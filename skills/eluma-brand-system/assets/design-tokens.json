@@ -1,0 +1,33 @@
+{
+  "brand": {
+    "name": "Eluma",
+    "slug": "eluma-brand-system",
+    "domain": "eluma.ch",
+    "tagline": "EVENT-DRIVEN ECOSYSTEM",
+    "description": "Apply the complete Eluma design system to any app or component. Includes dark/light themes, 124 UI component patterns, animations, gamification elements, responsive layouts, and brand assets. Use when building any Eluma-related UI, applying Eluma branding to a new app, creating pages/components in the Eluma style, or when the user says \"apply Eluma design\", \"Eluma style\", \"Eluma branding\", \"use Eluma UI\", or references the Eluma design system. Also use when building any app for eluma.ch. Covers: React, Vue, Svelte, HTML/CSS, Tailwind, Next.js - any web stack.",
+    "triggers": ["Eluma design", "Eluma style", "Eluma branding", "Eluma UI", "eluma.ch"]
+  },
+  "colors": {
+    "PRIMARY": "#4fd1c5",
+    "PRIMARY_DARK": "#38b2ac",
+    "PRIMARY_RGB": "79,209,197",
+    "BG": "#0f172a",
+    "SURFACE": "#141e33",
+    "SIDEBAR_BG": "#0b1120",
+    "TEXT": "#f8fafc",
+    "MUTED": "#718096",
+    "SUCCESS": "#10b981",
+    "SUCCESS_RGB": "16,185,129",
+    "WARNING": "#f59e0b",
+    "WARNING_RGB": "245,158,11",
+    "ERROR": "#ef4444",
+    "ERROR_RGB": "239,68,68",
+    "INFO": "#3b82f6",
+    "INFO_RGB": "59,130,246"
+  },
+  "theme": {
+    "style": "dark-first",
+    "glassmorphism": true,
+    "motif": "hexagonal"
+  }
+}

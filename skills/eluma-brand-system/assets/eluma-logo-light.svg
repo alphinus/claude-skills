@@ -1,0 +1,104 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 240" width="800" height="240">
+  <defs>
+    <!-- Primary gradient - subtle tech accent -->
+    <linearGradient id="accentGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#6366f1"/>
+      <stop offset="50%" style="stop-color:#818cf8"/>
+      <stop offset="100%" style="stop-color:#a5b4fc"/>
+    </linearGradient>
+
+    <!-- Light glow effect -->
+    <radialGradient id="glowGrad" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" style="stop-color:#818cf8;stop-opacity:0.3"/>
+      <stop offset="100%" style="stop-color:#818cf8;stop-opacity:0"/>
+    </radialGradient>
+
+    <!-- Icon gradient -->
+    <linearGradient id="iconGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#4f46e5"/>
+      <stop offset="100%" style="stop-color:#818cf8"/>
+    </linearGradient>
+
+    <!-- Subtle shadow filter -->
+    <filter id="softShadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="2" stdDeviation="4" flood-color="#6366f1" flood-opacity="0.15"/>
+    </filter>
+  </defs>
+
+  <!-- Background glow behind icon -->
+  <circle cx="100" cy="120" r="80" fill="url(#glowGrad)"/>
+
+  <!-- Abstract E / Light prism mark -->
+  <g transform="translate(100, 120)" filter="url(#softShadow)">
+    <!-- Outer hexagonal frame - represents ecosystem -->
+    <polygon points="0,-52 45,-26 45,26 0,52 -45,26 -45,-26"
+             fill="none" stroke="url(#iconGrad)" stroke-width="2.5" opacity="0.6"/>
+
+    <!-- Inner geometric E shape - three horizontal light beams -->
+    <!-- Top beam -->
+    <rect x="-20" y="-28" width="32" height="5" rx="2.5" fill="url(#accentGrad)" opacity="0.9"/>
+    <rect x="16" y="-28" width="12" height="5" rx="2.5" fill="url(#accentGrad)" opacity="0.5"/>
+
+    <!-- Middle beam (longer - emphasis) -->
+    <rect x="-20" y="-2.5" width="36" height="5" rx="2.5" fill="url(#iconGrad)"/>
+    <rect x="20" y="-2.5" width="8" height="5" rx="2.5" fill="url(#iconGrad)" opacity="0.4"/>
+
+    <!-- Bottom beam -->
+    <rect x="-20" y="23" width="32" height="5" rx="2.5" fill="url(#accentGrad)" opacity="0.9"/>
+    <rect x="16" y="23" width="12" height="5" rx="2.5" fill="url(#accentGrad)" opacity="0.5"/>
+
+    <!-- Vertical spine of E -->
+    <rect x="-22" y="-30" width="5" height="58" rx="2.5" fill="url(#iconGrad)"/>
+
+    <!-- Light burst dots - representing data/events flowing -->
+    <circle cx="34" cy="-26" r="2" fill="#818cf8" opacity="0.6"/>
+    <circle cx="38" cy="0" r="1.5" fill="#6366f1" opacity="0.4"/>
+    <circle cx="34" cy="25" r="2" fill="#818cf8" opacity="0.6"/>
+
+    <!-- Corner accent nodes on hexagon -->
+    <circle cx="0" cy="-52" r="3" fill="#6366f1"/>
+    <circle cx="45" cy="-26" r="2.5" fill="#818cf8"/>
+    <circle cx="45" cy="26" r="2.5" fill="#818cf8"/>
+    <circle cx="0" cy="52" r="3" fill="#6366f1"/>
+    <circle cx="-45" cy="26" r="2.5" fill="#818cf8"/>
+    <circle cx="-45" cy="-26" r="2.5" fill="#818cf8"/>
+  </g>
+
+  <!-- Wordmark: ELUMA -->
+  <g transform="translate(185, 100)">
+    <!-- E -->
+    <text x="0" y="50" font-family="system-ui, -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif"
+          font-size="72" font-weight="200" letter-spacing="12" fill="#1e1b4b">
+      E
+    </text>
+    <!-- L -->
+    <text x="62" y="50" font-family="system-ui, -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif"
+          font-size="72" font-weight="200" letter-spacing="12" fill="#1e1b4b">
+      L
+    </text>
+    <!-- U -->
+    <text x="114" y="50" font-family="system-ui, -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif"
+          font-size="72" font-weight="200" letter-spacing="12" fill="#1e1b4b">
+      U
+    </text>
+    <!-- M -->
+    <text x="182" y="50" font-family="system-ui, -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif"
+          font-size="72" font-weight="200" letter-spacing="12" fill="#1e1b4b">
+      M
+    </text>
+    <!-- A - with accent color -->
+    <text x="264" y="50" font-family="system-ui, -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif"
+          font-size="72" font-weight="200" letter-spacing="12" fill="url(#iconGrad)">
+      A
+    </text>
+  </g>
+
+  <!-- Tagline -->
+  <text x="190" y="172" font-family="system-ui, -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif"
+        font-size="14" font-weight="300" letter-spacing="6" fill="#6366f1" opacity="0.7">
+    EVENT-DRIVEN ECOSYSTEM
+  </text>
+
+  <!-- Subtle decorative line under tagline -->
+  <line x1="190" y1="182" x2="520" y2="182" stroke="url(#accentGrad)" stroke-width="0.5" opacity="0.4"/>
+</svg>

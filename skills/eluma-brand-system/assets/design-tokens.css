@@ -1,0 +1,30 @@
+/* Auto-generated design tokens for Eluma */
+/* Built from: brands/eluma/tokens.json */
+
+:root, [data-theme="dark"] {
+  --brand-primary: #4fd1c5;
+  --brand-primary-dark: #38b2ac;
+  --brand-bg: #0f172a;
+  --brand-surface: #141e33;
+  --brand-sidebar-bg: #0b1120;
+  --brand-text: #f8fafc;
+  --brand-muted: #718096;
+  --brand-success: #10b981;
+  --brand-warning: #f59e0b;
+  --brand-error: #ef4444;
+  --brand-info: #3b82f6;
+  --brand-border: rgba(255,255,255,0.06);
+  --brand-border-hover: rgba(255,255,255,0.12);
+  --brand-gradient: linear-gradient(135deg, #4fd1c5, #38b2ac);
+  --brand-shadow-glow: 0 0 20px rgba(79,209,197,0.15);
+}
+
+[data-theme="light"] {
+  --brand-bg: #f1f5f9;
+  --brand-surface: #ffffff;
+  --brand-sidebar-bg: #ffffff;
+  --brand-text: #1a202c;
+  --brand-muted: #718096;
+  --brand-border: rgba(0,0,0,0.08);
+  --brand-border-hover: rgba(0,0,0,0.15);
+}

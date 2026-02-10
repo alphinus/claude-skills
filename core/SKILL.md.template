@@ -1,0 +1,133 @@
+---
+name: {{SKILL_SLUG}}
+description: >
+  {{BRAND_DESCRIPTION}}
+---
+
+# {{BRAND_NAME}} Brand System
+
+Complete design system for the {{BRAND_NAME}} {{brand_tagline}} ({{BRAND_DOMAIN}}). Apply to any new app to get
+the full {{BRAND_NAME}} look: dark glassmorphism UI, cyan accents, smooth animations, gamification, and responsive layouts.
+
+## Workflow
+
+1. **Detect stack** - Identify the project's tech stack (React, Vue, HTML, Tailwind, etc.)
+2. **Apply design tokens** - Copy `assets/design-tokens.css` or adapt `assets/design-tokens.json` for the stack
+3. **Apply theme system** - Set up dark/light theme switching with CSS custom properties
+4. **Apply component patterns** - Use reference patterns for buttons, cards, modals, forms, etc.
+5. **Apply layout patterns** - Use sidebar+main, dashboard grids, responsive breakpoints
+6. **Apply animations** - Add transitions, scroll animations, micro-interactions
+7. **Apply gamification** (if applicable) - Achievements, XP bars, leaderboards, progress systems
+8. **Apply brand assets** - Logo SVGs from `assets/` directory
+
+## Quick Reference: Core Variables
+
+```css
+:root {
+  --dark-bg: {{BG}};
+  --card-bg: {{SURFACE}};
+  --surface: #1e293b;
+  --cyan: {{PRIMARY}};
+  --cyan-dark: {{PRIMARY_DARK}};
+  --cloud: {{TEXT}};
+  --muted: {{MUTED}};
+  --border: rgba(255,255,255,0.06);
+  --success: {{SUCCESS}};
+  --warning: {{WARNING}};
+  --error: {{ERROR}};
+  --info: {{INFO}};
+}
+```
+
+Light theme override: `[data-theme="light"]` swaps all surface/text colors. See `assets/design-tokens.css`.
+
+## Quick Reference: Font Stack
+
+```css
+font-family: system-ui, -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif;
+```
+
+Monospace: `'SF Mono', Monaco, 'Fira Code', monospace`
+
+## Quick Reference: Key Patterns
+
+**Gradient text:**
+```css
+background: linear-gradient(135deg, {{PRIMARY}}, {{PRIMARY_DARK}});
+-webkit-background-clip: text;
+-webkit-text-fill-color: transparent;
+```
+
+**Glass card:**
+```css
+background: rgba(255,255,255,0.02);
+border: 1px solid rgba(255,255,255,0.06);
+border-radius: 14px;
+backdrop-filter: blur(16px);
+```
+
+**Primary button:**
+```css
+background: linear-gradient(135deg, {{PRIMARY}}, {{PRIMARY_DARK}});
+color: {{BG}}; border: none; border-radius: 10px;
+padding: 12px 28px; font-weight: 600;
+transition: all 0.3s;
+/* hover: transform: translateY(-2px); box-shadow: 0 8px 24px rgba({{PRIMARY_RGB}},0.25); */
+```
+
+**Ghost button:**
+```css
+background: rgba({{PRIMARY_RGB}},0.1);
+border: 1px solid rgba({{PRIMARY_RGB}},0.3);
+color: {{PRIMARY}}; border-radius: 8px;
+/* hover: background: rgba({{PRIMARY_RGB}},0.2); */
+```
+
+**Status badges:**
+```css
+.badge { padding: 3px 10px; border-radius: 20px; font-size: 12px; }
+/* success: bg rgba(16,185,129,0.1) color {{SUCCESS}} */
+/* warning: bg rgba(245,158,11,0.1) color {{WARNING}} */
+/* error:   bg rgba(239,68,68,0.1)  color {{ERROR}} */
+/* info:    bg rgba({{PRIMARY_RGB}},0.1)  color {{PRIMARY}} */
+```
+
+## Detailed References
+
+Read these reference files based on what you need:
+
+- **UI Components** (buttons, cards, modals, forms, inputs, toasts, tables, toggles, badges, empty states, spinners, skeletons): See `references/components.md`
+- **Animations & Gamification** (keyframes, transitions, scroll animations, 3D transforms, particles, confetti, achievements, XP bars, leaderboards, level systems): See `references/animations.md`
+- **Layouts & Navigation** (sidebar+main, dashboard grids, responsive breakpoints, theme switching, tables, wizards, command palette, navigation): See `references/layouts.md`
+
+## Assets
+
+- `assets/{{brand_name}}-logo-light.svg` - Full logo for light backgrounds
+- `assets/{{brand_name}}-logo-dark.svg` - Full logo for dark backgrounds
+- `assets/{{brand_name}}-icon.svg` - Icon mark only (hexagonal E)
+- `assets/design-tokens.css` - Complete CSS custom properties (copy to project)
+- `assets/design-tokens.json` - JSON format (for JS/Tailwind config)
+
+## Framework-Specific Integration
+
+### React / Next.js
+Import design-tokens.css in root layout. Use CSS modules or styled-components with token values.
+For theme switching, use `useEffect` to toggle `data-theme` attribute on `<html>`.
+
+### Tailwind CSS
+Extend `tailwind.config.js` with values from design-tokens.json:
+```js
+theme: { extend: { colors: { cyan: { DEFAULT: '{{PRIMARY}}', dark: '{{PRIMARY_DARK}}' }, dark: { bg: '{{BG}}' } } } }
+```
+
+### Vue / Svelte
+Import design-tokens.css globally. Use CSS custom properties directly in components.
+
+## Design Principles
+
+1. **Dark-first** - Dark backgrounds ({{BG}}), light text ({{TEXT}}), cyan accents ({{PRIMARY}})
+2. **Glassmorphism** - Translucent surfaces with subtle borders and backdrop blur
+3. **Minimal** - Thin font weights (200-400 for headings), generous whitespace
+4. **Micro-interactions** - Every interactive element has a transition (0.2-0.3s)
+5. **Hexagonal motif** - The hexagon shape appears in icons, badges, decorative elements
+6. **German-first i18n** - All UI text uses proper Unicode (ae->ä, oe->ö, ue->ü, ss->ß)
