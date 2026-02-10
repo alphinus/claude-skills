@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>{{BRAND_NAME}} Merchandise Designs</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #1a1a2e;
+    font-family: system-ui, -apple-system, sans-serif;
+    display: flex; flex-direction: column;
+    align-items: center;
+    min-height: 100vh; padding: 40px;
+  }
+
+  .page-title {
+    font-size: 24px; font-weight: 200; color: {{TEXT}};
+    letter-spacing: 8px; margin-bottom: 8px;
+  }
+  .page-title span { color: {{PRIMARY}}; }
+  .page-sub {
+    font-size: 11px; color: {{MUTED}}; letter-spacing: 2px;
+    margin-bottom: 40px;
+  }
+
+  .merch-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 36px;
+    max-width: 800px;
+  }
+
+  .merch-item {
+    display: flex; flex-direction: column;
+    align-items: center; gap: 14px;
+  }
+
+  .merch-label {
+    font-size: 12px; color: {{TEXT}}; font-weight: 500;
+    letter-spacing: 1px;
+  }
+  .merch-desc {
+    font-size: 9px; color: {{MUTED}}; letter-spacing: 0.5px;
+    text-align: center;
+  }
+
+  .mockup {
+    position: relative;
+    display: flex; align-items: center; justify-content: center;
+  }
+</style>
+</head>
+<body>
+
+<div class="page-title">ELUM<span>A</span> Merch</div>
+<div class="page-sub">Merchandise-Kollektion &middot; Design-Vorlagen</div>
+
+<div class="merch-grid">
+
+  <!-- 1. T-SHIRT FRONT -->
+  <div class="merch-item">
+    <div class="mockup">
+      <svg width="280" height="320" viewBox="0 0 280 320">
+        <defs>
+          <linearGradient id="shirtDark" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stop-color="#1a202c"/>
+            <stop offset="100%" stop-color="{{BG}}"/>
+          </linearGradient>
+          <linearGradient id="hexGradM" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="{{PRIMARY}}"/>
+            <stop offset="100%" stop-color="{{PRIMARY_DARK}}"/>
+          </linearGradient>
+        </defs>
+
+        <!-- T-shirt silhouette -->
+        <path d="M70,30 L30,50 L10,100 L40,110 L50,80 L50,290 Q50,300 60,300 L220,300 Q230,300 230,290 L230,80 L240,110 L270,100 L250,50 L210,30 Q190,15 170,25 L160,30 Q150,38 140,38 Q130,38 120,30 L110,25 Q90,15 70,30 Z"
+          fill="url(#shirtDark)" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
+
+        <!-- Collar -->
+        <path d="M120,30 Q130,42 140,42 Q150,42 160,30"
+          fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="2"/>
+
+        <!-- DESIGN: Large hexagon logo centered -->
+        <g transform="translate(140,145)">
+          <!-- Hex -->
+          <polygon points="0,-48 42,-24 42,24 0,48 -42,24 -42,-24"
+            fill="none" stroke="url(#hexGradM)" stroke-width="1.5" opacity="0.9"/>
+          <!-- E beams -->
+          <line x1="-16" y1="-16" x2="16" y2="-16" stroke="{{PRIMARY}}" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="-16" y1="0" x2="10" y2="0" stroke="{{PRIMARY}}" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="-16" y1="16" x2="16" y2="16" stroke="{{PRIMARY}}" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="-16" y1="-16" x2="-16" y2="16" stroke="{{PRIMARY}}" stroke-width="1.5" stroke-linecap="round"/>
+        </g>
+
+        <!-- {{BRAND_NAME}} wordmark below hex -->
+        <text x="140" y="220" text-anchor="middle" fill="{{TEXT}}"
+          font-family="system-ui,-apple-system,sans-serif" font-size="18" font-weight="200"
+          letter-spacing="6" opacity="0.9">ELUM<tspan fill="{{PRIMARY}}">A</tspan></text>
+
+        <!-- Tagline -->
+        <text x="140" y="238" text-anchor="middle" fill="{{MUTED}}"
+          font-family="system-ui,-apple-system,sans-serif" font-size="7" font-weight="400"
+          letter-spacing="2" opacity="0.7">{{BRAND_TAGLINE}}</text>
+      </svg>
+    </div>
+    <div class="merch-label">T-Shirt Vorderseite</div>
+    <div class="merch-desc">Hexagon-Logo zentriert auf dunklem Stoff</div>
+  </div>
+
+  <!-- 2. T-SHIRT BACK -->
+  <div class="merch-item">
+    <div class="mockup">
+      <svg width="280" height="320" viewBox="0 0 280 320">
+        <!-- T-shirt silhouette (back) -->
+        <path d="M70,30 L30,50 L10,100 L40,110 L50,80 L50,290 Q50,300 60,300 L220,300 Q230,300 230,290 L230,80 L240,110 L270,100 L250,50 L210,30 Q190,20 175,28 L165,33 Q155,40 140,40 Q125,40 115,33 L105,28 Q90,20 70,30 Z"
+          fill="url(#shirtDark)" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
+
+        <!-- DESIGN: {{BRAND_NAME}} large across upper back -->
+        <text x="140" y="110" text-anchor="middle" fill="{{TEXT}}"
+          font-family="system-ui,-apple-system,sans-serif" font-size="32" font-weight="200"
+          letter-spacing="10" opacity="0.9">ELUM<tspan fill="{{PRIMARY}}">A</tspan></text>
+
+        <!-- Small hex pattern below -->
+        <g transform="translate(90,140)" opacity="0.12" stroke="{{PRIMARY}}" stroke-width="0.6" fill="none">
+          <polygon points="15,0 28,-8 41,0 41,16 28,24 15,16"/>
+          <polygon points="41,0 54,-8 67,0 67,16 54,24 41,16"/>
+          <polygon points="67,0 80,-8 93,0 93,16 80,24 67,16"/>
+
+          <polygon points="2,20 15,12 28,20 28,36 15,44 2,36"/>
+          <polygon points="28,20 41,12 54,20 54,36 41,44 28,36"/>
+          <polygon points="54,20 67,12 80,20 80,36 67,44 54,36"/>
+          <polygon points="80,20 93,12 106,20 106,36 93,44 80,36"/>
+
+          <polygon points="15,40 28,32 41,40 41,56 28,64 15,56"/>
+          <polygon points="41,40 54,32 67,40 67,56 54,64 41,56"/>
+          <polygon points="67,40 80,32 93,40 93,56 80,64 67,56"/>
+
+          <polygon points="2,60 15,52 28,60 28,76 15,84 2,76"/>
+          <polygon points="28,60 41,52 54,60 54,76 41,84 28,76"/>
+          <polygon points="54,60 67,52 80,60 80,76 67,84 54,76"/>
+          <polygon points="80,60 93,52 106,60 106,76 93,84 80,76"/>
+        </g>
+
+        <!-- URL at bottom -->
+        <text x="140" y="270" text-anchor="middle" fill="{{PRIMARY}}"
+          font-family="system-ui,-apple-system,sans-serif" font-size="8"
+          letter-spacing="2" opacity="0.5">{{BRAND_DOMAIN}}</text>
+      </svg>
+    </div>
+    <div class="merch-label">T-Shirt Rückseite</div>
+    <div class="merch-desc">Wortmarke oben, Hex-Muster darunter</div>
+  </div>
+
+  <!-- 3. HOODIE -->
+  <div class="merch-item">
+    <div class="mockup">
+      <svg width="300" height="340" viewBox="0 0 300 340">
+        <defs>
+          <linearGradient id="hoodieDark" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stop-color="#1e293b"/>
+            <stop offset="100%" stop-color="{{BG}}"/>
+          </linearGradient>
+        </defs>
+
+        <!-- Hoodie silhouette -->
+        <path d="M80,45 L25,70 L5,130 L40,140 L55,100 L55,310 Q55,320 65,320 L235,320 Q245,320 245,310 L245,100 L260,140 L295,130 L275,70 L220,45 Q200,30 185,40 L170,48 Q160,56 150,56 Q140,56 130,48 L115,40 Q100,30 80,45 Z"
+          fill="url(#hoodieDark)" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
+
+        <!-- Hood -->
+        <path d="M80,45 Q95,15 120,12 Q140,10 150,18 Q160,10 180,12 Q205,15 220,45"
+          fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="2"/>
+
+        <!-- Hood opening / V-shape -->
+        <path d="M130,48 L150,65 L170,48"
+          fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="1.5"/>
+
+        <!-- Kangaroo pocket -->
+        <path d="M90,220 Q90,210 100,210 L200,210 Q210,210 210,220 L210,260 Q210,270 200,270 L100,270 Q90,270 90,260 Z"
+          fill="none" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+
+        <!-- DESIGN: Chest hex logo -->
+        <g transform="translate(150,130)">
+          <polygon points="0,-36 31,-18 31,18 0,36 -31,18 -31,-18"
+            fill="none" stroke="url(#hexGradM)" stroke-width="1.2" opacity="0.9"/>
+          <line x1="-12" y1="-12" x2="12" y2="-12" stroke="{{PRIMARY}}" stroke-width="1.2" stroke-linecap="round"/>
+          <line x1="-12" y1="0" x2="8" y2="0" stroke="{{PRIMARY}}" stroke-width="1.2" stroke-linecap="round"/>
+          <line x1="-12" y1="12" x2="12" y2="12" stroke="{{PRIMARY}}" stroke-width="1.2" stroke-linecap="round"/>
+          <line x1="-12" y1="-12" x2="-12" y2="12" stroke="{{PRIMARY}}" stroke-width="1.2" stroke-linecap="round"/>
+        </g>
+
+        <!-- "Event-Driven" text below logo -->
+        <text x="150" y="185" text-anchor="middle" fill="{{MUTED}}"
+          font-family="system-ui,-apple-system,sans-serif" font-size="9"
+          letter-spacing="3" font-weight="300" opacity="0.7">EVENT-DRIVEN</text>
+
+        <!-- Drawstrings -->
+        <line x1="140" y1="56" x2="135" y2="110" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+        <line x1="160" y1="56" x2="165" y2="110" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+        <!-- String ends -->
+        <line x1="133" y1="108" x2="137" y2="118" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+        <line x1="163" y1="108" x2="167" y2="118" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+      </svg>
+    </div>
+    <div class="merch-label">Hoodie</div>
+    <div class="merch-desc">Brust-Logo mit Event-Driven Schriftzug</div>
+  </div>
+
+  <!-- 4. MUG -->
+  <div class="merch-item">
+    <div class="mockup">
+      <svg width="300" height="300" viewBox="0 0 300 300">
+        <defs>
+          <linearGradient id="mugBody" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stop-color="#1a202c"/>
+            <stop offset="30%" stop-color="{{BG}}"/>
+            <stop offset="70%" stop-color="{{BG}}"/>
+            <stop offset="100%" stop-color="#1e293b"/>
+          </linearGradient>
+          <linearGradient id="mugRim" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stop-color="#2d3748"/>
+            <stop offset="100%" stop-color="#1a202c"/>
+          </linearGradient>
+        </defs>
+
+        <!-- Mug body -->
+        <path d="M60,80 L60,240 Q60,260 80,260 L200,260 Q220,260 220,240 L220,80 Z"
+          fill="url(#mugBody)" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
+
+        <!-- Rim -->
+        <ellipse cx="140" cy="80" rx="82" ry="12" fill="url(#mugRim)"
+          stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
+        <!-- Inner rim -->
+        <ellipse cx="140" cy="80" rx="72" ry="8" fill="{{BG}}"
+          stroke="rgba(255,255,255,0.03)" stroke-width="0.5"/>
+
+        <!-- Handle -->
+        <path d="M220,110 Q270,110 270,170 Q270,230 220,230"
+          fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="12"
+          stroke-linecap="round"/>
+        <path d="M220,116 Q264,116 264,170 Q264,224 220,224"
+          fill="none" stroke="url(#mugBody)" stroke-width="6"/>
+
+        <!-- DESIGN: Wrap-around strip -->
+        <!-- Hex pattern left side (wrapping around) -->
+        <g opacity="0.1" stroke="{{PRIMARY}}" stroke-width="0.5" fill="none">
+          <polygon points="70,120 80,114 90,120 90,132 80,138 70,132"/>
+          <polygon points="90,120 100,114 110,120 110,132 100,138 90,132"/>
+          <polygon points="70,140 80,134 90,140 90,152 80,158 70,152"/>
+          <polygon points="90,140 100,134 110,140 110,152 100,158 90,152"/>
+          <polygon points="70,160 80,154 90,160 90,172 80,178 70,172"/>
+          <polygon points="90,160 100,154 110,160 110,172 100,178 90,172"/>
+        </g>
+
+        <!-- Center: Logo -->
+        <g transform="translate(150,155)">
+          <polygon points="0,-28 24,-14 24,14 0,28 -24,14 -24,-14"
+            fill="none" stroke="{{PRIMARY}}" stroke-width="1" opacity="0.8"/>
+          <line x1="-10" y1="-10" x2="10" y2="-10" stroke="{{PRIMARY}}" stroke-width="1" stroke-linecap="round"/>
+          <line x1="-10" y1="0" x2="6" y2="0" stroke="{{PRIMARY}}" stroke-width="1" stroke-linecap="round"/>
+          <line x1="-10" y1="10" x2="10" y2="10" stroke="{{PRIMARY}}" stroke-width="1" stroke-linecap="round"/>
+          <line x1="-10" y1="-10" x2="-10" y2="10" stroke="{{PRIMARY}}" stroke-width="1" stroke-linecap="round"/>
+        </g>
+
+        <!-- {{BRAND_NAME}} text -->
+        <text x="150" y="205" text-anchor="middle" fill="{{TEXT}}"
+          font-family="system-ui,-apple-system,sans-serif" font-size="14" font-weight="200"
+          letter-spacing="4" opacity="0.85">ELUM<tspan fill="{{PRIMARY}}">A</tspan></text>
+
+        <!-- Tagline -->
+        <text x="150" y="220" text-anchor="middle" fill="{{MUTED}}"
+          font-family="system-ui,-apple-system,sans-serif" font-size="6"
+          letter-spacing="2" opacity="0.6">{{BRAND_TAGLINE}}</text>
+
+        <!-- Hex pattern right side -->
+        <g opacity="0.1" stroke="{{PRIMARY}}" stroke-width="0.5" fill="none">
+          <polygon points="185,120 195,114 205,120 205,132 195,138 185,132"/>
+          <polygon points="185,140 195,134 205,140 205,152 195,158 185,152"/>
+          <polygon points="185,160 195,154 205,160 205,172 195,178 185,172"/>
+          <polygon points="195,130 205,124 215,130 215,142 205,148 195,142"/>
+          <polygon points="195,150 205,144 215,150 215,162 205,168 195,162"/>
+        </g>
+
+        <!-- Cyan accent lines -->
+        <line x1="65" y1="105" x2="215" y2="105" stroke="{{PRIMARY}}" stroke-width="0.5" opacity="0.2"/>
+        <line x1="65" y1="235" x2="215" y2="235" stroke="{{PRIMARY}}" stroke-width="0.5" opacity="0.2"/>
+
+        <!-- Bottom ellipse -->
+        <ellipse cx="140" cy="258" rx="80" ry="6" fill="rgba(0,0,0,0.3)"/>
+      </svg>
+    </div>
+    <div class="merch-label">Tasse</div>
+    <div class="merch-desc">Umlaufendes Design mit Logo, Hex-Muster und Tagline</div>
+  </div>
+
+</div>
+
+</body>
+</html>

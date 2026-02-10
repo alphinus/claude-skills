@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{BRAND_NAME}} Datenmodell</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:{{BG}};font-family:system-ui,-apple-system,sans-serif;color:{{TEXT}};min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:40px 20px}
+  h1{font-size:2rem;font-weight:700;letter-spacing:-.5px;margin-bottom:8px}
+  h1 span{color:{{PRIMARY}}}
+  .subtitle{color:{{MUTED}};font-size:.95rem;margin-bottom:32px}
+  .diagram-wrap{background:#1e293b;border-radius:16px;border:1px solid rgba({{PRIMARY_RGB}},.15);padding:32px;max-width:1300px;width:100%;overflow-x:auto}
+  svg text{font-family:system-ui,-apple-system,sans-serif}
+</style>
+</head>
+<body>
+
+<h1><span>{{BRAND_NAME}}</span> Datenmodell</h1>
+<p class="subtitle">Entity-Relationship-Diagramm &mdash; Domänenobjekte und ihre Beziehungen</p>
+
+<div class="diagram-wrap">
+<svg viewBox="0 0 1200 820" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto">
+  <defs>
+    <filter id="shadow"><feDropShadow dx="0" dy="2" stdDeviation="4" flood-color="#000" flood-opacity=".3"/></filter>
+
+    <!-- Crow's foot markers -->
+    <marker id="cf-many" markerWidth="12" markerHeight="12" refX="12" refY="6" orient="auto">
+      <line x1="0" y1="0" x2="12" y2="6" stroke="{{MUTED}}" stroke-width="1.5"/>
+      <line x1="0" y1="12" x2="12" y2="6" stroke="{{MUTED}}" stroke-width="1.5"/>
+      <line x1="12" y1="0" x2="12" y2="12" stroke="{{MUTED}}" stroke-width="1.5"/>
+    </marker>
+    <marker id="cf-one" markerWidth="12" markerHeight="12" refX="0" refY="6" orient="auto">
+      <line x1="4" y1="0" x2="4" y2="12" stroke="{{MUTED}}" stroke-width="1.5"/>
+      <line x1="8" y1="0" x2="8" y2="12" stroke="{{MUTED}}" stroke-width="1.5"/>
+    </marker>
+  </defs>
+
+  <!-- ========= ENTITY: Event ========= -->
+  <g filter="url(#shadow)" transform="translate(60,40)">
+    <rect width="220" height="280" rx="12" fill="#132332" stroke="{{PRIMARY}}" stroke-width="1.5"/>
+    <!-- Header -->
+    <rect width="220" height="44" rx="12" fill="{{PRIMARY}}" opacity=".15"/>
+    <rect y="32" width="220" height="12" fill="#132332"/>
+    <text x="110" y="28" text-anchor="middle" fill="{{PRIMARY}}" font-size="14" font-weight="700">Event</text>
+    <text x="14" y="19" fill="{{PRIMARY}}" font-size="9" opacity=".7">EVENTS</text>
+    <!-- Fields -->
+    <g fill="{{TEXT}}" font-size="11">
+      <text x="16" y="68"><tspan fill="{{PRIMARY}}" font-weight="700">PK</tspan> <tspan fill="{{WARNING}}">id</tspan> : string (uuid)</text>
+      <text x="16" y="92">type : string</text>
+      <text x="16" y="116">data : object</text>
+      <text x="16" y="140"><tspan fill="{{MUTED}}">FK</tspan> stream_id : string</text>
+      <text x="16" y="164"><tspan fill="{{MUTED}}">FK</tspan> user_id : string</text>
+      <text x="16" y="188">timestamp : ISO 8601</text>
+      <text x="16" y="212">version : number</text>
+      <text x="16" y="236">metadata : object</text>
+      <text x="16" y="260">checksum : string</text>
+    </g>
+  </g>
+
+  <!-- ========= ENTITY: Stream ========= -->
+  <g filter="url(#shadow)" transform="translate(60,380)">
+    <rect width="220" height="220" rx="12" fill="#132332" stroke="{{PRIMARY}}" stroke-width="1.5"/>
+    <rect width="220" height="44" rx="12" fill="{{PRIMARY}}" opacity=".15"/>
+    <rect y="32" width="220" height="12" fill="#132332"/>
+    <text x="110" y="28" text-anchor="middle" fill="{{PRIMARY}}" font-size="14" font-weight="700">Stream</text>
+    <text x="14" y="19" fill="{{PRIMARY}}" font-size="9" opacity=".7">EVENTS</text>
+    <g fill="{{TEXT}}" font-size="11">
+      <text x="16" y="68"><tspan fill="{{PRIMARY}}" font-weight="700">PK</tspan> <tspan fill="{{WARNING}}">id</tspan> : string (uuid)</text>
+      <text x="16" y="92">name : string</text>
+      <text x="16" y="116"><tspan fill="{{MUTED}}">FK</tspan> workspace_id : string</text>
+      <text x="16" y="140">created_at : ISO 8601</text>
+      <text x="16" y="164">event_count : number</text>
+      <text x="16" y="188">last_event_at : ISO 8601</text>
+      <text x="16" y="204" fill="{{MUTED}}" font-size="9">status : active | archived</text>
+    </g>
+  </g>
+
+  <!-- ========= ENTITY: User ========= -->
+  <g filter="url(#shadow)" transform="translate(380,40)">
+    <rect width="220" height="260" rx="12" fill="#132332" stroke="{{INFO}}" stroke-width="1.5"/>
+    <rect width="220" height="44" rx="12" fill="{{INFO}}" opacity=".15"/>
+    <rect y="32" width="220" height="12" fill="#132332"/>
+    <text x="110" y="28" text-anchor="middle" fill="{{INFO}}" font-size="14" font-weight="700">User</text>
+    <text x="14" y="19" fill="{{INFO}}" font-size="9" opacity=".7">BENUTZER</text>
+    <g fill="{{TEXT}}" font-size="11">
+      <text x="16" y="68"><tspan fill="{{PRIMARY}}" font-weight="700">PK</tspan> <tspan fill="{{WARNING}}">id</tspan> : string (uuid)</text>
+      <text x="16" y="92">email : string</text>
+      <text x="16" y="116">name : string</text>
+      <text x="16" y="140">role : admin | user | bot</text>
+      <text x="16" y="164"><tspan fill="{{MUTED}}">FK</tspan> workspace_id : string</text>
+      <text x="16" y="188">api_key_hash : string</text>
+      <text x="16" y="212">created_at : ISO 8601</text>
+      <text x="16" y="236">last_active : ISO 8601</text>
+    </g>
+  </g>
+
+  <!-- ========= ENTITY: Workspace ========= -->
+  <g filter="url(#shadow)" transform="translate(380,370)">
+    <rect width="220" height="240" rx="12" fill="#132332" stroke="{{INFO}}" stroke-width="1.5"/>
+    <rect width="220" height="44" rx="12" fill="{{INFO}}" opacity=".15"/>
+    <rect y="32" width="220" height="12" fill="#132332"/>
+    <text x="110" y="28" text-anchor="middle" fill="{{INFO}}" font-size="14" font-weight="700">Workspace</text>
+    <text x="14" y="19" fill="{{INFO}}" font-size="9" opacity=".7">BENUTZER</text>
+    <g fill="{{TEXT}}" font-size="11">
+      <text x="16" y="68"><tspan fill="{{PRIMARY}}" font-weight="700">PK</tspan> <tspan fill="{{WARNING}}">id</tspan> : string (uuid)</text>
+      <text x="16" y="92">name : string</text>
+      <text x="16" y="116">slug : string (unique)</text>
+      <text x="16" y="140">plan : free | pro | enterprise</text>
+      <text x="16" y="164">settings : object</text>
+      <text x="16" y="188">created_at : ISO 8601</text>
+      <text x="16" y="212">event_quota : number</text>
+    </g>
+  </g>
+
+  <!-- ========= ENTITY: Webhook ========= -->
+  <g filter="url(#shadow)" transform="translate(700,40)">
+    <rect width="220" height="260" rx="12" fill="#132332" stroke="#a78bfa" stroke-width="1.5"/>
+    <rect width="220" height="44" rx="12" fill="#a78bfa" opacity=".15"/>
+    <rect y="32" width="220" height="12" fill="#132332"/>
+    <text x="110" y="28" text-anchor="middle" fill="#a78bfa" font-size="14" font-weight="700">Webhook</text>
+    <text x="14" y="19" fill="#a78bfa" font-size="9" opacity=".7">INTEGRATION</text>
+    <g fill="{{TEXT}}" font-size="11">
+      <text x="16" y="68"><tspan fill="{{PRIMARY}}" font-weight="700">PK</tspan> <tspan fill="{{WARNING}}">id</tspan> : string (uuid)</text>
+      <text x="16" y="92">url : string</text>
+      <text x="16" y="116">secret : string (encrypted)</text>
+      <text x="16" y="140"><tspan fill="{{MUTED}}">FK</tspan> workspace_id : string</text>
+      <text x="16" y="164">event_types : string[]</text>
+      <text x="16" y="188">active : boolean</text>
+      <text x="16" y="212">retry_count : number</text>
+      <text x="16" y="236">last_delivery : ISO 8601</text>
+    </g>
+  </g>
+
+  <!-- ========= ENTITY: TelegramChat ========= -->
+  <g filter="url(#shadow)" transform="translate(700,370)">
+    <rect width="220" height="240" rx="12" fill="#132332" stroke="#a78bfa" stroke-width="1.5"/>
+    <rect width="220" height="44" rx="12" fill="#a78bfa" opacity=".15"/>
+    <rect y="32" width="220" height="12" fill="#132332"/>
+    <text x="110" y="28" text-anchor="middle" fill="#a78bfa" font-size="14" font-weight="700">TelegramChat</text>
+    <text x="14" y="19" fill="#a78bfa" font-size="9" opacity=".7">INTEGRATION</text>
+    <g fill="{{TEXT}}" font-size="11">
+      <text x="16" y="68"><tspan fill="{{PRIMARY}}" font-weight="700">PK</tspan> <tspan fill="{{WARNING}}">id</tspan> : string</text>
+      <text x="16" y="92">chat_id : number</text>
+      <text x="16" y="116">chat_type : private | group</text>
+      <text x="16" y="140"><tspan fill="{{MUTED}}">FK</tspan> workspace_id : string</text>
+      <text x="16" y="164"><tspan fill="{{MUTED}}">FK</tspan> user_id : string</text>
+      <text x="16" y="188">subscriptions : string[]</text>
+      <text x="16" y="212">active : boolean</text>
+    </g>
+  </g>
+
+  <!-- ========= ENTITY: AITask ========= -->
+  <g filter="url(#shadow)" transform="translate(980,40)">
+    <rect width="200" height="300" rx="12" fill="#132332" stroke="#a78bfa" stroke-width="1.5"/>
+    <rect width="200" height="44" rx="12" fill="#a78bfa" opacity=".15"/>
+    <rect y="32" width="200" height="12" fill="#132332"/>
+    <text x="100" y="28" text-anchor="middle" fill="#a78bfa" font-size="14" font-weight="700">AITask</text>
+    <text x="14" y="19" fill="#a78bfa" font-size="9" opacity=".7">INTEGRATION</text>
+    <g fill="{{TEXT}}" font-size="11">
+      <text x="16" y="68"><tspan fill="{{PRIMARY}}" font-weight="700">PK</tspan> <tspan fill="{{WARNING}}">id</tspan> : string (uuid)</text>
+      <text x="16" y="92"><tspan fill="{{MUTED}}">FK</tspan> event_id : string</text>
+      <text x="16" y="116">model : string</text>
+      <text x="16" y="140">prompt : string</text>
+      <text x="16" y="164">result : object | null</text>
+      <text x="16" y="188">status : pending | done</text>
+      <text x="16" y="212">tokens_used : number</text>
+      <text x="16" y="236">duration_ms : number</text>
+      <text x="16" y="260">created_at : ISO 8601</text>
+      <text x="16" y="284">completed_at : ISO 8601</text>
+    </g>
+  </g>
+
+  <!-- ========= RELATIONSHIP LINES ========= -->
+
+  <!-- Stream 1:N Event -->
+  <line x1="170" y1="380" x2="170" y2="320" stroke="{{MUTED}}" stroke-width="1.5" marker-start="url(#cf-one)" marker-end="url(#cf-many)"/>
+  <rect x="138" y="338" width="66" height="18" rx="4" fill="{{BG}}" stroke="#334155" stroke-width=".5"/>
+  <text x="171" y="350" text-anchor="middle" fill="{{MUTED}}" font-size="9">1 : N</text>
+
+  <!-- User 1:N Event -->
+  <line x1="280" y1="170" x2="377" y2="170" stroke="{{MUTED}}" stroke-width="1.5" marker-start="url(#cf-many)" marker-end="url(#cf-one)"/>
+  <rect x="306" y="158" width="46" height="18" rx="4" fill="{{BG}}" stroke="#334155" stroke-width=".5"/>
+  <text x="329" y="170" text-anchor="middle" fill="{{MUTED}}" font-size="9">N : 1</text>
+
+  <!-- Workspace 1:N User -->
+  <line x1="490" y1="370" x2="490" y2="300" stroke="{{MUTED}}" stroke-width="1.5" marker-start="url(#cf-one)" marker-end="url(#cf-many)"/>
+  <rect x="458" y="326" width="66" height="18" rx="4" fill="{{BG}}" stroke="#334155" stroke-width=".5"/>
+  <text x="491" y="338" text-anchor="middle" fill="{{MUTED}}" font-size="9">1 : N</text>
+
+  <!-- Workspace 1:N Stream -->
+  <path d="M380,490 L310,490 L310,540 L280,540 L280,600" fill="none" stroke="{{MUTED}}" stroke-width="1.5" marker-start="url(#cf-one)" marker-end="url(#cf-many)"/>
+  <rect x="278" y="558" width="66" height="18" rx="4" fill="{{BG}}" stroke="#334155" stroke-width=".5"/>
+  <text x="311" y="570" text-anchor="middle" fill="{{MUTED}}" font-size="9">1 : N</text>
+
+  <!-- Workspace 1:N Webhook -->
+  <path d="M600,490 L660,490 L660,220 L697,220" fill="none" stroke="{{MUTED}}" stroke-width="1.5" marker-start="url(#cf-one)" marker-end="url(#cf-many)"/>
+  <rect x="640" y="340" width="46" height="18" rx="4" fill="{{BG}}" stroke="#334155" stroke-width=".5"/>
+  <text x="663" y="352" text-anchor="middle" fill="{{MUTED}}" font-size="9">1 : N</text>
+
+  <!-- Workspace 1:N TelegramChat -->
+  <line x1="600" y1="490" x2="697" y2="490" stroke="{{MUTED}}" stroke-width="1.5" marker-start="url(#cf-one)" marker-end="url(#cf-many)"/>
+  <rect x="624" y="478" width="46" height="18" rx="4" fill="{{BG}}" stroke="#334155" stroke-width=".5"/>
+  <text x="647" y="490" text-anchor="middle" fill="{{MUTED}}" font-size="9">1 : N</text>
+
+  <!-- Event 1:N AITask -->
+  <path d="M280,170 L280,120 L340,80 L440,40 L680,40 L980,100" fill="none" stroke="{{MUTED}}" stroke-width="1" stroke-dasharray="4 2"/>
+  <line x1="280" y1="80" x2="980" y2="80" stroke="none"/>
+  <!-- Simplified: Event to AITask -->
+  <path d="M270,40 Q600,0 977,80" fill="none" stroke="{{MUTED}}" stroke-width="1.5" marker-start="url(#cf-one)" marker-end="url(#cf-many)"/>
+  <rect x="600" y="14" width="66" height="18" rx="4" fill="{{BG}}" stroke="#334155" stroke-width=".5"/>
+  <text x="633" y="26" text-anchor="middle" fill="{{MUTED}}" font-size="9">1 : N</text>
+
+  <!-- User 1:N TelegramChat -->
+  <path d="M600,170 Q660,170 660,370 L660,430 Q660,462 697,462" fill="none" stroke="{{MUTED}}" stroke-width="1" stroke-dasharray="4 2"/>
+
+  <!-- ========= DOMAIN LEGEND ========= -->
+  <g transform="translate(960,650)">
+    <rect x="0" y="0" width="220" height="110" rx="8" fill="{{BG}}" stroke="#334155" stroke-width="1"/>
+    <text x="14" y="22" fill="{{TEXT}}" font-size="12" font-weight="600">Domänen</text>
+    <rect x="14" y="34" width="14" height="14" rx="3" fill="{{PRIMARY}}" opacity=".7"/>
+    <text x="34" y="46" fill="#cbd5e1" font-size="10">Events (Event, Stream)</text>
+    <rect x="14" y="56" width="14" height="14" rx="3" fill="{{INFO}}" opacity=".7"/>
+    <text x="34" y="68" fill="#cbd5e1" font-size="10">Benutzer (User, Workspace)</text>
+    <rect x="14" y="78" width="14" height="14" rx="3" fill="#a78bfa" opacity=".7"/>
+    <text x="34" y="90" fill="#cbd5e1" font-size="10">Integration (Webhook, TG, KI)</text>
+  </g>
+
+  <!-- Notation legend -->
+  <g transform="translate(960,770)">
+    <rect x="0" y="0" width="220" height="44" rx="8" fill="{{BG}}" stroke="#334155" stroke-width="1"/>
+    <text x="14" y="16" fill="{{MUTED}}" font-size="9">Crow's-Foot-Notation:</text>
+    <line x1="14" y1="30" x2="50" y2="30" stroke="{{MUTED}}" stroke-width="1.5"/>
+    <text x="58" y="34" fill="{{MUTED}}" font-size="9">1 : N Beziehung</text>
+    <line x1="14" y1="30" x2="26" y2="24" stroke="{{MUTED}}" stroke-width="1.5"/>
+    <line x1="14" y1="30" x2="26" y2="36" stroke="{{MUTED}}" stroke-width="1.5"/>
+  </g>
+
+</svg>
+</div>
+
+</body>
+</html>

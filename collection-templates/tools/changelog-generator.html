@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{BRAND_NAME}} - Changelog Generator</title>
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  :root{--dark-bg:{{BG}};--cyan:{{PRIMARY}};--cyan-dark:{{PRIMARY_DARK}};--cloud:{{TEXT}};--muted:{{MUTED}};--surface:#1e293b;--border:rgba(255,255,255,.06);--card:rgba(255,255,255,.04);
+    --added:#48bb78;--changed:#4299e1;--fixed:#fc8181;--removed:{{MUTED}}}
+  body{font-family:system-ui,-apple-system,sans-serif;background:var(--dark-bg);color:var(--cloud);min-height:100vh;padding:40px 20px}
+  .container{max-width:1200px;margin:0 auto}
+  h1{font-size:2.2rem;font-weight:700;margin-bottom:6px;background:linear-gradient(135deg,var(--cyan),var(--cyan-dark));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+  .subtitle{color:var(--muted);margin-bottom:40px}
+
+  .split{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+  @media(max-width:900px){.split{grid-template-columns:1fr}}
+
+  /* Panel */
+  .panel{background:var(--card);border:1px solid var(--border);border-radius:16px;overflow:hidden}
+  .panel-header{display:flex;justify-content:space-between;align-items:center;padding:16px 20px;border-bottom:1px solid var(--border)}
+  .panel-header h2{font-size:1rem;font-weight:700}
+  .panel-body{padding:20px}
+
+  /* Input Section */
+  .field-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px}
+  .field label{display:block;font-size:.78rem;font-weight:600;color:var(--muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:.5px}
+  .field input,.field select{width:100%;padding:10px 14px;border-radius:10px;border:1px solid var(--border);background:rgba(255,255,255,.02);color:var(--cloud);font-size:.9rem;font-family:inherit;outline:none;transition:border-color .15s}
+  .field input:focus,.field select:focus{border-color:rgba({{PRIMARY_RGB}},.3)}
+  .field select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' fill='%23718096' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1l4 4 4-4'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:36px}
+  .field select option{background:var(--surface);color:var(--cloud)}
+
+  .add-entry-form{display:grid;grid-template-columns:130px 1fr auto;gap:8px;align-items:end;margin-bottom:20px}
+  @media(max-width:500px){.add-entry-form{grid-template-columns:1fr;gap:12px}}
+  .add-btn{padding:10px 18px;border-radius:10px;background:linear-gradient(135deg,var(--cyan-dark),var(--cyan));color:var(--dark-bg);font-weight:700;font-size:.85rem;border:none;cursor:pointer;transition:transform .15s;white-space:nowrap;height:42px}
+  .add-btn:hover{transform:scale(1.02)}
+  .add-btn:active{transform:scale(.98)}
+
+  /* Entry List */
+  .entry-list{max-height:400px;overflow-y:auto}
+  .entry-item{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;background:rgba(255,255,255,.02);border:1px solid var(--border);margin-bottom:6px;transition:all .15s}
+  .entry-item:hover{background:rgba(255,255,255,.04)}
+  .entry-type-tag{font-size:.7rem;font-weight:700;padding:3px 10px;border-radius:6px;text-transform:uppercase;letter-spacing:.5px;flex-shrink:0;min-width:72px;text-align:center}
+  .entry-type-tag.added{background:rgba(72,187,120,.12);color:var(--added)}
+  .entry-type-tag.changed{background:rgba(66,153,225,.12);color:var(--changed)}
+  .entry-type-tag.fixed{background:rgba(252,129,129,.12);color:var(--fixed)}
+  .entry-type-tag.removed{background:rgba(113,128,150,.12);color:var(--removed)}
+  .entry-text{flex:1;font-size:.88rem;line-height:1.4}
+  .entry-remove{width:26px;height:26px;border-radius:6px;border:none;background:transparent;color:var(--muted);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0;transition:all .15s}
+  .entry-remove:hover{color:#fc8181;background:rgba(252,129,129,.08)}
+
+  /* Preview */
+  .preview-content{font-size:.9rem;line-height:1.8}
+  .preview-version{font-size:1.4rem;font-weight:800;margin-bottom:4px}
+  .preview-date{font-size:.85rem;color:var(--muted);margin-bottom:20px}
+  .preview-group{margin-bottom:20px}
+  .preview-group-title{font-size:.95rem;font-weight:700;margin-bottom:8px;display:flex;align-items:center;gap:8px}
+  .preview-group-title .dot{width:8px;height:8px;border-radius:50%}
+  .preview-group-title .dot.added{background:var(--added)}
+  .preview-group-title .dot.changed{background:var(--changed)}
+  .preview-group-title .dot.fixed{background:var(--fixed)}
+  .preview-group-title .dot.removed{background:var(--removed)}
+  .preview-list{list-style:none;padding-left:20px}
+  .preview-list li{position:relative;padding:4px 0;color:rgba(255,255,255,.8);font-size:.88rem}
+  .preview-list li::before{content:'\2022';position:absolute;left:-16px;color:var(--muted)}
+
+  /* Export Buttons */
+  .export-btns{display:flex;gap:8px}
+  .export-btn{padding:8px 16px;border-radius:8px;font-size:.82rem;font-weight:600;border:1px solid var(--border);background:transparent;color:var(--muted);cursor:pointer;transition:all .15s;display:flex;align-items:center;gap:6px}
+  .export-btn:hover{color:var(--cloud);border-color:rgba(255,255,255,.15);background:rgba(255,255,255,.04)}
+  .export-btn.copied{color:var(--cyan);border-color:rgba({{PRIMARY_RGB}},.3)}
+  .export-btn svg{width:14px;height:14px}
+
+  /* Divider */
+  .divider{height:1px;background:var(--border);margin:16px 0}
+
+  .empty-state{text-align:center;padding:40px 20px;color:var(--muted)}
+  .empty-state svg{width:48px;height:48px;margin-bottom:12px;stroke:rgba(255,255,255,.1);fill:none;stroke-width:1.5}
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>Changelog Generator</h1>
+  <p class="subtitle">Erstelle und exportiere professionelle Changelogs fuer {{BRAND_NAME}}-Releases</p>
+
+  <div class="split">
+    <!-- Input Panel -->
+    <div class="panel">
+      <div class="panel-header">
+        <h2>Eintraege</h2>
+      </div>
+      <div class="panel-body">
+        <div class="field-row">
+          <div class="field">
+            <label>Version</label>
+            <input type="text" id="versionInput" value="v2.4.0" placeholder="z.B. v2.4.0">
+          </div>
+          <div class="field">
+            <label>Datum</label>
+            <input type="date" id="dateInput" value="2026-02-10">
+          </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="add-entry-form">
+          <div class="field" style="margin:0">
+            <label>Typ</label>
+            <select id="typeSelect">
+              <option value="added">Added</option>
+              <option value="changed">Changed</option>
+              <option value="fixed">Fixed</option>
+              <option value="removed">Removed</option>
+            </select>
+          </div>
+          <div class="field" style="margin:0">
+            <label>Beschreibung</label>
+            <input type="text" id="descInput" placeholder="Aenderung beschreiben..." onkeydown="if(event.key==='Enter')addEntry()">
+          </div>
+          <button class="add-btn" onclick="addEntry()">+ Hinzufuegen</button>
+        </div>
+
+        <div class="entry-list" id="entryList"></div>
+      </div>
+    </div>
+
+    <!-- Preview Panel -->
+    <div class="panel">
+      <div class="panel-header">
+        <h2>Vorschau</h2>
+        <div class="export-btns">
+          <button class="export-btn" id="mdBtn" onclick="copyMarkdown()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1"/></svg>
+            Markdown kopieren
+          </button>
+          <button class="export-btn" id="htmlBtn" onclick="copyHTML()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+            HTML kopieren
+          </button>
+        </div>
+      </div>
+      <div class="panel-body">
+        <div id="preview"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const typeLabels={added:'Added',changed:'Changed',fixed:'Fixed',removed:'Removed'};
+let entries=[
+  {type:'added',desc:'Neues KI-gestuetztes Anomalie-Erkennungssystem fuer Event-Streams'},
+  {type:'added',desc:'SSE-Streaming Endpunkt fuer Echtzeit-Event-Updates'},
+  {type:'added',desc:'Team-Rollen und Berechtigungssystem mit granularen Zugriffskontrollen'},
+  {type:'changed',desc:'Dashboard-Performance um 40% verbessert durch virtualisiertes Rendering'},
+  {type:'changed',desc:'API Rate-Limits fuer Pro-Accounts auf 1.000 Requests/Min erhoehen'},
+  {type:'fixed',desc:'Webhook-Retry-Logik bei Timeout-Fehlern korrigiert'},
+  {type:'fixed',desc:'Event-Deduplizierung bei hoher Last stabilisiert'},
+  {type:'fixed',desc:'Zeitzonenbehandlung in Event-Timestamps korrigiert'},
+  {type:'removed',desc:'Veralteten v1 API-Endpunkt /api/legacy/events entfernt'}
+];
+
+function renderEntries(){
+  const list=document.getElementById('entryList');
+  list.innerHTML='';
+  entries.forEach((e,i)=>{
+    const item=document.createElement('div');
+    item.className='entry-item';
+    item.innerHTML=`
+      <span class="entry-type-tag ${e.type}">${typeLabels[e.type]}</span>
+      <span class="entry-text">${e.desc}</span>
+      <button class="entry-remove" onclick="removeEntry(${i})">&times;</button>
+    `;
+    list.appendChild(item);
+  });
+  renderPreview();
+}
+
+function addEntry(){
+  const type=document.getElementById('typeSelect').value;
+  const desc=document.getElementById('descInput').value.trim();
+  if(!desc)return;
+  entries.push({type,desc});
+  document.getElementById('descInput').value='';
+  renderEntries();
+}
+
+function removeEntry(i){
+  entries.splice(i,1);
+  renderEntries();
+}
+
+function renderPreview(){
+  const version=document.getElementById('versionInput').value||'v0.0.0';
+  const date=document.getElementById('dateInput').value||'2026-01-01';
+  const grouped={added:[],changed:[],fixed:[],removed:[]};
+  entries.forEach(e=>{if(grouped[e.type])grouped[e.type].push(e.desc)});
+
+  let html=`<div class="preview-version">${version}</div>`;
+  html+=`<div class="preview-date">${formatDate(date)}</div>`;
+
+  const groupMeta=[
+    {key:'added',label:'Hinzugefuegt',color:'added'},
+    {key:'changed',label:'Geaendert',color:'changed'},
+    {key:'fixed',label:'Behoben',color:'fixed'},
+    {key:'removed',label:'Entfernt',color:'removed'}
+  ];
+
+  let hasContent=false;
+  groupMeta.forEach(g=>{
+    if(grouped[g.key].length){
+      hasContent=true;
+      html+=`<div class="preview-group">`;
+      html+=`<div class="preview-group-title"><span class="dot ${g.color}"></span>${g.label}</div>`;
+      html+=`<ul class="preview-list">`;
+      grouped[g.key].forEach(d=>{html+=`<li>${d}</li>`});
+      html+=`</ul></div>`;
+    }
+  });
+
+  if(!hasContent){
+    html+=`<div class="empty-state"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg><p>Fuege Eintraege hinzu, um die Vorschau zu sehen.</p></div>`;
+  }
+
+  document.getElementById('preview').innerHTML=html;
+}
+
+function formatDate(d){
+  const parts=d.split('-');
+  const months=['Januar','Februar','Maerz','April','Mai','Juni','Juli','August','September','Oktober','November','Dezember'];
+  return `${parseInt(parts[2])}. ${months[parseInt(parts[1])-1]} ${parts[0]}`;
+}
+
+function generateMarkdown(){
+  const version=document.getElementById('versionInput').value||'v0.0.0';
+  const date=document.getElementById('dateInput').value||'2026-01-01';
+  const grouped={added:[],changed:[],fixed:[],removed:[]};
+  entries.forEach(e=>{if(grouped[e.type])grouped[e.type].push(e.desc)});
+
+  let md=`## ${version} - ${formatDate(date)}\n\n`;
+  const labels={added:'### Hinzugefuegt',changed:'### Geaendert',fixed:'### Behoben',removed:'### Entfernt'};
+  ['added','changed','fixed','removed'].forEach(k=>{
+    if(grouped[k].length){
+      md+=`${labels[k]}\n\n`;
+      grouped[k].forEach(d=>{md+=`- ${d}\n`});
+      md+='\n';
+    }
+  });
+  return md.trim();
+}
+
+function generateHTMLExport(){
+  const version=document.getElementById('versionInput').value||'v0.0.0';
+  const date=document.getElementById('dateInput').value||'2026-01-01';
+  const grouped={added:[],changed:[],fixed:[],removed:[]};
+  entries.forEach(e=>{if(grouped[e.type])grouped[e.type].push(e.desc)});
+
+  let html=`<h2>${version} <small>${formatDate(date)}</small></h2>\n`;
+  const labels={added:'Hinzugefuegt',changed:'Geaendert',fixed:'Behoben',removed:'Entfernt'};
+  ['added','changed','fixed','removed'].forEach(k=>{
+    if(grouped[k].length){
+      html+=`<h3>${labels[k]}</h3>\n<ul>\n`;
+      grouped[k].forEach(d=>{html+=`  <li>${d}</li>\n`});
+      html+=`</ul>\n`;
+    }
+  });
+  return html.trim();
+}
+
+function copyMarkdown(){
+  navigator.clipboard.writeText(generateMarkdown()).then(()=>{
+    const btn=document.getElementById('mdBtn');
+    btn.classList.add('copied');
+    btn.innerHTML=`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> Kopiert!`;
+    setTimeout(()=>{
+      btn.classList.remove('copied');
+      btn.innerHTML=`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1"/></svg> Markdown kopieren`;
+    },2000);
+  });
+}
+
+function copyHTML(){
+  navigator.clipboard.writeText(generateHTMLExport()).then(()=>{
+    const btn=document.getElementById('htmlBtn');
+    btn.classList.add('copied');
+    btn.innerHTML=`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> Kopiert!`;
+    setTimeout(()=>{
+      btn.classList.remove('copied');
+      btn.innerHTML=`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg> HTML kopieren`;
+    },2000);
+  });
+}
+
+// Listen for version/date changes
+document.getElementById('versionInput').addEventListener('input',renderPreview);
+document.getElementById('dateInput').addEventListener('input',renderPreview);
+
+// Initial render
+renderEntries();
+</script>
+</body>
+</html>

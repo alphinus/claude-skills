@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{BRAND_NAME}} - Social Media Profilbilder</title>
+<style>
+  :root {
+    --dark-bg: {{BG}};
+    --cyan: {{PRIMARY}};
+    --cyan-dark: {{PRIMARY_DARK}};
+    --cloud: {{TEXT}};
+    --muted: {{MUTED}};
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #080e1a;
+    color: var(--cloud);
+    font-family: system-ui, -apple-system, sans-serif;
+    padding: 60px 40px;
+  }
+
+  h1 {
+    text-align: center;
+    font-size: 28px;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    margin-bottom: 8px;
+    color: var(--cloud);
+  }
+
+  h1 span { color: var(--cyan); }
+
+  .subtitle {
+    text-align: center;
+    color: var(--muted);
+    font-size: 14px;
+    margin-bottom: 50px;
+    letter-spacing: 0.03em;
+  }
+
+  .grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 48px;
+    justify-content: center;
+    align-items: flex-end;
+  }
+
+  .profile-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .profile-container {
+    border-radius: 50%;
+    overflow: hidden;
+    flex-shrink: 0;
+    position: relative;
+    box-shadow: 0 0 30px rgba({{PRIMARY_RGB}}, 0.08), 0 4px 20px rgba(0,0,0,0.4);
+  }
+
+  .profile-pic {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--dark-bg);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .profile-pic::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 50% 50%, rgba({{PRIMARY_RGB}}, 0.06) 0%, transparent 70%);
+  }
+
+  .label {
+    text-align: center;
+  }
+
+  .label .platform {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--cloud);
+    letter-spacing: 0.04em;
+  }
+
+  .label .dimensions {
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 3px;
+  }
+
+  /* Hexagon logo SVG scaling */
+  .logo-svg {
+    position: relative;
+    z-index: 1;
+  }
+</style>
+</head>
+<body>
+
+<h1>ELUM<span>A</span> Profilbilder</h1>
+<p class="subtitle">Social Media Profilbild-Varianten / Alle in Originalgrösse</p>
+
+<div class="grid">
+
+  <!-- Instagram 320x320 -->
+  <div class="profile-card">
+    <div class="profile-container" style="width:320px;height:320px;">
+      <div class="profile-pic" style="width:320px;height:320px;">
+        <svg class="logo-svg" width="180" height="200" viewBox="0 0 180 200">
+          <defs>
+            <filter id="glow-320" x="-50%" y="-50%" width="200%" height="200%">
+              <feGaussianBlur stdDeviation="8" result="blur"/>
+              <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+            </filter>
+            <filter id="outerGlow-320" x="-50%" y="-50%" width="200%" height="200%">
+              <feGaussianBlur stdDeviation="12"/>
+            </filter>
+            <linearGradient id="cyanGrad-320" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="{{PRIMARY}}"/>
+              <stop offset="100%" stop-color="{{PRIMARY_DARK}}"/>
+            </linearGradient>
+          </defs>
+          <!-- Outer glow -->
+          <polygon points="90,10 165,50 165,130 90,170 15,130 15,50"
+            fill="none" stroke="{{PRIMARY}}" stroke-width="2" opacity="0.15"
+            filter="url(#outerGlow-320)"/>
+          <!-- Hexagon outline -->
+          <polygon points="90,15 160,52 160,128 90,165 20,128 20,52"
+            fill="none" stroke="url(#cyanGrad-320)" stroke-width="2.5" opacity="0.7"/>
+          <!-- Inner hexagon fill -->
+          <polygon points="90,25 150,57 150,123 90,160 30,123 30,57"
+            fill="rgba({{PRIMARY_RGB}},0.04)" stroke="none"/>
+          <!-- E beam lines -->
+          <g filter="url(#glow-320)">
+            <!-- Top horizontal beam -->
+            <rect x="60" y="55" width="60" height="6" rx="3" fill="url(#cyanGrad-320)" opacity="0.95"/>
+            <!-- Middle horizontal beam -->
+            <rect x="60" y="82" width="48" height="6" rx="3" fill="url(#cyanGrad-320)" opacity="0.95"/>
+            <!-- Bottom horizontal beam -->
+            <rect x="60" y="109" width="60" height="6" rx="3" fill="url(#cyanGrad-320)" opacity="0.95"/>
+            <!-- Vertical beam -->
+            <rect x="60" y="55" width="6" height="60" rx="3" fill="url(#cyanGrad-320)" opacity="0.95"/>
+          </g>
+        </svg>
+      </div>
+    </div>
+    <div class="label">
+      <div class="platform">Instagram</div>
+      <div class="dimensions">320 x 320 px</div>
+    </div>
+  </div>
+
+  <!-- Facebook 170x170 -->
+  <div class="profile-card">
+    <div class="profile-container" style="width:170px;height:170px;">
+      <div class="profile-pic" style="width:170px;height:170px;">
+        <svg class="logo-svg" width="96" height="106" viewBox="0 0 180 200">
+          <defs>
+            <filter id="glow-170" x="-50%" y="-50%" width="200%" height="200%">
+              <feGaussianBlur stdDeviation="8" result="blur"/>
+              <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+            </filter>
+            <filter id="outerGlow-170" x="-50%" y="-50%" width="200%" height="200%">
+              <feGaussianBlur stdDeviation="12"/>
+            </filter>
+            <linearGradient id="cyanGrad-170" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="{{PRIMARY}}"/>
+              <stop offset="100%" stop-color="{{PRIMARY_DARK}}"/>
+            </linearGradient>
+          </defs>
+          <polygon points="90,10 165,50 165,130 90,170 15,130 15,50"
+            fill="none" stroke="{{PRIMARY}}" stroke-width="3" opacity="0.15"
+            filter="url(#outerGlow-170)"/>
+          <polygon points="90,15 160,52 160,128 90,165 20,128 20,52"
+            fill="none" stroke="url(#cyanGrad-170)" stroke-width="3" opacity="0.7"/>
+          <polygon points="90,25 150,57 150,123 90,160 30,123 30,57"
+            fill="rgba({{PRIMARY_RGB}},0.04)" stroke="none"/>
+          <g filter="url(#glow-170)">
+            <rect x="60" y="55" width="60" height="6" rx="3" fill="url(#cyanGrad-170)" opacity="0.95"/>
+            <rect x="60" y="82" width="48" height="6" rx="3" fill="url(#cyanGrad-170)" opacity="0.95"/>
+            <rect x="60" y="109" width="60" height="6" rx="3" fill="url(#cyanGrad-170)" opacity="0.95"/>
+            <rect x="60" y="55" width="6" height="60" rx="3" fill="url(#cyanGrad-170)" opacity="0.95"/>
+          </g>
+        </svg>
+      </div>
+    </div>
+    <div class="label">
+      <div class="platform">Facebook</div>
+      <div class="dimensions">170 x 170 px</div>
+    </div>
+  </div>
+
+  <!-- X/Twitter 400x400 -->
+  <div class="profile-card">
+    <div class="profile-container" style="width:400px;height:400px;">
+      <div class="profile-pic" style="width:400px;height:400px;">
+        <svg class="logo-svg" width="224" height="248" viewBox="0 0 180 200">
+          <defs>
+            <filter id="glow-400t" x="-50%" y="-50%" width="200%" height="200%">
+              <feGaussianBlur stdDeviation="8" result="blur"/>
+              <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+            </filter>
+            <filter id="outerGlow-400t" x="-50%" y="-50%" width="200%" height="200%">
+              <feGaussianBlur stdDeviation="12"/>
+            </filter>
+            <linearGradient id="cyanGrad-400t" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="{{PRIMARY}}"/>
+              <stop offset="100%" stop-color="{{PRIMARY_DARK}}"/>
+            </linearGradient>
+          </defs>
+          <polygon points="90,10 165,50 165,130 90,170 15,130 15,50"
+            fill="none" stroke="{{PRIMARY}}" stroke-width="2" opacity="0.15"
+            filter="url(#outerGlow-400t)"/>
+          <polygon points="90,15 160,52 160,128 90,165 20,128 20,52"
+            fill="none" stroke="url(#cyanGrad-400t)" stroke-width="2.5" opacity="0.7"/>
+          <polygon points="90,25 150,57 150,123 90,160 30,123 30,57"
+            fill="rgba({{PRIMARY_RGB}},0.04)" stroke="none"/>
+          <g filter="url(#glow-400t)">
+            <rect x="60" y="55" width="60" height="6" rx="3" fill="url(#cyanGrad-400t)" opacity="0.95"/>
+            <rect x="60" y="82" width="48" height="6" rx="3" fill="url(#cyanGrad-400t)" opacity="0.95"/>
+            <rect x="60" y="109" width="60" height="6" rx="3" fill="url(#cyanGrad-400t)" opacity="0.95"/>
+            <rect x="60" y="55" width="6" height="60" rx="3" fill="url(#cyanGrad-400t)" opacity="0.95"/>
+          </g>
+        </svg>
+      </div>
+    </div>
+    <div class="label">
+      <div class="platform">X / Twitter</div>
+      <div class="dimensions">400 x 400 px</div>
+    </div>
+  </div>
+
+  <!-- LinkedIn 400x400 -->
+  <div class="profile-card">
+    <div class="profile-container" style="width:400px;height:400px;">
+      <div class="profile-pic" style="width:400px;height:400px;">
+        <svg class="logo-svg" width="224" height="248" viewBox="0 0 180 200">
+          <defs>
+            <filter id="glow-400l" x="-50%" y="-50%" width="200%" height="200%">
+              <feGaussianBlur stdDeviation="8" result="blur"/>
+              <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+            </filter>
+            <filter id="outerGlow-400l" x="-50%" y="-50%" width="200%" height="200%">
+              <feGaussianBlur stdDeviation="12"/>
+            </filter>
+            <linearGradient id="cyanGrad-400l" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="{{PRIMARY}}"/>
+              <stop offset="100%" stop-color="{{PRIMARY_DARK}}"/>
+            </linearGradient>
+          </defs>
+          <polygon points="90,10 165,50 165,130 90,170 15,130 15,50"
+            fill="none" stroke="{{PRIMARY}}" stroke-width="2" opacity="0.15"
+            filter="url(#outerGlow-400l)"/>
+          <polygon points="90,15 160,52 160,128 90,165 20,128 20,52"
+            fill="none" stroke="url(#cyanGrad-400l)" stroke-width="2.5" opacity="0.7"/>
+          <polygon points="90,25 150,57 150,123 90,160 30,123 30,57"
+            fill="rgba({{PRIMARY_RGB}},0.04)" stroke="none"/>
+          <g filter="url(#glow-400l)">
+            <rect x="60" y="55" width="60" height="6" rx="3" fill="url(#cyanGrad-400l)" opacity="0.95"/>
+            <rect x="60" y="82" width="48" height="6" rx="3" fill="url(#cyanGrad-400l)" opacity="0.95"/>
+            <rect x="60" y="109" width="60" height="6" rx="3" fill="url(#cyanGrad-400l)" opacity="0.95"/>
+            <rect x="60" y="55" width="6" height="60" rx="3" fill="url(#cyanGrad-400l)" opacity="0.95"/>
+          </g>
+        </svg>
+      </div>
+    </div>
+    <div class="label">
+      <div class="platform">LinkedIn</div>
+      <div class="dimensions">400 x 400 px</div>
+    </div>
+  </div>
+
+  <!-- YouTube 800x800 -->
+  <div class="profile-card">
+    <div class="profile-container" style="width:800px;height:800px;">
+      <div class="profile-pic" style="width:800px;height:800px;">
+        <svg class="logo-svg" width="448" height="500" viewBox="0 0 180 200">
+          <defs>
+            <filter id="glow-800" x="-50%" y="-50%" width="200%" height="200%">
+              <feGaussianBlur stdDeviation="6" result="blur"/>
+              <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+            </filter>
+            <filter id="outerGlow-800" x="-50%" y="-50%" width="200%" height="200%">
+              <feGaussianBlur stdDeviation="10"/>
+            </filter>
+            <linearGradient id="cyanGrad-800" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="{{PRIMARY}}"/>
+              <stop offset="100%" stop-color="{{PRIMARY_DARK}}"/>
+            </linearGradient>
+          </defs>
+          <polygon points="90,10 165,50 165,130 90,170 15,130 15,50"
+            fill="none" stroke="{{PRIMARY}}" stroke-width="1.5" opacity="0.15"
+            filter="url(#outerGlow-800)"/>
+          <polygon points="90,15 160,52 160,128 90,165 20,128 20,52"
+            fill="none" stroke="url(#cyanGrad-800)" stroke-width="2" opacity="0.7"/>
+          <polygon points="90,25 150,57 150,123 90,160 30,123 30,57"
+            fill="rgba({{PRIMARY_RGB}},0.04)" stroke="none"/>
+          <g filter="url(#glow-800)">
+            <rect x="60" y="55" width="60" height="6" rx="3" fill="url(#cyanGrad-800)" opacity="0.95"/>
+            <rect x="60" y="82" width="48" height="6" rx="3" fill="url(#cyanGrad-800)" opacity="0.95"/>
+            <rect x="60" y="109" width="60" height="6" rx="3" fill="url(#cyanGrad-800)" opacity="0.95"/>
+            <rect x="60" y="55" width="6" height="60" rx="3" fill="url(#cyanGrad-800)" opacity="0.95"/>
+          </g>
+        </svg>
+      </div>
+    </div>
+    <div class="label">
+      <div class="platform">YouTube</div>
+      <div class="dimensions">800 x 800 px</div>
+    </div>
+  </div>
+
+  <!-- TikTok 200x200 -->
+  <div class="profile-card">
+    <div class="profile-container" style="width:200px;height:200px;">
+      <div class="profile-pic" style="width:200px;height:200px;">
+        <svg class="logo-svg" width="112" height="124" viewBox="0 0 180 200">
+          <defs>
+            <filter id="glow-200" x="-50%" y="-50%" width="200%" height="200%">
+              <feGaussianBlur stdDeviation="8" result="blur"/>
+              <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+            </filter>
+            <filter id="outerGlow-200" x="-50%" y="-50%" width="200%" height="200%">
+              <feGaussianBlur stdDeviation="12"/>
+            </filter>
+            <linearGradient id="cyanGrad-200" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="{{PRIMARY}}"/>
+              <stop offset="100%" stop-color="{{PRIMARY_DARK}}"/>
+            </linearGradient>
+          </defs>
+          <polygon points="90,10 165,50 165,130 90,170 15,130 15,50"
+            fill="none" stroke="{{PRIMARY}}" stroke-width="3" opacity="0.15"
+            filter="url(#outerGlow-200)"/>
+          <polygon points="90,15 160,52 160,128 90,165 20,128 20,52"
+            fill="none" stroke="url(#cyanGrad-200)" stroke-width="3.5" opacity="0.7"/>
+          <polygon points="90,25 150,57 150,123 90,160 30,123 30,57"
+            fill="rgba({{PRIMARY_RGB}},0.04)" stroke="none"/>
+          <g filter="url(#glow-200)">
+            <rect x="60" y="55" width="60" height="6" rx="3" fill="url(#cyanGrad-200)" opacity="0.95"/>
+            <rect x="60" y="82" width="48" height="6" rx="3" fill="url(#cyanGrad-200)" opacity="0.95"/>
+            <rect x="60" y="109" width="60" height="6" rx="3" fill="url(#cyanGrad-200)" opacity="0.95"/>
+            <rect x="60" y="55" width="6" height="60" rx="3" fill="url(#cyanGrad-200)" opacity="0.95"/>
+          </g>
+        </svg>
+      </div>
+    </div>
+    <div class="label">
+      <div class="platform">TikTok</div>
+      <div class="dimensions">200 x 200 px</div>
+    </div>
+  </div>
+
+  <!-- Telegram 512x512 -->
+  <div class="profile-card">
+    <div class="profile-container" style="width:512px;height:512px;">
+      <div class="profile-pic" style="width:512px;height:512px;">
+        <svg class="logo-svg" width="288" height="320" viewBox="0 0 180 200">
+          <defs>
+            <filter id="glow-512t" x="-50%" y="-50%" width="200%" height="200%">
+              <feGaussianBlur stdDeviation="7" result="blur"/>
+              <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+            </filter>
+            <filter id="outerGlow-512t" x="-50%" y="-50%" width="200%" height="200%">
+              <feGaussianBlur stdDeviation="11"/>
+            </filter>
+            <linearGradient id="cyanGrad-512t" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="{{PRIMARY}}"/>
+              <stop offset="100%" stop-color="{{PRIMARY_DARK}}"/>
+            </linearGradient>
+          </defs>
+          <polygon points="90,10 165,50 165,130 90,170 15,130 15,50"
+            fill="none" stroke="{{PRIMARY}}" stroke-width="2" opacity="0.15"
+            filter="url(#outerGlow-512t)"/>
+          <polygon points="90,15 160,52 160,128 90,165 20,128 20,52"
+            fill="none" stroke="url(#cyanGrad-512t)" stroke-width="2.5" opacity="0.7"/>
+          <polygon points="90,25 150,57 150,123 90,160 30,123 30,57"
+            fill="rgba({{PRIMARY_RGB}},0.04)" stroke="none"/>
+          <g filter="url(#glow-512t)">
+            <rect x="60" y="55" width="60" height="6" rx="3" fill="url(#cyanGrad-512t)" opacity="0.95"/>
+            <rect x="60" y="82" width="48" height="6" rx="3" fill="url(#cyanGrad-512t)" opacity="0.95"/>
+            <rect x="60" y="109" width="60" height="6" rx="3" fill="url(#cyanGrad-512t)" opacity="0.95"/>
+            <rect x="60" y="55" width="6" height="60" rx="3" fill="url(#cyanGrad-512t)" opacity="0.95"/>
+          </g>
+        </svg>
+      </div>
+    </div>
+    <div class="label">
+      <div class="platform">Telegram</div>
+      <div class="dimensions">512 x 512 px</div>
+    </div>
+  </div>
+
+  <!-- Discord 512x512 -->
+  <div class="profile-card">
+    <div class="profile-container" style="width:512px;height:512px;">
+      <div class="profile-pic" style="width:512px;height:512px;">
+        <svg class="logo-svg" width="288" height="320" viewBox="0 0 180 200">
+          <defs>
+            <filter id="glow-512d" x="-50%" y="-50%" width="200%" height="200%">
+              <feGaussianBlur stdDeviation="7" result="blur"/>
+              <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+            </filter>
+            <filter id="outerGlow-512d" x="-50%" y="-50%" width="200%" height="200%">
+              <feGaussianBlur stdDeviation="11"/>
+            </filter>
+            <linearGradient id="cyanGrad-512d" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="{{PRIMARY}}"/>
+              <stop offset="100%" stop-color="{{PRIMARY_DARK}}"/>
+            </linearGradient>
+          </defs>
+          <polygon points="90,10 165,50 165,130 90,170 15,130 15,50"
+            fill="none" stroke="{{PRIMARY}}" stroke-width="2" opacity="0.15"
+            filter="url(#outerGlow-512d)"/>
+          <polygon points="90,15 160,52 160,128 90,165 20,128 20,52"
+            fill="none" stroke="url(#cyanGrad-512d)" stroke-width="2.5" opacity="0.7"/>
+          <polygon points="90,25 150,57 150,123 90,160 30,123 30,57"
+            fill="rgba({{PRIMARY_RGB}},0.04)" stroke="none"/>
+          <g filter="url(#glow-512d)">
+            <rect x="60" y="55" width="60" height="6" rx="3" fill="url(#cyanGrad-512d)" opacity="0.95"/>
+            <rect x="60" y="82" width="48" height="6" rx="3" fill="url(#cyanGrad-512d)" opacity="0.95"/>
+            <rect x="60" y="109" width="60" height="6" rx="3" fill="url(#cyanGrad-512d)" opacity="0.95"/>
+            <rect x="60" y="55" width="6" height="60" rx="3" fill="url(#cyanGrad-512d)" opacity="0.95"/>
+          </g>
+        </svg>
+      </div>
+    </div>
+    <div class="label">
+      <div class="platform">Discord</div>
+      <div class="dimensions">512 x 512 px</div>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>

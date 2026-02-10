@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>{{BRAND_NAME}} Developer Conference 2026 Poster</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #1a1a2e;
+    font-family: system-ui, -apple-system, sans-serif;
+    display: flex; align-items: center; justify-content: center;
+    min-height: 100vh; padding: 40px;
+  }
+
+  .poster {
+    width: 420px; height: 594px;
+    background: {{BG}};
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 30px 80px rgba(0,0,0,0.6);
+    border-radius: 2px;
+  }
+
+  /* Background effects */
+  .poster::before {
+    content: ''; position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba({{PRIMARY_RGB}},0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba({{PRIMARY_RGB}},0.03) 1px, transparent 1px);
+    background-size: 25px 25px;
+  }
+
+  .glow-top {
+    position: absolute; top: -80px; left: 50%; transform: translateX(-50%);
+    width: 400px; height: 250px;
+    background: radial-gradient(ellipse, rgba({{PRIMARY_RGB}},0.12) 0%, transparent 70%);
+    filter: blur(30px);
+  }
+
+  /* Decorative hexagons */
+  .deco-hex {
+    position: absolute; opacity: 0.04;
+  }
+  .deco-hex svg { stroke: {{PRIMARY}}; fill: none; }
+  .hex-tl { top: 20px; left: -30px; }
+  .hex-tr { top: 80px; right: -20px; }
+  .hex-bl { bottom: 80px; left: -25px; }
+  .hex-br { bottom: 20px; right: -15px; }
+  .hex-mid { top: 50%; left: 50%; transform: translate(-50%, -50%); opacity: 0.02; }
+
+  /* ── HEADER ── */
+  .poster-header {
+    position: relative; z-index: 1;
+    text-align: center;
+    padding: 28px 24px 12px;
+  }
+
+  .event-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 4px 14px;
+    border: 1px solid rgba({{PRIMARY_RGB}},0.3);
+    border-radius: 50px;
+    font-size: 7px; color: {{PRIMARY}}; letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+  }
+  .event-badge .badge-dot {
+    width: 5px; height: 5px; border-radius: 50%;
+    background: {{PRIMARY}};
+  }
+
+  .poster-logo {
+    margin-bottom: 10px;
+  }
+
+  .conf-title {
+    font-size: 11px; font-weight: 300; color: {{MUTED}};
+    letter-spacing: 4px; text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+
+  .conf-name {
+    font-size: 28px; font-weight: 700; color: {{TEXT}};
+    letter-spacing: 1px; line-height: 1.2;
+  }
+  .conf-name em { font-style: normal; color: {{PRIMARY}}; }
+
+  .conf-year {
+    font-size: 48px; font-weight: 100; color: rgba({{PRIMARY_RGB}},0.15);
+    letter-spacing: 8px;
+    margin-top: -6px;
+  }
+
+  /* Date & Location */
+  .event-meta {
+    position: relative; z-index: 1;
+    display: flex; justify-content: center; gap: 24px;
+    padding: 4px 24px 16px;
+  }
+  .meta-block {
+    display: flex; align-items: center; gap: 8px;
+  }
+  .meta-icon {
+    width: 28px; height: 28px;
+    border: 1px solid rgba({{PRIMARY_RGB}},0.2);
+    border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    background: rgba({{PRIMARY_RGB}},0.05);
+  }
+  .meta-icon svg { width: 14px; height: 14px; }
+  .meta-text .meta-label {
+    font-size: 7px; color: {{MUTED}}; letter-spacing: 1px; text-transform: uppercase;
+  }
+  .meta-text .meta-value {
+    font-size: 10px; color: {{TEXT}}; font-weight: 500;
+  }
+
+  /* Divider */
+  .divider {
+    position: relative; z-index: 1;
+    height: 1px;
+    margin: 0 40px;
+    background: linear-gradient(90deg, transparent, rgba({{PRIMARY_RGB}},0.2), transparent);
+  }
+
+  /* ── SPEAKERS ── */
+  .speakers-section {
+    position: relative; z-index: 1;
+    padding: 14px 24px;
+  }
+  .section-title {
+    font-size: 8px; font-weight: 600; color: {{PRIMARY}};
+    letter-spacing: 3px; text-transform: uppercase;
+    text-align: center; margin-bottom: 12px;
+  }
+
+  .speakers-grid {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+  .speaker {
+    display: flex; align-items: center; gap: 10px;
+    padding: 8px 10px;
+    background: rgba(255,255,255,0.02);
+    border: 1px solid rgba({{PRIMARY_RGB}},0.08);
+    border-radius: 8px;
+  }
+  .speaker-avatar {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, rgba({{PRIMARY_RGB}},0.15), rgba(56,178,172,0.08));
+    border: 1px solid rgba({{PRIMARY_RGB}},0.2);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .speaker-avatar .initials {
+    font-size: 12px; font-weight: 600; color: {{PRIMARY}};
+  }
+  .speaker-info .speaker-name {
+    font-size: 9px; font-weight: 600; color: {{TEXT}};
+  }
+  .speaker-info .speaker-topic {
+    font-size: 7.5px; color: {{MUTED}}; margin-top: 1px;
+  }
+  .speaker-info .speaker-role {
+    font-size: 6.5px; color: {{PRIMARY}}; margin-top: 1px;
+  }
+
+  /* ── SCHEDULE ── */
+  .schedule-section {
+    position: relative; z-index: 1;
+    padding: 12px 24px;
+  }
+  .schedule-grid {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+  .schedule-day {
+    padding: 10px;
+    background: rgba({{PRIMARY_RGB}},0.03);
+    border: 1px solid rgba({{PRIMARY_RGB}},0.08);
+    border-radius: 6px;
+  }
+  .day-title {
+    font-size: 9px; font-weight: 600; color: {{PRIMARY}};
+    margin-bottom: 6px;
+  }
+  .sched-item {
+    display: flex; gap: 8px;
+    margin-bottom: 4px;
+  }
+  .sched-time {
+    font-size: 7px; color: {{MUTED}};
+    min-width: 32px; font-variant-numeric: tabular-nums;
+  }
+  .sched-event {
+    font-size: 7.5px; color: #cbd5e0;
+  }
+
+  /* ── SPONSORS ── */
+  .sponsors-section {
+    position: relative; z-index: 1;
+    padding: 10px 24px;
+    text-align: center;
+  }
+  .sponsors-row {
+    display: flex; justify-content: center; gap: 16px;
+    margin-top: 8px;
+  }
+  .sponsor {
+    width: 60px; height: 28px;
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 4px;
+    display: flex; align-items: center; justify-content: center;
+    background: rgba(255,255,255,0.02);
+  }
+  .sponsor span {
+    font-size: 7px; color: {{MUTED}}; letter-spacing: 1px;
+    font-weight: 500;
+  }
+
+  /* ── BOTTOM ── */
+  .poster-bottom {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    height: 40px;
+    background: linear-gradient(90deg, {{PRIMARY}}, {{PRIMARY_DARK}});
+    display: flex; align-items: center; justify-content: center;
+    gap: 8px;
+  }
+  .poster-bottom .wordmark {
+    font-size: 14px; font-weight: 200; letter-spacing: 6px; color: {{BG}};
+  }
+  .poster-bottom .wordmark em { font-style: normal; font-weight: 400; }
+  .poster-bottom .bottom-url {
+    font-size: 9px; color: rgba(15,23,42,0.6); letter-spacing: 1px;
+  }
+</style>
+</head>
+<body>
+
+<div class="poster">
+  <!-- Effects -->
+  <div class="glow-top"></div>
+
+  <!-- Decorative hexagons -->
+  <svg class="deco-hex hex-tl" width="100" height="115" viewBox="0 0 56 64"><polygon points="28,2 54,16 54,48 28,62 2,48 2,16" stroke-width="0.5"/></svg>
+  <svg class="deco-hex hex-tr" width="70" height="80" viewBox="0 0 56 64"><polygon points="28,2 54,16 54,48 28,62 2,48 2,16" stroke-width="0.5"/></svg>
+  <svg class="deco-hex hex-bl" width="80" height="92" viewBox="0 0 56 64"><polygon points="28,2 54,16 54,48 28,62 2,48 2,16" stroke-width="0.5"/></svg>
+  <svg class="deco-hex hex-br" width="60" height="69" viewBox="0 0 56 64"><polygon points="28,2 54,16 54,48 28,62 2,48 2,16" stroke-width="0.5"/></svg>
+  <svg class="deco-hex hex-mid" width="300" height="345" viewBox="0 0 56 64"><polygon points="28,2 54,16 54,48 28,62 2,48 2,16" stroke-width="0.3"/></svg>
+
+  <!-- Header -->
+  <div class="poster-header">
+    <div class="event-badge">
+      <div class="badge-dot"></div>
+      <span>Konferenz 2026</span>
+    </div>
+
+    <div class="poster-logo">
+      <svg width="48" height="55" viewBox="0 0 56 64">
+        <defs>
+          <linearGradient id="pg" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="{{PRIMARY}}"/>
+            <stop offset="100%" stop-color="{{PRIMARY_DARK}}"/>
+          </linearGradient>
+        </defs>
+        <polygon points="28,2 54,16 54,48 28,62 2,48 2,16" fill="none" stroke="url(#pg)" stroke-width="1.5"/>
+        <line x1="18" y1="22" x2="38" y2="22" stroke="url(#pg)" stroke-width="1.5" stroke-linecap="round"/>
+        <line x1="18" y1="32" x2="34" y2="32" stroke="url(#pg)" stroke-width="1.5" stroke-linecap="round"/>
+        <line x1="18" y1="42" x2="38" y2="42" stroke="url(#pg)" stroke-width="1.5" stroke-linecap="round"/>
+        <line x1="18" y1="22" x2="18" y2="42" stroke="url(#pg)" stroke-width="1.5" stroke-linecap="round"/>
+      </svg>
+    </div>
+
+    <div class="conf-title">{{BRAND_NAME}}</div>
+    <div class="conf-name">Developer<br><em>Conference</em></div>
+    <div class="conf-year">2026</div>
+  </div>
+
+  <!-- Date & Location -->
+  <div class="event-meta">
+    <div class="meta-block">
+      <div class="meta-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="{{PRIMARY}}" stroke-width="1.5">
+          <rect x="3" y="4" width="18" height="18" rx="2"/>
+          <line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/>
+          <line x1="3" y1="10" x2="21" y2="10"/>
+        </svg>
+      </div>
+      <div class="meta-text">
+        <div class="meta-label">Datum</div>
+        <div class="meta-value">15. &ndash; 16. März 2026</div>
+      </div>
+    </div>
+    <div class="meta-block">
+      <div class="meta-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="{{PRIMARY}}" stroke-width="1.5">
+          <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/>
+          <circle cx="12" cy="10" r="3"/>
+        </svg>
+      </div>
+      <div class="meta-text">
+        <div class="meta-label">Ort</div>
+        <div class="meta-value">Zürich, Kongresshaus</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- Speakers -->
+  <div class="speakers-section">
+    <div class="section-title">Speaker Lineup</div>
+    <div class="speakers-grid">
+      <div class="speaker">
+        <div class="speaker-avatar"><span class="initials">MK</span></div>
+        <div class="speaker-info">
+          <div class="speaker-name">Marco Keller</div>
+          <div class="speaker-topic">Event-Driven Architektur</div>
+          <div class="speaker-role">{{BRAND_NAME}}, Gründer</div>
+        </div>
+      </div>
+      <div class="speaker">
+        <div class="speaker-avatar"><span class="initials">LW</span></div>
+        <div class="speaker-info">
+          <div class="speaker-name">Laura Weber</div>
+          <div class="speaker-topic">KI im Ökosystem</div>
+          <div class="speaker-role">ETH Zürich, AI Lab</div>
+        </div>
+      </div>
+      <div class="speaker">
+        <div class="speaker-avatar"><span class="initials">TS</span></div>
+        <div class="speaker-info">
+          <div class="speaker-name">Thomas Schmid</div>
+          <div class="speaker-topic">Echtzeit-Streaming</div>
+          <div class="speaker-role">SwissCloud, CTO</div>
+        </div>
+      </div>
+      <div class="speaker">
+        <div class="speaker-avatar"><span class="initials">NB</span></div>
+        <div class="speaker-info">
+          <div class="speaker-name">Nina Brunner</div>
+          <div class="speaker-topic">DevOps & Automation</div>
+          <div class="speaker-role">CloudNative CH</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- Schedule -->
+  <div class="schedule-section">
+    <div class="section-title">Programm-Highlights</div>
+    <div class="schedule-grid">
+      <div class="schedule-day">
+        <div class="day-title">Tag 1 &ndash; 15. März</div>
+        <div class="sched-item">
+          <div class="sched-time">09:00</div>
+          <div class="sched-event">Keynote: Die Zukunft von Events</div>
+        </div>
+        <div class="sched-item">
+          <div class="sched-time">11:00</div>
+          <div class="sched-event">Workshop: API-Design</div>
+        </div>
+        <div class="sched-item">
+          <div class="sched-time">14:00</div>
+          <div class="sched-event">Panel: KI &amp; Automatisierung</div>
+        </div>
+        <div class="sched-item">
+          <div class="sched-time">17:00</div>
+          <div class="sched-event">Networking Apéro</div>
+        </div>
+      </div>
+      <div class="schedule-day">
+        <div class="day-title">Tag 2 &ndash; 16. März</div>
+        <div class="sched-item">
+          <div class="sched-time">09:00</div>
+          <div class="sched-event">Deep Dive: Event Sourcing</div>
+        </div>
+        <div class="sched-item">
+          <div class="sched-time">11:00</div>
+          <div class="sched-event">Live Coding: Telegram Bot</div>
+        </div>
+        <div class="sched-item">
+          <div class="sched-time">14:00</div>
+          <div class="sched-event">Hackathon Kickoff</div>
+        </div>
+        <div class="sched-item">
+          <div class="sched-time">18:00</div>
+          <div class="sched-event">Closing &amp; Awards</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sponsors -->
+  <div class="sponsors-section">
+    <div class="section-title" style="font-size:7px; margin-bottom:4px;">Sponsoren</div>
+    <div class="sponsors-row">
+      <div class="sponsor"><span>SWISS</span></div>
+      <div class="sponsor"><span>ETH</span></div>
+      <div class="sponsor"><span>ZKB</span></div>
+      <div class="sponsor"><span>SBB</span></div>
+      <div class="sponsor"><span>SWITCH</span></div>
+    </div>
+  </div>
+
+  <!-- Bottom bar -->
+  <div class="poster-bottom">
+    <span class="wordmark">ELUM<em>A</em></span>
+    <span class="bottom-url">&middot; {{BRAND_DOMAIN}}/conference</span>
+  </div>
+</div>
+
+</body>
+</html>

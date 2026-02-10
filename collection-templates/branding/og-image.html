@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>{{BRAND_NAME}} OG Image</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    width: 1200px; height: 630px; background: {{BG}};
+    font-family: system-ui, -apple-system, sans-serif;
+    display: flex; align-items: center; justify-content: center;
+    overflow: hidden; position: relative;
+  }
+
+  /* Grid */
+  body::before {
+    content: ''; position: absolute; inset: 0;
+    background-image: linear-gradient(rgba({{PRIMARY_RGB}},0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba({{PRIMARY_RGB}},0.03) 1px, transparent 1px);
+    background-size: 50px 50px;
+    mask-image: radial-gradient(ellipse at center, black 30%, transparent 70%);
+  }
+
+  .orb { position: absolute; border-radius: 50%; filter: blur(80px); }
+  .orb-1 { width: 400px; height: 400px; background: rgba({{PRIMARY_RGB}},0.08); top: 5%; left: 10%; }
+  .orb-2 { width: 300px; height: 300px; background: rgba(30,58,95,0.15); bottom: 10%; right: 15%; }
+
+  .content { position: relative; z-index: 1; text-align: center; }
+
+  .logo { font-size: 64px; font-weight: 200; letter-spacing: 12px; color: {{TEXT}}; margin-bottom: 20px; }
+  .logo span { color: {{PRIMARY}}; }
+
+  .tagline { font-size: 28px; font-weight: 200; color: {{TEXT}}; margin-bottom: 12px; }
+  .highlight { background: linear-gradient(135deg, {{PRIMARY}}, {{PRIMARY_DARK}}); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; font-weight: 300; }
+
+  .desc { font-size: 18px; color: {{MUTED}}; font-weight: 300; margin-bottom: 32px; }
+
+  .badge { display: inline-flex; align-items: center; gap: 8px; padding: 8px 20px; border: 1px solid rgba({{PRIMARY_RGB}},0.3); border-radius: 50px; font-size: 14px; color: {{PRIMARY}}; letter-spacing: 2px; }
+  .badge-dot { width: 8px; height: 8px; background: {{PRIMARY}}; border-radius: 50%; }
+
+  .url { position: absolute; bottom: 30px; right: 40px; font-size: 16px; color: {{PRIMARY}}; letter-spacing: 2px; font-weight: 300; }
+
+  /* Decorative hexagons */
+  .hex { position: absolute; opacity: 0.05; }
+  .hex svg { stroke: {{PRIMARY}}; fill: none; stroke-width: 1; }
+</style>
+</head>
+<body>
+
+<div class="orb orb-1"></div>
+<div class="orb orb-2"></div>
+
+<div class="hex" style="top:60px;left:80px;">
+  <svg width="80" height="80" viewBox="0 0 60 60"><polygon points="30,2 56,16 56,44 30,58 4,44 4,16"/></svg>
+</div>
+<div class="hex" style="bottom:80px;right:120px;">
+  <svg width="60" height="60" viewBox="0 0 60 60"><polygon points="30,2 56,16 56,44 30,58 4,44 4,16"/></svg>
+</div>
+<div class="hex" style="top:120px;right:200px;">
+  <svg width="40" height="40" viewBox="0 0 60 60"><polygon points="30,2 56,16 56,44 30,58 4,44 4,16"/></svg>
+</div>
+
+<div class="content">
+  <div class="logo">ELUM<span>A</span></div>
+  <div class="tagline"><span class="highlight">Event-Driven</span> Ecosystem for Teams</div>
+  <div class="desc">Modular. Intelligent. Swiss-Made.</div>
+  <div class="badge"><span class="badge-dot"></span>OPEN BETA</div>
+</div>
+
+<div class="url">{{BRAND_DOMAIN}}</div>
+
+</body>
+</html>

@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{BRAND_NAME}} - API Playground</title>
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  :root{--dark-bg:{{BG}};--cyan:{{PRIMARY}};--cyan-dark:{{PRIMARY_DARK}};--cloud:{{TEXT}};--muted:{{MUTED}};--surface:#1e293b;--border:rgba(255,255,255,.06);--card:rgba(255,255,255,.04)}
+  body{font-family:system-ui,-apple-system,sans-serif;background:var(--dark-bg);color:var(--cloud);min-height:100vh;padding:40px 20px}
+  .container{max-width:1200px;margin:0 auto}
+  h1{font-size:2.2rem;font-weight:700;margin-bottom:6px;background:linear-gradient(135deg,var(--cyan),var(--cyan-dark));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+  .subtitle{color:var(--muted);margin-bottom:40px}
+  .layout{display:grid;grid-template-columns:240px 1fr;gap:24px}
+  @media(max-width:900px){.layout{grid-template-columns:1fr}.sidebar{order:2}}
+
+  /* Sidebar - History */
+  .sidebar{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:20px;height:fit-content}
+  .sidebar h3{font-size:.85rem;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--muted);margin-bottom:16px}
+  .history-item{padding:12px;border-radius:10px;background:rgba(255,255,255,.02);border:1px solid var(--border);margin-bottom:8px;cursor:pointer;transition:all .15s}
+  .history-item:hover{background:rgba(255,255,255,.05);border-color:rgba(255,255,255,.1)}
+  .history-item.active{border-color:rgba({{PRIMARY_RGB}},.25);background:rgba({{PRIMARY_RGB}},.05)}
+  .history-method{font-size:.7rem;font-weight:700;padding:2px 6px;border-radius:4px;display:inline-block;margin-bottom:4px}
+  .history-url{font-size:.75rem;color:var(--muted);font-family:monospace;word-break:break-all}
+  .history-time{font-size:.65rem;color:rgba(255,255,255,.3);margin-top:4px}
+
+  /* Main Area */
+  .main{display:flex;flex-direction:column;gap:20px}
+
+  /* Method + URL */
+  .request-bar{display:flex;gap:8px}
+  .method-select{position:relative}
+  .method-btn{padding:12px 18px;border-radius:12px;border:1px solid var(--border);font-weight:700;font-size:.9rem;cursor:pointer;display:flex;align-items:center;gap:6px;background:var(--card);color:var(--cloud);transition:all .15s;min-width:110px;justify-content:space-between}
+  .method-btn:hover{border-color:rgba(255,255,255,.15)}
+  .method-dropdown{position:absolute;top:calc(100% + 4px);left:0;width:100%;background:var(--surface);border:1px solid rgba(255,255,255,.1);border-radius:10px;overflow:hidden;z-index:100;display:none;box-shadow:0 8px 24px rgba(0,0,0,.4)}
+  .method-dropdown.show{display:block}
+  .method-option{padding:10px 14px;font-weight:700;font-size:.85rem;cursor:pointer;transition:background .1s}
+  .method-option:hover{background:rgba(255,255,255,.06)}
+  .m-get{color:#48bb78}.m-post{color:var(--cyan)}.m-put{color:#ed8936}.m-delete{color:#fc8181}
+  .url-input{flex:1;padding:12px 16px;border-radius:12px;border:1px solid var(--border);background:var(--card);color:var(--cloud);font-size:.92rem;font-family:monospace;outline:none;transition:border-color .15s}
+  .url-input:focus{border-color:rgba({{PRIMARY_RGB}},.3)}
+  .send-btn{padding:12px 28px;border-radius:12px;background:linear-gradient(135deg,var(--cyan-dark),var(--cyan));color:var(--dark-bg);font-weight:700;font-size:.92rem;border:none;cursor:pointer;transition:transform .15s,box-shadow .15s;white-space:nowrap}
+  .send-btn:hover{transform:scale(1.02);box-shadow:0 4px 16px rgba({{PRIMARY_RGB}},.3)}
+  .send-btn:active{transform:scale(.98)}
+
+  /* Sections */
+  .section{background:var(--card);border:1px solid var(--border);border-radius:16px;overflow:hidden}
+  .section-header{display:flex;justify-content:space-between;align-items:center;padding:14px 20px;border-bottom:1px solid var(--border);cursor:pointer;user-select:none}
+  .section-header h3{font-size:.9rem;font-weight:700}
+  .section-header .toggle{color:var(--muted);font-size:1.2rem;transition:transform .2s}
+  .section-body{padding:16px 20px}
+  .section.collapsed .section-body{display:none}
+  .section.collapsed .toggle{transform:rotate(-90deg)}
+
+  /* Headers key-value */
+  .kv-row{display:flex;gap:8px;margin-bottom:8px;align-items:center}
+  .kv-input{flex:1;padding:8px 12px;border-radius:8px;border:1px solid var(--border);background:rgba(255,255,255,.02);color:var(--cloud);font-size:.85rem;font-family:monospace;outline:none}
+  .kv-input:focus{border-color:rgba({{PRIMARY_RGB}},.25)}
+  .kv-input.key{max-width:200px;color:var(--cyan)}
+  .kv-remove{width:28px;height:28px;border-radius:6px;border:1px solid var(--border);background:transparent;color:var(--muted);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0}
+  .kv-remove:hover{color:#fc8181;border-color:rgba(252,129,129,.3)}
+  .add-row{padding:8px 14px;border-radius:8px;border:1px dashed var(--border);background:transparent;color:var(--muted);font-size:.82rem;cursor:pointer;transition:all .15s;display:inline-flex;align-items:center;gap:4px}
+  .add-row:hover{border-color:rgba(255,255,255,.15);color:var(--cloud)}
+
+  /* Body Editor */
+  .body-editor{width:100%;min-height:200px;padding:16px;border-radius:10px;border:1px solid var(--border);background:#0a0f1e;color:var(--cloud);font-family:'SF Mono',Monaco,Consolas,monospace;font-size:.85rem;line-height:1.7;resize:vertical;outline:none;tab-size:2}
+  .body-editor:focus{border-color:rgba({{PRIMARY_RGB}},.25)}
+
+  /* Response */
+  .response-header{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+  .status-badge{padding:6px 14px;border-radius:8px;font-weight:700;font-size:.85rem}
+  .status-badge.s2xx{background:rgba(72,187,120,.12);color:#48bb78}
+  .status-badge.s4xx{background:rgba(252,129,129,.12);color:#fc8181}
+  .status-badge.s5xx{background:rgba(237,137,54,.12);color:#ed8936}
+  .response-time{font-size:.82rem;color:var(--muted)}
+  .response-size{font-size:.82rem;color:var(--muted)}
+  .response-body{margin-top:16px;padding:16px;border-radius:10px;background:#0a0f1e;border:1px solid var(--border);font-family:'SF Mono',Monaco,Consolas,monospace;font-size:.82rem;line-height:1.7;overflow-x:auto;white-space:pre-wrap;max-height:400px;overflow-y:auto}
+  .json-key{color:var(--cyan)}.json-str{color:#48bb78}.json-num{color:#ed8936}.json-bool{color:#9f7aea}.json-null{color:var(--muted)}
+
+  /* Loading animation */
+  .loading{display:none;align-items:center;gap:8px;padding:20px;color:var(--muted);font-size:.9rem}
+  .loading.active{display:flex}
+  .loading-dots span{width:6px;height:6px;border-radius:50%;background:var(--cyan);display:inline-block;animation:dotPulse .8s ease-in-out infinite}
+  .loading-dots span:nth-child(2){animation-delay:.15s}
+  .loading-dots span:nth-child(3){animation-delay:.3s}
+  @keyframes dotPulse{0%,100%{opacity:.3;transform:scale(.8)}50%{opacity:1;transform:scale(1.1)}}
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>API Playground</h1>
+  <p class="subtitle">Teste die {{BRAND_NAME}} API direkt im Browser</p>
+
+  <div class="layout">
+    <!-- History Sidebar -->
+    <div class="sidebar">
+      <h3>Verlauf</h3>
+      <div id="historyList">
+        <div class="history-item active" onclick="loadHistory(0)">
+          <span class="history-method m-post" style="background:rgba({{PRIMARY_RGB}},.12)">POST</span>
+          <div class="history-url">/api/events</div>
+          <div class="history-time">Vor 2 Minuten - 201</div>
+        </div>
+        <div class="history-item" onclick="loadHistory(1)">
+          <span class="history-method m-get" style="background:rgba(72,187,120,.12)">GET</span>
+          <div class="history-url">/api/streams</div>
+          <div class="history-time">Vor 12 Minuten - 200</div>
+        </div>
+        <div class="history-item" onclick="loadHistory(2)">
+          <span class="history-method m-delete" style="background:rgba(252,129,129,.12)">DELETE</span>
+          <div class="history-url">/api/events/evt_abc123</div>
+          <div class="history-time">Vor 1 Stunde - 204</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main -->
+    <div class="main">
+      <!-- Request Bar -->
+      <div class="request-bar">
+        <div class="method-select">
+          <button class="method-btn" id="methodBtn" onclick="toggleMethodDropdown()">
+            <span id="methodLabel" class="m-post">POST</span>
+            <svg width="10" height="10" viewBox="0 0 10 10" fill="currentColor"><path d="M2 3.5l3 3 3-3"/></svg>
+          </button>
+          <div class="method-dropdown" id="methodDropdown">
+            <div class="method-option m-get" onclick="selectMethod('GET')">GET</div>
+            <div class="method-option m-post" onclick="selectMethod('POST')">POST</div>
+            <div class="method-option m-put" onclick="selectMethod('PUT')">PUT</div>
+            <div class="method-option m-delete" onclick="selectMethod('DELETE')">DELETE</div>
+          </div>
+        </div>
+        <input class="url-input" id="urlInput" value="https://api.{{BRAND_DOMAIN}}/api/events" placeholder="API URL eingeben...">
+        <button class="send-btn" id="sendBtn" onclick="sendRequest()">Senden</button>
+      </div>
+
+      <!-- Headers -->
+      <div class="section" id="headersSection">
+        <div class="section-header" onclick="toggleSection('headersSection')">
+          <h3>Headers</h3>
+          <span class="toggle">&#9662;</span>
+        </div>
+        <div class="section-body">
+          <div id="headerRows">
+            <div class="kv-row">
+              <input class="kv-input key" value="Content-Type" placeholder="Key">
+              <input class="kv-input" value="application/json" placeholder="Value">
+              <button class="kv-remove" onclick="this.parentElement.remove()">&times;</button>
+            </div>
+            <div class="kv-row">
+              <input class="kv-input key" value="Authorization" placeholder="Key">
+              <input class="kv-input" value="Bearer elm_sk_live_xxx..." placeholder="Value">
+              <button class="kv-remove" onclick="this.parentElement.remove()">&times;</button>
+            </div>
+            <div class="kv-row">
+              <input class="kv-input key" value="X-{{BRAND_NAME}}-Version" placeholder="Key">
+              <input class="kv-input" value="2024-01" placeholder="Value">
+              <button class="kv-remove" onclick="this.parentElement.remove()">&times;</button>
+            </div>
+          </div>
+          <button class="add-row" onclick="addHeaderRow()">+ Header hinzufuegen</button>
+        </div>
+      </div>
+
+      <!-- Body -->
+      <div class="section" id="bodySection">
+        <div class="section-header" onclick="toggleSection('bodySection')">
+          <h3>Body</h3>
+          <span class="toggle">&#9662;</span>
+        </div>
+        <div class="section-body">
+          <textarea class="body-editor" id="bodyEditor">{
+  "event": "user.session.started",
+  "stream": "auth-events",
+  "data": {
+    "user_id": "usr_7k3m9x2p",
+    "session_id": "ses_ab12cd34",
+    "ip": "203.0.113.42",
+    "user_agent": "Mozilla/5.0",
+    "country": "CH"
+  },
+  "metadata": {
+    "sdk_version": "2.4.0",
+    "environment": "production"
+  }
+}</textarea>
+        </div>
+      </div>
+
+      <!-- Response -->
+      <div class="section" id="responseSection">
+        <div class="section-header" onclick="toggleSection('responseSection')">
+          <h3>Antwort</h3>
+          <span class="toggle">&#9662;</span>
+        </div>
+        <div class="section-body">
+          <div class="loading" id="loadingIndicator">
+            <div class="loading-dots"><span></span><span></span><span></span></div>
+            Anfrage wird gesendet...
+          </div>
+          <div id="responseContent">
+            <div class="response-header">
+              <span class="status-badge s2xx" id="statusBadge">201 Created</span>
+              <span class="response-time" id="responseTime">124ms</span>
+              <span class="response-size" id="responseSize">342 bytes</span>
+            </div>
+            <div class="response-body" id="responseBody">{
+  <span class="json-key">"id"</span>: <span class="json-str">"evt_2f8a3c91-e4b7-4d2f-a1c3-8f92d4e6b7a1"</span>,
+  <span class="json-key">"event"</span>: <span class="json-str">"user.session.started"</span>,
+  <span class="json-key">"stream"</span>: <span class="json-str">"auth-events"</span>,
+  <span class="json-key">"status"</span>: <span class="json-str">"accepted"</span>,
+  <span class="json-key">"created_at"</span>: <span class="json-str">"2026-02-10T09:41:23.847Z"</span>,
+  <span class="json-key">"processed"</span>: <span class="json-bool">true</span>,
+  <span class="json-key">"latency_ms"</span>: <span class="json-num">7</span>,
+  <span class="json-key">"data"</span>: {
+    <span class="json-key">"user_id"</span>: <span class="json-str">"usr_7k3m9x2p"</span>,
+    <span class="json-key">"session_id"</span>: <span class="json-str">"ses_ab12cd34"</span>,
+    <span class="json-key">"ip"</span>: <span class="json-str">"203.0.113.42"</span>,
+    <span class="json-key">"user_agent"</span>: <span class="json-str">"Mozilla/5.0"</span>,
+    <span class="json-key">"country"</span>: <span class="json-str">"CH"</span>
+  },
+  <span class="json-key">"metadata"</span>: {
+    <span class="json-key">"sdk_version"</span>: <span class="json-str">"2.4.0"</span>,
+    <span class="json-key">"environment"</span>: <span class="json-str">"production"</span>,
+    <span class="json-key">"received_at"</span>: <span class="json-str">"2026-02-10T09:41:23.840Z"</span>
+  }
+}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+let currentMethod='POST';
+
+function toggleMethodDropdown(){
+  document.getElementById('methodDropdown').classList.toggle('show');
+}
+document.addEventListener('click',e=>{
+  if(!e.target.closest('.method-select'))document.getElementById('methodDropdown').classList.remove('show');
+});
+
+function selectMethod(m){
+  currentMethod=m;
+  const label=document.getElementById('methodLabel');
+  label.textContent=m;
+  label.className='m-'+m.toLowerCase();
+  document.getElementById('methodDropdown').classList.remove('show');
+}
+
+function toggleSection(id){
+  document.getElementById(id).classList.toggle('collapsed');
+}
+
+function addHeaderRow(){
+  const row=document.createElement('div');
+  row.className='kv-row';
+  row.innerHTML=`<input class="kv-input key" placeholder="Key"><input class="kv-input" placeholder="Value"><button class="kv-remove" onclick="this.parentElement.remove()">&times;</button>`;
+  document.getElementById('headerRows').appendChild(row);
+}
+
+const responses={
+  POST:{status:'201 Created',cls:'s2xx',time:'124ms',size:'342 bytes',body:`{
+  <span class="json-key">"id"</span>: <span class="json-str">"evt_${Math.random().toString(36).substr(2,8)}"</span>,
+  <span class="json-key">"event"</span>: <span class="json-str">"user.session.started"</span>,
+  <span class="json-key">"stream"</span>: <span class="json-str">"auth-events"</span>,
+  <span class="json-key">"status"</span>: <span class="json-str">"accepted"</span>,
+  <span class="json-key">"created_at"</span>: <span class="json-str">"${new Date().toISOString()}"</span>,
+  <span class="json-key">"processed"</span>: <span class="json-bool">true</span>,
+  <span class="json-key">"latency_ms"</span>: <span class="json-num">${Math.floor(Math.random()*15+3)}</span>
+}`},
+  GET:{status:'200 OK',cls:'s2xx',time:'87ms',size:'1.2 KB',body:`{
+  <span class="json-key">"data"</span>: [
+    {
+      <span class="json-key">"id"</span>: <span class="json-str">"str_analytics"</span>,
+      <span class="json-key">"name"</span>: <span class="json-str">"auth-events"</span>,
+      <span class="json-key">"events_count"</span>: <span class="json-num">12847</span>,
+      <span class="json-key">"active"</span>: <span class="json-bool">true</span>
+    },
+    {
+      <span class="json-key">"id"</span>: <span class="json-str">"str_billing"</span>,
+      <span class="json-key">"name"</span>: <span class="json-str">"billing"</span>,
+      <span class="json-key">"events_count"</span>: <span class="json-num">5421</span>,
+      <span class="json-key">"active"</span>: <span class="json-bool">true</span>
+    }
+  ],
+  <span class="json-key">"total"</span>: <span class="json-num">2</span>,
+  <span class="json-key">"has_more"</span>: <span class="json-bool">false</span>
+}`},
+  PUT:{status:'200 OK',cls:'s2xx',time:'156ms',size:'218 bytes',body:`{
+  <span class="json-key">"id"</span>: <span class="json-str">"evt_updated"</span>,
+  <span class="json-key">"updated"</span>: <span class="json-bool">true</span>,
+  <span class="json-key">"updated_at"</span>: <span class="json-str">"${new Date().toISOString()}"</span>
+}`},
+  DELETE:{status:'204 No Content',cls:'s2xx',time:'45ms',size:'0 bytes',body:`<span class="json-null">// Kein Inhalt - Event erfolgreich geloescht</span>`}
+};
+
+function sendRequest(){
+  const loading=document.getElementById('loadingIndicator');
+  const content=document.getElementById('responseContent');
+  content.style.display='none';
+  loading.classList.add('active');
+  document.getElementById('sendBtn').textContent='...';
+
+  setTimeout(()=>{
+    loading.classList.remove('active');
+    content.style.display='block';
+    const r=responses[currentMethod];
+    document.getElementById('statusBadge').textContent=r.status;
+    document.getElementById('statusBadge').className='status-badge '+r.cls;
+    document.getElementById('responseTime').textContent=r.time;
+    document.getElementById('responseSize').textContent=r.size;
+    document.getElementById('responseBody').innerHTML=r.body;
+    document.getElementById('sendBtn').textContent='Senden';
+  },800+Math.random()*600);
+}
+
+function loadHistory(idx){
+  document.querySelectorAll('.history-item').forEach(h=>h.classList.remove('active'));
+  document.querySelectorAll('.history-item')[idx].classList.add('active');
+  const configs=[
+    {method:'POST',url:'https://api.{{BRAND_DOMAIN}}/api/events'},
+    {method:'GET',url:'https://api.{{BRAND_DOMAIN}}/api/streams'},
+    {method:'DELETE',url:'https://api.{{BRAND_DOMAIN}}/api/events/evt_abc123'}
+  ];
+  selectMethod(configs[idx].method);
+  document.getElementById('urlInput').value=configs[idx].url;
+}
+</script>
+</body>
+</html>

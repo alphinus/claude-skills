@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{BRAND_NAME}} - PWA Install Banner</title>
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  :root{--dark-bg:{{BG}};--cyan:{{PRIMARY}};--cyan-dark:{{PRIMARY_DARK}};--cloud:{{TEXT}};--muted:{{MUTED}};--surface:#1e293b}
+  body{font-family:system-ui,-apple-system,sans-serif;background:var(--dark-bg);color:var(--cloud);min-height:100vh}
+
+  /* Simulated Page Background */
+  .page-content{max-width:800px;margin:0 auto;padding:40px 20px 160px}
+  .page-header{margin-bottom:40px}
+  .page-header h1{font-size:2rem;font-weight:700;margin-bottom:8px;background:linear-gradient(135deg,var(--cyan),var(--cyan-dark));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+  .page-header p{color:var(--muted);line-height:1.6}
+  .page-card{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.06);border-radius:16px;padding:24px;margin-bottom:20px}
+  .page-card h3{font-size:1.1rem;font-weight:700;margin-bottom:8px}
+  .page-card p{color:var(--muted);font-size:.9rem;line-height:1.6}
+  .page-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:20px}
+  .page-stat{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.06);border-radius:12px;padding:20px;text-align:center}
+  .page-stat .val{font-size:1.5rem;font-weight:800;color:var(--cyan)}
+  .page-stat .lbl{font-size:.78rem;color:var(--muted);margin-top:4px}
+  .page-list{list-style:none;padding:0}
+  .page-list li{padding:14px 0;border-bottom:1px solid rgba(255,255,255,.06);display:flex;align-items:center;gap:12px;color:var(--muted);font-size:.9rem}
+  .page-list li:last-child{border-bottom:none}
+  .page-list li::before{content:'';width:8px;height:8px;border-radius:50%;background:var(--cyan);flex-shrink:0}
+
+  /* PWA Install Banner */
+  .pwa-banner{position:fixed;bottom:0;left:0;right:0;z-index:1000;transform:translateY(100%);animation:slideUp .6s cubic-bezier(.16,1,.3,1) .8s forwards}
+  @keyframes slideUp{to{transform:translateY(0)}}
+  .pwa-banner.dismissed{animation:slideDown .4s cubic-bezier(.7,0,.84,0) forwards}
+  @keyframes slideDown{to{transform:translateY(100%)}}
+
+  .pwa-inner{max-width:800px;margin:0 auto;padding:0 16px 16px}
+  .pwa-card{background:var(--surface);border:1px solid rgba({{PRIMARY_RGB}},.15);border-radius:20px;padding:20px 24px;display:flex;align-items:center;gap:16px;box-shadow:0 -8px 40px rgba(0,0,0,.4),0 0 0 1px rgba({{PRIMARY_RGB}},.08);backdrop-filter:blur(20px);position:relative}
+
+  .pwa-icon{width:56px;height:56px;border-radius:14px;background:linear-gradient(135deg,var(--cyan-dark),var(--cyan));display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 4px 12px rgba({{PRIMARY_RGB}},.3)}
+  .pwa-icon svg{width:28px;height:28px}
+  .pwa-content{flex:1;min-width:0}
+  .pwa-title{font-size:1rem;font-weight:700;margin-bottom:3px}
+  .pwa-desc{font-size:.82rem;color:var(--muted);line-height:1.4}
+  .pwa-features{display:flex;gap:12px;margin-top:8px;flex-wrap:wrap}
+  .pwa-feature{display:flex;align-items:center;gap:4px;font-size:.72rem;color:rgba(255,255,255,.6)}
+  .pwa-feature svg{width:14px;height:14px;flex-shrink:0}
+  .pwa-actions{display:flex;gap:8px;flex-shrink:0;align-items:center}
+  .pwa-install{padding:12px 28px;border-radius:12px;background:linear-gradient(135deg,var(--cyan-dark),var(--cyan));color:var(--dark-bg);font-weight:700;font-size:.92rem;border:none;cursor:pointer;transition:transform .15s,box-shadow .15s;white-space:nowrap}
+  .pwa-install:hover{transform:scale(1.03);box-shadow:0 4px 16px rgba({{PRIMARY_RGB}},.4)}
+  .pwa-install:active{transform:scale(.98)}
+  .pwa-later{padding:12px 16px;border-radius:12px;background:transparent;color:var(--muted);font-weight:600;font-size:.85rem;border:none;cursor:pointer;transition:color .15s;white-space:nowrap}
+  .pwa-later:hover{color:var(--cloud)}
+
+  .pwa-close{position:absolute;top:8px;right:12px;width:24px;height:24px;border-radius:50%;background:rgba(255,255,255,.06);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:14px;transition:background .15s}
+  .pwa-close:hover{background:rgba(255,255,255,.12)}
+
+  /* Install animation feedback */
+  .pwa-install.installing{background:rgba({{PRIMARY_RGB}},.15);color:var(--cyan);pointer-events:none}
+  .pwa-install.installed{background:rgba(72,187,120,.15);color:#48bb78;pointer-events:none}
+
+  @media(max-width:600px){
+    .pwa-card{flex-direction:column;text-align:center;padding:20px 16px}
+    .pwa-actions{width:100%;flex-direction:column}
+    .pwa-install{width:100%}
+    .pwa-later{width:100%}
+    .pwa-features{justify-content:center}
+    .page-stats{grid-template-columns:1fr}
+  }
+</style>
+</head>
+<body>
+  <!-- Simulated Page Content -->
+  <div class="page-content">
+    <div class="page-header">
+      <h1>{{BRAND_NAME}} Dashboard</h1>
+      <p>Willkommen zurueck! Hier ist eine Uebersicht deiner aktuellen Event-Aktivitaet und System-Performance.</p>
+    </div>
+    <div class="page-stats">
+      <div class="page-stat"><div class="val">2.847</div><div class="lbl">Events heute</div></div>
+      <div class="page-stat"><div class="val">12</div><div class="lbl">Aktive Streams</div></div>
+      <div class="page-stat"><div class="val">7ms</div><div class="lbl">Avg. Latenz</div></div>
+    </div>
+    <div class="page-card">
+      <h3>Aktuelle Streams</h3>
+      <ul class="page-list">
+        <li>auth-events - 340 Events/Min</li>
+        <li>billing - 128 Events/Min</li>
+        <li>user-analytics - 892 Events/Min</li>
+        <li>webhooks - 67 Events/Min</li>
+        <li>ai-pipeline - 245 Events/Min</li>
+      </ul>
+    </div>
+    <div class="page-card">
+      <h3>Letzte Aktivitaet</h3>
+      <p>Dein letzter Deploy war vor 2 Stunden. Alle Systeme laufen stabil. Die KI-Analyse hat 3 neue Muster in deinen Event-Daten erkannt.</p>
+    </div>
+    <div class="page-card">
+      <h3>Team-Update</h3>
+      <p>Sarah Koch hat einen neuen Stream "monitoring-v3" erstellt. Patrick Wagner hat die Webhook-Konfiguration aktualisiert.</p>
+    </div>
+  </div>
+
+  <!-- PWA Install Banner -->
+  <div class="pwa-banner" id="pwaBanner">
+    <div class="pwa-inner">
+      <div class="pwa-card">
+        <button class="pwa-close" onclick="dismissBanner()" aria-label="Schliessen">&times;</button>
+        <div class="pwa-icon">
+          <svg viewBox="0 0 40 40" fill="none">
+            <path d="M20 6L8 14v12l12 8 12-8V14L20 6z" fill="rgba(15,23,42,.6)" stroke="{{BG}}" stroke-width="1.5"/>
+            <path d="M20 10l-8 5.3v10.7L20 31.3l8-5.3V15.3L20 10z" fill="none" stroke="{{BG}}" stroke-width="2"/>
+            <circle cx="20" cy="20" r="4" fill="{{BG}}"/>
+          </svg>
+        </div>
+        <div class="pwa-content">
+          <div class="pwa-title">{{BRAND_NAME}} als App installieren</div>
+          <div class="pwa-desc">Schneller Zugriff, Offline-Modus, Push-Benachrichtigungen</div>
+          <div class="pwa-features">
+            <div class="pwa-feature">
+              <svg viewBox="0 0 24 24" fill="none" stroke="var(--cyan)" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+              Sofort starten
+            </div>
+            <div class="pwa-feature">
+              <svg viewBox="0 0 24 24" fill="none" stroke="var(--cyan)" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+              Offline verfuegbar
+            </div>
+            <div class="pwa-feature">
+              <svg viewBox="0 0 24 24" fill="none" stroke="var(--cyan)" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+              Push-Alerts
+            </div>
+          </div>
+        </div>
+        <div class="pwa-actions">
+          <button class="pwa-install" id="installBtn" onclick="installApp()">Installieren</button>
+          <button class="pwa-later" onclick="dismissBanner()">Spaeter</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<script>
+function dismissBanner(){
+  document.getElementById('pwaBanner').classList.add('dismissed');
+}
+
+function installApp(){
+  const btn=document.getElementById('installBtn');
+  btn.textContent='Wird installiert...';
+  btn.classList.add('installing');
+  setTimeout(()=>{
+    btn.textContent='Installiert!';
+    btn.classList.remove('installing');
+    btn.classList.add('installed');
+    setTimeout(()=>dismissBanner(),1200);
+  },1500);
+}
+</script>
+</body>
+</html>

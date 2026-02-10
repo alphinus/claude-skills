@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{BRAND_NAME}} - README Preview</title>
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --dark-bg:{{BG}};--cyan:{{PRIMARY}};--cyan-dark:{{PRIMARY_DARK}};--cloud:{{TEXT}};--muted:{{MUTED}};
+    --surface:#1e293b;--border:#334155;--success:#48bb78;--info:#4299e1;
+  }
+  body{font-family:system-ui,-apple-system,sans-serif;background:{{SIDEBAR_BG}};color:var(--cloud);line-height:1.7;padding:40px 20px}
+
+  .readme-container{max-width:900px;margin:0 auto;background:var(--dark-bg);border:1px solid var(--border);border-radius:12px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.4)}
+
+  /* Hero Banner */
+  .hero-banner{
+    background:linear-gradient(135deg,{{BG}} 0%,#1e293b 50%,{{BG}} 100%);
+    padding:60px 40px;text-align:center;position:relative;overflow:hidden;
+    border-bottom:1px solid var(--border);
+  }
+  .hero-banner::before{
+    content:'';position:absolute;inset:0;
+    background:radial-gradient(ellipse at center,rgba({{PRIMARY_RGB}},.08) 0%,transparent 70%);
+  }
+  .hero-logo{position:relative;z-index:1;margin-bottom:16px}
+  .hero-title{position:relative;z-index:1;font-size:48px;font-weight:800;letter-spacing:4px;color:var(--cloud)}
+  .hero-title span{color:var(--cyan)}
+  .hero-subtitle{position:relative;z-index:1;font-size:18px;color:var(--muted);margin-top:8px;letter-spacing:1px}
+
+  /* Content */
+  .readme-content{padding:40px 48px}
+
+  /* Badges row */
+  .badges{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:32px}
+  .badge{display:inline-flex;border-radius:4px;overflow:hidden;font-size:12px;font-weight:600}
+  .badge-left{padding:4px 8px;background:#2d3748;color:var(--muted)}
+  .badge-right{padding:4px 8px}
+  .badge-green .badge-right{background:#48bb78;color:#fff}
+  .badge-blue .badge-right{background:#4299e1;color:#fff}
+  .badge-purple .badge-right{background:#805ad5;color:#fff}
+  .badge-cyan .badge-right{background:{{PRIMARY_DARK}};color:#fff}
+
+  /* Headings */
+  h2.readme-h2{font-size:24px;font-weight:700;margin:32px 0 16px;padding-bottom:8px;border-bottom:1px solid var(--border);color:var(--cloud)}
+  h3.readme-h3{font-size:18px;font-weight:600;margin:24px 0 12px;color:var(--cloud)}
+  p.readme-p{color:var(--muted);margin-bottom:16px;font-size:15px}
+
+  /* Code Block */
+  .code-block{
+    background:{{SIDEBAR_BG}};border:1px solid var(--border);border-radius:8px;
+    margin:16px 0 24px;overflow:hidden;
+  }
+  .code-header{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:8px 16px;background:var(--surface);border-bottom:1px solid var(--border);
+    font-size:12px;color:var(--muted);
+  }
+  .code-header .lang{font-weight:600;text-transform:uppercase;letter-spacing:.5px}
+  .code-header .copy-btn{
+    padding:3px 10px;border-radius:4px;background:var(--dark-bg);border:1px solid var(--border);
+    color:var(--muted);cursor:pointer;font-size:11px;font-family:inherit;
+  }
+  .code-header .copy-btn:hover{color:var(--cloud)}
+  .code-body{padding:16px 20px;font-family:'SF Mono','Fira Code',monospace;font-size:13px;line-height:1.8;overflow-x:auto}
+  .code-body .comment{color:#4a5568}
+  .code-body .cmd{color:var(--muted)}
+  .code-body .string{color:var(--cyan)}
+  .code-body .keyword{color:#805ad5}
+
+  /* Feature List */
+  .feature-list{list-style:none;margin:16px 0 24px}
+  .feature-list li{
+    display:flex;align-items:flex-start;gap:12px;padding:10px 0;
+    border-bottom:1px solid rgba(51,65,85,.3);font-size:15px;color:var(--muted);
+  }
+  .feature-list li:last-child{border-bottom:none}
+  .feature-icon{
+    width:28px;height:28px;border-radius:6px;display:flex;align-items:center;justify-content:center;
+    flex-shrink:0;font-size:14px;margin-top:2px;
+  }
+  .fi-cyan{background:rgba({{PRIMARY_RGB}},.15);color:var(--cyan)}
+  .fi-blue{background:rgba(66,153,225,.15);color:var(--info)}
+  .fi-green{background:rgba(72,187,120,.15);color:var(--success)}
+  .fi-purple{background:rgba(128,90,213,.15);color:#805ad5}
+  .feature-text strong{color:var(--cloud)}
+
+  /* Architecture Diagram Placeholder */
+  .arch-diagram{
+    background:var(--surface);border:1px solid var(--border);border-radius:8px;
+    padding:40px;text-align:center;margin:16px 0 24px;position:relative;overflow:hidden;
+  }
+  .arch-diagram::before{
+    content:'';position:absolute;inset:0;
+    background:repeating-linear-gradient(0deg,transparent,transparent 19px,rgba({{PRIMARY_RGB}},.04) 19px,rgba({{PRIMARY_RGB}},.04) 20px),
+               repeating-linear-gradient(90deg,transparent,transparent 19px,rgba({{PRIMARY_RGB}},.04) 19px,rgba({{PRIMARY_RGB}},.04) 20px);
+  }
+  .arch-boxes{position:relative;display:flex;justify-content:center;gap:16px;flex-wrap:wrap;margin-bottom:16px}
+  .arch-box{
+    padding:12px 20px;background:var(--dark-bg);border:1px solid var(--border);border-radius:8px;
+    font-size:13px;font-weight:600;color:var(--cloud);position:relative;
+  }
+  .arch-box.highlighted{border-color:var(--cyan);color:var(--cyan)}
+  .arch-arrow{color:var(--muted);font-size:20px;display:flex;align-items:center}
+  .arch-label{font-size:12px;color:var(--muted);position:relative}
+
+  /* Install Steps */
+  .install-steps{margin:16px 0}
+  .install-step{display:flex;gap:12px;align-items:flex-start;margin-bottom:16px}
+  .step-num{
+    width:28px;height:28px;border-radius:50%;background:rgba({{PRIMARY_RGB}},.15);color:var(--cyan);
+    display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0;
+  }
+  .step-content{flex:1}
+  .step-content p{margin:0;font-size:14px;color:var(--muted)}
+  .step-content .step-code{
+    display:inline-block;padding:4px 12px;background:{{SIDEBAR_BG}};border:1px solid var(--border);
+    border-radius:4px;font-family:monospace;font-size:13px;color:var(--cyan);margin-top:6px;
+  }
+
+  /* Contributing */
+  .contrib-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:16px 0}
+  .contrib-item{
+    padding:14px 16px;background:var(--surface);border:1px solid var(--border);border-radius:8px;
+    font-size:14px;color:var(--muted);display:flex;align-items:center;gap:10px;
+  }
+  .contrib-item span{color:var(--cyan);font-size:16px}
+
+  /* Footer */
+  .readme-footer{
+    margin-top:40px;padding:24px 0 0;border-top:1px solid var(--border);
+    text-align:center;color:#4a5568;font-size:13px;
+  }
+  .readme-footer a{color:var(--cyan);text-decoration:none}
+</style>
+</head>
+<body>
+
+<div class="readme-container">
+  <!-- Hero Banner -->
+  <div class="hero-banner">
+    <div class="hero-logo">
+      <svg width="56" height="64" viewBox="0 0 72 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M36 2L68 20V60L36 78L4 60V20L36 2Z" fill="none" stroke="{{PRIMARY}}" stroke-width="2"/>
+        <path d="M36 16L54 26V50L36 60L18 50V26L36 16Z" fill="rgba({{PRIMARY_RGB}},0.1)" stroke="{{PRIMARY}}" stroke-width="1.5"/>
+        <circle cx="36" cy="38" r="5" fill="{{PRIMARY}}" opacity="0.8"/>
+      </svg>
+    </div>
+    <div class="hero-title"><span>E</span>LUMA</div>
+    <div class="hero-subtitle">{{BRAND_TAGLINE}} for Modern Applications</div>
+  </div>
+
+  <div class="readme-content">
+    <!-- Badges -->
+    <div class="badges">
+      <div class="badge badge-green"><span class="badge-left">build</span><span class="badge-right">passing</span></div>
+      <div class="badge badge-blue"><span class="badge-left">coverage</span><span class="badge-right">94%</span></div>
+      <div class="badge badge-purple"><span class="badge-left">version</span><span class="badge-right">2.4.1</span></div>
+      <div class="badge badge-cyan"><span class="badge-left">license</span><span class="badge-right">MIT</span></div>
+    </div>
+
+    <p class="readme-p">
+      {{BRAND_NAME}} ist ein ereignisgesteuertes Oekosystem fuer moderne Anwendungen. Es vereint Event Streaming,
+      KI-gestuetzte Analyse und Echtzeit-Verarbeitung in einer einheitlichen Plattform.
+    </p>
+
+    <!-- Quick Start -->
+    <h2 class="readme-h2">Schnellstart</h2>
+    <div class="code-block">
+      <div class="code-header">
+        <span class="lang">bash</span>
+        <button class="copy-btn">Kopieren</button>
+      </div>
+      <div class="code-body">
+        <span class="comment"># {{BRAND_NAME}} CLI installieren</span><br>
+        <span class="cmd">npm install -g</span> <span class="string">@{{BRAND_NAME_LOWER}}/cli</span><br><br>
+        <span class="comment"># Neues Projekt erstellen</span><br>
+        <span class="cmd">{{BRAND_NAME_LOWER}} init</span> <span class="string">mein-projekt</span><br>
+        <span class="cmd">cd</span> mein-projekt<br><br>
+        <span class="comment"># Entwicklungsserver starten</span><br>
+        <span class="cmd">{{BRAND_NAME_LOWER}} dev</span><br><br>
+        <span class="comment"># Erstes Event senden</span><br>
+        <span class="cmd">{{BRAND_NAME_LOWER}} events send</span> <span class="string">--type user.signup</span> <span class="string">--data '{"email":"test@{{BRAND_NAME_LOWER}}.dev"}'</span>
+      </div>
+    </div>
+
+    <!-- Features -->
+    <h2 class="readme-h2">Funktionen</h2>
+    <ul class="feature-list">
+      <li>
+        <div class="feature-icon fi-cyan">&#9889;</div>
+        <div class="feature-text"><strong>Event Streaming</strong> - Hochleistungs-Event-Bus mit garantierter Zustellung und automatischer Wiederholung bei Fehlern.</div>
+      </li>
+      <li>
+        <div class="feature-icon fi-blue">&#128300;</div>
+        <div class="feature-text"><strong>KI-Analyse</strong> - Integriertes AI SDK fuer Mustererkennung, Anomalieerkennung und praediktive Analyse.</div>
+      </li>
+      <li>
+        <div class="feature-icon fi-green">&#9203;</div>
+        <div class="feature-text"><strong>Echtzeit-Verarbeitung</strong> - Sub-Millisekunden-Latenz mit SSE und WebSocket-Unterstuetzung.</div>
+      </li>
+      <li>
+        <div class="feature-icon fi-purple">&#128736;</div>
+        <div class="feature-text"><strong>TypeScript-First</strong> - Vollstaendig typisierte API mit automatischer Codegenerierung und IntelliSense.</div>
+      </li>
+      <li>
+        <div class="feature-icon fi-cyan">&#128640;</div>
+        <div class="feature-text"><strong>Skalierbar</strong> - Von Prototyp bis Produktion mit horizontaler Skalierung und Cluster-Modus.</div>
+      </li>
+    </ul>
+
+    <!-- Architecture -->
+    <h2 class="readme-h2">Architektur</h2>
+    <div class="arch-diagram">
+      <div class="arch-boxes">
+        <div class="arch-box">Client SDK</div>
+        <div class="arch-arrow">&rarr;</div>
+        <div class="arch-box highlighted">API Gateway</div>
+        <div class="arch-arrow">&rarr;</div>
+        <div class="arch-box">Event Store</div>
+      </div>
+      <div class="arch-boxes">
+        <div class="arch-box">Stream Processor</div>
+        <div class="arch-arrow">&harr;</div>
+        <div class="arch-box highlighted">AI Engine</div>
+        <div class="arch-arrow">&harr;</div>
+        <div class="arch-box">Dashboard</div>
+      </div>
+      <div class="arch-label">Vereinfachtes Architekturdiagramm des {{BRAND_NAME}}-Oekosystems</div>
+    </div>
+
+    <!-- Installation -->
+    <h2 class="readme-h2">Installation</h2>
+    <div class="install-steps">
+      <div class="install-step">
+        <div class="step-num">1</div>
+        <div class="step-content">
+          <p><strong style="color:var(--cloud)">Voraussetzungen pruefen</strong></p>
+          <p>Node.js 18+ und npm 9+ erforderlich.</p>
+          <div class="step-code">node --version && npm --version</div>
+        </div>
+      </div>
+      <div class="install-step">
+        <div class="step-num">2</div>
+        <div class="step-content">
+          <p><strong style="color:var(--cloud)">CLI installieren</strong></p>
+          <p>Global ueber npm installieren.</p>
+          <div class="step-code">npm install -g @{{BRAND_NAME_LOWER}}/cli</div>
+        </div>
+      </div>
+      <div class="install-step">
+        <div class="step-num">3</div>
+        <div class="step-content">
+          <p><strong style="color:var(--cloud)">Projekt initialisieren</strong></p>
+          <p>Neues {{BRAND_NAME}}-Projekt mit Standardvorlage erstellen.</p>
+          <div class="step-code">{{BRAND_NAME_LOWER}} init mein-projekt --template standard</div>
+        </div>
+      </div>
+      <div class="install-step">
+        <div class="step-num">4</div>
+        <div class="step-content">
+          <p><strong style="color:var(--cloud)">Starten</strong></p>
+          <p>Entwicklungsumgebung hochfahren.</p>
+          <div class="step-code">cd mein-projekt && {{BRAND_NAME_LOWER}} dev</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Contributing -->
+    <h2 class="readme-h2">Beitragen</h2>
+    <p class="readme-p">Beitraege sind willkommen! Bitte lesen Sie unsere Beitragsrichtlinien.</p>
+    <div class="contrib-grid">
+      <div class="contrib-item"><span>&#128038;</span> Fork und Clone</div>
+      <div class="contrib-item"><span>&#127793;</span> Feature-Branch erstellen</div>
+      <div class="contrib-item"><span>&#9997;</span> Aenderungen vornehmen</div>
+      <div class="contrib-item"><span>&#9989;</span> Tests schreiben</div>
+      <div class="contrib-item"><span>&#128640;</span> Pull Request oeffnen</div>
+      <div class="contrib-item"><span>&#128172;</span> Code Review abwarten</div>
+    </div>
+
+    <!-- License Footer -->
+    <div class="readme-footer">
+      <p>MIT License &copy; 2024-2026 {{BRAND_NAME}} Contributors</p>
+      <p style="margin-top:8px">
+        <a href="#">Dokumentation</a> &middot;
+        <a href="#">Changelog</a> &middot;
+        <a href="#">Discord</a> &middot;
+        <a href="#">Twitter</a>
+      </p>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

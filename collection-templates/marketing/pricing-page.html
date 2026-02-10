@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{BRAND_NAME}} - Preise & Pakete</title>
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --dark-bg:{{BG}};--cyan:{{PRIMARY}};--cyan-dark:{{PRIMARY_DARK}};--cloud:{{TEXT}};--muted:{{MUTED}};
+    --card-bg:#1e293b;--border:#334155;--green:#48bb78;--red:#fc8181;--yellow:#ecc94b;
+  }
+  body{font-family:system-ui,-apple-system,sans-serif;background:var(--dark-bg);color:var(--cloud);line-height:1.6;overflow-x:hidden}
+  a{color:var(--cyan);text-decoration:none}
+
+  /* Header */
+  .header{text-align:center;padding:80px 24px 40px}
+  .header h1{font-size:clamp(2rem,5vw,3.2rem);font-weight:800;margin-bottom:12px}
+  .header h1 span{color:var(--cyan)}
+  .header p{color:var(--muted);font-size:1.15rem;max-width:560px;margin:0 auto}
+
+  /* Toggle */
+  .toggle-wrap{display:flex;align-items:center;justify-content:center;gap:16px;margin:32px 0 48px}
+  .toggle-label{font-size:.95rem;color:var(--muted);cursor:pointer;transition:color .3s}
+  .toggle-label.active{color:var(--cloud);font-weight:600}
+  .toggle{position:relative;width:56px;height:30px;background:var(--border);border-radius:99px;cursor:pointer;transition:background .3s}
+  .toggle.annual{background:var(--cyan-dark)}
+  .toggle::after{content:'';position:absolute;top:3px;left:3px;width:24px;height:24px;background:var(--cloud);border-radius:50%;transition:transform .3s}
+  .toggle.annual::after{transform:translateX(26px)}
+  .discount-badge{background:var(--cyan);color:var(--dark-bg);font-size:.75rem;font-weight:700;padding:4px 10px;border-radius:99px;animation:pulse 2s ease-in-out infinite}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.7}}
+
+  /* Trust Badges */
+  .trust-badges{display:flex;flex-wrap:wrap;justify-content:center;gap:24px;margin-bottom:56px}
+  .trust-badge{display:flex;align-items:center;gap:8px;color:var(--muted);font-size:.9rem}
+  .trust-badge svg{width:20px;height:20px;fill:var(--cyan)}
+
+  /* Plans Grid */
+  .plans{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:28px;max-width:1080px;margin:0 auto;padding:0 24px}
+  .plan-card{background:var(--card-bg);border:1px solid var(--border);border-radius:20px;padding:40px 32px 36px;position:relative;transition:transform .3s,box-shadow .3s}
+  .plan-card:hover{transform:translateY(-4px);box-shadow:0 12px 40px rgba(0,0,0,.35)}
+  .plan-card.popular{border-color:var(--cyan);box-shadow:0 0 0 1px var(--cyan),0 8px 32px rgba({{PRIMARY_RGB}},.15)}
+  .popular-badge{position:absolute;top:-14px;left:50%;transform:translateX(-50%);background:var(--cyan);color:var(--dark-bg);font-size:.8rem;font-weight:700;padding:5px 20px;border-radius:99px;white-space:nowrap}
+  .plan-name{font-size:1.1rem;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px}
+  .plan-price{font-size:3rem;font-weight:800;margin-bottom:4px}
+  .plan-price .currency{font-size:1.2rem;vertical-align:super;margin-right:2px}
+  .plan-price .period{font-size:1rem;color:var(--muted);font-weight:400}
+  .plan-price-annual{font-size:.85rem;color:var(--cyan);margin-bottom:8px;min-height:22px}
+  .plan-desc{color:var(--muted);font-size:.95rem;margin-bottom:28px}
+  .plan-cta{display:block;width:100%;padding:14px 0;border:none;border-radius:12px;font-size:1rem;font-weight:700;cursor:pointer;transition:all .25s;text-align:center;font-family:inherit}
+  .plan-cta.primary{background:var(--cyan);color:var(--dark-bg)}
+  .plan-cta.primary:hover{background:var(--cyan-dark);transform:scale(1.02)}
+  .plan-cta.secondary{background:transparent;border:2px solid var(--border);color:var(--cloud)}
+  .plan-cta.secondary:hover{border-color:var(--cyan);color:var(--cyan)}
+  .plan-features{list-style:none;margin-top:28px;display:flex;flex-direction:column;gap:14px}
+  .plan-features li{display:flex;align-items:flex-start;gap:10px;font-size:.92rem;color:var(--cloud)}
+  .plan-features li.disabled{color:var(--muted)}
+  .plan-features li .icon{width:20px;height:20px;flex-shrink:0;margin-top:1px}
+  .icon-check{color:var(--green)}
+  .icon-cross{color:var(--red)}
+  .icon-limit{color:var(--yellow)}
+
+  /* Feature Comparison Table */
+  .comparison-section{max-width:1080px;margin:80px auto 0;padding:0 24px}
+  .comparison-section h2{font-size:1.8rem;font-weight:700;text-align:center;margin-bottom:40px}
+  .comparison-table{width:100%;border-collapse:collapse;border-radius:16px;overflow:hidden}
+  .comparison-table thead th{background:var(--card-bg);padding:16px 20px;font-size:.85rem;text-transform:uppercase;letter-spacing:1px;color:var(--muted);border-bottom:2px solid var(--border)}
+  .comparison-table thead th:first-child{text-align:left}
+  .comparison-table thead th.highlight{color:var(--cyan)}
+  .comparison-table tbody td{padding:14px 20px;border-bottom:1px solid var(--border);text-align:center;font-size:.9rem}
+  .comparison-table tbody td:first-child{text-align:left;font-weight:500}
+  .comparison-table tbody tr:hover{background:rgba({{PRIMARY_RGB}},.04)}
+  .comparison-table tbody td.highlight{background:rgba({{PRIMARY_RGB}},.06)}
+  .ct-check{color:var(--green);font-size:1.1rem}
+  .ct-cross{color:var(--red);font-size:1.1rem}
+  .ct-text{color:var(--cloud)}
+
+  /* FAQ */
+  .faq-section{max-width:760px;margin:80px auto 0;padding:0 24px 100px}
+  .faq-section h2{font-size:1.8rem;font-weight:700;text-align:center;margin-bottom:40px}
+  .faq-item{border:1px solid var(--border);border-radius:14px;margin-bottom:12px;overflow:hidden;background:var(--card-bg)}
+  .faq-q{padding:20px 24px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;font-weight:600;font-size:1rem;user-select:none;transition:color .2s}
+  .faq-q:hover{color:var(--cyan)}
+  .faq-q .arrow{transition:transform .3s;font-size:1.2rem;color:var(--muted)}
+  .faq-item.open .faq-q .arrow{transform:rotate(180deg)}
+  .faq-a{max-height:0;overflow:hidden;transition:max-height .35s ease,padding .35s ease;padding:0 24px;color:var(--muted);font-size:.95rem;line-height:1.7}
+  .faq-item.open .faq-a{max-height:300px;padding:0 24px 20px}
+
+  @media(max-width:768px){
+    .plans{grid-template-columns:1fr;max-width:420px}
+    .comparison-table{font-size:.8rem}
+    .comparison-table thead th,.comparison-table tbody td{padding:10px 8px}
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>Transparente <span>Preise</span></h1>
+  <p>Starten Sie kostenlos und skalieren Sie mit Ihrem Wachstum. Keine versteckten Kosten.</p>
+</div>
+
+<div class="toggle-wrap">
+  <span class="toggle-label active" id="lblMonthly">Monatlich</span>
+  <div class="toggle" id="billingToggle" onclick="toggleBilling()"></div>
+  <span class="toggle-label" id="lblAnnual">Jahrlich</span>
+  <span class="discount-badge" id="discountBadge" style="opacity:0;transform:scale(.8);transition:all .3s">2 Monate gratis</span>
+</div>
+
+<div class="trust-badges">
+  <div class="trust-badge">
+    <svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/></svg>
+    14 Tage kostenlos
+  </div>
+  <div class="trust-badge">
+    <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 14H4V6h16v12zM4 0h16v2H4zm0 22h16v2H4z"/></svg>
+    Keine Kreditkarte notig
+  </div>
+  <div class="trust-badge">
+    <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg>
+    Jederzeit kundbar
+  </div>
+</div>
+
+<div class="plans">
+  <!-- Free -->
+  <div class="plan-card">
+    <div class="plan-name">Free</div>
+    <div class="plan-price"><span class="currency">CHF</span>0<span class="period">/Mo</span></div>
+    <div class="plan-price-annual">&nbsp;</div>
+    <div class="plan-desc">Perfekt zum Ausprobieren und fur kleine Projekte.</div>
+    <button class="plan-cta secondary">Kostenlos starten</button>
+    <ul class="plan-features">
+      <li><svg class="icon icon-check" viewBox="0 0 20 20"><path fill="currentColor" d="M10 0C4.48 0 0 4.48 0 10s4.48 10 10 10 10-4.48 10-10S15.52 0 10 0zm-2 15l-5-5 1.41-1.41L8 12.17l7.59-7.59L17 6l-9 9z"/></svg> 1'000 Events / Monat</li>
+      <li><svg class="icon icon-check" viewBox="0 0 20 20"><path fill="currentColor" d="M10 0C4.48 0 0 4.48 0 10s4.48 10 10 10 10-4.48 10-10S15.52 0 10 0zm-2 15l-5-5 1.41-1.41L8 12.17l7.59-7.59L17 6l-9 9z"/></svg> 1 Projekt</li>
+      <li><svg class="icon icon-check" viewBox="0 0 20 20"><path fill="currentColor" d="M10 0C4.48 0 0 4.48 0 10s4.48 10 10 10 10-4.48 10-10S15.52 0 10 0zm-2 15l-5-5 1.41-1.41L8 12.17l7.59-7.59L17 6l-9 9z"/></svg> Community Support</li>
+      <li><svg class="icon icon-check" viewBox="0 0 20 20"><path fill="currentColor" d="M10 0C4.48 0 0 4.48 0 10s4.48 10 10 10 10-4.48 10-10S15.52 0 10 0zm-2 15l-5-5 1.41-1.41L8 12.17l7.59-7.59L17 6l-9 9z"/></svg> Basis-Dashboard</li>
+      <li class="disabled"><svg class="icon icon-cross" viewBox="0 0 20 20"><path fill="currentColor" d="M10 0C4.48 0 0 4.48 0 10s4.48 10 10 10 10-4.48 10-10S15.52 0 10 0zm5 13.59L13.59 15 10 11.41 6.41 15 5 13.59 8.59 10 5 6.41 6.41 5 10 8.59 13.59 5 15 6.41 11.41 10 15 13.59z"/></svg> AI-Funktionen</li>
+      <li class="disabled"><svg class="icon icon-cross" viewBox="0 0 20 20"><path fill="currentColor" d="M10 0C4.48 0 0 4.48 0 10s4.48 10 10 10 10-4.48 10-10S15.52 0 10 0zm5 13.59L13.59 15 10 11.41 6.41 15 5 13.59 8.59 10 5 6.41 6.41 5 10 8.59 13.59 5 15 6.41 11.41 10 15 13.59z"/></svg> Telegram Bot</li>
+    </ul>
+  </div>
+
+  <!-- Pro -->
+  <div class="plan-card popular">
+    <span class="popular-badge">Beliebteste Wahl</span>
+    <div class="plan-name">Pro</div>
+    <div class="plan-price" id="proPrice"><span class="currency">CHF</span>49<span class="period">/Mo</span></div>
+    <div class="plan-price-annual" id="proAnnual">&nbsp;</div>
+    <div class="plan-desc">Fur wachsende Teams und professionelle Anforderungen.</div>
+    <button class="plan-cta primary">Jetzt starten</button>
+    <ul class="plan-features">
+      <li><svg class="icon icon-check" viewBox="0 0 20 20"><path fill="currentColor" d="M10 0C4.48 0 0 4.48 0 10s4.48 10 10 10 10-4.48 10-10S15.52 0 10 0zm-2 15l-5-5 1.41-1.41L8 12.17l7.59-7.59L17 6l-9 9z"/></svg> 100'000 Events / Monat</li>
+      <li><svg class="icon icon-check" viewBox="0 0 20 20"><path fill="currentColor" d="M10 0C4.48 0 0 4.48 0 10s4.48 10 10 10 10-4.48 10-10S15.52 0 10 0zm-2 15l-5-5 1.41-1.41L8 12.17l7.59-7.59L17 6l-9 9z"/></svg> 10 Projekte</li>
+      <li><svg class="icon icon-check" viewBox="0 0 20 20"><path fill="currentColor" d="M10 0C4.48 0 0 4.48 0 10s4.48 10 10 10 10-4.48 10-10S15.52 0 10 0zm-2 15l-5-5 1.41-1.41L8 12.17l7.59-7.59L17 6l-9 9z"/></svg> Prioritats-Support</li>
+      <li><svg class="icon icon-check" viewBox="0 0 20 20"><path fill="currentColor" d="M10 0C4.48 0 0 4.48 0 10s4.48 10 10 10 10-4.48 10-10S15.52 0 10 0zm-2 15l-5-5 1.41-1.41L8 12.17l7.59-7.59L17 6l-9 9z"/></svg> Erweitertes Dashboard</li>
+      <li><svg class="icon icon-check" viewBox="0 0 20 20"><path fill="currentColor" d="M10 0C4.48 0 0 4.48 0 10s4.48 10 10 10 10-4.48 10-10S15.52 0 10 0zm-2 15l-5-5 1.41-1.41L8 12.17l7.59-7.59L17 6l-9 9z"/></svg> AI-Funktionen inkl.</li>
+      <li><svg class="icon icon-check" viewBox="0 0 20 20"><path fill="currentColor" d="M10 0C4.48 0 0 4.48 0 10s4.48 10 10 10 10-4.48 10-10S15.52 0 10 0zm-2 15l-5-5 1.41-1.41L8 12.17l7.59-7.59L17 6l-9 9z"/></svg> Telegram Bot</li>
+      <li><svg class="icon icon-check" viewBox="0 0 20 20"><path fill="currentColor" d="M10 0C4.48 0 0 4.48 0 10s4.48 10 10 10 10-4.48 10-10S15.52 0 10 0zm-2 15l-5-5 1.41-1.41L8 12.17l7.59-7.59L17 6l-9 9z"/></svg> API-Zugang</li>
+    </ul>
+  </div>
+
+  <!-- Enterprise -->
+  <div class="plan-card">
+    <div class="plan-name">Enterprise</div>
+    <div class="plan-price" style="font-size:2rem;padding:12px 0">Kontakt</div>
+    <div class="plan-price-annual">&nbsp;</div>
+    <div class="plan-desc">Massgeschneiderte Losungen fur grosse Organisationen.</div>
+    <button class="plan-cta secondary">Vertrieb kontaktieren</button>
+    <ul class="plan-features">
+      <li><svg class="icon icon-check" viewBox="0 0 20 20"><path fill="currentColor" d="M10 0C4.48 0 0 4.48 0 10s4.48 10 10 10 10-4.48 10-10S15.52 0 10 0zm-2 15l-5-5 1.41-1.41L8 12.17l7.59-7.59L17 6l-9 9z"/></svg> Unbegrenzte Events</li>
+      <li><svg class="icon icon-check" viewBox="0 0 20 20"><path fill="currentColor" d="M10 0C4.48 0 0 4.48 0 10s4.48 10 10 10 10-4.48 10-10S15.52 0 10 0zm-2 15l-5-5 1.41-1.41L8 12.17l7.59-7.59L17 6l-9 9z"/></svg> Unbegrenzte Projekte</li>
+      <li><svg class="icon icon-check" viewBox="0 0 20 20"><path fill="currentColor" d="M10 0C4.48 0 0 4.48 0 10s4.48 10 10 10 10-4.48 10-10S15.52 0 10 0zm-2 15l-5-5 1.41-1.41L8 12.17l7.59-7.59L17 6l-9 9z"/></svg> Dedizierter Account Manager</li>
+      <li><svg class="icon icon-check" viewBox="0 0 20 20"><path fill="currentColor" d="M10 0C4.48 0 0 4.48 0 10s4.48 10 10 10 10-4.48 10-10S15.52 0 10 0zm-2 15l-5-5 1.41-1.41L8 12.17l7.59-7.59L17 6l-9 9z"/></svg> SLA-Garantie 99.9%</li>
+      <li><svg class="icon icon-check" viewBox="0 0 20 20"><path fill="currentColor" d="M10 0C4.48 0 0 4.48 0 10s4.48 10 10 10 10-4.48 10-10S15.52 0 10 0zm-2 15l-5-5 1.41-1.41L8 12.17l7.59-7.59L17 6l-9 9z"/></svg> On-Premise Option</li>
+      <li><svg class="icon icon-check" viewBox="0 0 20 20"><path fill="currentColor" d="M10 0C4.48 0 0 4.48 0 10s4.48 10 10 10 10-4.48 10-10S15.52 0 10 0zm-2 15l-5-5 1.41-1.41L8 12.17l7.59-7.59L17 6l-9 9z"/></svg> Custom Integrationen</li>
+      <li><svg class="icon icon-check" viewBox="0 0 20 20"><path fill="currentColor" d="M10 0C4.48 0 0 4.48 0 10s4.48 10 10 10 10-4.48 10-10S15.52 0 10 0zm-2 15l-5-5 1.41-1.41L8 12.17l7.59-7.59L17 6l-9 9z"/></svg> SSO & RBAC</li>
+    </ul>
+  </div>
+</div>
+
+<!-- Feature Comparison Table -->
+<section class="comparison-section">
+  <h2>Detaillierter Funktionsvergleich</h2>
+  <div style="overflow-x:auto">
+  <table class="comparison-table">
+    <thead>
+      <tr>
+        <th>Funktion</th>
+        <th>Free</th>
+        <th class="highlight">Pro</th>
+        <th>Enterprise</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>Events / Monat</td><td>1'000</td><td class="highlight">100'000</td><td>Unbegrenzt</td></tr>
+      <tr><td>Projekte</td><td>1</td><td class="highlight">10</td><td>Unbegrenzt</td></tr>
+      <tr><td>Team-Mitglieder</td><td>1</td><td class="highlight">10</td><td>Unbegrenzt</td></tr>
+      <tr><td>Dashboard</td><td class="ct-text">Basis</td><td class="highlight ct-text">Erweitert</td><td class="ct-text">Custom</td></tr>
+      <tr><td>AI-Funktionen</td><td><span class="ct-cross">&#10007;</span></td><td class="highlight"><span class="ct-check">&#10003;</span></td><td><span class="ct-check">&#10003;</span></td></tr>
+      <tr><td>Telegram Bot</td><td><span class="ct-cross">&#10007;</span></td><td class="highlight"><span class="ct-check">&#10003;</span></td><td><span class="ct-check">&#10003;</span></td></tr>
+      <tr><td>API-Zugang</td><td><span class="ct-cross">&#10007;</span></td><td class="highlight"><span class="ct-check">&#10003;</span></td><td><span class="ct-check">&#10003;</span></td></tr>
+      <tr><td>Webhooks</td><td>1</td><td class="highlight">20</td><td>Unbegrenzt</td></tr>
+      <tr><td>Datenaufbewahrung</td><td class="ct-text">7 Tage</td><td class="highlight ct-text">90 Tage</td><td class="ct-text">Unbegrenzt</td></tr>
+      <tr><td>Support</td><td class="ct-text">Community</td><td class="highlight ct-text">Prioritat</td><td class="ct-text">Dediziert</td></tr>
+      <tr><td>SSO / SAML</td><td><span class="ct-cross">&#10007;</span></td><td class="highlight"><span class="ct-cross">&#10007;</span></td><td><span class="ct-check">&#10003;</span></td></tr>
+      <tr><td>SLA-Garantie</td><td><span class="ct-cross">&#10007;</span></td><td class="highlight ct-text">99.5%</td><td class="ct-text">99.9%</td></tr>
+      <tr><td>On-Premise</td><td><span class="ct-cross">&#10007;</span></td><td class="highlight"><span class="ct-cross">&#10007;</span></td><td><span class="ct-check">&#10003;</span></td></tr>
+    </tbody>
+  </table>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="faq-section">
+  <h2>Haufig gestellte Fragen</h2>
+
+  <div class="faq-item">
+    <div class="faq-q" onclick="toggleFaq(this)">
+      Kann ich jederzeit upgraden oder downgraden?
+      <span class="arrow">&#9660;</span>
+    </div>
+    <div class="faq-a">Ja, Sie konnen Ihr Paket jederzeit andern. Beim Upgrade wird der Differenzbetrag anteilig berechnet. Beim Downgrade wird das Guthaben fur zukunftige Rechnungen gutgeschrieben.</div>
+  </div>
+
+  <div class="faq-item">
+    <div class="faq-q" onclick="toggleFaq(this)">
+      Was passiert nach der 14-tagigen Testphase?
+      <span class="arrow">&#9660;</span>
+    </div>
+    <div class="faq-a">Nach Ablauf der Testphase wird Ihr Konto automatisch auf den Free-Plan zuruckgestuft. Es werden keine Gebuhren erhoben, es sei denn, Sie entscheiden sich aktiv fur ein Upgrade.</div>
+  </div>
+
+  <div class="faq-item">
+    <div class="faq-q" onclick="toggleFaq(this)">
+      Welche Zahlungsmethoden werden akzeptiert?
+      <span class="arrow">&#9660;</span>
+    </div>
+    <div class="faq-a">Wir akzeptieren alle gangigen Kreditkarten (Visa, Mastercard, American Express), SEPA-Lastschrift sowie Rechnungszahlung fur Enterprise-Kunden. Alle Preise verstehen sich exkl. MwSt.</div>
+  </div>
+
+  <div class="faq-item">
+    <div class="faq-q" onclick="toggleFaq(this)">
+      Gibt es einen Rabatt fur Startups oder Non-Profits?
+      <span class="arrow">&#9660;</span>
+    </div>
+    <div class="faq-a">Ja! Wir bieten qualifizierten Startups und Non-Profit-Organisationen bis zu 50% Rabatt. Kontaktieren Sie uns mit einem Nachweis und wir richten Ihren vergünstigten Zugang ein.</div>
+  </div>
+
+  <div class="faq-item">
+    <div class="faq-q" onclick="toggleFaq(this)">
+      Wie funktioniert die Event-Zahlung?
+      <span class="arrow">&#9660;</span>
+    </div>
+    <div class="faq-a">Events werden pro Kalendermonat gezahlt. Jede eingehende Nachricht, jeder API-Aufruf oder Webhook-Trigger zahlt als ein Event. Im Dashboard sehen Sie Ihren aktuellen Verbrauch in Echtzeit.</div>
+  </div>
+</section>
+
+<script>
+let isAnnual = false;
+
+function toggleBilling() {
+  isAnnual = !isAnnual;
+  const toggle = document.getElementById('billingToggle');
+  const lblM = document.getElementById('lblMonthly');
+  const lblA = document.getElementById('lblAnnual');
+  const badge = document.getElementById('discountBadge');
+  const proPrice = document.getElementById('proPrice');
+  const proAnnual = document.getElementById('proAnnual');
+
+  toggle.classList.toggle('annual', isAnnual);
+  lblM.classList.toggle('active', !isAnnual);
+  lblA.classList.toggle('active', isAnnual);
+
+  if (isAnnual) {
+    badge.style.opacity = '1';
+    badge.style.transform = 'scale(1)';
+    proPrice.innerHTML = '<span class="currency">CHF</span>41<span class="period">/Mo</span>';
+    proAnnual.textContent = 'CHF 490 / Jahr (statt CHF 588)';
+  } else {
+    badge.style.opacity = '0';
+    badge.style.transform = 'scale(.8)';
+    proPrice.innerHTML = '<span class="currency">CHF</span>49<span class="period">/Mo</span>';
+    proAnnual.innerHTML = '&nbsp;';
+  }
+}
+
+function toggleFaq(el) {
+  const item = el.parentElement;
+  const wasOpen = item.classList.contains('open');
+  document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+  if (!wasOpen) item.classList.add('open');
+}
+</script>
+</body>
+</html>

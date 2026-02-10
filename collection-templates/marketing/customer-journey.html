@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{BRAND_NAME}} - Customer Journey Map</title>
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --dark-bg:{{BG}};--cyan:{{PRIMARY}};--cyan-dark:{{PRIMARY_DARK}};--cloud:{{TEXT}};--muted:{{MUTED}};
+    --card-bg:#1e293b;--border:#334155;
+  }
+  body{font-family:system-ui,-apple-system,sans-serif;background:var(--dark-bg);color:var(--cloud);line-height:1.6;min-height:100vh}
+
+  .header{text-align:center;padding:60px 24px 12px}
+  .header h1{font-size:clamp(1.8rem,4vw,2.8rem);font-weight:800}
+  .header h1 span{color:var(--cyan)}
+  .header p{color:var(--muted);margin-top:8px;font-size:1.05rem}
+
+  .journey-container{overflow-x:auto;padding:40px 24px 80px;-webkit-overflow-scrolling:touch}
+  .journey{display:grid;grid-template-columns:repeat(5,minmax(240px,1fr));gap:0;min-width:1200px;position:relative}
+
+  /* Emotion Curve SVG */
+  .emotion-curve-wrap{grid-column:1/-1;height:120px;margin-bottom:20px;position:relative}
+  .emotion-curve-wrap svg{width:100%;height:100%}
+  .emotion-label{font-size:.75rem;fill:var(--muted)}
+  .emotion-line{fill:none;stroke:var(--cyan);stroke-width:3;stroke-linecap:round;stroke-linejoin:round;filter:drop-shadow(0 0 8px rgba({{PRIMARY_RGB}},.4))}
+  .emotion-dot{fill:var(--cyan);stroke:var(--dark-bg);stroke-width:3}
+  .emotion-emoji{font-size:1.3rem;text-anchor:middle}
+
+  /* Stage */
+  .stage{padding:0 10px;position:relative}
+  .stage::before{content:'';position:absolute;top:0;left:0;right:0;bottom:0;border-radius:16px;opacity:.04;z-index:0}
+  .stage:nth-child(2)::before{background:linear-gradient(180deg,#6366f1,transparent)}
+  .stage:nth-child(3)::before{background:linear-gradient(180deg,#8b5cf6,transparent)}
+  .stage:nth-child(4)::before{background:linear-gradient(180deg,#06b6d4,transparent)}
+  .stage:nth-child(5)::before{background:linear-gradient(180deg,var(--cyan),transparent)}
+  .stage:nth-child(6)::before{background:linear-gradient(180deg,{{SUCCESS}},transparent)}
+
+  .stage-header{text-align:center;margin-bottom:20px;position:relative;z-index:1}
+  .stage-number{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:1rem;margin:0 auto 8px;border:2px solid var(--border);color:var(--muted);background:var(--dark-bg)}
+  .stage:nth-child(2) .stage-number{border-color:#6366f1;color:#6366f1}
+  .stage:nth-child(3) .stage-number{border-color:#8b5cf6;color:#8b5cf6}
+  .stage:nth-child(4) .stage-number{border-color:#06b6d4;color:#06b6d4}
+  .stage:nth-child(5) .stage-number{border-color:var(--cyan);color:var(--cyan)}
+  .stage:nth-child(6) .stage-number{border-color:{{SUCCESS}};color:{{SUCCESS}}}
+  .stage-name{font-size:1.05rem;font-weight:700}
+
+  /* Arrow connector between stages */
+  .stage+.stage::after{content:'';position:absolute;left:-6px;top:18px;width:12px;height:12px;border-top:2px solid var(--border);border-right:2px solid var(--border);transform:rotate(45deg);z-index:2}
+
+  /* Section Cards */
+  .section-card{background:var(--card-bg);border:1px solid var(--border);border-radius:12px;padding:14px 16px;margin-bottom:10px;position:relative;z-index:1}
+  .section-card h3{font-size:.78rem;text-transform:uppercase;letter-spacing:.8px;color:var(--muted);margin-bottom:8px;display:flex;align-items:center;gap:6px}
+  .section-card h3 .sec-icon{font-size:.9rem}
+  .section-card ul{list-style:none;display:flex;flex-direction:column;gap:5px}
+  .section-card li{font-size:.82rem;color:var(--cloud);padding-left:14px;position:relative}
+  .section-card li::before{content:'';position:absolute;left:0;top:8px;width:5px;height:5px;border-radius:50%;background:var(--cyan)}
+  .section-card.pain li::before{background:#fc8181}
+  .section-card.opportunity li::before{background:#48bb78}
+
+  .emotion-display{text-align:center;font-size:1.6rem;margin-bottom:10px;position:relative;z-index:1}
+
+  @media(max-width:768px){
+    .journey-container{padding:20px 12px 40px}
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>Customer Journey <span>Map</span></h1>
+  <p>Der Weg unserer Kunden - von der Entdeckung bis zur Erweiterung</p>
+</div>
+
+<div class="journey-container">
+<div class="journey">
+
+  <!-- Emotion Curve -->
+  <div class="emotion-curve-wrap">
+    <svg viewBox="0 0 1200 120" preserveAspectRatio="none">
+      <!-- Grid lines -->
+      <line x1="0" y1="30" x2="1200" y2="30" stroke="#334155" stroke-width="0.5" stroke-dasharray="4"/>
+      <line x1="0" y1="60" x2="1200" y2="60" stroke="#334155" stroke-width="0.5" stroke-dasharray="4"/>
+      <line x1="0" y1="90" x2="1200" y2="90" stroke="#334155" stroke-width="0.5" stroke-dasharray="4"/>
+      <text x="4" y="28" class="emotion-label">Begeistert</text>
+      <text x="4" y="58" class="emotion-label">Zufrieden</text>
+      <text x="4" y="88" class="emotion-label">Frustriert</text>
+
+      <!-- Curve: Entdeckung(excited) -> Evaluation(uncertain) -> Onboarding(frustrated) -> Nutzung(happy) -> Erweiterung(very happy) -->
+      <polyline class="emotion-line" points="120,35 360,65 600,80 840,30 1080,20"/>
+
+      <!-- Dots -->
+      <circle class="emotion-dot" cx="120" cy="35" r="7"/>
+      <circle class="emotion-dot" cx="360" cy="65" r="7"/>
+      <circle class="emotion-dot" cx="600" cy="80" r="7"/>
+      <circle class="emotion-dot" cx="840" cy="30" r="7"/>
+      <circle class="emotion-dot" cx="1080" cy="20" r="7"/>
+
+      <!-- Emoji labels -->
+      <text class="emotion-emoji" x="120" y="16">&#129321;</text>
+      <text class="emotion-emoji" x="360" y="56">&#129300;</text>
+      <text class="emotion-emoji" x="600" y="106">&#128533;</text>
+      <text class="emotion-emoji" x="840" y="16">&#128522;</text>
+      <text class="emotion-emoji" x="1080" y="10">&#129395;</text>
+    </svg>
+  </div>
+
+  <!-- Stage 1: Entdeckung -->
+  <div class="stage">
+    <div class="stage-header">
+      <div class="stage-number">1</div>
+      <div class="stage-name">Entdeckung</div>
+    </div>
+
+    <div class="section-card">
+      <h3><span class="sec-icon">&#128205;</span> Touchpoints</h3>
+      <ul>
+        <li>Google-Suche / SEO</li>
+        <li>Technologie-Blogs</li>
+        <li>Social Media Ads</li>
+        <li>Entwickler-Konferenzen</li>
+      </ul>
+    </div>
+
+    <div class="section-card">
+      <h3><span class="sec-icon">&#9889;</span> Aktionen</h3>
+      <ul>
+        <li>Landingpage besuchen</li>
+        <li>Features vergleichen</li>
+        <li>Dokumentation lesen</li>
+      </ul>
+    </div>
+
+    <div class="section-card pain">
+      <h3><span class="sec-icon">&#128293;</span> Pain Points</h3>
+      <ul>
+        <li>Unklare Differenzierung</li>
+        <li>Zu technische Sprache</li>
+      </ul>
+    </div>
+
+    <div class="section-card opportunity">
+      <h3><span class="sec-icon">&#128161;</span> Chancen</h3>
+      <ul>
+        <li>Klare Value Proposition</li>
+        <li>Interaktive Demo</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Stage 2: Evaluation -->
+  <div class="stage">
+    <div class="stage-header">
+      <div class="stage-number">2</div>
+      <div class="stage-name">Evaluation</div>
+    </div>
+
+    <div class="section-card">
+      <h3><span class="sec-icon">&#128205;</span> Touchpoints</h3>
+      <ul>
+        <li>Pricing-Seite</li>
+        <li>Vergleichstabellen</li>
+        <li>Kundenbewertungen</li>
+        <li>Free-Tier testen</li>
+      </ul>
+    </div>
+
+    <div class="section-card">
+      <h3><span class="sec-icon">&#9889;</span> Aktionen</h3>
+      <ul>
+        <li>Account erstellen</li>
+        <li>Testprojekt anlegen</li>
+        <li>Team konsultieren</li>
+      </ul>
+    </div>
+
+    <div class="section-card pain">
+      <h3><span class="sec-icon">&#128293;</span> Pain Points</h3>
+      <ul>
+        <li>Preistransparenz</li>
+        <li>Kein Live-Support</li>
+        <li>Feature-Verwirrung</li>
+      </ul>
+    </div>
+
+    <div class="section-card opportunity">
+      <h3><span class="sec-icon">&#128161;</span> Chancen</h3>
+      <ul>
+        <li>Guided Tour</li>
+        <li>ROI-Rechner</li>
+        <li>Live-Chat anbieten</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Stage 3: Onboarding -->
+  <div class="stage">
+    <div class="stage-header">
+      <div class="stage-number">3</div>
+      <div class="stage-name">Onboarding</div>
+    </div>
+
+    <div class="section-card">
+      <h3><span class="sec-icon">&#128205;</span> Touchpoints</h3>
+      <ul>
+        <li>Willkommens-E-Mail</li>
+        <li>Setup-Wizard</li>
+        <li>Dokumentation</li>
+        <li>Onboarding-Videos</li>
+      </ul>
+    </div>
+
+    <div class="section-card">
+      <h3><span class="sec-icon">&#9889;</span> Aktionen</h3>
+      <ul>
+        <li>Erstes Event senden</li>
+        <li>Dashboard einrichten</li>
+        <li>Team einladen</li>
+      </ul>
+    </div>
+
+    <div class="section-card pain">
+      <h3><span class="sec-icon">&#128293;</span> Pain Points</h3>
+      <ul>
+        <li>Technische Hurden</li>
+        <li>Langsamer erster Erfolg</li>
+        <li>Fehlende Templates</li>
+      </ul>
+    </div>
+
+    <div class="section-card opportunity">
+      <h3><span class="sec-icon">&#128161;</span> Chancen</h3>
+      <ul>
+        <li>1-Klick-Templates</li>
+        <li>Personliches Onboarding</li>
+        <li>Quick-Start-Guide</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Stage 4: Nutzung -->
+  <div class="stage">
+    <div class="stage-header">
+      <div class="stage-number">4</div>
+      <div class="stage-name">Nutzung</div>
+    </div>
+
+    <div class="section-card">
+      <h3><span class="sec-icon">&#128205;</span> Touchpoints</h3>
+      <ul>
+        <li>Dashboard (taglich)</li>
+        <li>Telegram-Alerts</li>
+        <li>API-Integration</li>
+        <li>Support-Tickets</li>
+      </ul>
+    </div>
+
+    <div class="section-card">
+      <h3><span class="sec-icon">&#9889;</span> Aktionen</h3>
+      <ul>
+        <li>Events uberwachen</li>
+        <li>Workflows erstellen</li>
+        <li>Reports generieren</li>
+      </ul>
+    </div>
+
+    <div class="section-card pain">
+      <h3><span class="sec-icon">&#128293;</span> Pain Points</h3>
+      <ul>
+        <li>Performance-Limits</li>
+        <li>Fehlende Integrationen</li>
+      </ul>
+    </div>
+
+    <div class="section-card opportunity">
+      <h3><span class="sec-icon">&#128161;</span> Chancen</h3>
+      <ul>
+        <li>AI-Empfehlungen</li>
+        <li>Proaktive Alerts</li>
+        <li>Usage-Insights</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Stage 5: Erweiterung -->
+  <div class="stage">
+    <div class="stage-header">
+      <div class="stage-number">5</div>
+      <div class="stage-name">Erweiterung</div>
+    </div>
+
+    <div class="section-card">
+      <h3><span class="sec-icon">&#128205;</span> Touchpoints</h3>
+      <ul>
+        <li>Upgrade-Angebote</li>
+        <li>Feature-Requests</li>
+        <li>Community-Forum</li>
+        <li>Account Manager</li>
+      </ul>
+    </div>
+
+    <div class="section-card">
+      <h3><span class="sec-icon">&#9889;</span> Aktionen</h3>
+      <ul>
+        <li>Auf Pro upgraden</li>
+        <li>Neue Projekte starten</li>
+        <li>Team vergrssern</li>
+      </ul>
+    </div>
+
+    <div class="section-card pain">
+      <h3><span class="sec-icon">&#128293;</span> Pain Points</h3>
+      <ul>
+        <li>Preissprung Pro-Tier</li>
+        <li>Migration bestehender Daten</li>
+      </ul>
+    </div>
+
+    <div class="section-card opportunity">
+      <h3><span class="sec-icon">&#128161;</span> Chancen</h3>
+      <ul>
+        <li>Loyalty-Programm</li>
+        <li>Referral-Bonus</li>
+        <li>Beta-Zugang Features</li>
+      </ul>
+    </div>
+  </div>
+
+</div>
+</div>
+
+</body>
+</html>

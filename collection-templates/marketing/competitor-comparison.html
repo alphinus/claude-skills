@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{BRAND_NAME}} - Warum {{BRAND_NAME}}?</title>
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --dark-bg:{{BG}};--cyan:{{PRIMARY}};--cyan-dark:{{PRIMARY_DARK}};--cloud:{{TEXT}};--muted:{{MUTED}};
+    --card-bg:#1e293b;--border:#334155;--green:#48bb78;--red:#fc8181;--yellow:#ecc94b;
+  }
+  body{font-family:system-ui,-apple-system,sans-serif;background:var(--dark-bg);color:var(--cloud);line-height:1.6;min-height:100vh}
+
+  .header{text-align:center;padding:60px 24px 48px}
+  .header h1{font-size:clamp(2rem,5vw,3.2rem);font-weight:800}
+  .header h1 span{color:var(--cyan)}
+  .header p{color:var(--muted);margin-top:10px;font-size:1.1rem;max-width:600px;margin-left:auto;margin-right:auto}
+
+  .table-container{max-width:1000px;margin:0 auto;padding:0 24px 80px;overflow-x:auto}
+
+  table{width:100%;border-collapse:separate;border-spacing:0;min-width:700px}
+
+  /* Header Row */
+  thead th{padding:20px 16px;font-size:.85rem;text-transform:uppercase;letter-spacing:1px;color:var(--muted);background:var(--card-bg);border-bottom:2px solid var(--border);vertical-align:bottom}
+  thead th:first-child{text-align:left;border-radius:16px 0 0 0;width:200px}
+  thead th:last-child{border-radius:0 16px 0 0}
+  thead th.{{BRAND_NAME_LOWER}}-col{color:var(--cyan);position:relative}
+  thead th.{{BRAND_NAME_LOWER}}-col::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--cyan);border-radius:3px 3px 0 0}
+
+  /* Company Headers */
+  .company-header{display:flex;flex-direction:column;align-items:center;gap:8px}
+  .company-logo{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:1rem}
+  .company-logo.{{BRAND_NAME_LOWER}}-logo{background:linear-gradient(135deg,var(--cyan),var(--cyan-dark));color:var(--dark-bg)}
+  .company-logo.segment-logo{background:#52bd94;color:#fff}
+  .company-logo.kafka-logo{background:#231f20;color:#fff;font-size:.7rem}
+  .company-logo.custom-logo{background:var(--border);color:var(--cloud)}
+  .company-name{font-size:.9rem;font-weight:700}
+
+  /* Body */
+  tbody td{padding:16px;text-align:center;border-bottom:1px solid var(--border);font-size:.9rem;background:transparent;transition:background .2s}
+  tbody td:first-child{text-align:left;font-weight:600;color:var(--cloud)}
+  tbody tr:hover td{background:rgba(255,255,255,.02)}
+  tbody tr:last-child td{border-bottom:none}
+  tbody tr:last-child td:first-child{border-radius:0 0 0 16px}
+  tbody tr:last-child td:last-child{border-radius:0 0 16px 0}
+
+  /* {{BRAND_NAME}} Column Highlight */
+  .{{BRAND_NAME_LOWER}}-col{background:rgba({{PRIMARY_RGB}},.04)!important;border-left:1px solid rgba({{PRIMARY_RGB}},.15);border-right:1px solid rgba({{PRIMARY_RGB}},.15)}
+
+  /* Cell Types */
+  .cell-check{color:var(--green);font-size:1.2rem}
+  .cell-cross{color:var(--red);font-size:1.2rem}
+  .cell-partial{color:var(--yellow);font-size:.85rem}
+  .cell-text{color:var(--cloud)}
+  .cell-win{color:var(--cyan);font-weight:700}
+  .cell-muted{color:var(--muted)}
+
+  /* Stars */
+  .stars{display:flex;justify-content:center;gap:2px}
+  .star{font-size:.9rem}
+  .star.filled{color:var(--yellow)}
+  .star.empty{color:var(--border)}
+
+  /* Feature Row Label */
+  .feature-icon{margin-right:8px;font-size:.9rem}
+
+  /* Bottom Section */
+  .bottom-section{max-width:1000px;margin:0 auto;padding:0 24px 100px}
+  .benefits-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:20px}
+  .benefit-card{background:var(--card-bg);border:1px solid var(--border);border-radius:16px;padding:24px;text-align:center;transition:transform .2s,border-color .2s}
+  .benefit-card:hover{transform:translateY(-3px);border-color:var(--cyan)}
+  .benefit-icon{font-size:2.4rem;margin-bottom:12px;display:block}
+  .benefit-title{font-weight:700;font-size:1rem;margin-bottom:6px}
+  .benefit-desc{color:var(--muted);font-size:.85rem}
+
+  .cta-section{text-align:center;margin-top:56px}
+  .cta-btn{display:inline-block;background:var(--cyan);color:var(--dark-bg);font-size:1.1rem;font-weight:700;padding:16px 40px;border-radius:14px;border:none;cursor:pointer;transition:all .25s;font-family:inherit}
+  .cta-btn:hover{background:var(--cyan-dark);transform:scale(1.03)}
+  .cta-sub{color:var(--muted);font-size:.9rem;margin-top:12px}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>Warum <span>{{BRAND_NAME}}</span>?</h1>
+  <p>Sehen Sie im direkten Vergleich, wie {{BRAND_NAME}} gegenuber den Alternativen abschneidet.</p>
+</div>
+
+<div class="table-container">
+<table>
+  <thead>
+    <tr>
+      <th></th>
+      <th class="{{BRAND_NAME_LOWER}}-col">
+        <div class="company-header">
+          <div class="company-logo {{BRAND_NAME_LOWER}}-logo">E</div>
+          <div class="company-name">{{BRAND_NAME}}</div>
+        </div>
+      </th>
+      <th>
+        <div class="company-header">
+          <div class="company-logo segment-logo">S</div>
+          <div class="company-name">Segment</div>
+        </div>
+      </th>
+      <th>
+        <div class="company-header">
+          <div class="company-logo kafka-logo">K</div>
+          <div class="company-name">Kafka</div>
+        </div>
+      </th>
+      <th>
+        <div class="company-header">
+          <div class="company-logo custom-logo">C</div>
+          <div class="company-name">Custom</div>
+        </div>
+      </th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><span class="feature-icon">&#9889;</span>Echtzeit-Events</td>
+      <td class="{{BRAND_NAME_LOWER}}-col cell-win">&#10003; &lt;50ms</td>
+      <td class="cell-check">&#10003;</td>
+      <td class="cell-check">&#10003;</td>
+      <td class="cell-partial">Variabel</td>
+    </tr>
+    <tr>
+      <td><span class="feature-icon">&#129302;</span>AI-Integration</td>
+      <td class="{{BRAND_NAME_LOWER}}-col cell-win">&#10003; Nativ</td>
+      <td class="cell-partial">Add-on</td>
+      <td class="cell-cross">&#10007;</td>
+      <td class="cell-partial">DIY</td>
+    </tr>
+    <tr>
+      <td><span class="feature-icon">&#128172;</span>Telegram Bot</td>
+      <td class="{{BRAND_NAME_LOWER}}-col cell-win">&#10003; Inkl.</td>
+      <td class="cell-cross">&#10007;</td>
+      <td class="cell-cross">&#10007;</td>
+      <td class="cell-partial">Manuell</td>
+    </tr>
+    <tr>
+      <td><span class="feature-icon">&#128176;</span>Preis</td>
+      <td class="{{BRAND_NAME_LOWER}}-col cell-win">Ab CHF 0</td>
+      <td class="cell-muted">Ab $120/Mo</td>
+      <td class="cell-muted">Infra-Kosten</td>
+      <td class="cell-muted">Entwicklungskosten</td>
+    </tr>
+    <tr>
+      <td><span class="feature-icon">&#9200;</span>Setup-Zeit</td>
+      <td class="{{BRAND_NAME_LOWER}}-col cell-win">5 Minuten</td>
+      <td class="cell-muted">30 Minuten</td>
+      <td class="cell-muted">Tage / Wochen</td>
+      <td class="cell-muted">Wochen / Monate</td>
+    </tr>
+    <tr>
+      <td><span class="feature-icon">&#128200;</span>Skalierung</td>
+      <td class="{{BRAND_NAME_LOWER}}-col">
+        <div class="stars">
+          <span class="star filled">&#9733;</span><span class="star filled">&#9733;</span><span class="star filled">&#9733;</span><span class="star filled">&#9733;</span><span class="star filled">&#9733;</span>
+        </div>
+      </td>
+      <td>
+        <div class="stars">
+          <span class="star filled">&#9733;</span><span class="star filled">&#9733;</span><span class="star filled">&#9733;</span><span class="star filled">&#9733;</span><span class="star empty">&#9733;</span>
+        </div>
+      </td>
+      <td>
+        <div class="stars">
+          <span class="star filled">&#9733;</span><span class="star filled">&#9733;</span><span class="star filled">&#9733;</span><span class="star filled">&#9733;</span><span class="star filled">&#9733;</span>
+        </div>
+      </td>
+      <td>
+        <div class="stars">
+          <span class="star filled">&#9733;</span><span class="star filled">&#9733;</span><span class="star empty">&#9733;</span><span class="star empty">&#9733;</span><span class="star empty">&#9733;</span>
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <td><span class="feature-icon">&#128268;</span>Open Source</td>
+      <td class="{{BRAND_NAME_LOWER}}-col cell-win">&#10003; Core</td>
+      <td class="cell-cross">&#10007;</td>
+      <td class="cell-check">&#10003;</td>
+      <td class="cell-check">&#10003;</td>
+    </tr>
+    <tr>
+      <td><span class="feature-icon">&#127384;</span>Support</td>
+      <td class="{{BRAND_NAME_LOWER}}-col">
+        <div class="stars">
+          <span class="star filled">&#9733;</span><span class="star filled">&#9733;</span><span class="star filled">&#9733;</span><span class="star filled">&#9733;</span><span class="star filled">&#9733;</span>
+        </div>
+      </td>
+      <td>
+        <div class="stars">
+          <span class="star filled">&#9733;</span><span class="star filled">&#9733;</span><span class="star filled">&#9733;</span><span class="star filled">&#9733;</span><span class="star empty">&#9733;</span>
+        </div>
+      </td>
+      <td>
+        <div class="stars">
+          <span class="star filled">&#9733;</span><span class="star filled">&#9733;</span><span class="star filled">&#9733;</span><span class="star empty">&#9733;</span><span class="star empty">&#9733;</span>
+        </div>
+      </td>
+      <td>
+        <div class="stars">
+          <span class="star filled">&#9733;</span><span class="star empty">&#9733;</span><span class="star empty">&#9733;</span><span class="star empty">&#9733;</span><span class="star empty">&#9733;</span>
+        </div>
+      </td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<!-- Benefits -->
+<section class="bottom-section">
+  <div class="benefits-grid">
+    <div class="benefit-card">
+      <span class="benefit-icon">&#9889;</span>
+      <div class="benefit-title">Blitzschnell</div>
+      <div class="benefit-desc">Event-Verarbeitung in unter 50ms. Keine Kompromisse bei der Geschwindigkeit.</div>
+    </div>
+    <div class="benefit-card">
+      <span class="benefit-icon">&#129302;</span>
+      <div class="benefit-title">AI-First</div>
+      <div class="benefit-desc">Kunstliche Intelligenz ist kein Add-on, sondern Teil des Kerns.</div>
+    </div>
+    <div class="benefit-card">
+      <span class="benefit-icon">&#128274;</span>
+      <div class="benefit-title">Swiss Hosting</div>
+      <div class="benefit-desc">Daten bleiben in der Schweiz. DSGVO-konform und sicher.</div>
+    </div>
+    <div class="benefit-card">
+      <span class="benefit-icon">&#128640;</span>
+      <div class="benefit-title">5-Min Setup</div>
+      <div class="benefit-desc">Vom Sign-up zum ersten Event in unter funf Minuten.</div>
+    </div>
+  </div>
+
+  <div class="cta-section">
+    <button class="cta-btn">Jetzt kostenlos starten</button>
+    <div class="cta-sub">Kein Kreditkarte notig &middot; 14 Tage Pro-Features gratis</div>
+  </div>
+</section>
+
+</body>
+</html>

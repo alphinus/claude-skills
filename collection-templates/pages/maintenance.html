@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{BRAND_NAME}} - Wartung</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  :root { --dark-bg: {{BG}}; --cyan: {{PRIMARY}}; --cyan-dark: {{PRIMARY_DARK}}; --cloud: {{TEXT}}; --muted: {{MUTED}}; --warning: {{WARNING}}; }
+  body { background: var(--dark-bg); font-family: system-ui, -apple-system, sans-serif; color: var(--cloud); min-height: 100vh; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+
+  .content { text-align: center; position: relative; z-index: 1; max-width: 480px; }
+
+  /* Animated gear */
+  .gears { margin: 0 auto 32px; width: 120px; height: 120px; position: relative; }
+  .gear {
+    position: absolute; border-radius: 50%; border: 3px solid rgba({{PRIMARY_RGB}},0.3);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .gear::before { content: ''; position: absolute; inset: 6px; border-radius: 50%; border: 2px dashed rgba({{PRIMARY_RGB}},0.15); }
+  .gear-1 { width: 80px; height: 80px; top: 0; left: 10px; animation: gearSpin 6s linear infinite; }
+  .gear-2 { width: 56px; height: 56px; bottom: 0; right: 0; animation: gearSpin 4s linear infinite reverse; border-color: rgba(56,178,172,0.3); }
+  .gear-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--cyan); }
+  @keyframes gearSpin { to { transform: rotate(360deg); } }
+
+  .title { font-size: 32px; font-weight: 200; margin-bottom: 12px; }
+  .title span { color: var(--cyan); }
+
+  .desc { font-size: 15px; color: var(--muted); font-weight: 300; line-height: 1.7; margin-bottom: 32px; }
+
+  /* Status card */
+  .status-card {
+    background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 14px; padding: 24px; text-align: left; margin-bottom: 32px;
+  }
+  .status-header { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; }
+  .status-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--warning); animation: statusBlink 1.5s ease-in-out infinite; }
+  @keyframes statusBlink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+  .status-text { font-size: 14px; font-weight: 400; color: var(--warning); }
+
+  .status-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.03); font-size: 13px; }
+  .status-row:last-child { border-bottom: none; }
+  .status-label { color: var(--muted); font-weight: 300; }
+  .status-val { font-weight: 400; }
+  .status-val.ok { color: {{SUCCESS}}; }
+  .status-val.warn { color: var(--warning); }
+
+  /* Progress */
+  .progress-wrap { margin-bottom: 32px; }
+  .progress-header { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 13px; }
+  .progress-label { color: var(--muted); font-weight: 300; }
+  .progress-pct { color: var(--cyan); }
+  .progress-bar { height: 4px; border-radius: 2px; background: rgba(255,255,255,0.06); overflow: hidden; }
+  .progress-fill { height: 100%; border-radius: 2px; background: linear-gradient(90deg, var(--cyan-dark), var(--cyan)); animation: progressGrow 8s ease-in-out infinite; }
+  @keyframes progressGrow { 0% { width: 65%; } 50% { width: 82%; } 100% { width: 65%; } }
+
+  .eta { font-size: 14px; color: var(--muted); font-weight: 300; margin-bottom: 24px; }
+  .eta strong { color: var(--cloud); font-weight: 400; }
+
+  .contact { font-size: 13px; color: var(--muted); font-weight: 300; }
+  .contact a { color: var(--cyan); text-decoration: none; }
+  .contact a:hover { text-decoration: underline; }
+
+  /* BG animation */
+  .bg-hex { position: fixed; inset: 0; pointer-events: none; overflow: hidden; }
+  .hex-item { position: absolute; opacity: 0.02; animation: hexDrift linear infinite; }
+  @keyframes hexDrift { from { transform: translateY(110vh) rotate(0); } to { transform: translateY(-10vh) rotate(180deg); } }
+</style>
+</head>
+<body>
+
+<div class="bg-hex" id="bgHex"></div>
+
+<div class="content">
+  <div class="gears">
+    <div class="gear gear-1"><div class="gear-dot"></div></div>
+    <div class="gear gear-2"><div class="gear-dot"></div></div>
+  </div>
+
+  <div class="title">Geplante <span>Wartung</span></div>
+  <p class="desc">Wir führen aktuell ein System-Update durch. Der Dienst ist in Kürze wieder verfügbar.</p>
+
+  <div class="progress-wrap">
+    <div class="progress-header"><span class="progress-label">Fortschritt</span><span class="progress-pct">~75%</span></div>
+    <div class="progress-bar"><div class="progress-fill"></div></div>
+  </div>
+
+  <div class="status-card">
+    <div class="status-header"><div class="status-dot"></div><span class="status-text">Wartung aktiv</span></div>
+    <div class="status-row"><span class="status-label">API Server</span><span class="status-val warn">Wartung</span></div>
+    <div class="status-row"><span class="status-label">Event Store</span><span class="status-val warn">Migration</span></div>
+    <div class="status-row"><span class="status-label">Dashboard</span><span class="status-val warn">Offline</span></div>
+    <div class="status-row"><span class="status-label">Telegram Bot</span><span class="status-val ok">Online</span></div>
+  </div>
+
+  <p class="eta">Voraussichtliches Ende: <strong>15:00 Uhr MEZ</strong></p>
+  <p class="contact">Fragen? <a href="#">status.{{BRAND_DOMAIN}}</a> oder <a href="#">support@{{BRAND_DOMAIN}}</a></p>
+</div>
+
+<script>
+  const bg = document.getElementById('bgHex');
+  for (let i = 0; i < 8; i++) {
+    const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    svg.setAttribute('viewBox', '0 0 60 60');
+    svg.setAttribute('width', 30 + Math.random() * 50);
+    svg.innerHTML = '<polygon points="30,2 56,16 56,44 30,58 4,44 4,16" fill="none" stroke="{{PRIMARY}}" stroke-width="1"/>';
+    svg.className.baseVal = 'hex-item';
+    svg.style.left = Math.random() * 100 + '%';
+    svg.style.animationDuration = (20 + Math.random() * 15) + 's';
+    svg.style.animationDelay = -(Math.random() * 20) + 's';
+    bg.appendChild(svg);
+  }
+</script>
+
+</body>
+</html>

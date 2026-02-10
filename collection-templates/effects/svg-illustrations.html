@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{BRAND_NAME}} - SVG Illustrationen</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  :root { --dark-bg: {{BG}}; --cyan: {{PRIMARY}}; --cyan-dark: {{PRIMARY_DARK}}; --cloud: {{TEXT}}; --muted: {{MUTED}}; }
+  body { background: var(--dark-bg); font-family: system-ui, -apple-system, sans-serif; color: var(--cloud); padding: 60px 40px; }
+
+  h1 { font-size: 36px; font-weight: 200; text-align: center; margin-bottom: 12px; }
+  h1 span { background: linear-gradient(135deg, var(--cyan), var(--cyan-dark)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+  .subtitle { text-align: center; color: var(--muted); font-size: 14px; margin-bottom: 60px; font-weight: 300; }
+
+  .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; max-width: 1100px; margin: 0 auto; }
+  @media (max-width: 900px) { .grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 500px) { .grid { grid-template-columns: 1fr; } }
+
+  .card {
+    background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 16px; padding: 32px 20px 24px; text-align: center;
+    backdrop-filter: blur(8px); transition: all 0.3s;
+  }
+  .card:hover { border-color: rgba({{PRIMARY_RGB}},0.2); background: rgba(255,255,255,0.03); transform: translateY(-4px); }
+
+  .illust { width: 160px; height: 160px; margin: 0 auto 16px; }
+  .illust svg { width: 100%; height: 100%; }
+
+  .card-label { font-size: 14px; font-weight: 400; margin-bottom: 4px; }
+  .card-desc { font-size: 12px; color: var(--muted); font-weight: 300; }
+
+  /* Animations */
+  @keyframes dash { to { stroke-dashoffset: -40; } }
+  @keyframes pulse { 0%, 100% { opacity: 0.3; } 50% { opacity: 0.8; } }
+  @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  @keyframes drawOn { to { stroke-dashoffset: 0; } }
+  @keyframes fadeInOut { 0%, 100% { opacity: 0.15; } 50% { opacity: 0.5; } }
+  @keyframes wave { 0% { r: 8; opacity: 0.5; } 100% { r: 28; opacity: 0; } }
+  @keyframes rocketShake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-1px); } 75% { transform: translateX(1px); } }
+</style>
+</head>
+<body>
+
+<h1>SVG <span>Illustrationen</span></h1>
+<p class="subtitle">Handgefertigte animierte Illustrationen für das {{BRAND_NAME}}-Ökosystem</p>
+
+<div class="grid">
+
+  <!-- 1: Event Stream -->
+  <div class="card">
+    <div class="illust">
+      <svg viewBox="0 0 160 160">
+        <!-- Flow path -->
+        <path d="M20 80 C50 40, 70 120, 100 60 S140 100, 150 80" fill="none" stroke="{{PRIMARY}}" stroke-width="1.5" opacity="0.2"/>
+        <path d="M20 80 C50 40, 70 120, 100 60 S140 100, 150 80" fill="none" stroke="{{PRIMARY}}" stroke-width="1.5" opacity="0.6" stroke-dasharray="6 8" style="animation: dash 2s linear infinite;"/>
+        <!-- Nodes -->
+        <circle cx="20" cy="80" r="6" fill="none" stroke="{{PRIMARY}}" stroke-width="1.5" opacity="0.5"/>
+        <circle cx="20" cy="80" r="2.5" fill="{{PRIMARY}}" opacity="0.7"/>
+        <circle cx="60" cy="65" r="5" fill="none" stroke="{{PRIMARY}}" stroke-width="1" opacity="0.3" style="animation: pulse 3s ease infinite;"/>
+        <circle cx="60" cy="65" r="2" fill="{{PRIMARY}}" opacity="0.5"/>
+        <circle cx="100" cy="60" r="5" fill="none" stroke="{{PRIMARY}}" stroke-width="1" opacity="0.3" style="animation: pulse 3s ease 0.5s infinite;"/>
+        <circle cx="100" cy="60" r="2" fill="{{PRIMARY}}" opacity="0.5"/>
+        <circle cx="140" cy="85" r="6" fill="none" stroke="{{PRIMARY}}" stroke-width="1.5" opacity="0.5"/>
+        <circle cx="140" cy="85" r="2.5" fill="{{PRIMARY}}" opacity="0.7"/>
+        <!-- Floating particles -->
+        <circle cx="40" cy="55" r="1.5" fill="{{PRIMARY}}" opacity="0.4" style="animation: float 3s ease infinite;"/>
+        <circle cx="80" cy="95" r="1" fill="{{PRIMARY}}" opacity="0.3" style="animation: float 4s ease 1s infinite;"/>
+        <circle cx="120" cy="50" r="1.5" fill="{{PRIMARY}}" opacity="0.3" style="animation: float 3.5s ease 0.5s infinite;"/>
+        <!-- Label lines -->
+        <line x1="30" y1="110" x2="130" y2="110" stroke="{{PRIMARY}}" stroke-width="0.5" opacity="0.1"/>
+        <line x1="30" y1="120" x2="100" y2="120" stroke="{{PRIMARY}}" stroke-width="0.5" opacity="0.07"/>
+      </svg>
+    </div>
+    <div class="card-label">Event Stream</div>
+    <div class="card-desc">Datenfluss in Echtzeit</div>
+  </div>
+
+  <!-- 2: Cloud Infrastructure -->
+  <div class="card">
+    <div class="illust">
+      <svg viewBox="0 0 160 160">
+        <!-- Cloud shape -->
+        <path d="M40 90 Q40 65, 60 65 Q65 45, 85 50 Q105 40, 115 60 Q135 60, 130 80 Q140 95, 120 95 Z" fill="none" stroke="{{PRIMARY}}" stroke-width="1.5" opacity="0.3"/>
+        <path d="M50 88 Q50 72, 63 72 Q67 58, 82 62 Q96 55, 103 68 Q116 68, 113 80 Q120 88, 108 88 Z" fill="rgba({{PRIMARY_RGB}},0.03)" stroke="{{PRIMARY}}" stroke-width="1" opacity="0.15"/>
+        <!-- Server nodes -->
+        <rect x="62" y="72" width="12" height="10" rx="2" fill="none" stroke="{{PRIMARY}}" stroke-width="1" opacity="0.5"/>
+        <line x1="65" y1="75" x2="71" y2="75" stroke="{{PRIMARY}}" stroke-width="0.8" opacity="0.4"/>
+        <line x1="65" y1="78" x2="69" y2="78" stroke="{{PRIMARY}}" stroke-width="0.8" opacity="0.3"/>
+        <rect x="86" y="72" width="12" height="10" rx="2" fill="none" stroke="{{PRIMARY}}" stroke-width="1" opacity="0.5"/>
+        <line x1="89" y1="75" x2="95" y2="75" stroke="{{PRIMARY}}" stroke-width="0.8" opacity="0.4"/>
+        <line x1="89" y1="78" x2="93" y2="78" stroke="{{PRIMARY}}" stroke-width="0.8" opacity="0.3"/>
+        <!-- Connections -->
+        <line x1="74" y1="77" x2="86" y2="77" stroke="{{PRIMARY}}" stroke-width="0.8" stroke-dasharray="2 2" opacity="0.3" style="animation: dash 3s linear infinite;"/>
+        <!-- Pulse dots -->
+        <circle cx="68" cy="77" r="1.5" fill="{{PRIMARY}}" style="animation: pulse 2s ease infinite;"/>
+        <circle cx="92" cy="77" r="1.5" fill="{{PRIMARY}}" style="animation: pulse 2s ease 0.5s infinite;"/>
+        <!-- Data lines below -->
+        <line x1="55" y1="110" x2="105" y2="110" stroke="{{PRIMARY}}" stroke-width="0.5" opacity="0.1"/>
+        <line x1="60" y1="118" x2="95" y2="118" stroke="{{PRIMARY}}" stroke-width="0.5" opacity="0.07"/>
+      </svg>
+    </div>
+    <div class="card-label">Cloud Infrastruktur</div>
+    <div class="card-desc">Skalierbare Server-Architektur</div>
+  </div>
+
+  <!-- 3: AI Brain -->
+  <div class="card">
+    <div class="illust">
+      <svg viewBox="0 0 160 160">
+        <!-- Outer ring -->
+        <circle cx="80" cy="75" r="35" fill="none" stroke="{{PRIMARY}}" stroke-width="1" opacity="0.15"/>
+        <circle cx="80" cy="75" r="25" fill="none" stroke="{{PRIMARY}}" stroke-width="0.8" opacity="0.1"/>
+        <!-- Neural connections -->
+        <line x1="60" y1="60" x2="80" y2="75" stroke="{{PRIMARY}}" stroke-width="0.8" opacity="0.3" style="animation: fadeInOut 3s ease infinite;"/>
+        <line x1="100" y1="60" x2="80" y2="75" stroke="{{PRIMARY}}" stroke-width="0.8" opacity="0.3" style="animation: fadeInOut 3s ease 0.3s infinite;"/>
+        <line x1="65" y1="90" x2="80" y2="75" stroke="{{PRIMARY}}" stroke-width="0.8" opacity="0.3" style="animation: fadeInOut 3s ease 0.6s infinite;"/>
+        <line x1="95" y1="90" x2="80" y2="75" stroke="{{PRIMARY}}" stroke-width="0.8" opacity="0.3" style="animation: fadeInOut 3s ease 0.9s infinite;"/>
+        <line x1="60" y1="60" x2="100" y2="60" stroke="{{PRIMARY}}" stroke-width="0.5" opacity="0.15" style="animation: fadeInOut 4s ease 0.2s infinite;"/>
+        <line x1="65" y1="90" x2="95" y2="90" stroke="{{PRIMARY}}" stroke-width="0.5" opacity="0.15" style="animation: fadeInOut 4s ease 0.8s infinite;"/>
+        <line x1="60" y1="60" x2="65" y2="90" stroke="{{PRIMARY}}" stroke-width="0.5" opacity="0.15"/>
+        <line x1="100" y1="60" x2="95" y2="90" stroke="{{PRIMARY}}" stroke-width="0.5" opacity="0.15"/>
+        <!-- Nodes -->
+        <circle cx="80" cy="75" r="5" fill="rgba({{PRIMARY_RGB}},0.15)" stroke="{{PRIMARY}}" stroke-width="1.5" opacity="0.6"/>
+        <circle cx="80" cy="75" r="2" fill="{{PRIMARY}}" opacity="0.8" style="animation: pulse 2s ease infinite;"/>
+        <circle cx="60" cy="60" r="3.5" fill="none" stroke="{{PRIMARY}}" stroke-width="1" opacity="0.4"/>
+        <circle cx="60" cy="60" r="1.5" fill="{{PRIMARY}}" opacity="0.5" style="animation: pulse 2.5s ease 0.2s infinite;"/>
+        <circle cx="100" cy="60" r="3.5" fill="none" stroke="{{PRIMARY}}" stroke-width="1" opacity="0.4"/>
+        <circle cx="100" cy="60" r="1.5" fill="{{PRIMARY}}" opacity="0.5" style="animation: pulse 2.5s ease 0.4s infinite;"/>
+        <circle cx="65" cy="90" r="3.5" fill="none" stroke="{{PRIMARY}}" stroke-width="1" opacity="0.4"/>
+        <circle cx="65" cy="90" r="1.5" fill="{{PRIMARY}}" opacity="0.5" style="animation: pulse 2.5s ease 0.6s infinite;"/>
+        <circle cx="95" cy="90" r="3.5" fill="none" stroke="{{PRIMARY}}" stroke-width="1" opacity="0.4"/>
+        <circle cx="95" cy="90" r="1.5" fill="{{PRIMARY}}" opacity="0.5" style="animation: pulse 2.5s ease 0.8s infinite;"/>
+        <!-- Sparkles -->
+        <circle cx="48" cy="50" r="1" fill="{{PRIMARY}}" opacity="0.3" style="animation: float 3s ease infinite;"/>
+        <circle cx="112" cy="85" r="1" fill="{{PRIMARY}}" opacity="0.2" style="animation: float 4s ease 1s infinite;"/>
+      </svg>
+    </div>
+    <div class="card-label">KI-Netzwerk</div>
+    <div class="card-desc">Neuronale Verarbeitung</div>
+  </div>
+
+  <!-- 4: Security Shield -->
+  <div class="card">
+    <div class="illust">
+      <svg viewBox="0 0 160 160">
+        <!-- Hexagonal shield -->
+        <polygon points="80,35 115,52 115,88 80,105 45,88 45,52" fill="rgba({{PRIMARY_RGB}},0.03)" stroke="{{PRIMARY}}" stroke-width="1.5" opacity="0.3"/>
+        <polygon points="80,42 108,56 108,84 80,98 52,84 52,56" fill="none" stroke="{{PRIMARY}}" stroke-width="0.8" opacity="0.15"/>
+        <!-- Lock icon -->
+        <rect x="72" y="68" width="16" height="14" rx="2" fill="none" stroke="{{PRIMARY}}" stroke-width="1.5" opacity="0.5"/>
+        <path d="M75 68 V63 Q75 57, 80 57 Q85 57, 85 63 V68" fill="none" stroke="{{PRIMARY}}" stroke-width="1.5" opacity="0.5"/>
+        <circle cx="80" cy="76" r="2" fill="{{PRIMARY}}" opacity="0.6"/>
+        <!-- Scanning line -->
+        <line x1="50" y1="70" x2="110" y2="70" stroke="{{PRIMARY}}" stroke-width="0.5" opacity="0.2">
+          <animateTransform attributeName="transform" type="translate" values="0,-18;0,18;0,-18" dur="4s" repeatCount="indefinite"/>
+          <animate attributeName="opacity" values="0;0.3;0" dur="4s" repeatCount="indefinite"/>
+        </line>
+        <!-- Corner accents -->
+        <line x1="45" y1="52" x2="50" y2="52" stroke="{{PRIMARY}}" stroke-width="2" opacity="0.4"/>
+        <line x1="115" y1="52" x2="110" y2="52" stroke="{{PRIMARY}}" stroke-width="2" opacity="0.4"/>
+        <circle cx="80" cy="35" r="2" fill="{{PRIMARY}}" opacity="0.3" style="animation: pulse 3s ease infinite;"/>
+      </svg>
+    </div>
+    <div class="card-label">Sicherheitsschild</div>
+    <div class="card-desc">Verschlüsselter Datenschutz</div>
+  </div>
+
+  <!-- 5: Real-time Dashboard -->
+  <div class="card">
+    <div class="illust">
+      <svg viewBox="0 0 160 160">
+        <!-- Monitor frame -->
+        <rect x="25" y="35" width="110" height="75" rx="6" fill="none" stroke="{{PRIMARY}}" stroke-width="1.5" opacity="0.3"/>
+        <line x1="25" y1="50" x2="135" y2="50" stroke="{{PRIMARY}}" stroke-width="0.8" opacity="0.15"/>
+        <!-- Window dots -->
+        <circle cx="34" cy="43" r="2" fill="{{PRIMARY}}" opacity="0.3"/>
+        <circle cx="42" cy="43" r="2" fill="{{PRIMARY}}" opacity="0.2"/>
+        <circle cx="50" cy="43" r="2" fill="{{PRIMARY}}" opacity="0.15"/>
+        <!-- Chart line (animated draw) -->
+        <polyline points="35,90 50,85 65,88 80,72 95,78 110,65 125,70"
+          fill="none" stroke="{{PRIMARY}}" stroke-width="1.5" opacity="0.6"
+          stroke-dasharray="200" stroke-dashoffset="200"
+          style="animation: drawOn 3s ease forwards infinite; animation-delay: 0.5s;"/>
+        <!-- Area fill -->
+        <polygon points="35,95 35,90 50,85 65,88 80,72 95,78 110,65 125,70 125,95"
+          fill="url(#chartGrad)" opacity="0.15"/>
+        <defs>
+          <linearGradient id="chartGrad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="{{PRIMARY}}"/>
+            <stop offset="100%" stop-color="{{PRIMARY}}" stop-opacity="0"/>
+          </linearGradient>
+        </defs>
+        <!-- Data points -->
+        <circle cx="80" cy="72" r="2.5" fill="{{PRIMARY}}" opacity="0.5" style="animation: pulse 2s ease 1.5s infinite;"/>
+        <circle cx="125" cy="70" r="2.5" fill="{{PRIMARY}}" opacity="0.5" style="animation: pulse 2s ease 2s infinite;"/>
+        <!-- Stand -->
+        <line x1="70" y1="110" x2="90" y2="110" stroke="{{PRIMARY}}" stroke-width="1" opacity="0.2"/>
+        <line x1="80" y1="110" x2="80" y2="118" stroke="{{PRIMARY}}" stroke-width="1" opacity="0.15"/>
+        <line x1="68" y1="118" x2="92" y2="118" stroke="{{PRIMARY}}" stroke-width="1.5" opacity="0.2"/>
+      </svg>
+    </div>
+    <div class="card-label">Echtzeit-Dashboard</div>
+    <div class="card-desc">Live-Datenvisualisierung</div>
+  </div>
+
+  <!-- 6: Telegram Bot -->
+  <div class="card">
+    <div class="illust">
+      <svg viewBox="0 0 160 160">
+        <!-- Paper plane -->
+        <g style="animation: float 4s ease infinite;">
+          <polygon points="55,55 115,75 75,85" fill="rgba({{PRIMARY_RGB}},0.08)" stroke="{{PRIMARY}}" stroke-width="1.5" opacity="0.5" stroke-linejoin="round"/>
+          <polygon points="75,85 115,75 85,100" fill="rgba({{PRIMARY_RGB}},0.04)" stroke="{{PRIMARY}}" stroke-width="1" opacity="0.3" stroke-linejoin="round"/>
+          <line x1="75" y1="85" x2="83" y2="91" stroke="{{PRIMARY}}" stroke-width="1" opacity="0.4"/>
+        </g>
+        <!-- Signal waves -->
+        <circle cx="90" cy="72" r="8" fill="none" stroke="{{PRIMARY}}" stroke-width="1" opacity="0">
+          <animate attributeName="r" values="8;28" dur="2.5s" repeatCount="indefinite"/>
+          <animate attributeName="opacity" values="0.5;0" dur="2.5s" repeatCount="indefinite"/>
+        </circle>
+        <circle cx="90" cy="72" r="8" fill="none" stroke="{{PRIMARY}}" stroke-width="1" opacity="0">
+          <animate attributeName="r" values="8;28" dur="2.5s" begin="0.8s" repeatCount="indefinite"/>
+          <animate attributeName="opacity" values="0.4;0" dur="2.5s" begin="0.8s" repeatCount="indefinite"/>
+        </circle>
+        <circle cx="90" cy="72" r="8" fill="none" stroke="{{PRIMARY}}" stroke-width="1" opacity="0">
+          <animate attributeName="r" values="8;28" dur="2.5s" begin="1.6s" repeatCount="indefinite"/>
+          <animate attributeName="opacity" values="0.3;0" dur="2.5s" begin="1.6s" repeatCount="indefinite"/>
+        </circle>
+        <!-- Small dots -->
+        <circle cx="45" cy="90" r="1" fill="{{PRIMARY}}" opacity="0.2" style="animation: float 3s ease 0.5s infinite;"/>
+        <circle cx="125" cy="55" r="1" fill="{{PRIMARY}}" opacity="0.2" style="animation: float 3.5s ease infinite;"/>
+      </svg>
+    </div>
+    <div class="card-label">Telegram Bot</div>
+    <div class="card-desc">Automatisierte Nachrichten</div>
+  </div>
+
+  <!-- 7: Team Collaboration -->
+  <div class="card">
+    <div class="illust">
+      <svg viewBox="0 0 160 160">
+        <!-- Connection lines -->
+        <line x1="50" y1="60" x2="110" y2="60" stroke="{{PRIMARY}}" stroke-width="0.8" stroke-dasharray="3 3" opacity="0.2" style="animation: dash 4s linear infinite;"/>
+        <line x1="50" y1="60" x2="80" y2="100" stroke="{{PRIMARY}}" stroke-width="0.8" stroke-dasharray="3 3" opacity="0.2" style="animation: dash 4s linear 0.5s infinite;"/>
+        <line x1="110" y1="60" x2="80" y2="100" stroke="{{PRIMARY}}" stroke-width="0.8" stroke-dasharray="3 3" opacity="0.2" style="animation: dash 4s linear 1s infinite;"/>
+        <!-- User 1 (top left) -->
+        <circle cx="50" cy="52" r="10" fill="none" stroke="{{PRIMARY}}" stroke-width="1" opacity="0.3"/>
+        <circle cx="50" cy="49" r="4" fill="none" stroke="{{PRIMARY}}" stroke-width="1" opacity="0.4"/>
+        <path d="M42 59 Q42 54, 50 54 Q58 54, 58 59" fill="none" stroke="{{PRIMARY}}" stroke-width="1" opacity="0.3"/>
+        <!-- User 2 (top right) -->
+        <circle cx="110" cy="52" r="10" fill="none" stroke="{{PRIMARY}}" stroke-width="1" opacity="0.3"/>
+        <circle cx="110" cy="49" r="4" fill="none" stroke="{{PRIMARY_DARK}}" stroke-width="1" opacity="0.4"/>
+        <path d="M102 59 Q102 54, 110 54 Q118 54, 118 59" fill="none" stroke="{{PRIMARY_DARK}}" stroke-width="1" opacity="0.3"/>
+        <!-- User 3 (bottom center) -->
+        <circle cx="80" cy="92" r="10" fill="none" stroke="{{PRIMARY}}" stroke-width="1" opacity="0.3"/>
+        <circle cx="80" cy="89" r="4" fill="none" stroke="{{PRIMARY}}" stroke-width="1" opacity="0.4"/>
+        <path d="M72 99 Q72 94, 80 94 Q88 94, 88 99" fill="none" stroke="{{PRIMARY}}" stroke-width="1" opacity="0.3"/>
+        <!-- Pulse on connections -->
+        <circle cx="80" cy="60" r="2" fill="{{PRIMARY}}" opacity="0.5" style="animation: pulse 2s ease infinite;"/>
+        <circle cx="65" cy="80" r="2" fill="{{PRIMARY}}" opacity="0.4" style="animation: pulse 2s ease 0.7s infinite;"/>
+        <circle cx="95" cy="80" r="2" fill="{{PRIMARY}}" opacity="0.4" style="animation: pulse 2s ease 1.4s infinite;"/>
+        <!-- Plus icon -->
+        <line x1="128" y1="88" x2="140" y2="88" stroke="{{PRIMARY}}" stroke-width="1.5" stroke-linecap="round" opacity="0.25"/>
+        <line x1="134" y1="82" x2="134" y2="94" stroke="{{PRIMARY}}" stroke-width="1.5" stroke-linecap="round" opacity="0.25"/>
+      </svg>
+    </div>
+    <div class="card-label">Team-Kollaboration</div>
+    <div class="card-desc">Vernetzte Zusammenarbeit</div>
+  </div>
+
+  <!-- 8: Rocket Launch -->
+  <div class="card">
+    <div class="illust">
+      <svg viewBox="0 0 160 160">
+        <!-- Stars -->
+        <circle cx="30" cy="40" r="1" fill="{{PRIMARY}}" opacity="0.3" style="animation: pulse 3s ease infinite;"/>
+        <circle cx="130" cy="35" r="1.5" fill="{{PRIMARY}}" opacity="0.2" style="animation: pulse 4s ease 1s infinite;"/>
+        <circle cx="45" cy="100" r="1" fill="{{PRIMARY}}" opacity="0.25" style="animation: pulse 3.5s ease 0.5s infinite;"/>
+        <circle cx="120" cy="95" r="1" fill="{{PRIMARY}}" opacity="0.2" style="animation: pulse 2.5s ease 1.5s infinite;"/>
+        <circle cx="25" cy="70" r="0.8" fill="{{PRIMARY}}" opacity="0.15"/>
+        <circle cx="140" cy="65" r="0.8" fill="{{PRIMARY}}" opacity="0.15"/>
+        <!-- Rocket body -->
+        <g style="animation: rocketShake 0.3s ease infinite;">
+          <!-- Main body -->
+          <path d="M80 35 Q80 35, 72 65 L72 90 Q76 97, 80 97 Q84 97, 88 90 L88 65 Q80 35, 80 35Z"
+            fill="rgba({{PRIMARY_RGB}},0.05)" stroke="{{PRIMARY}}" stroke-width="1.5" opacity="0.5" stroke-linejoin="round"/>
+          <!-- Nose cone highlight -->
+          <path d="M80 38 Q78 48, 76 58" fill="none" stroke="{{PRIMARY}}" stroke-width="0.8" opacity="0.2"/>
+          <!-- Window -->
+          <circle cx="80" cy="62" r="4" fill="rgba({{PRIMARY_RGB}},0.1)" stroke="{{PRIMARY}}" stroke-width="1" opacity="0.4"/>
+          <circle cx="80" cy="62" r="1.5" fill="{{PRIMARY}}" opacity="0.3"/>
+          <!-- Fins -->
+          <path d="M72 82 L62 95 L72 90" fill="rgba({{PRIMARY_RGB}},0.04)" stroke="{{PRIMARY}}" stroke-width="1" opacity="0.3"/>
+          <path d="M88 82 L98 95 L88 90" fill="rgba({{PRIMARY_RGB}},0.04)" stroke="{{PRIMARY}}" stroke-width="1" opacity="0.3"/>
+        </g>
+        <!-- Exhaust flames -->
+        <ellipse cx="80" cy="105" rx="5" ry="8" fill="none" stroke="{{PRIMARY}}" stroke-width="1" opacity="0.4" style="animation: pulse 0.5s ease infinite;"/>
+        <ellipse cx="80" cy="110" rx="3" ry="6" fill="none" stroke="{{PRIMARY_DARK}}" stroke-width="0.8" opacity="0.3" style="animation: pulse 0.4s ease 0.1s infinite;"/>
+        <!-- Exhaust particles -->
+        <circle cx="76" cy="115" r="1.5" fill="{{PRIMARY}}" opacity="0">
+          <animate attributeName="cy" values="105;130" dur="1s" repeatCount="indefinite"/>
+          <animate attributeName="opacity" values="0.5;0" dur="1s" repeatCount="indefinite"/>
+        </circle>
+        <circle cx="84" cy="115" r="1" fill="{{PRIMARY}}" opacity="0">
+          <animate attributeName="cy" values="105;125" dur="0.8s" begin="0.3s" repeatCount="indefinite"/>
+          <animate attributeName="opacity" values="0.4;0" dur="0.8s" begin="0.3s" repeatCount="indefinite"/>
+        </circle>
+        <circle cx="80" cy="115" r="1.5" fill="{{PRIMARY_DARK}}" opacity="0">
+          <animate attributeName="cy" values="108;135" dur="1.2s" begin="0.15s" repeatCount="indefinite"/>
+          <animate attributeName="opacity" values="0.4;0" dur="1.2s" begin="0.15s" repeatCount="indefinite"/>
+        </circle>
+      </svg>
+    </div>
+    <div class="card-label">Rocket Launch</div>
+    <div class="card-desc">Startbereit für den Erfolg</div>
+  </div>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>{{BRAND_NAME}} Sticker Designs</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #1a1a2e;
+    font-family: system-ui, -apple-system, sans-serif;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    min-height: 100vh; padding: 40px;
+  }
+
+  .page-title {
+    font-size: 24px; font-weight: 200; color: {{TEXT}};
+    letter-spacing: 8px; margin-bottom: 8px;
+  }
+  .page-title span { color: {{PRIMARY}}; }
+  .page-sub {
+    font-size: 11px; color: {{MUTED}}; letter-spacing: 2px;
+    margin-bottom: 30px;
+  }
+
+  .sticker-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 28px;
+  }
+
+  .sticker-wrap {
+    display: flex; flex-direction: column;
+    align-items: center; gap: 10px;
+  }
+
+  .sticker {
+    position: relative;
+    display: flex; align-items: center; justify-content: center;
+  }
+
+  .sticker-label {
+    font-size: 9px; color: {{MUTED}}; letter-spacing: 1px;
+    text-align: center;
+  }
+  .sticker-size {
+    font-size: 7px; color: {{PRIMARY}}; letter-spacing: 0.5px;
+  }
+
+  /* ── 1. Hexagon Logo Sticker (die-cut) ── */
+  .hex-sticker {
+    width: 140px; height: 160px;
+  }
+  .hex-sticker svg .cut-line {
+    stroke: {{PRIMARY}}; stroke-width: 1; stroke-dasharray: 4,3;
+    fill: none; opacity: 0.5;
+  }
+  .hex-sticker svg .sticker-bg {
+    fill: {{BG}};
+  }
+
+  /* ── 2. Wordmark Sticker (rectangular) ── */
+  .word-sticker {
+    width: 160px; height: 60px;
+  }
+  .word-sticker .cut-rect {
+    stroke: {{PRIMARY}}; stroke-width: 1; stroke-dasharray: 4,3;
+    fill: none; opacity: 0.5;
+  }
+  .word-sticker .sticker-bg {
+    fill: {{BG}};
+  }
+
+  /* ── 3. Event-Driven Badge (pill) ── */
+  .pill-sticker {
+    width: 160px; height: 60px;
+  }
+
+  /* ── 4. Hex Pattern Sticker ── */
+  .pattern-sticker {
+    width: 130px; height: 130px;
+  }
+
+  /* ── 5. Built with {{BRAND_NAME}} Badge ── */
+  .built-sticker {
+    width: 150px; height: 56px;
+  }
+
+  /* ── 6. QR Code Sticker ── */
+  .qr-sticker {
+    width: 130px; height: 150px;
+  }
+</style>
+</head>
+<body>
+
+<div class="page-title">ELUM<span>A</span> Stickers</div>
+<div class="page-sub">6 Sticker-Designs &middot; Druckfertige Vorlagen</div>
+
+<div class="sticker-grid">
+
+  <!-- 1. Hexagon Logo Sticker -->
+  <div class="sticker-wrap">
+    <div class="sticker hex-sticker">
+      <svg width="140" height="160" viewBox="0 0 140 160">
+        <!-- Cut line (hexagon die-cut) -->
+        <polygon class="cut-line" points="70,5 132,35 132,95 70,125 8,95 8,35"
+          stroke="{{PRIMARY}}" stroke-width="1" stroke-dasharray="4,3" fill="none" opacity="0.5"/>
+        <!-- Sticker background -->
+        <polygon points="70,8 130,37 130,93 70,122 10,93 10,37" fill="{{BG}}"/>
+        <!-- Logo -->
+        <svg x="44" y="38" width="52" height="52" viewBox="0 0 56 64">
+          <defs>
+            <linearGradient id="sg1" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="{{PRIMARY}}"/><stop offset="100%" stop-color="{{PRIMARY_DARK}}"/>
+            </linearGradient>
+          </defs>
+          <polygon points="28,2 54,16 54,48 28,62 2,48 2,16" fill="none" stroke="url(#sg1)" stroke-width="2"/>
+          <line x1="18" y1="22" x2="38" y2="22" stroke="url(#sg1)" stroke-width="2" stroke-linecap="round"/>
+          <line x1="18" y1="32" x2="34" y2="32" stroke="url(#sg1)" stroke-width="2" stroke-linecap="round"/>
+          <line x1="18" y1="42" x2="38" y2="42" stroke="url(#sg1)" stroke-width="2" stroke-linecap="round"/>
+          <line x1="18" y1="22" x2="18" y2="42" stroke="url(#sg1)" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+        <!-- {{BRAND_NAME}} text -->
+        <text x="70" y="108" text-anchor="middle" fill="{{TEXT}}"
+          font-family="system-ui,-apple-system,sans-serif" font-size="13" font-weight="200"
+          letter-spacing="4">ELUM<tspan fill="{{PRIMARY}}">A</tspan></text>
+      </svg>
+    </div>
+    <div class="sticker-label">Hexagon Logo</div>
+    <div class="sticker-size">Stanzform &middot; 50&times;58 mm</div>
+  </div>
+
+  <!-- 2. Wordmark Sticker -->
+  <div class="sticker-wrap">
+    <div class="sticker word-sticker">
+      <svg width="160" height="60" viewBox="0 0 160 60">
+        <!-- Cut line -->
+        <rect class="cut-rect" x="2" y="2" width="156" height="56" rx="6"
+          stroke="{{PRIMARY}}" stroke-width="1" stroke-dasharray="4,3" fill="none" opacity="0.5"/>
+        <!-- Background -->
+        <rect x="5" y="5" width="150" height="50" rx="4" fill="{{BG}}"/>
+        <!-- Hex icon small -->
+        <svg x="12" y="12" width="22" height="25" viewBox="0 0 56 64">
+          <polygon points="28,2 54,16 54,48 28,62 2,48 2,16" fill="none" stroke="{{PRIMARY}}" stroke-width="2.5"/>
+          <line x1="18" y1="22" x2="38" y2="22" stroke="{{PRIMARY}}" stroke-width="2.5" stroke-linecap="round"/>
+          <line x1="18" y1="32" x2="34" y2="32" stroke="{{PRIMARY}}" stroke-width="2.5" stroke-linecap="round"/>
+          <line x1="18" y1="42" x2="38" y2="42" stroke="{{PRIMARY}}" stroke-width="2.5" stroke-linecap="round"/>
+          <line x1="18" y1="22" x2="18" y2="42" stroke="{{PRIMARY}}" stroke-width="2.5" stroke-linecap="round"/>
+        </svg>
+        <!-- {{BRAND_NAME}} -->
+        <text x="95" y="35" text-anchor="middle" fill="{{TEXT}}"
+          font-family="system-ui,-apple-system,sans-serif" font-size="22" font-weight="200"
+          letter-spacing="6">ELUM<tspan fill="{{PRIMARY}}">A</tspan></text>
+      </svg>
+    </div>
+    <div class="sticker-label">Wortmarke</div>
+    <div class="sticker-size">Rechteckig &middot; 70&times;25 mm</div>
+  </div>
+
+  <!-- 3. Event-Driven Badge -->
+  <div class="sticker-wrap">
+    <div class="sticker pill-sticker">
+      <svg width="160" height="60" viewBox="0 0 160 60">
+        <!-- Cut line (pill) -->
+        <rect x="2" y="8" width="156" height="44" rx="22"
+          stroke="{{PRIMARY}}" stroke-width="1" stroke-dasharray="4,3" fill="none" opacity="0.5"/>
+        <!-- Background -->
+        <rect x="5" y="11" width="150" height="38" rx="19" fill="{{BG}}"/>
+        <!-- Gradient bar -->
+        <rect x="5" y="46" width="150" height="3" rx="1.5"
+          fill="url(#pillGrad)" opacity="0.6"/>
+        <defs>
+          <linearGradient id="pillGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stop-color="{{PRIMARY}}"/><stop offset="100%" stop-color="{{PRIMARY_DARK}}"/>
+          </linearGradient>
+        </defs>
+        <!-- Dot -->
+        <circle cx="26" cy="30" r="4" fill="{{PRIMARY}}" opacity="0.8"/>
+        <!-- Text -->
+        <text x="90" y="34" text-anchor="middle" fill="{{TEXT}}"
+          font-family="system-ui,-apple-system,sans-serif" font-size="11" font-weight="500"
+          letter-spacing="2">EVENT-DRIVEN</text>
+      </svg>
+    </div>
+    <div class="sticker-label">Event-Driven Badge</div>
+    <div class="sticker-size">Pillenform &middot; 65&times;22 mm</div>
+  </div>
+
+  <!-- 4. Hex Pattern Sticker -->
+  <div class="sticker-wrap">
+    <div class="sticker pattern-sticker">
+      <svg width="130" height="130" viewBox="0 0 130 130">
+        <!-- Cut line (circle) -->
+        <circle cx="65" cy="65" r="62"
+          stroke="{{PRIMARY}}" stroke-width="1" stroke-dasharray="4,3" fill="none" opacity="0.5"/>
+        <!-- Background -->
+        <circle cx="65" cy="65" r="59" fill="{{BG}}"/>
+        <!-- Hex pattern -->
+        <g opacity="0.15" stroke="{{PRIMARY}}" stroke-width="0.6" fill="none">
+          <polygon points="40,20 55,12 70,20 70,36 55,44 40,36"/>
+          <polygon points="60,20 75,12 90,20 90,36 75,44 60,36"/>
+          <polygon points="30,38 45,30 60,38 60,54 45,62 30,54"/>
+          <polygon points="50,38 65,30 80,38 80,54 65,62 50,54"/>
+          <polygon points="70,38 85,30 100,38 100,54 85,62 70,54"/>
+          <polygon points="40,56 55,48 70,56 70,72 55,80 40,72"/>
+          <polygon points="60,56 75,48 90,56 90,72 75,80 60,72"/>
+          <polygon points="30,74 45,66 60,74 60,90 45,98 30,90"/>
+          <polygon points="50,74 65,66 80,74 80,90 65,98 50,90"/>
+          <polygon points="70,74 85,66 100,74 100,90 85,98 70,90"/>
+          <polygon points="40,92 55,84 70,92 70,108 55,116 40,108"/>
+          <polygon points="60,92 75,84 90,92 90,108 75,116 60,108"/>
+        </g>
+        <!-- Center highlight hex -->
+        <polygon points="65,42 80,34 95,42 95,58 80,66 65,58"
+          stroke="{{PRIMARY}}" stroke-width="1" fill="rgba({{PRIMARY_RGB}},0.08)"/>
+        <!-- E beams in center -->
+        <svg x="45" y="48" width="40" height="34" viewBox="0 0 56 48">
+          <line x1="12" y1="10" x2="44" y2="10" stroke="{{PRIMARY}}" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="12" y1="24" x2="36" y2="24" stroke="{{PRIMARY}}" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="12" y1="38" x2="44" y2="38" stroke="{{PRIMARY}}" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="12" y1="10" x2="12" y2="38" stroke="{{PRIMARY}}" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+      </svg>
+    </div>
+    <div class="sticker-label">Hex-Muster</div>
+    <div class="sticker-size">Rund &middot; 50 mm &empty;</div>
+  </div>
+
+  <!-- 5. Built with {{BRAND_NAME}} Badge -->
+  <div class="sticker-wrap">
+    <div class="sticker built-sticker">
+      <svg width="150" height="56" viewBox="0 0 150 56">
+        <!-- Cut line -->
+        <rect x="2" y="2" width="146" height="52" rx="6"
+          stroke="{{PRIMARY}}" stroke-width="1" stroke-dasharray="4,3" fill="none" opacity="0.5"/>
+        <!-- Background -->
+        <rect x="5" y="5" width="140" height="46" rx="4" fill="{{BG}}"/>
+        <!-- Left accent -->
+        <rect x="5" y="5" width="3" height="46" rx="1.5"
+          fill="url(#builtGrad)"/>
+        <defs>
+          <linearGradient id="builtGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stop-color="{{PRIMARY}}"/><stop offset="100%" stop-color="{{PRIMARY_DARK}}"/>
+          </linearGradient>
+        </defs>
+        <!-- "Built with" -->
+        <text x="20" y="23" fill="{{MUTED}}"
+          font-family="system-ui,-apple-system,sans-serif" font-size="8"
+          letter-spacing="1.5" font-weight="400">BUILT WITH</text>
+        <!-- {{BRAND_NAME}} -->
+        <text x="20" y="40" fill="{{TEXT}}"
+          font-family="system-ui,-apple-system,sans-serif" font-size="16"
+          letter-spacing="4" font-weight="200">ELUM<tspan fill="{{PRIMARY}}">A</tspan></text>
+        <!-- Hex icon -->
+        <svg x="112" y="12" width="24" height="28" viewBox="0 0 56 64">
+          <polygon points="28,2 54,16 54,48 28,62 2,48 2,16" fill="none" stroke="{{PRIMARY}}" stroke-width="2.5" opacity="0.3"/>
+          <line x1="18" y1="22" x2="38" y2="22" stroke="{{PRIMARY}}" stroke-width="2" stroke-linecap="round" opacity="0.5"/>
+          <line x1="18" y1="32" x2="34" y2="32" stroke="{{PRIMARY}}" stroke-width="2" stroke-linecap="round" opacity="0.5"/>
+          <line x1="18" y1="42" x2="38" y2="42" stroke="{{PRIMARY}}" stroke-width="2" stroke-linecap="round" opacity="0.5"/>
+          <line x1="18" y1="22" x2="18" y2="42" stroke="{{PRIMARY}}" stroke-width="2" stroke-linecap="round" opacity="0.5"/>
+        </svg>
+      </svg>
+    </div>
+    <div class="sticker-label">Built with {{BRAND_NAME}}</div>
+    <div class="sticker-size">Rechteckig &middot; 60&times;22 mm</div>
+  </div>
+
+  <!-- 6. QR Code Sticker -->
+  <div class="sticker-wrap">
+    <div class="sticker qr-sticker">
+      <svg width="130" height="150" viewBox="0 0 130 150">
+        <!-- Cut line -->
+        <rect x="2" y="2" width="126" height="146" rx="8"
+          stroke="{{PRIMARY}}" stroke-width="1" stroke-dasharray="4,3" fill="none" opacity="0.5"/>
+        <!-- Background -->
+        <rect x="5" y="5" width="120" height="140" rx="6" fill="{{BG}}"/>
+        <!-- QR code area (white bg) -->
+        <rect x="20" y="15" width="90" height="90" rx="4" fill="{{TEXT}}"/>
+        <!-- QR pattern (stylized) -->
+        <g fill="{{BG}}">
+          <!-- Top-left finder -->
+          <rect x="26" y="21" width="20" height="20" rx="2"/>
+          <rect x="29" y="24" width="14" height="14" rx="1" fill="{{TEXT}}"/>
+          <rect x="32" y="27" width="8" height="8" rx="1" fill="{{BG}}"/>
+          <!-- Top-right finder -->
+          <rect x="84" y="21" width="20" height="20" rx="2"/>
+          <rect x="87" y="24" width="14" height="14" rx="1" fill="{{TEXT}}"/>
+          <rect x="90" y="27" width="8" height="8" rx="1" fill="{{BG}}"/>
+          <!-- Bottom-left finder -->
+          <rect x="26" y="79" width="20" height="20" rx="2"/>
+          <rect x="29" y="82" width="14" height="14" rx="1" fill="{{TEXT}}"/>
+          <rect x="32" y="85" width="8" height="8" rx="1" fill="{{BG}}"/>
+          <!-- Data modules -->
+          <rect x="50" y="21" width="5" height="5"/>
+          <rect x="58" y="21" width="5" height="5"/>
+          <rect x="66" y="21" width="5" height="5"/>
+          <rect x="74" y="21" width="5" height="5"/>
+          <rect x="50" y="29" width="5" height="5"/>
+          <rect x="62" y="29" width="5" height="5"/>
+          <rect x="50" y="37" width="5" height="5"/>
+          <rect x="58" y="37" width="5" height="5"/>
+          <rect x="70" y="37" width="5" height="5"/>
+          <rect x="78" y="37" width="5" height="5"/>
+          <rect x="26" y="45" width="5" height="5"/>
+          <rect x="34" y="45" width="5" height="5"/>
+          <rect x="42" y="45" width="5" height="5"/>
+          <rect x="62" y="45" width="5" height="5"/>
+          <rect x="74" y="45" width="5" height="5"/>
+          <rect x="90" y="45" width="5" height="5"/>
+          <rect x="26" y="53" width="5" height="5"/>
+          <rect x="38" y="53" width="5" height="5"/>
+          <rect x="50" y="53" width="5" height="5"/>
+          <rect x="66" y="53" width="5" height="5"/>
+          <rect x="82" y="53" width="5" height="5"/>
+          <rect x="26" y="61" width="5" height="5"/>
+          <rect x="34" y="61" width="5" height="5"/>
+          <rect x="46" y="61" width="5" height="5"/>
+          <rect x="58" y="61" width="5" height="5"/>
+          <rect x="70" y="61" width="5" height="5"/>
+          <rect x="82" y="61" width="5" height="5"/>
+          <rect x="94" y="61" width="5" height="5"/>
+          <rect x="26" y="69" width="5" height="5"/>
+          <rect x="42" y="69" width="5" height="5"/>
+          <rect x="54" y="69" width="5" height="5"/>
+          <rect x="78" y="69" width="5" height="5"/>
+          <rect x="90" y="69" width="5" height="5"/>
+          <rect x="50" y="79" width="5" height="5"/>
+          <rect x="62" y="79" width="5" height="5"/>
+          <rect x="74" y="79" width="5" height="5"/>
+          <rect x="86" y="79" width="5" height="5"/>
+          <rect x="50" y="87" width="5" height="5"/>
+          <rect x="66" y="87" width="5" height="5"/>
+          <rect x="82" y="87" width="5" height="5"/>
+          <rect x="94" y="87" width="5" height="5"/>
+          <rect x="54" y="95" width="5" height="5"/>
+          <rect x="70" y="95" width="5" height="5"/>
+          <rect x="78" y="95" width="5" height="5"/>
+          <rect x="90" y="95" width="5" height="5"/>
+        </g>
+        <!-- Center hex logo overlay -->
+        <rect x="51" y="47" width="28" height="28" rx="3" fill="{{TEXT}}"/>
+        <svg x="52" y="44" width="26" height="30" viewBox="0 0 56 64">
+          <polygon points="28,2 54,16 54,48 28,62 2,48 2,16" fill="none" stroke="{{PRIMARY}}" stroke-width="3"/>
+          <line x1="18" y1="22" x2="38" y2="22" stroke="{{PRIMARY}}" stroke-width="3" stroke-linecap="round"/>
+          <line x1="18" y1="32" x2="34" y2="32" stroke="{{PRIMARY}}" stroke-width="3" stroke-linecap="round"/>
+          <line x1="18" y1="42" x2="38" y2="42" stroke="{{PRIMARY}}" stroke-width="3" stroke-linecap="round"/>
+          <line x1="18" y1="22" x2="18" y2="42" stroke="{{PRIMARY}}" stroke-width="3" stroke-linecap="round"/>
+        </svg>
+        <!-- URL below QR -->
+        <text x="65" y="120" text-anchor="middle" fill="{{PRIMARY}}"
+          font-family="system-ui,-apple-system,sans-serif" font-size="10"
+          letter-spacing="2" font-weight="500">{{BRAND_DOMAIN}}</text>
+        <!-- Scan text -->
+        <text x="65" y="135" text-anchor="middle" fill="{{MUTED}}"
+          font-family="system-ui,-apple-system,sans-serif" font-size="7"
+          letter-spacing="1">JETZT SCANNEN</text>
+      </svg>
+    </div>
+    <div class="sticker-label">QR-Code Sticker</div>
+    <div class="sticker-size">Rechteckig &middot; 50&times;58 mm</div>
+  </div>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{BRAND_NAME}} - 404</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  :root { --dark-bg: {{BG}}; --cyan: {{PRIMARY}}; --cyan-dark: {{PRIMARY_DARK}}; --cloud: {{TEXT}}; --muted: {{MUTED}}; }
+  body { background: var(--dark-bg); font-family: system-ui, -apple-system, sans-serif; color: var(--cloud); min-height: 100vh; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+
+  .container { text-align: center; position: relative; z-index: 1; }
+
+  /* Glitch 404 */
+  .error-code {
+    font-size: 180px; font-weight: 200; line-height: 1;
+    background: linear-gradient(135deg, var(--cyan), var(--cyan-dark));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    position: relative; margin-bottom: 16px;
+    animation: glitchShift 4s ease-in-out infinite;
+  }
+  .error-code::before, .error-code::after {
+    content: '404'; position: absolute; left: 0; right: 0; top: 0;
+    -webkit-text-fill-color: transparent;
+  }
+  .error-code::before {
+    background: linear-gradient(135deg, {{ERROR}}, transparent);
+    -webkit-background-clip: text; background-clip: text;
+    animation: glitchLeft 4s ease-in-out infinite;
+  }
+  .error-code::after {
+    background: linear-gradient(135deg, transparent, {{INFO}});
+    -webkit-background-clip: text; background-clip: text;
+    animation: glitchRight 4s ease-in-out infinite;
+  }
+  @keyframes glitchShift { 0%,90%,100% { transform: none; } 92% { transform: skewX(-2deg); } 94% { transform: skewX(2deg); } }
+  @keyframes glitchLeft { 0%,90%,100% { clip-path: inset(0); opacity: 0; } 92% { clip-path: inset(20% 0 60% 0); opacity: 0.7; transform: translateX(-4px); } 94% { clip-path: inset(50% 0 20% 0); opacity: 0.7; transform: translateX(4px); } }
+  @keyframes glitchRight { 0%,90%,100% { clip-path: inset(0); opacity: 0; } 93% { clip-path: inset(40% 0 30% 0); opacity: 0.5; transform: translateX(4px); } 95% { clip-path: inset(10% 0 70% 0); opacity: 0.5; transform: translateX(-4px); } }
+
+  .error-title { font-size: 28px; font-weight: 300; margin-bottom: 12px; }
+  .error-desc { font-size: 16px; color: var(--muted); font-weight: 300; margin-bottom: 40px; max-width: 400px; line-height: 1.7; }
+
+  .error-actions { display: flex; gap: 14px; justify-content: center; }
+  .btn {
+    padding: 12px 32px; border-radius: 8px; font-size: 13px; font-weight: 500;
+    letter-spacing: 1px; cursor: pointer; transition: all 0.3s; font-family: inherit;
+  }
+  .btn-primary { background: linear-gradient(135deg, var(--cyan), var(--cyan-dark)); border: none; color: var(--dark-bg); font-weight: 600; }
+  .btn-primary:hover { box-shadow: 0 8px 24px rgba({{PRIMARY_RGB}},0.25); transform: translateY(-2px); }
+  .btn-ghost { background: transparent; border: 1px solid rgba({{PRIMARY_RGB}},0.3); color: var(--cyan); }
+  .btn-ghost:hover { background: rgba({{PRIMARY_RGB}},0.08); border-color: var(--cyan); transform: translateY(-2px); }
+
+  /* Floating hexagons background */
+  .bg-shapes { position: fixed; inset: 0; overflow: hidden; pointer-events: none; }
+  .hex-float {
+    position: absolute; opacity: 0.04;
+    animation: hexFloat linear infinite;
+  }
+  @keyframes hexFloat { from { transform: translateY(110vh) rotate(0deg); } to { transform: translateY(-10vh) rotate(360deg); } }
+
+  /* Broken connection illustration */
+  .illustration { margin: 0 auto 32px; width: 120px; height: 120px; position: relative; }
+  .ill-hex {
+    position: absolute; width: 100%; height: 100%;
+    border: 2px solid rgba({{PRIMARY_RGB}},0.2); border-radius: 0;
+    clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+    animation: hexPulse 3s ease-in-out infinite;
+  }
+  .ill-hex::after {
+    content: ''; position: absolute; inset: 15px;
+    border: 1px solid rgba({{PRIMARY_RGB}},0.15);
+    clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+  }
+  @keyframes hexPulse { 0%, 100% { opacity: 0.5; transform: scale(1); } 50% { opacity: 1; transform: scale(1.05); } }
+  .ill-x { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 36px; color: var(--cyan); opacity: 0.6; }
+
+  /* Scan lines */
+  .scanlines {
+    position: fixed; inset: 0; pointer-events: none;
+    background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.03) 2px, rgba(0,0,0,0.03) 4px);
+  }
+</style>
+</head>
+<body>
+
+<div class="bg-shapes" id="bgShapes"></div>
+<div class="scanlines"></div>
+
+<div class="container">
+  <div class="illustration">
+    <div class="ill-hex"></div>
+    <div class="ill-x">&#10005;</div>
+  </div>
+  <div class="error-code">404</div>
+  <div class="error-title">Seite nicht gefunden</div>
+  <div class="error-desc">Die angeforderte Seite existiert nicht oder wurde verschoben. Vielleicht findest du was du suchst auf der Startseite.</div>
+  <div class="error-actions">
+    <button class="btn btn-primary">ZUR STARTSEITE</button>
+    <button class="btn btn-ghost">SUPPORT</button>
+  </div>
+</div>
+
+<script>
+  const shapes = document.getElementById('bgShapes');
+  for (let i = 0; i < 12; i++) {
+    const svg = document.createElementNS('http://www.w3.org/2000/svg','svg');
+    svg.setAttribute('viewBox','0 0 60 60');
+    svg.setAttribute('width', 30 + Math.random() * 40);
+    svg.innerHTML = '<polygon points="30,2 56,16 56,44 30,58 4,44 4,16" fill="none" stroke="{{PRIMARY}}" stroke-width="1"/>';
+    svg.className.baseVal = 'hex-float';
+    svg.style.left = Math.random() * 100 + '%';
+    svg.style.animationDuration = (15 + Math.random() * 20) + 's';
+    svg.style.animationDelay = -(Math.random() * 20) + 's';
+    shapes.appendChild(svg);
+  }
+</script>
+
+</body>
+</html>

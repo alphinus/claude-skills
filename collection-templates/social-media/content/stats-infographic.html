@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{BRAND_NAME}} Stats Infographic - 1080x1350</title>
+<style>
+  :root {
+    --dark-bg: {{BG}};
+    --cyan: {{PRIMARY}};
+    --cyan-dark: {{PRIMARY_DARK}};
+    --cloud: {{TEXT}};
+    --muted: {{MUTED}};
+    --card-bg: #1a2332;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #080e1a;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    font-family: system-ui, -apple-system, sans-serif;
+    color: var(--cloud);
+    padding: 40px 20px;
+  }
+
+  .meta {
+    color: var(--muted);
+    font-size: 14px;
+    margin-bottom: 20px;
+    text-align: center;
+    letter-spacing: 0.5px;
+  }
+  .meta strong { color: var(--cyan); }
+
+  .template {
+    width: 1080px;
+    height: 1350px;
+    background: var(--dark-bg);
+    position: relative;
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+
+  /* Grid background */
+  .grid-bg {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba({{PRIMARY_RGB}}, 0.02) 1px, transparent 1px),
+      linear-gradient(90deg, rgba({{PRIMARY_RGB}}, 0.02) 1px, transparent 1px);
+    background-size: 30px 30px;
+  }
+
+  /* Gradient accents */
+  .bg-orb-top {
+    position: absolute;
+    width: 500px; height: 500px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba({{PRIMARY_RGB}}, 0.1), transparent 70%);
+    top: -200px; left: 50%;
+    transform: translateX(-50%);
+    filter: blur(60px);
+  }
+  .bg-orb-bottom {
+    position: absolute;
+    width: 400px; height: 400px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(128, 90, 213, 0.08), transparent 70%);
+    bottom: -150px; right: -100px;
+    filter: blur(60px);
+  }
+
+  .top-line {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--cyan), var(--cyan-dark), #805ad5);
+  }
+
+  .content {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    padding: 64px 72px 56px;
+  }
+
+  /* Header */
+  .header {
+    text-align: center;
+    margin-bottom: 52px;
+  }
+  .header-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba({{PRIMARY_RGB}}, 0.1);
+    border: 1px solid rgba({{PRIMARY_RGB}}, 0.2);
+    border-radius: 20px;
+    padding: 8px 24px;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--cyan);
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+  .header-title {
+    font-size: 64px;
+    font-weight: 800;
+    color: var(--cloud);
+    line-height: 1.1;
+  }
+  .header-title span {
+    background: linear-gradient(135deg, var(--cyan), var(--cyan-dark));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .header-sub {
+    font-size: 22px;
+    color: var(--muted);
+    margin-top: 12px;
+  }
+
+  /* Stat blocks */
+  .stats {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    flex: 1;
+  }
+
+  .stat-card {
+    background: var(--card-bg);
+    border: 1px solid rgba({{PRIMARY_RGB}}, 0.08);
+    border-radius: 20px;
+    padding: 36px 40px;
+    display: flex;
+    align-items: center;
+    gap: 36px;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s;
+  }
+  .stat-card::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 4px;
+    background: linear-gradient(180deg, var(--cyan), var(--cyan-dark));
+    border-radius: 0 4px 4px 0;
+  }
+
+  .stat-icon {
+    width: 64px; height: 64px;
+    border-radius: 16px;
+    background: rgba({{PRIMARY_RGB}}, 0.08);
+    border: 1px solid rgba({{PRIMARY_RGB}}, 0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .stat-icon svg { width: 30px; height: 30px; color: var(--cyan); }
+
+  .stat-info {
+    flex: 1;
+  }
+  .stat-number {
+    font-size: 52px;
+    font-weight: 800;
+    color: var(--cloud);
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+  .stat-number span { color: var(--cyan); }
+  .stat-label {
+    font-size: 20px;
+    color: var(--muted);
+    font-weight: 400;
+  }
+
+  .stat-viz {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Mini bar chart */
+  .bar-chart {
+    display: flex;
+    align-items: flex-end;
+    gap: 6px;
+    height: 60px;
+  }
+  .bar {
+    width: 12px;
+    border-radius: 4px 4px 0 0;
+    background: linear-gradient(180deg, var(--cyan), rgba({{PRIMARY_RGB}}, 0.3));
+    animation: barGrow 2s ease-out forwards;
+    transform-origin: bottom;
+  }
+  @keyframes barGrow {
+    from { transform: scaleY(0); }
+    to { transform: scaleY(1); }
+  }
+  .bar:nth-child(1) { height: 30px; animation-delay: 0.1s; }
+  .bar:nth-child(2) { height: 42px; animation-delay: 0.2s; }
+  .bar:nth-child(3) { height: 35px; animation-delay: 0.3s; }
+  .bar:nth-child(4) { height: 50px; animation-delay: 0.4s; }
+  .bar:nth-child(5) { height: 45px; animation-delay: 0.5s; }
+  .bar:nth-child(6) { height: 58px; animation-delay: 0.6s; }
+  .bar:nth-child(7) { height: 60px; animation-delay: 0.7s; }
+
+  /* Gauge */
+  .gauge-container {
+    width: 80px;
+    height: 50px;
+    position: relative;
+  }
+  .gauge-svg { width: 80px; height: 50px; }
+  .gauge-track {
+    fill: none;
+    stroke: rgba({{PRIMARY_RGB}}, 0.1);
+    stroke-width: 6;
+    stroke-linecap: round;
+  }
+  .gauge-fill {
+    fill: none;
+    stroke: var(--cyan);
+    stroke-width: 6;
+    stroke-linecap: round;
+    stroke-dasharray: 110;
+    stroke-dashoffset: 88;
+    animation: gaugeFill 2s ease-out forwards;
+    filter: drop-shadow(0 0 6px rgba({{PRIMARY_RGB}}, 0.5));
+  }
+  @keyframes gaugeFill {
+    from { stroke-dashoffset: 110; }
+    to { stroke-dashoffset: 22; }
+  }
+
+  /* Progress ring */
+  .ring-container {
+    width: 72px;
+    height: 72px;
+    position: relative;
+  }
+  .ring-svg { width: 72px; height: 72px; }
+  .ring-track {
+    fill: none;
+    stroke: rgba({{PRIMARY_RGB}}, 0.1);
+    stroke-width: 5;
+  }
+  .ring-fill {
+    fill: none;
+    stroke: var(--cyan);
+    stroke-width: 5;
+    stroke-linecap: round;
+    stroke-dasharray: 188.5;
+    stroke-dashoffset: 188.5;
+    animation: ringFill 2.5s ease-out forwards;
+    filter: drop-shadow(0 0 6px rgba({{PRIMARY_RGB}}, 0.4));
+    transform: rotate(-90deg);
+    transform-origin: center;
+  }
+  @keyframes ringFill {
+    to { stroke-dashoffset: 1.885; }
+  }
+  .ring-text {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--cyan);
+  }
+
+  /* Growth arrow */
+  .growth-arrow {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+  }
+  .growth-arrow svg {
+    width: 32px; height: 32px;
+    color: #68d391;
+    animation: arrowBounce 2s ease-in-out infinite;
+  }
+  @keyframes arrowBounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-6px); }
+  }
+  .growth-pct {
+    font-size: 16px;
+    font-weight: 700;
+    color: #68d391;
+  }
+
+  /* Footer */
+  .footer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    padding-top: 40px;
+    margin-top: auto;
+  }
+  .footer svg { width: 36px; height: 36px; }
+  .footer-text {
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: 6px;
+    color: var(--cloud);
+  }
+
+  .meta-bottom {
+    color: var(--muted);
+    font-size: 14px;
+    margin-top: 20px;
+    text-align: center;
+  }
+</style>
+</head>
+<body>
+
+<div class="meta">
+  <strong>Stats Infographic</strong> &mdash; 1080 &times; 1350px &mdash; Instagram Portrait / Pinterest
+</div>
+
+<div class="template">
+  <div class="grid-bg"></div>
+  <div class="bg-orb-top"></div>
+  <div class="bg-orb-bottom"></div>
+  <div class="top-line"></div>
+
+  <div class="content">
+    <!-- Header -->
+    <div class="header">
+      <div class="header-badge">Plattform-Statistiken 2026</div>
+      <div class="header-title">{{BRAND_NAME}} in <span>Zahlen</span></div>
+      <div class="header-sub">Echtzeit-Performance auf einen Blick</div>
+    </div>
+
+    <!-- Stats -->
+    <div class="stats">
+      <!-- Stat 1: Events/Tag -->
+      <div class="stat-card">
+        <div class="stat-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+          </svg>
+        </div>
+        <div class="stat-info">
+          <div class="stat-number">12'400<span>+</span></div>
+          <div class="stat-label">Events pro Tag</div>
+        </div>
+        <div class="stat-viz">
+          <div class="bar-chart">
+            <div class="bar"></div>
+            <div class="bar"></div>
+            <div class="bar"></div>
+            <div class="bar"></div>
+            <div class="bar"></div>
+            <div class="bar"></div>
+            <div class="bar"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Stat 2: Latenz -->
+      <div class="stat-card">
+        <div class="stat-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/>
+            <polyline points="12 6 12 12 16 14"/>
+          </svg>
+        </div>
+        <div class="stat-info">
+          <div class="stat-number">23<span>ms</span></div>
+          <div class="stat-label">Durchschnittliche Latenz</div>
+        </div>
+        <div class="stat-viz">
+          <div class="gauge-container">
+            <svg class="gauge-svg" viewBox="0 0 80 50">
+              <path d="M 8 45 A 32 32 0 0 1 72 45" class="gauge-track"/>
+              <path d="M 8 45 A 32 32 0 0 1 72 45" class="gauge-fill"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      <!-- Stat 3: Uptime -->
+      <div class="stat-card">
+        <div class="stat-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+            <polyline points="22 4 12 14.01 9 11.01"/>
+          </svg>
+        </div>
+        <div class="stat-info">
+          <div class="stat-number">99.9<span>%</span></div>
+          <div class="stat-label">Uptime-Garantie</div>
+        </div>
+        <div class="stat-viz">
+          <div class="ring-container">
+            <svg class="ring-svg" viewBox="0 0 72 72">
+              <circle cx="36" cy="36" r="30" class="ring-track"/>
+              <circle cx="36" cy="36" r="30" class="ring-fill"/>
+            </svg>
+            <div class="ring-text">99.9</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Stat 4: Aktive Streams -->
+      <div class="stat-card">
+        <div class="stat-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+          </svg>
+        </div>
+        <div class="stat-info">
+          <div class="stat-number">847</div>
+          <div class="stat-label">Aktive Streams</div>
+        </div>
+        <div class="stat-viz">
+          <div class="growth-arrow">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="12" y1="19" x2="12" y2="5"/>
+              <polyline points="5 12 12 5 19 12"/>
+            </svg>
+            <span class="growth-pct">+34%</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+      <svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M18 2L33 10.5v15L18 34 3 25.5v-15L18 2z" stroke="{{PRIMARY}}" stroke-width="1.5" fill="rgba({{PRIMARY_RGB}},0.06)"/>
+        <circle cx="18" cy="18" r="5" fill="{{PRIMARY}}" opacity="0.9"/>
+        <circle cx="18" cy="18" r="2.5" fill="{{BG}}"/>
+      </svg>
+      <span class="footer-text">{{BRAND_NAME}}</span>
+    </div>
+  </div>
+</div>
+
+<div class="meta-bottom">
+  Empfohlen: Instagram Portrait, Pinterest Pin, LinkedIn Carousel
+</div>
+
+</body>
+</html>

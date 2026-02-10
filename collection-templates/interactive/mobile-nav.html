@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{BRAND_NAME}} - Mobile Navigation</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  :root { --dark-bg: {{BG}}; --cyan: {{PRIMARY}}; --cyan-dark: {{PRIMARY_DARK}}; --cloud: {{TEXT}}; --muted: {{MUTED}}; }
+  body { background: var(--dark-bg); font-family: system-ui, -apple-system, sans-serif; color: var(--cloud); }
+
+  /* Frame to simulate mobile */
+  .phone-frame {
+    width: 375px; height: 812px; margin: 40px auto; border-radius: 40px;
+    border: 3px solid rgba(255,255,255,0.08); overflow: hidden; position: relative;
+    background: var(--dark-bg);
+  }
+
+  /* Header */
+  .mob-header {
+    padding: 56px 20px 16px; display: flex; justify-content: space-between; align-items: center;
+    background: rgba(15,23,42,0.95); backdrop-filter: blur(16px);
+    border-bottom: 1px solid rgba(255,255,255,0.04); position: relative; z-index: 10;
+  }
+  .mob-logo { font-size: 18px; font-weight: 300; letter-spacing: 5px; }
+  .mob-logo em { color: var(--cyan); font-style: normal; }
+
+  /* Hamburger */
+  .hamburger { width: 28px; height: 20px; position: relative; cursor: pointer; z-index: 20; }
+  .ham-line {
+    position: absolute; left: 0; width: 100%; height: 2px; background: var(--cloud);
+    border-radius: 1px; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .ham-line:nth-child(1) { top: 0; }
+  .ham-line:nth-child(2) { top: 9px; width: 70%; }
+  .ham-line:nth-child(3) { top: 18px; }
+
+  .hamburger.open .ham-line:nth-child(1) { top: 9px; transform: rotate(45deg); }
+  .hamburger.open .ham-line:nth-child(2) { opacity: 0; transform: translateX(-10px); }
+  .hamburger.open .ham-line:nth-child(3) { top: 9px; transform: rotate(-45deg); }
+
+  /* Mobile Menu */
+  .mob-menu {
+    position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(15, 23, 42, 0.98); backdrop-filter: blur(20px);
+    z-index: 5; padding: 100px 28px 40px;
+    display: flex; flex-direction: column;
+    transform: translateX(100%); transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .mob-menu.open { transform: translateX(0); }
+
+  .mob-nav { flex: 1; display: flex; flex-direction: column; gap: 4px; }
+  .mob-nav-item {
+    display: flex; align-items: center; gap: 14px; padding: 16px 12px;
+    border-radius: 12px; font-size: 18px; font-weight: 300; color: var(--muted);
+    transition: all 0.3s; cursor: pointer; text-decoration: none;
+    opacity: 0; transform: translateX(30px);
+  }
+  .mob-menu.open .mob-nav-item {
+    opacity: 1; transform: translateX(0);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .mob-menu.open .mob-nav-item:nth-child(1) { transition-delay: 0.1s; }
+  .mob-menu.open .mob-nav-item:nth-child(2) { transition-delay: 0.15s; }
+  .mob-menu.open .mob-nav-item:nth-child(3) { transition-delay: 0.2s; }
+  .mob-menu.open .mob-nav-item:nth-child(4) { transition-delay: 0.25s; }
+  .mob-menu.open .mob-nav-item:nth-child(5) { transition-delay: 0.3s; }
+
+  .mob-nav-item:hover { color: var(--cloud); background: rgba(255,255,255,0.03); }
+  .mob-nav-item.active { color: var(--cyan); }
+
+  .mob-nav-icon { width: 24px; text-align: center; font-size: 20px; }
+  .mob-nav-badge { margin-left: auto; font-size: 11px; padding: 2px 8px; border-radius: 8px; background: rgba({{PRIMARY_RGB}},0.12); color: var(--cyan); }
+
+  .mob-menu-footer { padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.04); opacity: 0; transition: opacity 0.4s 0.35s; }
+  .mob-menu.open .mob-menu-footer { opacity: 1; }
+
+  .mob-cta {
+    width: 100%; padding: 14px; border-radius: 10px; font-size: 14px; font-weight: 600;
+    letter-spacing: 1px; cursor: pointer; font-family: inherit;
+    background: linear-gradient(135deg, var(--cyan), var(--cyan-dark));
+    border: none; color: var(--dark-bg); margin-bottom: 16px;
+  }
+
+  .mob-user { display: flex; align-items: center; gap: 12px; }
+  .mob-avatar { width: 36px; height: 36px; border-radius: 10px; background: linear-gradient(135deg, var(--cyan), var(--cyan-dark)); display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 600; color: var(--dark-bg); }
+  .mob-user-name { font-size: 14px; font-weight: 400; }
+  .mob-user-plan { font-size: 12px; color: var(--cyan); font-weight: 300; }
+
+  /* Page content */
+  .mob-content { padding: 24px 20px; }
+  .mob-page-title { font-size: 24px; font-weight: 200; margin-bottom: 8px; }
+  .mob-page-sub { font-size: 13px; color: var(--muted); font-weight: 300; margin-bottom: 20px; }
+  .mob-card { background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.06); border-radius: 12px; padding: 16px; margin-bottom: 12px; }
+  .mob-card-header { display: flex; justify-content: space-between; margin-bottom: 8px; }
+  .mob-card-label { font-size: 11px; color: var(--muted); letter-spacing: 1px; }
+  .mob-card-trend { font-size: 11px; color: {{SUCCESS}}; }
+  .mob-card-val { font-size: 24px; font-weight: 200; color: var(--cyan); }
+
+  .frame-label { text-align: center; font-size: 12px; color: var(--muted); margin-top: 16px; letter-spacing: 2px; font-weight: 300; }
+</style>
+</head>
+<body>
+
+<div class="phone-frame">
+  <div class="mob-header">
+    <div class="mob-logo">ELUM<em>A</em></div>
+    <div class="hamburger" id="hamburger" onclick="toggleMenu()">
+      <div class="ham-line"></div>
+      <div class="ham-line"></div>
+      <div class="ham-line"></div>
+    </div>
+  </div>
+
+  <!-- Mobile Menu -->
+  <div class="mob-menu" id="mobMenu">
+    <nav class="mob-nav">
+      <a class="mob-nav-item active"><span class="mob-nav-icon">&#9638;</span>Dashboard</a>
+      <a class="mob-nav-item"><span class="mob-nav-icon">&#9889;</span>Events<span class="mob-nav-badge">142</span></a>
+      <a class="mob-nav-item"><span class="mob-nav-icon">&#128172;</span>Telegram</a>
+      <a class="mob-nav-item"><span class="mob-nav-icon">&#10024;</span>AI Studio</a>
+      <a class="mob-nav-item"><span class="mob-nav-icon">&#9881;</span>Einstellungen</a>
+    </nav>
+    <div class="mob-menu-footer">
+      <button class="mob-cta">+ NEUER EVENT</button>
+      <div class="mob-user">
+        <div class="mob-avatar">MK</div>
+        <div><div class="mob-user-name">Marco Keller</div><div class="mob-user-plan">Pro Plan</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Page Content -->
+  <div class="mob-content">
+    <div class="mob-page-title">Dashboard</div>
+    <div class="mob-page-sub">Heute, 10. Feb 2026</div>
+    <div class="mob-card"><div class="mob-card-header"><span class="mob-card-label">EVENTS HEUTE</span><span class="mob-card-trend">+12%</span></div><div class="mob-card-val">2'847</div></div>
+    <div class="mob-card"><div class="mob-card-header"><span class="mob-card-label">AKTIVE STREAMS</span><span class="mob-card-trend">+2</span></div><div class="mob-card-val">18</div></div>
+    <div class="mob-card"><div class="mob-card-header"><span class="mob-card-label">AVG. LATENZ</span><span class="mob-card-trend" style="color:{{ERROR}};">+3ms</span></div><div class="mob-card-val">47ms</div></div>
+  </div>
+</div>
+
+<div class="frame-label">MOBILE PREVIEW (375x812)</div>
+
+<script>
+  function toggleMenu() {
+    document.getElementById('hamburger').classList.toggle('open');
+    document.getElementById('mobMenu').classList.toggle('open');
+  }
+</script>
+
+</body>
+</html>

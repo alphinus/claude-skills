@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{BRAND_NAME}} - Responsive Breakpoint Showcase</title>
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --dark-bg:{{BG}};--cyan:{{PRIMARY}};--cyan-dark:{{PRIMARY_DARK}};--cloud:{{TEXT}};--muted:{{MUTED}};
+    --surface:#1e293b;--border:#334155;
+  }
+  body{font-family:system-ui,-apple-system,sans-serif;background:var(--dark-bg);color:var(--cloud);padding:0;min-height:100vh}
+
+  .page-header{padding:48px 64px;border-bottom:1px solid var(--border)}
+  .page-header h1{font-size:36px;font-weight:700;letter-spacing:-1px}
+  .page-header h1 span{color:var(--cyan)}
+  .page-header p{color:var(--muted);font-size:16px;margin-top:8px}
+
+  .showcase{padding:48px 40px;display:flex;gap:32px;justify-content:center;flex-wrap:wrap;align-items:flex-start}
+
+  .frame-wrap{display:flex;flex-direction:column;align-items:center;gap:12px;flex-shrink:0}
+  .frame-label{display:flex;flex-direction:column;align-items:center;gap:4px}
+  .frame-label .name{font-size:14px;font-weight:700;color:var(--cyan);text-transform:uppercase;letter-spacing:1px}
+  .frame-label .size{font-size:12px;color:var(--muted);font-family:monospace}
+  .frame-label .cols{font-size:11px;color:var(--muted);background:var(--surface);padding:2px 10px;border-radius:99px;margin-top:2px}
+
+  .device-frame{
+    background:var(--surface);border:2px solid var(--border);border-radius:12px;overflow:hidden;
+    box-shadow:0 8px 32px rgba(0,0,0,.3);
+  }
+
+  /* Device chrome */
+  .device-chrome{
+    height:32px;background:var(--dark-bg);border-bottom:1px solid var(--border);
+    display:flex;align-items:center;padding:0 12px;gap:6px;
+  }
+  .chrome-dot{width:8px;height:8px;border-radius:50%}
+  .chrome-dot.r{background:#e53e3e}.chrome-dot.y{background:#ecc94b}.chrome-dot.g{background:#48bb78}
+  .chrome-url{
+    flex:1;margin-left:8px;background:var(--surface);border-radius:4px;height:18px;
+    display:flex;align-items:center;padding:0 8px;font-size:9px;color:var(--muted);
+  }
+
+  .device-content{background:var(--dark-bg);overflow:hidden}
+
+  /* Mini Dashboard inside frames */
+  .mini-nav{
+    height:36px;background:var(--surface);border-bottom:1px solid var(--border);
+    display:flex;align-items:center;padding:0 12px;gap:8px;
+  }
+  .mini-logo{font-size:11px;font-weight:700;color:var(--cyan);letter-spacing:-0.3px}
+  .mini-nav-items{display:flex;gap:6px;margin-left:auto}
+  .mini-nav-item{font-size:8px;color:var(--muted);padding:3px 6px;border-radius:4px}
+  .mini-nav-item.active{background:rgba({{PRIMARY_RGB}},.1);color:var(--cyan)}
+
+  .mini-header{padding:10px 12px}
+  .mini-header h2{font-size:11px;font-weight:700;color:var(--cloud)}
+  .mini-header p{font-size:8px;color:var(--muted);margin-top:2px}
+
+  .mini-cards{padding:0 12px 12px;display:grid;gap:8px}
+  .cols-1 .mini-cards{grid-template-columns:1fr}
+  .cols-2 .mini-cards{grid-template-columns:1fr 1fr}
+  .cols-3 .mini-cards{grid-template-columns:1fr 1fr 1fr}
+  .cols-4 .mini-cards{grid-template-columns:1fr 1fr 1fr 1fr}
+
+  .mini-card{
+    background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:8px 10px;
+  }
+  .mini-card-label{font-size:7px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px}
+  .mini-card-value{font-size:14px;font-weight:700;color:var(--cloud);margin-top:2px}
+  .mini-card-change{font-size:7px;color:var(--cyan);margin-top:1px}
+
+  .mini-chart{margin:0 12px 12px;background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:10px;height:60px;display:flex;align-items:flex-end;gap:2px}
+  .mini-bar{flex:1;background:linear-gradient(to top,var(--cyan-dark),var(--cyan));border-radius:2px 2px 0 0;opacity:.6;min-width:0}
+
+  /* Breakpoint indicator line */
+  .bp-indicator{
+    display:flex;align-items:center;gap:12px;margin:32px 64px 0;
+    padding:20px 24px;background:var(--surface);border:1px solid var(--border);border-radius:12px;
+  }
+  .bp-indicator .title{font-size:14px;font-weight:600;white-space:nowrap}
+  .bp-scale{flex:1;position:relative;height:32px;display:flex;align-items:center}
+  .bp-track{width:100%;height:4px;background:var(--border);border-radius:2px;position:relative}
+  .bp-mark{position:absolute;top:-10px;display:flex;flex-direction:column;align-items:center}
+  .bp-mark .dot{width:12px;height:12px;border-radius:50%;background:var(--cyan);border:2px solid var(--dark-bg)}
+  .bp-mark .lbl{font-size:9px;color:var(--muted);margin-top:10px;white-space:nowrap;font-family:monospace}
+
+  .legend{display:flex;gap:32px;margin:24px 64px 48px;justify-content:center;flex-wrap:wrap}
+  .legend-item{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--muted)}
+  .legend-swatch{width:12px;height:12px;border-radius:3px;background:var(--cyan)}
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <h1><span>{{BRAND_NAME}}</span> Responsive Showcase</h1>
+  <p>Derselbe Dashboard-Aufbau in vier verschiedenen Breakpoints nebeneinander dargestellt.</p>
+</div>
+
+<div class="bp-indicator">
+  <div class="title">Breakpoints</div>
+  <div class="bp-scale">
+    <div class="bp-track">
+      <div class="bp-mark" style="left:0%"><div class="dot"></div><div class="lbl">375px Mobile</div></div>
+      <div class="bp-mark" style="left:33%"><div class="dot"></div><div class="lbl">768px Tablet</div></div>
+      <div class="bp-mark" style="left:60%"><div class="dot"></div><div class="lbl">1024px Desktop</div></div>
+      <div class="bp-mark" style="left:92%"><div class="dot"></div><div class="lbl">1440px Wide</div></div>
+    </div>
+  </div>
+</div>
+
+<div class="showcase">
+
+  <!-- Mobile 375px -->
+  <div class="frame-wrap">
+    <div class="frame-label">
+      <span class="name">Mobile</span>
+      <span class="size">375 x 667px</span>
+      <span class="cols">1 Spalte</span>
+    </div>
+    <div class="device-frame cols-1" style="width:187px">
+      <div class="device-chrome">
+        <div class="chrome-dot r"></div><div class="chrome-dot y"></div><div class="chrome-dot g"></div>
+        <div class="chrome-url">{{BRAND_NAME_LOWER}}.dev/dashboard</div>
+      </div>
+      <div class="device-content">
+        <div class="mini-nav">
+          <div class="mini-logo">{{BRAND_NAME}}</div>
+        </div>
+        <div class="mini-header"><h2>Dashboard</h2><p>Willkommen zurueck</p></div>
+        <div class="mini-cards">
+          <div class="mini-card"><div class="mini-card-label">Ereignisse</div><div class="mini-card-value">24.831</div><div class="mini-card-change">+12,4%</div></div>
+          <div class="mini-card"><div class="mini-card-label">Streams</div><div class="mini-card-value">18</div><div class="mini-card-change">+3 neue</div></div>
+          <div class="mini-card"><div class="mini-card-label">Latenz</div><div class="mini-card-value" style="color:var(--cyan)">23ms</div><div class="mini-card-change">-8%</div></div>
+          <div class="mini-card"><div class="mini-card-label">Fehlerrate</div><div class="mini-card-value">0,02%</div><div class="mini-card-change">+0,01%</div></div>
+        </div>
+        <div class="mini-chart">
+          <div class="mini-bar" style="height:45%"></div><div class="mini-bar" style="height:62%"></div><div class="mini-bar" style="height:38%"></div>
+          <div class="mini-bar" style="height:71%"></div><div class="mini-bar" style="height:83%"></div><div class="mini-bar" style="height:55%"></div>
+          <div class="mini-bar" style="height:92%"></div><div class="mini-bar" style="height:65%"></div><div class="mini-bar" style="height:78%"></div>
+          <div class="mini-bar" style="height:88%"></div><div class="mini-bar" style="height:60%"></div><div class="mini-bar" style="height:72%"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tablet 768px -->
+  <div class="frame-wrap">
+    <div class="frame-label">
+      <span class="name">Tablet</span>
+      <span class="size">768 x 1024px</span>
+      <span class="cols">2 Spalten</span>
+    </div>
+    <div class="device-frame cols-2" style="width:300px">
+      <div class="device-chrome">
+        <div class="chrome-dot r"></div><div class="chrome-dot y"></div><div class="chrome-dot g"></div>
+        <div class="chrome-url">{{BRAND_NAME_LOWER}}.dev/dashboard</div>
+      </div>
+      <div class="device-content">
+        <div class="mini-nav">
+          <div class="mini-logo">{{BRAND_NAME}}</div>
+          <div class="mini-nav-items">
+            <div class="mini-nav-item active">Dashboard</div>
+            <div class="mini-nav-item">Ereignisse</div>
+          </div>
+        </div>
+        <div class="mini-header"><h2>Dashboard</h2><p>Willkommen zurueck, Administrator</p></div>
+        <div class="mini-cards">
+          <div class="mini-card"><div class="mini-card-label">Ereignisse</div><div class="mini-card-value">24.831</div><div class="mini-card-change">+12,4%</div></div>
+          <div class="mini-card"><div class="mini-card-label">Streams</div><div class="mini-card-value">18</div><div class="mini-card-change">+3 neue</div></div>
+          <div class="mini-card"><div class="mini-card-label">Latenz</div><div class="mini-card-value" style="color:var(--cyan)">23ms</div><div class="mini-card-change">-8%</div></div>
+          <div class="mini-card"><div class="mini-card-label">Fehlerrate</div><div class="mini-card-value">0,02%</div><div class="mini-card-change">+0,01%</div></div>
+        </div>
+        <div class="mini-chart">
+          <div class="mini-bar" style="height:45%"></div><div class="mini-bar" style="height:62%"></div><div class="mini-bar" style="height:38%"></div>
+          <div class="mini-bar" style="height:71%"></div><div class="mini-bar" style="height:83%"></div><div class="mini-bar" style="height:55%"></div>
+          <div class="mini-bar" style="height:92%"></div><div class="mini-bar" style="height:65%"></div><div class="mini-bar" style="height:78%"></div>
+          <div class="mini-bar" style="height:88%"></div><div class="mini-bar" style="height:60%"></div><div class="mini-bar" style="height:72%"></div>
+          <div class="mini-bar" style="height:95%"></div><div class="mini-bar" style="height:48%"></div><div class="mini-bar" style="height:68%"></div>
+          <div class="mini-bar" style="height:80%"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Desktop 1024px -->
+  <div class="frame-wrap">
+    <div class="frame-label">
+      <span class="name">Desktop</span>
+      <span class="size">1024 x 768px</span>
+      <span class="cols">3 Spalten</span>
+    </div>
+    <div class="device-frame cols-3" style="width:420px">
+      <div class="device-chrome">
+        <div class="chrome-dot r"></div><div class="chrome-dot y"></div><div class="chrome-dot g"></div>
+        <div class="chrome-url">{{BRAND_NAME_LOWER}}.dev/dashboard</div>
+      </div>
+      <div class="device-content">
+        <div class="mini-nav">
+          <div class="mini-logo">{{BRAND_NAME}}</div>
+          <div class="mini-nav-items">
+            <div class="mini-nav-item active">Dashboard</div>
+            <div class="mini-nav-item">Ereignisse</div>
+            <div class="mini-nav-item">Streams</div>
+            <div class="mini-nav-item">Benutzer</div>
+          </div>
+        </div>
+        <div class="mini-header"><h2>Dashboard</h2><p>Willkommen zurueck, Administrator</p></div>
+        <div class="mini-cards">
+          <div class="mini-card"><div class="mini-card-label">Ereignisse</div><div class="mini-card-value">24.831</div><div class="mini-card-change">+12,4%</div></div>
+          <div class="mini-card"><div class="mini-card-label">Streams</div><div class="mini-card-value">18</div><div class="mini-card-change">+3 neue</div></div>
+          <div class="mini-card"><div class="mini-card-label">Latenz</div><div class="mini-card-value" style="color:var(--cyan)">23ms</div><div class="mini-card-change">-8%</div></div>
+          <div class="mini-card"><div class="mini-card-label">Fehlerrate</div><div class="mini-card-value">0,02%</div><div class="mini-card-change">+0,01%</div></div>
+          <div class="mini-card"><div class="mini-card-label">Uptime</div><div class="mini-card-value" style="color:#48bb78">99,9%</div><div class="mini-card-change">Stabil</div></div>
+          <div class="mini-card"><div class="mini-card-label">API-Aufrufe</div><div class="mini-card-value">1,2M</div><div class="mini-card-change">+18%</div></div>
+        </div>
+        <div class="mini-chart">
+          <div class="mini-bar" style="height:45%"></div><div class="mini-bar" style="height:62%"></div><div class="mini-bar" style="height:38%"></div>
+          <div class="mini-bar" style="height:71%"></div><div class="mini-bar" style="height:83%"></div><div class="mini-bar" style="height:55%"></div>
+          <div class="mini-bar" style="height:92%"></div><div class="mini-bar" style="height:65%"></div><div class="mini-bar" style="height:78%"></div>
+          <div class="mini-bar" style="height:88%"></div><div class="mini-bar" style="height:60%"></div><div class="mini-bar" style="height:72%"></div>
+          <div class="mini-bar" style="height:95%"></div><div class="mini-bar" style="height:48%"></div><div class="mini-bar" style="height:68%"></div>
+          <div class="mini-bar" style="height:80%"></div><div class="mini-bar" style="height:74%"></div><div class="mini-bar" style="height:58%"></div>
+          <div class="mini-bar" style="height:86%"></div><div class="mini-bar" style="height:42%"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Wide 1440px -->
+  <div class="frame-wrap">
+    <div class="frame-label">
+      <span class="name">Wide</span>
+      <span class="size">1440 x 900px</span>
+      <span class="cols">4 Spalten</span>
+    </div>
+    <div class="device-frame cols-4" style="width:540px">
+      <div class="device-chrome">
+        <div class="chrome-dot r"></div><div class="chrome-dot y"></div><div class="chrome-dot g"></div>
+        <div class="chrome-url">{{BRAND_NAME_LOWER}}.dev/dashboard</div>
+      </div>
+      <div class="device-content">
+        <div class="mini-nav">
+          <div class="mini-logo">{{BRAND_NAME}}</div>
+          <div class="mini-nav-items">
+            <div class="mini-nav-item active">Dashboard</div>
+            <div class="mini-nav-item">Ereignisse</div>
+            <div class="mini-nav-item">Streams</div>
+            <div class="mini-nav-item">Benutzer</div>
+            <div class="mini-nav-item">Einstellungen</div>
+          </div>
+        </div>
+        <div class="mini-header"><h2>Dashboard</h2><p>Willkommen zurueck, Administrator &mdash; Letzte Anmeldung vor 2 Stunden</p></div>
+        <div class="mini-cards">
+          <div class="mini-card"><div class="mini-card-label">Ereignisse</div><div class="mini-card-value">24.831</div><div class="mini-card-change">+12,4% zur Vorwoche</div></div>
+          <div class="mini-card"><div class="mini-card-label">Aktive Streams</div><div class="mini-card-value">18</div><div class="mini-card-change">+3 neue Streams</div></div>
+          <div class="mini-card"><div class="mini-card-label">Latenz (Avg)</div><div class="mini-card-value" style="color:var(--cyan)">23ms</div><div class="mini-card-change">-8% verbessert</div></div>
+          <div class="mini-card"><div class="mini-card-label">Fehlerrate</div><div class="mini-card-value">0,02%</div><div class="mini-card-change">+0,01% zur Vorwoche</div></div>
+          <div class="mini-card"><div class="mini-card-label">Uptime</div><div class="mini-card-value" style="color:#48bb78">99,9%</div><div class="mini-card-change">30 Tage stabil</div></div>
+          <div class="mini-card"><div class="mini-card-label">API-Aufrufe</div><div class="mini-card-value">1,2M</div><div class="mini-card-change">+18% diesen Monat</div></div>
+          <div class="mini-card"><div class="mini-card-label">Speicher</div><div class="mini-card-value">2,4 GB</div><div class="mini-card-change">von 10 GB genutzt</div></div>
+          <div class="mini-card"><div class="mini-card-label">Nutzer Online</div><div class="mini-card-value">142</div><div class="mini-card-change">Peak: 289</div></div>
+        </div>
+        <div class="mini-chart">
+          <div class="mini-bar" style="height:45%"></div><div class="mini-bar" style="height:62%"></div><div class="mini-bar" style="height:38%"></div>
+          <div class="mini-bar" style="height:71%"></div><div class="mini-bar" style="height:83%"></div><div class="mini-bar" style="height:55%"></div>
+          <div class="mini-bar" style="height:92%"></div><div class="mini-bar" style="height:65%"></div><div class="mini-bar" style="height:78%"></div>
+          <div class="mini-bar" style="height:88%"></div><div class="mini-bar" style="height:60%"></div><div class="mini-bar" style="height:72%"></div>
+          <div class="mini-bar" style="height:95%"></div><div class="mini-bar" style="height:48%"></div><div class="mini-bar" style="height:68%"></div>
+          <div class="mini-bar" style="height:80%"></div><div class="mini-bar" style="height:74%"></div><div class="mini-bar" style="height:58%"></div>
+          <div class="mini-bar" style="height:86%"></div><div class="mini-bar" style="height:42%"></div><div class="mini-bar" style="height:91%"></div>
+          <div class="mini-bar" style="height:53%"></div><div class="mini-bar" style="height:35%"></div><div class="mini-bar" style="height:70%"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="legend">
+  <div class="legend-item"><div class="legend-swatch"></div>{{BRAND_NAME}} Dashboard-Komponenten</div>
+  <div class="legend-item" style="color:var(--cloud)">Automatische Spaltenanpassung je nach Breakpoint</div>
+</div>
+
+</body>
+</html>

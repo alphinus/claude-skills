@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{BRAND_NAME}} - CLI Mockup</title>
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --dark-bg:{{BG}};--cyan:{{PRIMARY}};--cyan-dark:{{PRIMARY_DARK}};--cloud:{{TEXT}};--muted:{{MUTED}};
+    --surface:#1e293b;--border:#334155;--success:#48bb78;--danger:#e53e3e;
+  }
+  body{
+    font-family:system-ui,-apple-system,sans-serif;background:{{SIDEBAR_BG}};
+    display:flex;align-items:center;justify-content:center;min-height:100vh;padding:40px;
+  }
+
+  .terminal{
+    width:820px;background:#0c0e14;border-radius:12px;overflow:hidden;
+    box-shadow:0 24px 80px rgba(0,0,0,.6),0 0 0 1px rgba(255,255,255,.06);
+  }
+
+  /* Title bar */
+  .title-bar{
+    height:40px;background:#1a1d27;display:flex;align-items:center;padding:0 16px;
+    border-bottom:1px solid rgba(255,255,255,.06);gap:8px;
+  }
+  .dot{width:12px;height:12px;border-radius:50%}
+  .dot-red{background:#ff5f57}
+  .dot-yellow{background:#febc2e}
+  .dot-green{background:#28c840}
+  .title-text{
+    flex:1;text-align:center;font-size:12px;color:#5a5f73;font-weight:500;
+    margin-right:48px; /* offset for dots */
+  }
+
+  /* Terminal body */
+  .terminal-body{
+    padding:24px 28px 28px;font-family:'SF Mono','Fira Code','Cascadia Code',monospace;
+    font-size:14px;line-height:1.8;min-height:520px;
+  }
+
+  .line{display:flex;flex-wrap:wrap;white-space:pre-wrap;word-break:break-all}
+
+  .prompt{color:var(--cyan)}
+  .cmd{color:var(--cloud);font-weight:500}
+  .flag{color:#805ad5}
+  .string{color:#ecc94b}
+  .comment{color:#4a5568;font-style:italic}
+  .output{color:#a0aec0}
+  .success{color:var(--success)}
+  .value{color:var(--cyan)}
+  .muted{color:#5a6577}
+  .error{color:var(--danger)}
+  .bold{font-weight:700;color:var(--cloud)}
+
+  .gap{height:20px}
+  .small-gap{height:6px}
+
+  /* Table styling */
+  .table-line{color:#4a5568;line-height:1.4}
+  .table-content{color:#a0aec0;line-height:1.4}
+  .table-header{color:#a0aec0;font-weight:600;line-height:1.4}
+  .table-active{color:var(--success)}
+
+  /* Status section */
+  .status-label{color:#a0aec0}
+
+  /* Blinking cursor */
+  .cursor{
+    display:inline-block;width:8px;height:17px;background:var(--cyan);
+    animation:blink 1s step-end infinite;vertical-align:text-bottom;margin-left:2px;
+  }
+  @keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+
+  /* Scroll hint */
+  .term-footer{
+    padding:8px 16px;border-top:1px solid rgba(255,255,255,.04);
+    display:flex;align-items:center;justify-content:space-between;
+  }
+  .term-footer span{font-size:11px;color:#3a3f52}
+</style>
+</head>
+<body>
+
+<div class="terminal">
+  <div class="title-bar">
+    <div class="dot dot-red"></div>
+    <div class="dot dot-yellow"></div>
+    <div class="dot dot-green"></div>
+    <div class="title-text">Terminal - {{BRAND_NAME_LOWER}}-session</div>
+  </div>
+
+  <div class="terminal-body">
+    <!-- Command 1: {{BRAND_NAME_LOWER}} init -->
+    <div class="line"><span class="prompt">$ </span><span class="cmd">{{BRAND_NAME_LOWER}} init </span><span class="string">my-project</span></div>
+    <div class="small-gap"></div>
+    <div class="line"><span class="output">  Erstelle Projektverzeichnis...</span></div>
+    <div class="line"><span class="output">  Installiere Abhaengigkeiten...</span></div>
+    <div class="line"><span class="output">  Generiere Konfiguration...</span></div>
+    <div class="small-gap"></div>
+    <div class="line"><span class="success">  &#10003; </span><span class="output">Projekt erstellt in </span><span class="value">./my-project</span></div>
+    <div class="line"><span class="muted">    3 Pakete installiert in 2.4s</span></div>
+
+    <div class="gap"></div>
+
+    <!-- Command 2: {{BRAND_NAME_LOWER}} events send -->
+    <div class="line"><span class="prompt">$ </span><span class="cmd">{{BRAND_NAME_LOWER}} events send </span><span class="flag">--type </span><span class="string">user.signup </span><span class="flag">--data </span><span class="string">'{"email":"max@{{BRAND_NAME_LOWER}}.dev"}'</span></div>
+    <div class="small-gap"></div>
+    <div class="line"><span class="success">  &#10003; </span><span class="output">Event gesendet </span><span class="muted">(</span><span class="value">evt_abc123</span><span class="muted">)</span></div>
+    <div class="line"><span class="muted">    Stream: main  |  Latenz: 12ms  |  Groesse: 48 Bytes</span></div>
+
+    <div class="gap"></div>
+
+    <!-- Command 3: {{BRAND_NAME_LOWER}} streams list -->
+    <div class="line"><span class="prompt">$ </span><span class="cmd">{{BRAND_NAME_LOWER}} streams list</span></div>
+    <div class="small-gap"></div>
+    <div class="line"><span class="table-line">  &#9484;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9516;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9516;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9488;</span></div>
+    <div class="line"><span class="table-line">  &#9474; </span><span class="table-header">Stream    </span><span class="table-line">&#9474; </span><span class="table-header">Events  </span><span class="table-line">&#9474; </span><span class="table-header">Status     </span><span class="table-line">&#9474;</span></div>
+    <div class="line"><span class="table-line">  &#9500;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9532;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9532;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9508;</span></div>
+    <div class="line"><span class="table-line">  &#9474; </span><span class="table-content">main     </span><span class="table-line"> &#9474; </span><span class="value">12.400 </span><span class="table-line"> &#9474; </span><span class="table-active">&#9679; Aktiv    </span><span class="table-line">&#9474;</span></div>
+    <div class="line"><span class="table-line">  &#9474; </span><span class="table-content">billing  </span><span class="table-line"> &#9474; </span><span class="value"> 3.200 </span><span class="table-line"> &#9474; </span><span class="table-active">&#9679; Aktiv    </span><span class="table-line">&#9474;</span></div>
+    <div class="line"><span class="table-line">  &#9492;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9524;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9524;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9496;</span></div>
+
+    <div class="gap"></div>
+
+    <!-- Command 4: {{BRAND_NAME_LOWER}} status -->
+    <div class="line"><span class="prompt">$ </span><span class="cmd">{{BRAND_NAME_LOWER}} status</span></div>
+    <div class="small-gap"></div>
+    <div class="line"><span class="success">  &#10003; </span><span class="status-label">API:         </span><span class="bold">Online</span><span class="muted"> (23ms)</span></div>
+    <div class="line"><span class="success">  &#10003; </span><span class="status-label">Event Store: </span><span class="value">15.600</span><span class="muted"> Events</span></div>
+    <div class="line"><span class="success">  &#10003; </span><span class="status-label">AI Engine:   </span><span class="bold">Bereit</span></div>
+    <div class="line"><span class="success">  &#10003; </span><span class="status-label">Uptime:      </span><span class="value">14d 6h 32m</span></div>
+
+    <div class="gap"></div>
+
+    <div class="line"><span class="prompt">$ </span><span class="cursor"></span></div>
+  </div>
+
+  <div class="term-footer">
+    <span>zsh &middot; {{BRAND_NAME_LOWER}} v2.4.1</span>
+    <span>UTF-8 &middot; LF</span>
+  </div>
+</div>
+
+</body>
+</html>

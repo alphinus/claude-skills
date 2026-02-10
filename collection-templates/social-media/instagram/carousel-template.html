@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{BRAND_NAME}} - Instagram Carousel Template</title>
+<style>
+  :root {
+    --dark-bg: {{BG}};
+    --cyan: {{PRIMARY}};
+    --cyan-dark: {{PRIMARY_DARK}};
+    --cloud: {{TEXT}};
+    --muted: {{MUTED}};
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #080e1e;
+    color: var(--cloud);
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 40px 20px;
+  }
+
+  h1 { font-size: 28px; font-weight: 700; letter-spacing: 0.05em; margin-bottom: 8px; }
+  h1 span { color: var(--cyan); }
+  .subtitle { color: var(--muted); font-size: 14px; margin-bottom: 40px; }
+
+  .carousel-viewport {
+    width: 100%;
+    max-width: 1200px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+    scrollbar-color: var(--cyan-dark) var(--dark-bg);
+    padding-bottom: 20px;
+  }
+
+  .carousel-viewport::-webkit-scrollbar { height: 6px; }
+  .carousel-viewport::-webkit-scrollbar-track { background: var(--dark-bg); border-radius: 3px; }
+  .carousel-viewport::-webkit-scrollbar-thumb { background: var(--cyan-dark); border-radius: 3px; }
+
+  .carousel-track {
+    display: flex;
+    gap: 24px;
+    width: max-content;
+    padding: 0 20px;
+  }
+
+  .slide {
+    width: 540px;
+    height: 540px;
+    background: var(--dark-bg);
+    border-radius: 16px;
+    flex-shrink: 0;
+    scroll-snap-align: center;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba({{PRIMARY_RGB}},0.12);
+  }
+
+  /* Grid background pattern */
+  .slide::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba({{PRIMARY_RGB}},0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba({{PRIMARY_RGB}},0.04) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+  }
+
+  /* Corner decorations */
+  .slide::after {
+    content: '';
+    position: absolute;
+    top: 20px; left: 20px; right: 20px; bottom: 20px;
+    border: 1px solid rgba({{PRIMARY_RGB}},0.06);
+    border-radius: 8px;
+    pointer-events: none;
+  }
+
+  .slide-content {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    padding: 40px;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Progress dots */
+  .dots {
+    position: absolute;
+    bottom: 28px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 8px;
+    z-index: 2;
+  }
+
+  .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: rgba(113,128,150,0.4);
+  }
+
+  .dot.active {
+    background: var(--cyan);
+    box-shadow: 0 0 8px rgba({{PRIMARY_RGB}},0.5);
+  }
+
+  /* Slide number */
+  .slide-number {
+    position: absolute;
+    top: 28px;
+    right: 32px;
+    font-size: 13px;
+    color: var(--muted);
+    letter-spacing: 0.05em;
+    z-index: 2;
+  }
+
+  /* {{BRAND_NAME}} badge */
+  .{{BRAND_NAME_LOWER}}-badge {
+    position: absolute;
+    top: 28px;
+    left: 32px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    z-index: 2;
+  }
+
+  .{{BRAND_NAME_LOWER}}-badge svg { width: 20px; height: 20px; }
+
+  .{{BRAND_NAME_LOWER}}-badge span {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    color: var(--cyan);
+  }
+
+  /* --- Slide 1: Cover --- */
+  .slide-cover .big-title {
+    font-size: 52px;
+    font-weight: 800;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    margin-bottom: 16px;
+  }
+
+  .slide-cover .big-title .accent { color: var(--cyan); }
+
+  .slide-cover .cover-subtitle {
+    font-size: 16px;
+    color: var(--muted);
+    letter-spacing: 0.04em;
+  }
+
+  .hexagon-deco {
+    position: absolute;
+    opacity: 0.08;
+  }
+
+  .hex-large { top: -30px; right: -40px; width: 220px; height: 220px; }
+  .hex-small { bottom: 50px; left: -20px; width: 120px; height: 120px; }
+  .hex-tiny { top: 100px; left: 60px; width: 60px; height: 60px; opacity: 0.05; }
+
+  /* --- Slides 2-4: Content --- */
+  .slide-content-inner .num {
+    font-size: 80px;
+    font-weight: 900;
+    color: var(--cyan);
+    opacity: 0.15;
+    position: absolute;
+    top: 50px;
+    left: 40px;
+    line-height: 1;
+  }
+
+  .slide-content-inner .content-icon {
+    width: 72px;
+    height: 72px;
+    margin-bottom: 24px;
+  }
+
+  .slide-content-inner .content-title {
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 16px;
+    letter-spacing: -0.01em;
+  }
+
+  .slide-content-inner .content-title .accent { color: var(--cyan); }
+
+  .slide-content-inner .content-desc {
+    font-size: 16px;
+    line-height: 1.6;
+    color: var(--muted);
+    max-width: 380px;
+  }
+
+  /* --- Slide 5: CTA --- */
+  .slide-cta .cta-title {
+    font-size: 42px;
+    font-weight: 800;
+    color: var(--cyan);
+    margin-bottom: 12px;
+  }
+
+  .slide-cta .cta-sub {
+    font-size: 16px;
+    color: var(--muted);
+    margin-bottom: 32px;
+  }
+
+  .qr-placeholder {
+    width: 120px;
+    height: 120px;
+    border: 2px dashed var(--cyan-dark);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+    position: relative;
+  }
+
+  .qr-placeholder::before {
+    content: 'QR';
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--cyan-dark);
+    opacity: 0.5;
+  }
+
+  .qr-inner-grid {
+    position: absolute;
+    inset: 12px;
+    display: grid;
+    grid-template-columns: repeat(5,1fr);
+    grid-template-rows: repeat(5,1fr);
+    gap: 3px;
+    opacity: 0.15;
+  }
+
+  .qr-cell {
+    background: var(--cyan);
+    border-radius: 2px;
+  }
+
+  .cta-url {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--cloud);
+    letter-spacing: 0.05em;
+  }
+
+  .cta-url span { color: var(--cyan); }
+
+  .cta-button {
+    margin-top: 20px;
+    padding: 14px 40px;
+    background: var(--cyan);
+    color: var(--dark-bg);
+    font-size: 15px;
+    font-weight: 700;
+    border-radius: 50px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  .info {
+    margin-top: 40px;
+    color: var(--muted);
+    font-size: 13px;
+    text-align: center;
+    line-height: 1.7;
+  }
+
+  .info strong { color: var(--cloud); }
+</style>
+</head>
+<body>
+
+<h1><span>{{BRAND_NAME}}</span> Carousel Template</h1>
+<p class="subtitle">Instagram Karussell-Beitrag - 1080 x 1080 px pro Slide (hier 540px Vorschau)</p>
+
+<div class="carousel-viewport">
+  <div class="carousel-track">
+
+    <!-- ========== SLIDE 1: COVER ========== -->
+    <div class="slide">
+      <!-- Hexagon decorations -->
+      <svg class="hexagon-deco hex-large" viewBox="0 0 200 200" fill="none">
+        <polygon points="100,5 185,52.5 185,147.5 100,195 15,147.5 15,52.5" stroke="{{PRIMARY}}" stroke-width="2" fill="none"/>
+      </svg>
+      <svg class="hexagon-deco hex-small" viewBox="0 0 200 200" fill="none">
+        <polygon points="100,5 185,52.5 185,147.5 100,195 15,147.5 15,52.5" stroke="{{PRIMARY}}" stroke-width="2" fill="none"/>
+      </svg>
+      <svg class="hexagon-deco hex-tiny" viewBox="0 0 200 200" fill="none">
+        <polygon points="100,5 185,52.5 185,147.5 100,195 15,147.5 15,52.5" stroke="{{PRIMARY}}" stroke-width="2" fill="none"/>
+      </svg>
+
+      <div class="{{BRAND_NAME_LOWER}}-badge">
+        <svg viewBox="0 0 40 40" fill="none">
+          <polygon points="20,2 36,11 36,29 20,38 4,29 4,11" stroke="{{PRIMARY}}" stroke-width="2" fill="none"/>
+          <text x="20" y="26" text-anchor="middle" fill="{{PRIMARY}}" font-size="16" font-weight="800" font-family="system-ui">E</text>
+        </svg>
+        <span>{{BRAND_NAME}}</span>
+      </div>
+      <span class="slide-number">1 / 5</span>
+
+      <div class="slide-content slide-cover">
+        <h2 class="big-title">5 <span class="accent">Gruende</span><br>fuer {{BRAND_NAME}}</h2>
+        <p class="cover-subtitle">Das {{BRAND_TAGLINE}}</p>
+      </div>
+
+      <div class="dots">
+        <div class="dot active"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+      </div>
+    </div>
+
+    <!-- ========== SLIDE 2: ECHTZEIT EVENTS ========== -->
+    <div class="slide">
+      <div class="{{BRAND_NAME_LOWER}}-badge">
+        <svg viewBox="0 0 40 40" fill="none">
+          <polygon points="20,2 36,11 36,29 20,38 4,29 4,11" stroke="{{PRIMARY}}" stroke-width="2" fill="none"/>
+          <text x="20" y="26" text-anchor="middle" fill="{{PRIMARY}}" font-size="16" font-weight="800" font-family="system-ui">E</text>
+        </svg>
+        <span>{{BRAND_NAME}}</span>
+      </div>
+      <span class="slide-number">2 / 5</span>
+
+      <div class="slide-content">
+        <div class="slide-content-inner">
+          <span class="num">01</span>
+          <svg class="content-icon" viewBox="0 0 72 72" fill="none">
+            <circle cx="36" cy="36" r="30" stroke="{{PRIMARY}}" stroke-width="2" fill="none" opacity="0.2"/>
+            <path d="M42 18L26 38h12L34 54l18-22H40L42 18z" stroke="{{PRIMARY}}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          </svg>
+          <h3 class="content-title">Echtzeit <span class="accent">Events</span></h3>
+          <p class="content-desc">Reagiere sofort auf jedes Ereignis in deinem System. Event-Driven Architecture ermoeglicht blitzschnelle Verarbeitung und nahtlose Kommunikation zwischen allen Komponenten.</p>
+        </div>
+      </div>
+
+      <div class="dots">
+        <div class="dot"></div>
+        <div class="dot active"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+      </div>
+    </div>
+
+    <!-- ========== SLIDE 3: KI-INTEGRATION ========== -->
+    <div class="slide">
+      <div class="{{BRAND_NAME_LOWER}}-badge">
+        <svg viewBox="0 0 40 40" fill="none">
+          <polygon points="20,2 36,11 36,29 20,38 4,29 4,11" stroke="{{PRIMARY}}" stroke-width="2" fill="none"/>
+          <text x="20" y="26" text-anchor="middle" fill="{{PRIMARY}}" font-size="16" font-weight="800" font-family="system-ui">E</text>
+        </svg>
+        <span>{{BRAND_NAME}}</span>
+      </div>
+      <span class="slide-number">3 / 5</span>
+
+      <div class="slide-content">
+        <div class="slide-content-inner">
+          <span class="num">02</span>
+          <svg class="content-icon" viewBox="0 0 72 72" fill="none">
+            <circle cx="36" cy="36" r="30" stroke="{{PRIMARY}}" stroke-width="2" fill="none" opacity="0.2"/>
+            <circle cx="36" cy="28" r="8" stroke="{{PRIMARY}}" stroke-width="2" fill="none"/>
+            <path d="M28 28h16" stroke="{{PRIMARY}}" stroke-width="1.5" opacity="0.5"/>
+            <path d="M36 20v16" stroke="{{PRIMARY}}" stroke-width="1.5" opacity="0.5"/>
+            <circle cx="36" cy="28" r="3" fill="{{PRIMARY}}" opacity="0.4"/>
+            <path d="M24 46h24" stroke="{{PRIMARY}}" stroke-width="2" stroke-linecap="round"/>
+            <path d="M28 50h16" stroke="{{PRIMARY}}" stroke-width="2" stroke-linecap="round" opacity="0.5"/>
+            <path d="M30 42l-4-4" stroke="{{PRIMARY}}" stroke-width="1.5" stroke-linecap="round"/>
+            <path d="M42 42l4-4" stroke="{{PRIMARY}}" stroke-width="1.5" stroke-linecap="round"/>
+            <path d="M36 42v-6" stroke="{{PRIMARY}}" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+          <h3 class="content-title">KI-<span class="accent">Integration</span></h3>
+          <p class="content-desc">Nutze die Kraft kuenstlicher Intelligenz direkt in deinem Workflow. Von Textanalyse bis Entscheidungsfindung - KI arbeitet nahtlos im Hintergrund.</p>
+        </div>
+      </div>
+
+      <div class="dots">
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot active"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+      </div>
+    </div>
+
+    <!-- ========== SLIDE 4: TELEGRAM BOT ========== -->
+    <div class="slide">
+      <div class="{{BRAND_NAME_LOWER}}-badge">
+        <svg viewBox="0 0 40 40" fill="none">
+          <polygon points="20,2 36,11 36,29 20,38 4,29 4,11" stroke="{{PRIMARY}}" stroke-width="2" fill="none"/>
+          <text x="20" y="26" text-anchor="middle" fill="{{PRIMARY}}" font-size="16" font-weight="800" font-family="system-ui">E</text>
+        </svg>
+        <span>{{BRAND_NAME}}</span>
+      </div>
+      <span class="slide-number">4 / 5</span>
+
+      <div class="slide-content">
+        <div class="slide-content-inner">
+          <span class="num">03</span>
+          <svg class="content-icon" viewBox="0 0 72 72" fill="none">
+            <circle cx="36" cy="36" r="30" stroke="{{PRIMARY}}" stroke-width="2" fill="none" opacity="0.2"/>
+            <path d="M18 32l28-10-8 26-6-10-14-6z" stroke="{{PRIMARY}}" stroke-width="2" stroke-linejoin="round" fill="none"/>
+            <path d="M32 38l14-16" stroke="{{PRIMARY}}" stroke-width="1.5" stroke-linecap="round" opacity="0.5"/>
+          </svg>
+          <h3 class="content-title">Telegram <span class="accent">Bot</span></h3>
+          <p class="content-desc">Steuere dein gesamtes Ecosystem direkt aus Telegram. Befehle senden, Status abfragen, Benachrichtigungen erhalten - alles in deinem Lieblings-Messenger.</p>
+        </div>
+      </div>
+
+      <div class="dots">
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot active"></div>
+        <div class="dot"></div>
+      </div>
+    </div>
+
+    <!-- ========== SLIDE 5: CTA ========== -->
+    <div class="slide">
+      <!-- Hexagon decorations -->
+      <svg class="hexagon-deco hex-large" viewBox="0 0 200 200" fill="none">
+        <polygon points="100,5 185,52.5 185,147.5 100,195 15,147.5 15,52.5" stroke="{{PRIMARY}}" stroke-width="2" fill="none"/>
+      </svg>
+      <svg class="hexagon-deco hex-small" viewBox="0 0 200 200" fill="none" style="bottom:-20px;left:auto;right:-30px;">
+        <polygon points="100,5 185,52.5 185,147.5 100,195 15,147.5 15,52.5" stroke="{{PRIMARY}}" stroke-width="2" fill="none"/>
+      </svg>
+
+      <div class="{{BRAND_NAME_LOWER}}-badge">
+        <svg viewBox="0 0 40 40" fill="none">
+          <polygon points="20,2 36,11 36,29 20,38 4,29 4,11" stroke="{{PRIMARY}}" stroke-width="2" fill="none"/>
+          <text x="20" y="26" text-anchor="middle" fill="{{PRIMARY}}" font-size="16" font-weight="800" font-family="system-ui">E</text>
+        </svg>
+        <span>{{BRAND_NAME}}</span>
+      </div>
+      <span class="slide-number">5 / 5</span>
+
+      <div class="slide-content slide-cta">
+        <h2 class="cta-title">Starte jetzt</h2>
+        <p class="cta-sub">Dein {{BRAND_TAGLINE}} wartet.</p>
+
+        <div class="qr-placeholder">
+          <div class="qr-inner-grid">
+            <div class="qr-cell" style="grid-column:1/3;grid-row:1/3;"></div>
+            <div class="qr-cell" style="grid-column:4/6;grid-row:1/3;"></div>
+            <div class="qr-cell" style="grid-column:3;grid-row:3;"></div>
+            <div class="qr-cell" style="grid-column:1/3;grid-row:4/6;"></div>
+            <div class="qr-cell" style="grid-column:4;grid-row:4;"></div>
+            <div class="qr-cell" style="grid-column:5;grid-row:5;"></div>
+          </div>
+        </div>
+
+        <p class="cta-url"><span>{{BRAND_NAME_LOWER}}</span>.ch</p>
+        <div class="cta-button">Jetzt entdecken</div>
+      </div>
+
+      <div class="dots">
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot active"></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<p class="info">
+  <strong>Format:</strong> 1080 x 1080 px | 5 Slides | Karussell-Beitrag<br>
+  Horizontal scrollen zum Vorschau aller Slides
+</p>
+
+</body>
+</html>

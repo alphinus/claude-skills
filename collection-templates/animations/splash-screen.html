@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{BRAND_NAME}} - Splash Screen</title>
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --dark-bg:{{BG}};--cyan:{{PRIMARY}};--cyan-dark:{{PRIMARY_DARK}};--cloud:{{TEXT}};--muted:{{MUTED}};
+  }
+  body{font-family:system-ui,-apple-system,sans-serif;background:var(--dark-bg);color:var(--cloud);overflow:hidden;height:100vh;width:100vw}
+
+  /* Splash Overlay */
+  .splash{position:fixed;inset:0;background:var(--dark-bg);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:100;cursor:pointer}
+  .splash.done{pointer-events:auto}
+
+  /* Hexagon Logo */
+  .hex-logo{width:120px;height:120px;margin-bottom:32px}
+  .hex-logo svg{width:100%;height:100%}
+  .hex-path{fill:none;stroke:var(--cyan);stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:400;stroke-dashoffset:400;filter:drop-shadow(0 0 12px rgba({{PRIMARY_RGB}},.6))}
+  .hex-inner{fill:none;stroke:var(--cyan);stroke-width:2;stroke-dasharray:200;stroke-dashoffset:200;opacity:.6}
+  .animating .hex-path{animation:drawHex 1.2s ease-out forwards}
+  .animating .hex-inner{animation:drawHex .8s .4s ease-out forwards}
+
+  @keyframes drawHex{
+    to{stroke-dashoffset:0}
+  }
+
+  /* Letters */
+  .logo-letters{display:flex;gap:6px;margin-bottom:40px;height:48px}
+  .logo-letter{font-size:2.4rem;font-weight:800;letter-spacing:4px;opacity:0;transform:translateY(12px);color:var(--cloud)}
+  .animating .logo-letter{animation:letterIn .3s ease-out forwards}
+  .animating .logo-letter:nth-child(1){animation-delay:.8s}
+  .animating .logo-letter:nth-child(2){animation-delay:.9s}
+  .animating .logo-letter:nth-child(3){animation-delay:1s}
+  .animating .logo-letter:nth-child(4){animation-delay:1.1s}
+  .animating .logo-letter:nth-child(5){animation-delay:1.2s}
+
+  @keyframes letterIn{
+    to{opacity:1;transform:translateY(0)}
+  }
+
+  /* Loading Bar */
+  .loading-bar{width:200px;height:3px;background:var(--muted);border-radius:4px;overflow:hidden;opacity:0}
+  .loading-fill{height:100%;width:0;background:linear-gradient(90deg,var(--cyan-dark),var(--cyan));border-radius:4px}
+  .animating .loading-bar{animation:fadeIn .2s 1.3s ease-out forwards}
+  .animating .loading-fill{animation:fillBar 1s 1.4s ease-in-out forwards}
+
+  @keyframes fadeIn{to{opacity:1}}
+  @keyframes fillBar{to{width:100%}}
+
+  /* Splash exit */
+  .splash.exit{animation:splashExit .6s .1s ease-in forwards}
+  @keyframes splashExit{
+    to{opacity:0;transform:scale(1.05);pointer-events:none}
+  }
+
+  /* Simulated Dashboard */
+  .dashboard{position:fixed;inset:0;opacity:0;padding:24px;transition:opacity .5s .3s}
+  .dashboard.visible{opacity:1}
+
+  .dash-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:32px}
+  .dash-brand{display:flex;align-items:center;gap:12px}
+  .dash-brand svg{width:32px;height:32px}
+  .dash-brand span{font-weight:700;font-size:1.2rem}
+  .dash-nav{display:flex;gap:24px}
+  .dash-nav span{color:var(--muted);font-size:.9rem;cursor:default}
+  .dash-nav span:first-child{color:var(--cyan)}
+
+  .dash-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:20px;margin-bottom:24px}
+  .dash-card{background:#1e293b;border:1px solid #334155;border-radius:16px;padding:24px}
+  .dash-card-label{font-size:.8rem;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px}
+  .dash-card-value{font-size:2rem;font-weight:800}
+  .dash-card-value.cyan{color:var(--cyan)}
+  .dash-card-sub{font-size:.8rem;color:var(--muted);margin-top:4px}
+  .dash-card-bar{height:4px;background:#334155;border-radius:4px;margin-top:12px;overflow:hidden}
+  .dash-card-bar-fill{height:100%;border-radius:4px;background:var(--cyan)}
+
+  .dash-main{background:#1e293b;border:1px solid #334155;border-radius:16px;padding:24px;min-height:200px}
+  .dash-main-title{font-size:.9rem;font-weight:600;margin-bottom:16px}
+  .dash-chart{display:flex;align-items:flex-end;gap:8px;height:140px}
+  .dash-bar{flex:1;background:linear-gradient(to top,var(--cyan-dark),var(--cyan));border-radius:6px 6px 0 0;opacity:.8;min-width:12px}
+
+  .restart-hint{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);color:var(--muted);font-size:.8rem;opacity:0;transition:opacity .5s 1s}
+  .dashboard.visible~.restart-hint,.splash.done~.restart-hint{opacity:1}
+</style>
+</head>
+<body>
+
+<div class="splash animating" id="splash" onclick="restartAnimation()">
+  <!-- Hexagon SVG -->
+  <div class="hex-logo">
+    <svg viewBox="0 0 120 120">
+      <polygon class="hex-path" points="60,8 108,32 108,88 60,112 12,88 12,32"/>
+      <polygon class="hex-inner" points="60,28 88,44 88,76 60,92 32,76 32,44"/>
+      <!-- Center E hint -->
+      <text x="60" y="68" text-anchor="middle" fill="none" stroke="var(--cyan)" stroke-width="1.5" font-size="28" font-weight="800" style="stroke-dasharray:100;stroke-dashoffset:100;opacity:.7">
+        <animate attributeName="stroke-dashoffset" from="100" to="0" dur="0.6s" begin="0.6s" fill="freeze"/>
+        <animate attributeName="opacity" from=".7" to="1" dur="0.4s" begin="0.8s" fill="freeze"/>
+        E
+      </text>
+    </svg>
+  </div>
+
+  <!-- {{BRAND_NAME}} letters -->
+  <div class="logo-letters">
+    <span class="logo-letter">E</span>
+    <span class="logo-letter">L</span>
+    <span class="logo-letter">U</span>
+    <span class="logo-letter">M</span>
+    <span class="logo-letter">A</span>
+  </div>
+
+  <!-- Loading bar -->
+  <div class="loading-bar">
+    <div class="loading-fill"></div>
+  </div>
+</div>
+
+<!-- Dashboard behind splash -->
+<div class="dashboard" id="dashboard">
+  <div class="dash-header">
+    <div class="dash-brand">
+      <svg viewBox="0 0 120 120"><polygon fill="none" stroke="var(--cyan)" stroke-width="4" points="60,8 108,32 108,88 60,112 12,88 12,32"/></svg>
+      <span>{{BRAND_NAME}} Dashboard</span>
+    </div>
+    <div class="dash-nav">
+      <span>Ubersicht</span>
+      <span>Events</span>
+      <span>Analytics</span>
+      <span>Einstellungen</span>
+    </div>
+  </div>
+
+  <div class="dash-grid">
+    <div class="dash-card">
+      <div class="dash-card-label">Events Heute</div>
+      <div class="dash-card-value cyan">12'847</div>
+      <div class="dash-card-sub">+23% gegenuber gestern</div>
+      <div class="dash-card-bar"><div class="dash-card-bar-fill" style="width:72%"></div></div>
+    </div>
+    <div class="dash-card">
+      <div class="dash-card-label">Aktive Projekte</div>
+      <div class="dash-card-value">8</div>
+      <div class="dash-card-sub">2 neue diese Woche</div>
+      <div class="dash-card-bar"><div class="dash-card-bar-fill" style="width:80%"></div></div>
+    </div>
+    <div class="dash-card">
+      <div class="dash-card-label">Latenz (p95)</div>
+      <div class="dash-card-value cyan">34ms</div>
+      <div class="dash-card-sub">Ziel: &lt; 50ms</div>
+      <div class="dash-card-bar"><div class="dash-card-bar-fill" style="width:34%"></div></div>
+    </div>
+    <div class="dash-card">
+      <div class="dash-card-label">Uptime</div>
+      <div class="dash-card-value">99.98%</div>
+      <div class="dash-card-sub">Letzter Monat</div>
+      <div class="dash-card-bar"><div class="dash-card-bar-fill" style="width:99%"></div></div>
+    </div>
+  </div>
+
+  <div class="dash-main">
+    <div class="dash-main-title">Events pro Stunde (letzte 24h)</div>
+    <div class="dash-chart" id="chart"></div>
+  </div>
+</div>
+
+<div class="restart-hint" id="hint">Klicken fur erneute Animation</div>
+
+<script>
+// Generate random chart bars
+const chart = document.getElementById('chart');
+for (let i = 0; i < 24; i++) {
+  const bar = document.createElement('div');
+  bar.className = 'dash-bar';
+  bar.style.height = (20 + Math.random() * 80) + '%';
+  chart.appendChild(bar);
+}
+
+// Auto-transition after splash animation completes
+let timeout;
+function showDashboard() {
+  const splash = document.getElementById('splash');
+  const dashboard = document.getElementById('dashboard');
+  splash.classList.add('exit');
+  splash.classList.add('done');
+  timeout = setTimeout(() => {
+    dashboard.classList.add('visible');
+  }, 400);
+}
+
+// Start the transition after animation completes (~2.5s)
+let splashTimeout = setTimeout(showDashboard, 2600);
+
+function restartAnimation() {
+  clearTimeout(splashTimeout);
+  clearTimeout(timeout);
+
+  const splash = document.getElementById('splash');
+  const dashboard = document.getElementById('dashboard');
+
+  // Reset
+  dashboard.classList.remove('visible');
+  splash.classList.remove('exit', 'done', 'animating');
+
+  // Force reflow
+  void splash.offsetWidth;
+
+  splash.classList.add('animating');
+  splash.style.opacity = '1';
+  splash.style.transform = 'none';
+  splash.style.pointerEvents = 'none';
+
+  splashTimeout = setTimeout(() => {
+    showDashboard();
+  }, 2600);
+}
+</script>
+</body>
+</html>

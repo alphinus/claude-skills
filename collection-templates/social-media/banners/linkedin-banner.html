@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{BRAND_NAME}} - LinkedIn Banner (1584x396)</title>
+<style>
+  :root {
+    --dark-bg: {{BG}};
+    --cyan: {{PRIMARY}};
+    --cyan-dark: {{PRIMARY_DARK}};
+    --cloud: {{TEXT}};
+    --muted: {{MUTED}};
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #080e1a;
+    font-family: system-ui, -apple-system, sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 40px;
+  }
+
+  .banner {
+    width: 1584px;
+    height: 396px;
+    background: var(--dark-bg);
+    position: relative;
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+
+  /* Subtle hex pattern - right side decoration */
+  .hex-decoration {
+    position: absolute;
+    right: -20px;
+    top: -30px;
+    opacity: 0.05;
+  }
+
+  /* Gradient accent */
+  .gradient-accent {
+    position: absolute;
+    width: 500px;
+    height: 500px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba({{PRIMARY_RGB}}, 0.08) 0%, transparent 60%);
+    top: 50%;
+    left: 30%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+  }
+
+  /* Top accent line */
+  .top-line {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--cyan), var(--cyan-dark), transparent);
+    opacity: 0.5;
+  }
+
+  /* Content layout */
+  .content {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    padding: 0 100px;
+    gap: 80px;
+  }
+
+  .brand-section {
+    display: flex;
+    align-items: center;
+    gap: 36px;
+    z-index: 2;
+    flex-shrink: 0;
+  }
+
+  .logo-icon {
+    flex-shrink: 0;
+  }
+
+  .brand-text {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .wordmark {
+    font-size: 56px;
+    font-weight: 700;
+    color: var(--cloud);
+    letter-spacing: 0.12em;
+    line-height: 1;
+  }
+
+  .wordmark .accent { color: var(--cyan); }
+
+  .brand-tagline {
+    font-size: 14px;
+    color: var(--muted);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  /* Divider */
+  .divider {
+    width: 1px;
+    height: 100px;
+    background: linear-gradient(180deg, transparent, var(--cyan-dark), transparent);
+    opacity: 0.3;
+    flex-shrink: 0;
+    z-index: 2;
+  }
+
+  /* Metrics section */
+  .metrics {
+    display: flex;
+    gap: 48px;
+    z-index: 2;
+  }
+
+  .metric {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .metric-icon {
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .metric-label {
+    font-size: 14px;
+    color: var(--cloud);
+    font-weight: 500;
+    letter-spacing: 0.03em;
+    white-space: nowrap;
+  }
+
+  .metric-sub {
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 0.02em;
+  }
+
+  /* Bottom line */
+  .bottom-line {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--cyan-dark), transparent);
+    opacity: 0.2;
+  }
+</style>
+</head>
+<body>
+
+<div class="banner">
+  <!-- Top accent -->
+  <div class="top-line"></div>
+
+  <!-- Gradient -->
+  <div class="gradient-accent"></div>
+
+  <!-- Hex decoration on right -->
+  <div class="hex-decoration">
+    <svg width="500" height="460" viewBox="0 0 500 460">
+      <defs>
+        <pattern id="hexLI" x="0" y="0" width="52" height="46" patternUnits="userSpaceOnUse">
+          <polygon points="26,2 49,13 49,33 26,44 3,33 3,13"
+            fill="none" stroke="{{PRIMARY}}" stroke-width="0.6"/>
+        </pattern>
+      </defs>
+      <rect width="500" height="460" fill="url(#hexLI)"/>
+    </svg>
+  </div>
+
+  <!-- Main content -->
+  <div class="content">
+    <!-- Brand -->
+    <div class="brand-section">
+      <!-- Hex logo icon -->
+      <div class="logo-icon">
+        <svg width="90" height="100" viewBox="0 0 180 200">
+          <defs>
+            <filter id="glowLI" x="-50%" y="-50%" width="200%" height="200%">
+              <feGaussianBlur stdDeviation="5" result="blur"/>
+              <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+            </filter>
+            <linearGradient id="cyanGradLI" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="{{PRIMARY}}"/>
+              <stop offset="100%" stop-color="{{PRIMARY_DARK}}"/>
+            </linearGradient>
+          </defs>
+          <polygon points="90,15 160,52 160,128 90,165 20,128 20,52"
+            fill="rgba({{PRIMARY_RGB}},0.04)" stroke="url(#cyanGradLI)" stroke-width="3" opacity="0.8"/>
+          <g filter="url(#glowLI)">
+            <rect x="60" y="55" width="60" height="6" rx="3" fill="url(#cyanGradLI)" opacity="0.95"/>
+            <rect x="60" y="82" width="48" height="6" rx="3" fill="url(#cyanGradLI)" opacity="0.95"/>
+            <rect x="60" y="109" width="60" height="6" rx="3" fill="url(#cyanGradLI)" opacity="0.95"/>
+            <rect x="60" y="55" width="6" height="60" rx="3" fill="url(#cyanGradLI)" opacity="0.95"/>
+          </g>
+        </svg>
+      </div>
+
+      <div class="brand-text">
+        <div class="wordmark">ELUM<span class="accent">A</span></div>
+        <div class="brand-tagline">{{BRAND_TAGLINE}}</div>
+      </div>
+    </div>
+
+    <!-- Divider -->
+    <div class="divider"></div>
+
+    <!-- Key metrics -->
+    <div class="metrics">
+      <div class="metric">
+        <div class="metric-icon">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="{{PRIMARY}}" stroke-width="1.5">
+            <circle cx="12" cy="12" r="10"/>
+            <polyline points="12,6 12,12 16,14"/>
+          </svg>
+        </div>
+        <div class="metric-label">Real-time Events</div>
+        <div class="metric-sub">Echtzeit-Verarbeitung</div>
+      </div>
+
+      <div class="metric">
+        <div class="metric-icon">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="{{PRIMARY}}" stroke-width="1.5">
+            <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+            <path d="M2 17l10 5 10-5"/>
+            <path d="M2 12l10 5 10-5"/>
+          </svg>
+        </div>
+        <div class="metric-label">AI-Powered</div>
+        <div class="metric-sub">Intelligente Analyse</div>
+      </div>
+
+      <div class="metric">
+        <div class="metric-icon">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="{{PRIMARY}}" stroke-width="1.5">
+            <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/>
+          </svg>
+        </div>
+        <div class="metric-label">Open Source</div>
+        <div class="metric-sub">Offene Plattform</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom line -->
+  <div class="bottom-line"></div>
+</div>
+
+</body>
+</html>

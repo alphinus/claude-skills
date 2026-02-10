@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{BRAND_NAME}} YouTube Thumbnails - 1280x720px</title>
+<style>
+  :root {
+    --dark-bg: {{BG}};
+    --cyan: {{PRIMARY}};
+    --cyan-dark: {{PRIMARY_DARK}};
+    --cloud: {{TEXT}};
+    --muted: {{MUTED}};
+    --card-bg: #1e293b;
+    --border: #334155;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #0a0f1c;
+    color: var(--cloud);
+    font-family: system-ui, -apple-system, sans-serif;
+    padding: 40px;
+    min-height: 100vh;
+  }
+
+  .page-header {
+    text-align: center;
+    margin-bottom: 48px;
+  }
+
+  .page-header h1 {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--cloud);
+    letter-spacing: -0.5px;
+  }
+
+  .page-header h1 span { color: var(--cyan); }
+
+  .page-header p {
+    color: var(--muted);
+    margin-top: 8px;
+    font-size: 15px;
+  }
+
+  .variants-col {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 48px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .variant-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .variant-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--cyan);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-bottom: 12px;
+  }
+
+  .variant-dims {
+    font-size: 11px;
+    color: var(--muted);
+    margin-bottom: 16px;
+  }
+
+  .yt-frame {
+    width: 960px;
+    height: 540px;
+    overflow: hidden;
+    border-radius: 8px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.4), 0 0 0 1px var(--border);
+    position: relative;
+  }
+
+  .yt-canvas {
+    width: 1280px;
+    height: 720px;
+    transform: scale(0.75);
+    transform-origin: top left;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* =========================================
+     VARIANT 1: TUTORIAL
+     ========================================= */
+  .tutorial {
+    background: var(--dark-bg);
+    display: flex;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .tutorial .bg-glow {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 700px;
+    height: 700px;
+    background: radial-gradient(circle, rgba({{PRIMARY_RGB}},0.1) 0%, transparent 60%);
+    pointer-events: none;
+  }
+
+  .tutorial .bg-grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba({{PRIMARY_RGB}},0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba({{PRIMARY_RGB}},0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+  }
+
+  .tutorial .left-content {
+    flex: 1;
+    padding: 60px 56px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+    z-index: 2;
+  }
+
+  .tutorial .episode-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba({{PRIMARY_RGB}},0.12);
+    border: 1.5px solid rgba({{PRIMARY_RGB}},0.3);
+    border-radius: 8px;
+    padding: 8px 18px;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--cyan);
+    letter-spacing: 1px;
+    width: fit-content;
+    margin-bottom: 24px;
+  }
+
+  .tutorial .title {
+    font-size: 64px;
+    font-weight: 900;
+    color: var(--cloud);
+    line-height: 1.1;
+    letter-spacing: -2px;
+    margin-bottom: 20px;
+  }
+
+  .tutorial .title em {
+    font-style: normal;
+    color: var(--cyan);
+  }
+
+  .tutorial .subtitle {
+    font-size: 22px;
+    color: var(--muted);
+    font-weight: 500;
+    margin-bottom: 28px;
+  }
+
+  .tutorial .logo-tag {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: auto;
+  }
+
+  .tutorial .logo-text {
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--cloud);
+    letter-spacing: 3px;
+  }
+
+  .tutorial .logo-sep {
+    width: 1px;
+    height: 18px;
+    background: var(--border);
+  }
+
+  .tutorial .logo-sub {
+    font-size: 15px;
+    color: var(--muted);
+  }
+
+  .tutorial .right-content {
+    width: 480px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    z-index: 2;
+  }
+
+  .tutorial .code-window {
+    width: 400px;
+    background: rgba(15,23,42,0.9);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 16px 48px rgba(0,0,0,0.3);
+    transform: rotate(2deg);
+  }
+
+  .tutorial .cw-bar {
+    background: rgba(30,41,59,0.9);
+    padding: 14px 18px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .tutorial .cw-dot { width: 10px; height: 10px; border-radius: 50%; }
+  .tutorial .cw-dot-r { background: {{ERROR}}; }
+  .tutorial .cw-dot-y { background: {{WARNING}}; }
+  .tutorial .cw-dot-g { background: #22c55e; }
+  .tutorial .cw-file {
+    margin-left: 8px;
+    font-size: 12px;
+    color: var(--muted);
+    font-family: 'SF Mono', monospace;
+  }
+
+  .tutorial .cw-body {
+    padding: 20px;
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    font-size: 15px;
+    line-height: 1.7;
+    color: var(--cloud);
+  }
+
+  .tutorial .cw-body .kw { color: #c084fc; }
+  .tutorial .cw-body .fn { color: #60a5fa; }
+  .tutorial .cw-body .str { color: #34d399; }
+  .tutorial .cw-body .cm { color: var(--muted); }
+  .tutorial .cw-body .cy { color: var(--cyan); }
+
+  .tutorial .play-overlay {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80px;
+    height: 80px;
+    background: rgba({{PRIMARY_RGB}},0.9);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 24px rgba({{PRIMARY_RGB}},0.4);
+    z-index: 3;
+  }
+
+  /* =========================================
+     VARIANT 2: ANNOUNCEMENT
+     ========================================= */
+  .yt-announce {
+    background: var(--dark-bg);
+    display: flex;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .yt-announce .bg-burst {
+    position: absolute;
+    top: 50%;
+    left: 35%;
+    transform: translate(-50%, -50%);
+    width: 1000px;
+    height: 1000px;
+    background: radial-gradient(circle, rgba({{PRIMARY_RGB}},0.08) 0%, transparent 50%);
+    pointer-events: none;
+  }
+
+  .yt-announce .neu-badge {
+    position: absolute;
+    top: 36px;
+    left: 40px;
+    z-index: 3;
+    background: {{ERROR}};
+    color: white;
+    font-size: 28px;
+    font-weight: 900;
+    padding: 12px 28px;
+    border-radius: 12px;
+    letter-spacing: 2px;
+    box-shadow: 0 4px 20px rgba({{ERROR_RGB}},0.4);
+    transform: rotate(-3deg);
+  }
+
+  .yt-announce .left-content {
+    flex: 1;
+    padding: 80px 56px 56px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+    z-index: 2;
+  }
+
+  .yt-announce .title {
+    font-size: 72px;
+    font-weight: 900;
+    color: var(--cloud);
+    line-height: 1.05;
+    letter-spacing: -3px;
+    margin-bottom: 20px;
+  }
+
+  .yt-announce .title em {
+    font-style: normal;
+    color: var(--cyan);
+    text-shadow: 0 0 40px rgba({{PRIMARY_RGB}},0.3);
+  }
+
+  .yt-announce .subtitle {
+    font-size: 24px;
+    color: var(--muted);
+    font-weight: 500;
+    margin-bottom: 32px;
+    line-height: 1.4;
+  }
+
+  .yt-announce .feature-tags {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .yt-announce .ftag {
+    background: rgba({{PRIMARY_RGB}},0.1);
+    border: 1px solid rgba({{PRIMARY_RGB}},0.2);
+    border-radius: 8px;
+    padding: 8px 16px;
+    font-size: 15px;
+    color: var(--cyan);
+    font-weight: 600;
+  }
+
+  .yt-announce .logo-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: auto;
+  }
+
+  .yt-announce .logo-text {
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--cloud);
+    letter-spacing: 3px;
+  }
+
+  .yt-announce .logo-url {
+    font-size: 15px;
+    color: var(--muted);
+  }
+
+  .yt-announce .right-content {
+    width: 480px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    z-index: 2;
+    padding: 40px;
+  }
+
+  .yt-announce .mockup {
+    width: 380px;
+    height: 520px;
+    background: rgba(30,41,59,0.6);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    box-shadow: 0 16px 48px rgba(0,0,0,0.3);
+    transform: perspective(800px) rotateY(-5deg);
+  }
+
+  .yt-announce .mockup-bar {
+    background: rgba(30,41,59,0.9);
+    padding: 16px 20px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .yt-announce .m-dot { width: 10px; height: 10px; border-radius: 50%; }
+  .yt-announce .m-dot-r { background: {{ERROR}}; }
+  .yt-announce .m-dot-y { background: {{WARNING}}; }
+  .yt-announce .m-dot-g { background: #22c55e; }
+
+  .yt-announce .mockup-body {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+
+  .yt-announce .mockup-placeholder {
+    text-align: center;
+    color: var(--muted);
+  }
+
+  .yt-announce .mockup-placeholder-text {
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-top: 12px;
+  }
+
+  .yt-announce .mockup-lines {
+    position: absolute;
+    bottom: 24px;
+    left: 24px;
+    right: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .yt-announce .m-line {
+    height: 8px;
+    border-radius: 4px;
+    background: rgba({{PRIMARY_RGB}},0.08);
+  }
+
+  /* =========================================
+     VARIANT 3: TECH TALK
+     ========================================= */
+  .tech-talk {
+    background: var(--dark-bg);
+    display: flex;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .tech-talk .bg-diagonal {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, transparent 40%, rgba({{PRIMARY_RGB}},0.04) 40%, rgba({{PRIMARY_RGB}},0.04) 42%, transparent 42%);
+    pointer-events: none;
+  }
+
+  .tech-talk .left-content {
+    width: 480px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    z-index: 2;
+    padding: 40px;
+  }
+
+  .tech-talk .avatar-area {
+    width: 240px;
+    height: 240px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--card-bg), #253350);
+    border: 3px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    margin-bottom: 24px;
+  }
+
+  .tech-talk .avatar-area::after {
+    content: '';
+    position: absolute;
+    inset: -6px;
+    border-radius: 50%;
+    border: 2px solid rgba({{PRIMARY_RGB}},0.2);
+  }
+
+  .tech-talk .avatar-placeholder {
+    text-align: center;
+    color: var(--muted);
+  }
+
+  .tech-talk .avatar-icon {
+    opacity: 0.4;
+  }
+
+  .tech-talk .speaker-name {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--cloud);
+    text-align: center;
+  }
+
+  .tech-talk .speaker-role {
+    font-size: 16px;
+    color: var(--muted);
+    text-align: center;
+    margin-top: 4px;
+  }
+
+  .tech-talk .right-content {
+    flex: 1;
+    padding: 56px 56px 56px 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+    z-index: 2;
+  }
+
+  .tech-talk .episode-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: rgba({{PRIMARY_RGB}},0.12);
+    border: 1.5px solid rgba({{PRIMARY_RGB}},0.25);
+    border-radius: 8px;
+    padding: 8px 18px;
+    width: fit-content;
+    margin-bottom: 24px;
+  }
+
+  .tech-talk .ep-number {
+    font-size: 16px;
+    font-weight: 800;
+    color: var(--cyan);
+    letter-spacing: 1px;
+  }
+
+  .tech-talk .ep-series {
+    font-size: 14px;
+    color: var(--muted);
+    font-weight: 500;
+  }
+
+  .tech-talk .topic-title {
+    font-size: 52px;
+    font-weight: 900;
+    color: var(--cloud);
+    line-height: 1.1;
+    letter-spacing: -1.5px;
+    margin-bottom: 16px;
+  }
+
+  .tech-talk .topic-title em {
+    font-style: normal;
+    color: var(--cyan);
+  }
+
+  .tech-talk .topic-desc {
+    font-size: 20px;
+    color: var(--muted);
+    line-height: 1.5;
+    margin-bottom: 32px;
+  }
+
+  .tech-talk .tech-badges {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 28px;
+  }
+
+  .tech-talk .tbadge {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(30,41,59,0.8);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 8px 16px;
+    font-size: 15px;
+    color: var(--cloud);
+    font-weight: 600;
+  }
+
+  .tech-talk .tbadge-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+  }
+
+  .tech-talk .logo-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: auto;
+  }
+
+  .tech-talk .logo-text {
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--cloud);
+    letter-spacing: 3px;
+  }
+
+  .tech-talk .logo-sep {
+    width: 1px;
+    height: 18px;
+    background: var(--border);
+  }
+
+  .tech-talk .logo-sub {
+    font-size: 15px;
+    color: var(--muted);
+  }
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <h1><span>{{BRAND_NAME}}</span> YouTube Thumbnails</h1>
+  <p>1280 x 720px &mdash; YouTube</p>
+</div>
+
+<div class="variants-col">
+
+  <!-- ======== VARIANT 1: TUTORIAL ======== -->
+  <div class="variant-wrapper">
+    <div class="variant-label">Tutorial</div>
+    <div class="variant-dims">1280 x 720px</div>
+    <div class="yt-frame">
+      <div class="yt-canvas tutorial">
+        <div class="bg-glow"></div>
+        <div class="bg-grid"></div>
+
+        <div class="left-content">
+          <div class="episode-badge">
+            <svg width="14" height="14" viewBox="0 0 14 14"><polygon points="7,1 9,5 13,5.5 10,8.5 10.8,12.5 7,10.5 3.2,12.5 4,8.5 1,5.5 5,5" fill="var(--cyan)"/></svg>
+            EPISODE 12
+          </div>
+          <h2 class="title">Event Streams<br><em>erkl&auml;rt</em></h2>
+          <p class="subtitle">Schritt f&uuml;r Schritt zum Event-Driven System</p>
+          <div class="logo-tag">
+            <span class="logo-text">{{BRAND_NAME}}</span>
+            <span class="logo-sep"></span>
+            <span class="logo-sub">Tutorial-Serie</span>
+          </div>
+        </div>
+
+        <div class="right-content">
+          <div class="code-window">
+            <div class="cw-bar">
+              <span class="cw-dot cw-dot-r"></span>
+              <span class="cw-dot cw-dot-y"></span>
+              <span class="cw-dot cw-dot-g"></span>
+              <span class="cw-file">stream.config.ts</span>
+            </div>
+            <div class="cw-body">
+              <span class="kw">export const</span> config = {<br>
+              &nbsp;&nbsp;topic: <span class="str">'events.main'</span>,<br>
+              &nbsp;&nbsp;partitions: <span class="cy">12</span>,<br>
+              &nbsp;&nbsp;replication: <span class="cy">3</span>,<br>
+              &nbsp;&nbsp;retention: <span class="str">'30d'</span>,<br>
+              &nbsp;&nbsp;compression: <span class="str">'lz4'</span>,<br>
+              };<br>
+              <br>
+              <span class="cm">// Event Handler</span><br>
+              <span class="kw">export async function</span><br>
+              &nbsp;&nbsp;<span class="fn">onEvent</span>(e: <span class="cy">Event</span>) {<br>
+              &nbsp;&nbsp;<span class="kw">await</span> <span class="fn">process</span>(e);<br>
+              }
+            </div>
+          </div>
+
+          <div class="play-overlay">
+            <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+              <path d="M12 8v16l14-8z" fill="var(--dark-bg)"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======== VARIANT 2: ANNOUNCEMENT ======== -->
+  <div class="variant-wrapper">
+    <div class="variant-label">Announcement</div>
+    <div class="variant-dims">1280 x 720px</div>
+    <div class="yt-frame">
+      <div class="yt-canvas yt-announce">
+        <div class="bg-burst"></div>
+        <div class="neu-badge">NEU!</div>
+
+        <div class="left-content">
+          <h2 class="title">{{BRAND_NAME}}<br><em>AI Studio</em><br>ist da</h2>
+          <p class="subtitle">Intelligente Automatisierung f&uuml;r Event-Driven Systeme</p>
+          <div class="feature-tags">
+            <span class="ftag">KI-gesteuert</span>
+            <span class="ftag">Echtzeit</span>
+            <span class="ftag">No-Code</span>
+          </div>
+          <div class="logo-row">
+            <span class="logo-text">{{BRAND_NAME}}</span>
+            <span class="logo-url">{{BRAND_DOMAIN}}</span>
+          </div>
+        </div>
+
+        <div class="right-content">
+          <div class="mockup">
+            <div class="mockup-bar">
+              <span class="m-dot m-dot-r"></span>
+              <span class="m-dot m-dot-y"></span>
+              <span class="m-dot m-dot-g"></span>
+            </div>
+            <div class="mockup-body">
+              <div class="mockup-placeholder">
+                <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+                  <rect x="4" y="4" width="40" height="40" rx="6" stroke="var(--muted)" stroke-width="1.5" stroke-dasharray="4 4"/>
+                  <path d="M16 32l6-10 4 6 8-14" stroke="var(--cyan)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.5"/>
+                </svg>
+                <div class="mockup-placeholder-text">Produkt-Screenshot</div>
+              </div>
+              <div class="mockup-lines">
+                <div class="m-line" style="width: 90%;"></div>
+                <div class="m-line" style="width: 70%;"></div>
+                <div class="m-line" style="width: 80%;"></div>
+                <div class="m-line" style="width: 55%;"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======== VARIANT 3: TECH TALK ======== -->
+  <div class="variant-wrapper">
+    <div class="variant-label">Tech Talk</div>
+    <div class="variant-dims">1280 x 720px</div>
+    <div class="yt-frame">
+      <div class="yt-canvas tech-talk">
+        <div class="bg-diagonal"></div>
+
+        <div class="left-content">
+          <div class="avatar-area">
+            <div class="avatar-placeholder">
+              <svg class="avatar-icon" width="80" height="80" viewBox="0 0 80 80" fill="none">
+                <circle cx="40" cy="30" r="16" stroke="var(--muted)" stroke-width="2"/>
+                <path d="M12 72c0-15.5 12.5-28 28-28s28 12.5 28 28" stroke="var(--muted)" stroke-width="2" stroke-linecap="round"/>
+              </svg>
+            </div>
+          </div>
+          <div class="speaker-name">Dr. Anna Meier</div>
+          <div class="speaker-role">Lead Architect, {{BRAND_NAME}}</div>
+        </div>
+
+        <div class="right-content">
+          <div class="episode-tag">
+            <span class="ep-number">EP #08</span>
+            <span class="ep-series">{{BRAND_NAME}} Tech Talk</span>
+          </div>
+          <h2 class="topic-title">Event Sourcing<br>in der <em>Praxis</em></h2>
+          <p class="topic-desc">Von der Theorie zur produktionsreifen Implementierung</p>
+
+          <div class="tech-badges">
+            <div class="tbadge">
+              <span class="tbadge-dot" style="background: var(--cyan);"></span>
+              TypeScript
+            </div>
+            <div class="tbadge">
+              <span class="tbadge-dot" style="background: #f97316;"></span>
+              Kafka
+            </div>
+            <div class="tbadge">
+              <span class="tbadge-dot" style="background: #8b5cf6;"></span>
+              PostgreSQL
+            </div>
+            <div class="tbadge">
+              <span class="tbadge-dot" style="background: #22c55e;"></span>
+              Docker
+            </div>
+          </div>
+
+          <div class="logo-row">
+            <span class="logo-text">{{BRAND_NAME}}</span>
+            <span class="logo-sep"></span>
+            <span class="logo-sub">{{BRAND_DOMAIN}}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>

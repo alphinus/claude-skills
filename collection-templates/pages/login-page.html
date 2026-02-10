@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{BRAND_NAME}} - Login</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  :root { --dark-bg: {{BG}}; --cyan: {{PRIMARY}}; --cyan-dark: {{PRIMARY_DARK}}; --{{BRAND_NAME_LOWER}}-blue: {{SURFACE}}; --cloud: {{TEXT}}; --muted: {{MUTED}}; }
+  body { background: var(--dark-bg); font-family: system-ui, -apple-system, sans-serif; color: var(--cloud); min-height: 100vh; display: flex; }
+
+  /* Left panel - branding */
+  .brand-panel {
+    flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center;
+    padding: 60px; position: relative; overflow: hidden;
+    background: linear-gradient(135deg, rgba(30,58,95,0.3), rgba(15,23,42,1));
+  }
+  .brand-panel::before {
+    content: ''; position: absolute; inset: 0;
+    background-image: linear-gradient(rgba({{PRIMARY_RGB}},0.02) 1px, transparent 1px),
+      linear-gradient(90deg, rgba({{PRIMARY_RGB}},0.02) 1px, transparent 1px);
+    background-size: 50px 50px;
+  }
+  .brand-orb { position: absolute; border-radius: 50%; filter: blur(80px); pointer-events: none; }
+  .brand-orb-1 { width: 300px; height: 300px; background: rgba({{PRIMARY_RGB}},0.08); top: 20%; left: 10%; }
+  .brand-orb-2 { width: 200px; height: 200px; background: rgba(30,58,95,0.15); bottom: 20%; right: 20%; }
+
+  .brand-content { position: relative; z-index: 1; max-width: 380px; }
+  .brand-logo { font-size: 28px; font-weight: 300; letter-spacing: 8px; margin-bottom: 24px; }
+  .brand-logo em { color: var(--cyan); font-style: normal; }
+  .brand-tagline { font-size: 36px; font-weight: 200; line-height: 1.3; margin-bottom: 16px; }
+  .brand-tagline span { background: linear-gradient(135deg, var(--cyan), var(--cyan-dark)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+  .brand-desc { font-size: 15px; color: var(--muted); font-weight: 300; line-height: 1.7; }
+
+  /* Testimonial at bottom */
+  .brand-testi { position: absolute; bottom: 60px; left: 60px; right: 60px; z-index: 1; }
+  .testi-text { font-size: 14px; color: var(--muted); font-style: italic; font-weight: 300; line-height: 1.7; margin-bottom: 12px; }
+  .testi-author { font-size: 13px; color: var(--cloud); font-weight: 400; }
+  .testi-role { font-size: 12px; color: var(--muted); font-weight: 300; }
+
+  /* Right panel - form */
+  .form-panel {
+    width: 480px; display: flex; flex-direction: column; justify-content: center;
+    padding: 60px; background: rgba(20, 30, 51, 0.5);
+    border-left: 1px solid rgba(255,255,255,0.04);
+  }
+
+  .form-title { font-size: 24px; font-weight: 300; margin-bottom: 8px; }
+  .form-sub { font-size: 14px; color: var(--muted); font-weight: 300; margin-bottom: 36px; }
+  .form-sub a { color: var(--cyan); text-decoration: none; }
+  .form-sub a:hover { text-decoration: underline; }
+
+  /* Social login */
+  .social-btns { display: flex; gap: 10px; margin-bottom: 28px; }
+  .social-btn {
+    flex: 1; padding: 12px; border-radius: 10px; cursor: pointer;
+    background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08);
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    color: var(--muted); font-size: 13px; font-family: inherit; font-weight: 300;
+    transition: all 0.3s;
+  }
+  .social-btn:hover { border-color: rgba(255,255,255,0.15); color: var(--cloud); background: rgba(255,255,255,0.05); }
+  .social-btn svg { width: 18px; height: 18px; fill: currentColor; }
+
+  .divider { display: flex; align-items: center; gap: 16px; margin-bottom: 28px; }
+  .divider-line { flex: 1; height: 1px; background: rgba(255,255,255,0.06); }
+  .divider-text { font-size: 11px; color: var(--muted); letter-spacing: 2px; }
+
+  /* Input */
+  .field { margin-bottom: 20px; }
+  .field-label { font-size: 12px; color: var(--muted); letter-spacing: 1px; margin-bottom: 8px; display: block; font-weight: 300; }
+  .field-input {
+    width: 100%; padding: 12px 16px; border-radius: 10px;
+    background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08);
+    color: var(--cloud); font-size: 14px; font-family: inherit; outline: none;
+    transition: all 0.3s;
+  }
+  .field-input:focus { border-color: rgba({{PRIMARY_RGB}},0.5); box-shadow: 0 0 0 3px rgba({{PRIMARY_RGB}},0.08); }
+  .field-input::placeholder { color: rgba(255,255,255,0.15); }
+
+  .field-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 28px; }
+  .remember { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--muted); cursor: pointer; font-weight: 300; }
+  .remember input { accent-color: var(--cyan); }
+  .forgot { font-size: 13px; color: var(--cyan); text-decoration: none; font-weight: 300; }
+  .forgot:hover { text-decoration: underline; }
+
+  .login-btn {
+    width: 100%; padding: 14px; border-radius: 10px; font-size: 14px; font-weight: 600;
+    letter-spacing: 1px; cursor: pointer; font-family: inherit;
+    background: linear-gradient(135deg, var(--cyan), var(--cyan-dark));
+    border: none; color: var(--dark-bg); transition: all 0.3s;
+    position: relative; overflow: hidden;
+  }
+  .login-btn:hover { box-shadow: 0 8px 30px rgba({{PRIMARY_RGB}},0.25); transform: translateY(-1px); }
+  .login-btn::after {
+    content: ''; position: absolute; inset: 0;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    transform: translateX(-100%); transition: transform 0.6s;
+  }
+  .login-btn:hover::after { transform: translateX(100%); }
+
+  .terms { font-size: 12px; color: var(--muted); font-weight: 300; margin-top: 24px; text-align: center; line-height: 1.6; }
+  .terms a { color: var(--cyan); text-decoration: none; }
+</style>
+</head>
+<body>
+
+<!-- Left: Branding -->
+<div class="brand-panel">
+  <div class="brand-orb brand-orb-1"></div>
+  <div class="brand-orb brand-orb-2"></div>
+  <div class="brand-content">
+    <div class="brand-logo">ELUM<em>A</em></div>
+    <div class="brand-tagline">Dein <span>Event-Driven</span> Ecosystem</div>
+    <p class="brand-desc">Verwalte Events, automatisiere mit AI und behalte den Überblick. Alles in einer Plattform.</p>
+  </div>
+  <div class="brand-testi">
+    <div class="testi-text">"Seit wir {{BRAND_NAME}} nutzen, hat sich unsere Produktivität verdoppelt. Die Event-basierte Architektur ist genial."</div>
+    <div class="testi-author">Marco Keller</div>
+    <div class="testi-role">CTO, TechVenture AG</div>
+  </div>
+</div>
+
+<!-- Right: Login Form -->
+<div class="form-panel">
+  <div class="form-title">Willkommen zurück</div>
+  <div class="form-sub">Noch kein Konto? <a href="#">Registrieren</a></div>
+
+  <div class="social-btns">
+    <button class="social-btn"><svg viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>GitHub</button>
+    <button class="social-btn"><svg viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 01-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>Google</button>
+  </div>
+
+  <div class="divider"><div class="divider-line"></div><span class="divider-text">ODER</span><div class="divider-line"></div></div>
+
+  <div class="field">
+    <label class="field-label">E-MAIL</label>
+    <input class="field-input" type="email" placeholder="name@firma.ch">
+  </div>
+
+  <div class="field">
+    <label class="field-label">PASSWORT</label>
+    <input class="field-input" type="password" placeholder="Mindestens 8 Zeichen">
+  </div>
+
+  <div class="field-row">
+    <label class="remember"><input type="checkbox"> Eingeloggt bleiben</label>
+    <a class="forgot" href="#">Passwort vergessen?</a>
+  </div>
+
+  <button class="login-btn">ANMELDEN</button>
+
+  <div class="terms">Mit der Anmeldung akzeptierst du unsere <a href="#">AGB</a> und <a href="#">Datenschutzrichtlinie</a>.</div>
+</div>
+
+</body>
+</html>

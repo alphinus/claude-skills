@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>{{BRAND_NAME}} Rechnung</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #1a1a2e;
+    font-family: system-ui, -apple-system, sans-serif;
+    display: flex; align-items: center; justify-content: center;
+    min-height: 100vh; padding: 40px;
+  }
+
+  .page {
+    width: 595px; height: 842px;
+    background: #ffffff;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 30px 80px rgba(0,0,0,0.5);
+    border-radius: 2px;
+  }
+
+  /* ── HEADER ── */
+  .header {
+    background: {{BG}};
+    height: 90px;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 40px;
+    position: relative;
+  }
+  .header::after {
+    content: ''; position: absolute; bottom: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, {{PRIMARY}}, {{PRIMARY_DARK}}, transparent 80%);
+  }
+
+  .header-left {
+    display: flex; align-items: center; gap: 14px;
+  }
+  .header .wordmark {
+    font-size: 22px; font-weight: 200; letter-spacing: 8px; color: {{TEXT}};
+  }
+  .header .wordmark em { font-style: normal; color: {{PRIMARY}}; }
+
+  .invoice-badge {
+    background: rgba({{PRIMARY_RGB}},0.1);
+    border: 1px solid rgba({{PRIMARY_RGB}},0.3);
+    border-radius: 4px;
+    padding: 6px 14px;
+    text-align: right;
+  }
+  .invoice-badge .inv-label {
+    font-size: 7px; color: {{MUTED}}; letter-spacing: 2px; text-transform: uppercase;
+  }
+  .invoice-badge .inv-number {
+    font-size: 14px; color: {{PRIMARY}}; font-weight: 600; letter-spacing: 1px;
+  }
+
+  /* ── BODY ── */
+  .body-content {
+    padding: 30px 40px;
+  }
+
+  .rechnung-title {
+    font-size: 24px; font-weight: 700; color: {{BG}};
+    letter-spacing: 1px; margin-bottom: 20px;
+  }
+
+  /* Address blocks */
+  .addresses {
+    display: flex; justify-content: space-between;
+    margin-bottom: 24px;
+  }
+  .addr-block {
+    flex: 1;
+  }
+  .addr-label {
+    font-size: 7px; color: {{MUTED}}; text-transform: uppercase;
+    letter-spacing: 2px; margin-bottom: 6px;
+  }
+  .addr-line {
+    font-size: 9.5px; color: #334155; line-height: 1.7;
+  }
+  .addr-line.company { font-weight: 600; }
+
+  /* Meta row */
+  .meta-row {
+    display: flex; gap: 30px;
+    margin-bottom: 24px;
+    padding: 10px 14px;
+    background: {{TEXT}};
+    border-radius: 4px;
+    border-left: 3px solid {{PRIMARY}};
+  }
+  .meta-item .meta-label {
+    font-size: 7px; color: {{MUTED}}; text-transform: uppercase;
+    letter-spacing: 1.5px;
+  }
+  .meta-item .meta-value {
+    font-size: 10px; color: {{BG}}; font-weight: 500;
+  }
+
+  /* ── TABLE ── */
+  .inv-table {
+    width: 100%; border-collapse: collapse;
+    margin-bottom: 20px;
+  }
+  .inv-table thead th {
+    background: {{BG}};
+    color: {{TEXT}};
+    font-size: 8px; font-weight: 500;
+    letter-spacing: 1px; text-transform: uppercase;
+    padding: 8px 12px;
+    text-align: left;
+  }
+  .inv-table thead th:first-child { border-radius: 4px 0 0 0; }
+  .inv-table thead th:last-child { border-radius: 0 4px 0 0; text-align: right; }
+  .inv-table thead th.right { text-align: right; }
+  .inv-table thead th.center { text-align: center; }
+
+  .inv-table tbody td {
+    font-size: 9.5px; color: #334155;
+    padding: 10px 12px;
+    border-bottom: 1px solid #e2e8f0;
+  }
+  .inv-table tbody td.pos { color: {{MUTED}}; text-align: center; width: 30px; }
+  .inv-table tbody td.right { text-align: right; }
+  .inv-table tbody td.center { text-align: center; }
+  .inv-table tbody td.desc-title { font-weight: 500; }
+  .inv-table tbody td .desc-sub {
+    font-size: 8px; color: {{MUTED}}; margin-top: 2px;
+  }
+
+  .inv-table tbody tr:last-child td { border-bottom: 2px solid {{BG}}; }
+
+  /* Totals */
+  .totals {
+    display: flex; justify-content: flex-end;
+    margin-bottom: 24px;
+  }
+  .totals-block {
+    width: 220px;
+  }
+  .total-row {
+    display: flex; justify-content: space-between;
+    padding: 5px 0;
+    font-size: 9.5px; color: #334155;
+  }
+  .total-row.sub { border-bottom: 1px solid #e2e8f0; }
+  .total-row.tax { color: {{MUTED}}; font-size: 9px; }
+  .total-row.grand {
+    border-top: 2px solid {{BG}};
+    margin-top: 4px; padding-top: 8px;
+    font-size: 14px; font-weight: 700; color: {{BG}};
+  }
+  .total-row .currency { font-size: 8px; color: {{MUTED}}; margin-right: 4px; font-weight: 400; }
+
+  /* Payment info */
+  .payment-section {
+    background: {{TEXT}};
+    border-radius: 6px;
+    padding: 16px 20px;
+    margin-bottom: 20px;
+    border: 1px solid #e2e8f0;
+  }
+  .payment-title {
+    font-size: 9px; font-weight: 600; color: {{BG}};
+    text-transform: uppercase; letter-spacing: 1px;
+    margin-bottom: 10px;
+  }
+  .payment-grid {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 8px 30px;
+  }
+  .payment-item .pay-label {
+    font-size: 7px; color: {{MUTED}}; text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  .payment-item .pay-value {
+    font-size: 9.5px; color: #334155; font-weight: 500;
+  }
+
+  /* Note */
+  .note {
+    font-size: 8.5px; color: {{MUTED}}; line-height: 1.6;
+    padding-top: 10px;
+    border-top: 1px solid #e2e8f0;
+  }
+
+  /* ── FOOTER ── */
+  .footer {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    height: 44px;
+    background: {{BG}};
+    display: flex; align-items: center; justify-content: center;
+    gap: 24px;
+  }
+  .footer-item {
+    font-size: 7.5px; color: {{MUTED}}; letter-spacing: 0.5px;
+  }
+  .footer-item span { color: {{PRIMARY}}; }
+</style>
+</head>
+<body>
+
+<div class="page">
+  <!-- Header -->
+  <div class="header">
+    <div class="header-left">
+      <svg width="30" height="34" viewBox="0 0 56 64">
+        <polygon points="28,2 54,16 54,48 28,62 2,48 2,16" fill="none" stroke="{{PRIMARY}}" stroke-width="1.5"/>
+        <line x1="18" y1="22" x2="38" y2="22" stroke="{{PRIMARY}}" stroke-width="1.5" stroke-linecap="round"/>
+        <line x1="18" y1="32" x2="34" y2="32" stroke="{{PRIMARY}}" stroke-width="1.5" stroke-linecap="round"/>
+        <line x1="18" y1="42" x2="38" y2="42" stroke="{{PRIMARY}}" stroke-width="1.5" stroke-linecap="round"/>
+        <line x1="18" y1="22" x2="18" y2="42" stroke="{{PRIMARY}}" stroke-width="1.5" stroke-linecap="round"/>
+      </svg>
+      <div class="wordmark">ELUM<em>A</em></div>
+    </div>
+    <div class="invoice-badge">
+      <div class="inv-label">Rechnung Nr.</div>
+      <div class="inv-number">ELU-2026-0042</div>
+    </div>
+  </div>
+
+  <!-- Body -->
+  <div class="body-content">
+    <div class="rechnung-title">Rechnung</div>
+
+    <!-- Addresses -->
+    <div class="addresses">
+      <div class="addr-block">
+        <div class="addr-label">Von</div>
+        <div class="addr-line company">{{BRAND_NAME}}</div>
+        <div class="addr-line">Marco Keller</div>
+        <div class="addr-line">Bahnhofstrasse 10</div>
+        <div class="addr-line">8001 Zürich, Schweiz</div>
+        <div class="addr-line">hello@{{BRAND_DOMAIN}}</div>
+      </div>
+      <div class="addr-block">
+        <div class="addr-label">An</div>
+        <div class="addr-line company">Firma Muster AG</div>
+        <div class="addr-line">Herr Max Mustermann</div>
+        <div class="addr-line">Limmatstrasse 55</div>
+        <div class="addr-line">8005 Zürich, Schweiz</div>
+        <div class="addr-line">max@muster.ch</div>
+      </div>
+    </div>
+
+    <!-- Meta -->
+    <div class="meta-row">
+      <div class="meta-item">
+        <div class="meta-label">Rechnungsdatum</div>
+        <div class="meta-value">10.02.2026</div>
+      </div>
+      <div class="meta-item">
+        <div class="meta-label">Leistungszeitraum</div>
+        <div class="meta-value">01.01. &ndash; 31.01.2026</div>
+      </div>
+      <div class="meta-item">
+        <div class="meta-label">Kundennummer</div>
+        <div class="meta-value">KD-2024-1337</div>
+      </div>
+    </div>
+
+    <!-- Table -->
+    <table class="inv-table">
+      <thead>
+        <tr>
+          <th class="center">Pos</th>
+          <th>Beschreibung</th>
+          <th class="center">Menge</th>
+          <th class="right">Einzelpreis</th>
+          <th class="right">Gesamt</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="pos">1</td>
+          <td>
+            <div class="desc-title">API Pro Plan</div>
+            <div class="desc-sub">Event-Driven API Zugang, unbegrenzte Events, Premium-Support</div>
+          </td>
+          <td class="center">1</td>
+          <td class="right">CHF 249.00</td>
+          <td class="right">CHF 249.00</td>
+        </tr>
+        <tr>
+          <td class="pos">2</td>
+          <td>
+            <div class="desc-title">Event Streams Add-on</div>
+            <div class="desc-sub">Echtzeit-Streaming, Webhook-Integration, 50k Events/Monat</div>
+          </td>
+          <td class="center">1</td>
+          <td class="right">CHF 89.00</td>
+          <td class="right">CHF 89.00</td>
+        </tr>
+        <tr>
+          <td class="pos">3</td>
+          <td>
+            <div class="desc-title">Support Premium</div>
+            <div class="desc-sub">Dedizierter Support-Kanal, SLA 4h Reaktionszeit, Onboarding</div>
+          </td>
+          <td class="center">1</td>
+          <td class="right">CHF 149.00</td>
+          <td class="right">CHF 149.00</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- Totals -->
+    <div class="totals">
+      <div class="totals-block">
+        <div class="total-row sub">
+          <span>Zwischensumme</span>
+          <span>CHF 487.00</span>
+        </div>
+        <div class="total-row tax">
+          <span>MwSt. 8.1%</span>
+          <span>CHF 39.45</span>
+        </div>
+        <div class="total-row grand">
+          <span>Total</span>
+          <span><span class="currency">CHF</span>526.45</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Payment -->
+    <div class="payment-section">
+      <div class="payment-title">Zahlungsinformationen</div>
+      <div class="payment-grid">
+        <div class="payment-item">
+          <div class="pay-label">Kontoinhaber</div>
+          <div class="pay-value">{{BRAND_NAME}} / Marco Keller</div>
+        </div>
+        <div class="payment-item">
+          <div class="pay-label">Bank</div>
+          <div class="pay-value">Zürcher Kantonalbank</div>
+        </div>
+        <div class="payment-item">
+          <div class="pay-label">IBAN</div>
+          <div class="pay-value">CH00 0000 0000 0000 0000 0</div>
+        </div>
+        <div class="payment-item">
+          <div class="pay-label">Zahlungsfrist</div>
+          <div class="pay-value">30 Tage (bis 12.03.2026)</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Note -->
+    <div class="note">
+      Bitte geben Sie bei der Überweisung die Rechnungsnummer ELU-2026-0042 als Referenz an.
+      Bei Fragen zu dieser Rechnung kontaktieren Sie uns unter hello@{{BRAND_DOMAIN}}.
+      Vielen Dank für Ihr Vertrauen in {{BRAND_NAME}}.
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="footer">
+    <div class="footer-item"><span>{{BRAND_NAME}}</span> &middot; Bahnhofstrasse 10, 8001 Zürich</div>
+    <div class="footer-item"><span>{{BRAND_DOMAIN}}</span></div>
+    <div class="footer-item">CHE-000.000.000 MWST</div>
+  </div>
+</div>
+
+</body>
+</html>

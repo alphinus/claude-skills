@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{BRAND_NAME}} - Produkt-Roadmap 2026</title>
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --dark-bg:{{BG}};--cyan:{{PRIMARY}};--cyan-dark:{{PRIMARY_DARK}};--cloud:{{TEXT}};--muted:{{MUTED}};
+    --card-bg:#1e293b;--border:#334155;
+    --platform:#6366f1;--ai:{{WARNING}};--integrations:{{SUCCESS}};--developer:#ec4899;
+  }
+  body{font-family:system-ui,-apple-system,sans-serif;background:var(--dark-bg);color:var(--cloud);line-height:1.6;min-height:100vh}
+
+  .header{text-align:center;padding:60px 24px 20px}
+  .header h1{font-size:clamp(1.8rem,4vw,2.8rem);font-weight:800}
+  .header h1 span{color:var(--cyan)}
+  .header p{color:var(--muted);margin-top:8px;font-size:1.05rem}
+
+  /* Legend */
+  .legend{display:flex;flex-wrap:wrap;justify-content:center;gap:20px 32px;padding:20px 24px 40px}
+  .legend-item{display:flex;align-items:center;gap:8px;font-size:.85rem;color:var(--muted)}
+  .legend-dot{width:12px;height:12px;border-radius:3px}
+  .legend-status{display:flex;align-items:center;gap:6px;font-size:.85rem;color:var(--muted)}
+  .legend-status .status-icon{font-size:.9rem}
+
+  /* Timeline Container */
+  .timeline-container{overflow-x:auto;padding:0 40px 60px;-webkit-overflow-scrolling:touch}
+  .timeline{display:grid;grid-template-columns:repeat(4,minmax(280px,1fr));gap:0;position:relative;min-width:1100px}
+
+  /* Connecting Line */
+  .timeline::before{content:'';position:absolute;top:46px;left:40px;right:40px;height:4px;background:var(--border);border-radius:2px;z-index:1}
+
+  /* Quarter Column */
+  .quarter{padding:0 16px;position:relative}
+  .quarter-header{text-align:center;margin-bottom:32px;position:relative;z-index:2}
+  .quarter-dot{width:20px;height:20px;border-radius:50%;background:var(--border);border:3px solid var(--dark-bg);margin:34px auto 12px;position:relative;z-index:3;transition:all .3s}
+  .quarter.current .quarter-dot{width:24px;height:24px;background:var(--cyan);box-shadow:0 0 20px rgba({{PRIMARY_RGB}},.5);margin-top:32px}
+  .quarter.current .quarter-dot::after{content:'';position:absolute;inset:-6px;border-radius:50%;border:2px solid var(--cyan);animation:ring 2s ease-in-out infinite}
+  @keyframes ring{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.3;transform:scale(1.3)}}
+  .quarter-label{font-size:1.2rem;font-weight:700;color:var(--muted)}
+  .quarter.current .quarter-label{color:var(--cyan)}
+  .quarter-sublabel{font-size:.8rem;color:var(--muted);margin-top:2px}
+
+  /* Cards */
+  .roadmap-cards{display:flex;flex-direction:column;gap:12px}
+  .roadmap-card{background:var(--card-bg);border:1px solid var(--border);border-radius:14px;padding:16px 18px;transition:transform .2s,box-shadow .2s}
+  .roadmap-card:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.3)}
+  .card-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+  .card-category{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px;padding:3px 10px;border-radius:99px;color:#fff}
+  .card-category.platform{background:var(--platform)}
+  .card-category.ai{background:var(--ai);color:#000}
+  .card-category.integrations{background:var(--integrations)}
+  .card-category.developer{background:var(--developer)}
+  .card-status{font-size:.8rem;display:flex;align-items:center;gap:4px}
+  .card-status.done{color:#48bb78}
+  .card-status.progress{color:var(--cyan)}
+  .card-status.planned{color:var(--muted)}
+  .card-title{font-size:.95rem;font-weight:600;margin-bottom:4px}
+  .card-desc{font-size:.82rem;color:var(--muted);line-height:1.5}
+
+  .quarter.current .roadmap-card{border-color:rgba({{PRIMARY_RGB}},.25)}
+
+  @media(max-width:900px){
+    .timeline-container{padding:0 16px 40px}
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>Produkt-Roadmap <span>2026</span></h1>
+  <p>Unsere Vision fur die nachsten zwolf Monate</p>
+</div>
+
+<div class="legend">
+  <div class="legend-item"><div class="legend-dot" style="background:var(--platform)"></div> Platform</div>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--ai)"></div> AI</div>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--integrations)"></div> Integrations</div>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--developer)"></div> Developer</div>
+  <span style="color:var(--border);margin:0 8px">|</span>
+  <div class="legend-status"><span class="status-icon" style="color:#48bb78">&#10003;</span> Fertig</div>
+  <div class="legend-status"><span class="status-icon" style="color:var(--cyan)">&rarr;</span> In Arbeit</div>
+  <div class="legend-status"><span class="status-icon" style="color:var(--muted)">&#9675;</span> Geplant</div>
+</div>
+
+<div class="timeline-container">
+<div class="timeline">
+
+  <!-- Q1 2026 -->
+  <div class="quarter">
+    <div class="quarter-header">
+      <div class="quarter-dot"></div>
+      <div class="quarter-label">Q1 2026</div>
+      <div class="quarter-sublabel">Januar - Marz</div>
+    </div>
+    <div class="roadmap-cards">
+      <div class="roadmap-card">
+        <div class="card-top">
+          <span class="card-category platform">Platform</span>
+          <span class="card-status done">&#10003; Fertig</span>
+        </div>
+        <div class="card-title">Event-Engine v2</div>
+        <div class="card-desc">Komplett uberarbeitete Event-Processing-Pipeline mit 10x Durchsatz.</div>
+      </div>
+      <div class="roadmap-card">
+        <div class="card-top">
+          <span class="card-category developer">Developer</span>
+          <span class="card-status done">&#10003; Fertig</span>
+        </div>
+        <div class="card-title">SDK fur TypeScript</div>
+        <div class="card-desc">Typsicheres SDK mit vollstandiger API-Abdeckung und Auto-Completion.</div>
+      </div>
+      <div class="roadmap-card">
+        <div class="card-top">
+          <span class="card-category integrations">Integrations</span>
+          <span class="card-status done">&#10003; Fertig</span>
+        </div>
+        <div class="card-title">Telegram Bot v1</div>
+        <div class="card-desc">Echtzeit-Benachrichtigungen und Befehle direkt uber Telegram.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q2 2026 (Current) -->
+  <div class="quarter current">
+    <div class="quarter-header">
+      <div class="quarter-dot"></div>
+      <div class="quarter-label">Q2 2026</div>
+      <div class="quarter-sublabel">April - Juni</div>
+    </div>
+    <div class="roadmap-cards">
+      <div class="roadmap-card">
+        <div class="card-top">
+          <span class="card-category ai">AI</span>
+          <span class="card-status progress">&rarr; In Arbeit</span>
+        </div>
+        <div class="card-title">AI-Anomalie-Erkennung</div>
+        <div class="card-desc">Automatische Erkennung ungewohnlicher Muster in Event-Stromen.</div>
+      </div>
+      <div class="roadmap-card">
+        <div class="card-top">
+          <span class="card-category platform">Platform</span>
+          <span class="card-status progress">&rarr; In Arbeit</span>
+        </div>
+        <div class="card-title">Multi-Tenant Dashboard</div>
+        <div class="card-desc">Zentrales Dashboard fur die Verwaltung mehrerer Projekte.</div>
+      </div>
+      <div class="roadmap-card">
+        <div class="card-top">
+          <span class="card-category developer">Developer</span>
+          <span class="card-status progress">&rarr; In Arbeit</span>
+        </div>
+        <div class="card-title">CLI Tool</div>
+        <div class="card-desc">Kommandozeilen-Tool fur Projekt-Setup, Deployment und Monitoring.</div>
+      </div>
+      <div class="roadmap-card">
+        <div class="card-top">
+          <span class="card-category integrations">Integrations</span>
+          <span class="card-status planned">&#9675; Geplant</span>
+        </div>
+        <div class="card-title">Slack Integration</div>
+        <div class="card-desc">Bidirektionale Integration mit Slack-Channels und Workflows.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q3 2026 -->
+  <div class="quarter">
+    <div class="quarter-header">
+      <div class="quarter-dot"></div>
+      <div class="quarter-label">Q3 2026</div>
+      <div class="quarter-sublabel">Juli - September</div>
+    </div>
+    <div class="roadmap-cards">
+      <div class="roadmap-card">
+        <div class="card-top">
+          <span class="card-category ai">AI</span>
+          <span class="card-status planned">&#9675; Geplant</span>
+        </div>
+        <div class="card-title">Natural Language Queries</div>
+        <div class="card-desc">Datenabfragen in naturlicher Sprache statt komplexer Filter.</div>
+      </div>
+      <div class="roadmap-card">
+        <div class="card-top">
+          <span class="card-category platform">Platform</span>
+          <span class="card-status planned">&#9675; Geplant</span>
+        </div>
+        <div class="card-title">Workflow Builder</div>
+        <div class="card-desc">Visueller Drag-and-Drop-Editor fur Event-basierte Automatisierungen.</div>
+      </div>
+      <div class="roadmap-card">
+        <div class="card-top">
+          <span class="card-category integrations">Integrations</span>
+          <span class="card-status planned">&#9675; Geplant</span>
+        </div>
+        <div class="card-title">GitHub / GitLab Sync</div>
+        <div class="card-desc">Automatische Synchronisation von Repository-Events und CI/CD-Status.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q4 2026 -->
+  <div class="quarter">
+    <div class="quarter-header">
+      <div class="quarter-dot"></div>
+      <div class="quarter-label">Q4 2026</div>
+      <div class="quarter-sublabel">Oktober - Dezember</div>
+    </div>
+    <div class="roadmap-cards">
+      <div class="roadmap-card">
+        <div class="card-top">
+          <span class="card-category platform">Platform</span>
+          <span class="card-status planned">&#9675; Geplant</span>
+        </div>
+        <div class="card-title">Marketplace</div>
+        <div class="card-desc">Community-Marketplace fur Plugins, Templates und Integrationen.</div>
+      </div>
+      <div class="roadmap-card">
+        <div class="card-top">
+          <span class="card-category ai">AI</span>
+          <span class="card-status planned">&#9675; Geplant</span>
+        </div>
+        <div class="card-title">Predictive Analytics</div>
+        <div class="card-desc">KI-gestutzte Vorhersagen basierend auf historischen Event-Daten.</div>
+      </div>
+      <div class="roadmap-card">
+        <div class="card-top">
+          <span class="card-category developer">Developer</span>
+          <span class="card-status planned">&#9675; Geplant</span>
+        </div>
+        <div class="card-title">SDK fur Python & Go</div>
+        <div class="card-desc">Erweiterte SDK-Unterstutzung fur Python- und Go-Entwickler.</div>
+      </div>
+      <div class="roadmap-card">
+        <div class="card-top">
+          <span class="card-category integrations">Integrations</span>
+          <span class="card-status planned">&#9675; Geplant</span>
+        </div>
+        <div class="card-title">Zapier & Make</div>
+        <div class="card-desc">No-Code-Anbindung an tausende von Drittanbieter-Apps.</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{BRAND_NAME}} Admin Panel</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --dark-bg: {{BG}}; --cyan: {{PRIMARY}}; --cyan-dark: {{PRIMARY_DARK}}; --cloud: {{TEXT}};
+    --muted: {{MUTED}}; --success: {{SUCCESS}}; --warning: {{WARNING}}; --error: {{ERROR}}; --info: {{INFO}};
+    --sidebar-w: 240px; --surface: #1e293b; --surface-2: #334155; --border: #475569;
+  }
+  body { font-family: system-ui, -apple-system, sans-serif; background: var(--dark-bg); color: var(--cloud); min-height: 100vh; display: flex; }
+
+  /* Sidebar */
+  .sidebar { width: var(--sidebar-w); background: var(--surface); border-right: 1px solid var(--border); display: flex; flex-direction: column; position: fixed; top: 0; left: 0; bottom: 0; z-index: 10; }
+  .sidebar-logo { padding: 24px 20px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 12px; }
+  .sidebar-logo svg { width: 32px; height: 32px; }
+  .sidebar-logo span { font-size: 18px; font-weight: 700; color: var(--cyan); letter-spacing: 1px; }
+  .sidebar-nav { flex: 1; padding: 12px 0; }
+  .nav-item { display: flex; align-items: center; gap: 12px; padding: 11px 20px; color: var(--muted); font-size: 14px; cursor: pointer; transition: all .2s; border-left: 3px solid transparent; }
+  .nav-item:hover { color: var(--cloud); background: rgba({{PRIMARY_RGB}},.06); }
+  .nav-item.active { color: var(--cyan); background: rgba({{PRIMARY_RGB}},.1); border-left-color: var(--cyan); }
+  .nav-item svg { width: 18px; height: 18px; flex-shrink: 0; }
+  .sidebar-footer { padding: 16px 20px; border-top: 1px solid var(--border); display: flex; align-items: center; gap: 10px; }
+  .sidebar-footer .avatar-sm { width: 32px; height: 32px; border-radius: 50%; background: var(--cyan-dark); display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600; color: var(--dark-bg); }
+  .sidebar-footer .user-info { font-size: 13px; }
+  .sidebar-footer .user-info .name { color: var(--cloud); font-weight: 500; }
+  .sidebar-footer .user-info .role { color: var(--muted); font-size: 11px; }
+
+  /* Main */
+  .main { margin-left: var(--sidebar-w); flex: 1; padding: 28px 32px; min-height: 100vh; }
+  .page-header { margin-bottom: 24px; }
+  .page-header h1 { font-size: 24px; font-weight: 700; margin-bottom: 4px; }
+  .page-header p { color: var(--muted); font-size: 14px; }
+
+  /* Stats bar */
+  .stats-bar { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 24px; }
+  .stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 18px 20px; }
+  .stat-card .label { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: .5px; margin-bottom: 6px; }
+  .stat-card .value { font-size: 28px; font-weight: 700; }
+  .stat-card .change { font-size: 12px; margin-top: 4px; display: flex; align-items: center; gap: 4px; }
+  .stat-card .change.up { color: var(--success); }
+  .stat-card .change.down { color: var(--error); }
+  .stat-card .change.neutral { color: var(--muted); }
+
+  /* Filters */
+  .filters-row { display: flex; gap: 12px; margin-bottom: 20px; align-items: center; }
+  .search-input { flex: 1; max-width: 320px; background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 9px 14px 9px 38px; color: var(--cloud); font-size: 14px; outline: none; position: relative; }
+  .search-input:focus { border-color: var(--cyan); box-shadow: 0 0 0 3px rgba({{PRIMARY_RGB}},.15); }
+  .search-wrap { position: relative; flex: 1; max-width: 320px; }
+  .search-wrap svg { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--muted); width: 16px; height: 16px; pointer-events: none; }
+  .search-wrap .search-input { width: 100%; }
+  .filter-select { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 9px 32px 9px 14px; color: var(--cloud); font-size: 14px; appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%23718096' viewBox='0 0 24 24'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 10px center; cursor: pointer; outline: none; }
+  .filter-select:focus { border-color: var(--cyan); }
+
+  /* Table */
+  .table-wrap { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+  table { width: 100%; border-collapse: collapse; }
+  thead th { text-align: left; padding: 14px 16px; font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: .5px; background: rgba(0,0,0,.2); border-bottom: 1px solid var(--border); font-weight: 600; }
+  tbody td { padding: 14px 16px; border-bottom: 1px solid rgba(71,85,105,.4); font-size: 14px; vertical-align: middle; }
+  tbody tr:last-child td { border-bottom: none; }
+  tbody tr:hover { background: rgba({{PRIMARY_RGB}},.04); }
+  .user-cell { display: flex; align-items: center; gap: 12px; }
+  .avatar { width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 14px; color: var(--dark-bg); flex-shrink: 0; }
+  .user-name { font-weight: 500; }
+  .user-email { color: var(--muted); font-size: 13px; }
+  .badge { display: inline-flex; align-items: center; padding: 3px 10px; border-radius: 20px; font-size: 12px; font-weight: 500; }
+  .badge-admin { background: rgba({{PRIMARY_RGB}},.15); color: var(--cyan); }
+  .badge-editor { background: rgba({{INFO_RGB}},.15); color: var(--info); }
+  .badge-viewer { background: rgba(113,128,150,.2); color: var(--muted); }
+  .status-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; margin-right: 6px; }
+  .status-aktiv .status-dot { background: var(--success); }
+  .status-inaktiv .status-dot { background: var(--muted); }
+  .status-gesperrt .status-dot { background: var(--error); }
+  .status-label { font-size: 13px; }
+  .actions-cell { display: flex; gap: 6px; }
+  .btn-icon { width: 32px; height: 32px; border-radius: 6px; border: 1px solid var(--border); background: transparent; color: var(--muted); display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all .2s; }
+  .btn-icon:hover { border-color: var(--cyan); color: var(--cyan); background: rgba({{PRIMARY_RGB}},.08); }
+  .btn-icon.danger:hover { border-color: var(--error); color: var(--error); background: rgba({{ERROR_RGB}},.08); }
+  .btn-icon svg { width: 15px; height: 15px; }
+
+  /* Pagination */
+  .pagination { display: flex; align-items: center; justify-content: space-between; padding: 16px 20px; }
+  .pagination .info { font-size: 13px; color: var(--muted); }
+  .pagination .pages { display: flex; gap: 4px; }
+  .page-btn { width: 34px; height: 34px; border-radius: 6px; border: 1px solid var(--border); background: transparent; color: var(--muted); font-size: 13px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all .2s; }
+  .page-btn:hover { border-color: var(--cyan); color: var(--cyan); }
+  .page-btn.active { background: var(--cyan); color: var(--dark-bg); border-color: var(--cyan); font-weight: 600; }
+  .page-btn:disabled { opacity: .4; cursor: default; }
+</style>
+</head>
+<body>
+
+<!-- Sidebar -->
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <svg viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="14" stroke="{{PRIMARY}}" stroke-width="2"/><path d="M10 16c0-3.3 2.7-6 6-6s6 2.7 6 6-2.7 6-6 6" stroke="{{PRIMARY}}" stroke-width="2" stroke-linecap="round"/><circle cx="16" cy="16" r="2" fill="{{PRIMARY}}"/></svg>
+    <span>{{BRAND_NAME}}</span>
+  </div>
+  <nav class="sidebar-nav">
+    <div class="nav-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+      Dashboard
+    </div>
+    <div class="nav-item active">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      Benutzer
+    </div>
+    <div class="nav-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      Rollen
+    </div>
+    <div class="nav-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+      Logs
+    </div>
+    <div class="nav-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+      API-Schl&uuml;ssel
+    </div>
+    <div class="nav-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg>
+      Sicherheit
+    </div>
+  </nav>
+  <div class="sidebar-footer">
+    <div class="avatar-sm">MK</div>
+    <div class="user-info">
+      <div class="name">Max Keller</div>
+      <div class="role">Administrator</div>
+    </div>
+  </div>
+</aside>
+
+<!-- Main Content -->
+<main class="main">
+  <div class="page-header">
+    <h1>Benutzerverwaltung</h1>
+    <p>Verwalte Benutzer, Rollen und Berechtigungen</p>
+  </div>
+
+  <!-- Stats Bar -->
+  <div class="stats-bar">
+    <div class="stat-card">
+      <div class="label">Gesamt Benutzer</div>
+      <div class="value">1.247</div>
+      <div class="change up">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="18 15 12 9 6 15"/></svg>
+        +12% vs. letzter Monat
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="label">Aktive Heute</div>
+      <div class="value" style="color:var(--success)">438</div>
+      <div class="change up">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="18 15 12 9 6 15"/></svg>
+        +5% vs. gestern
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="label">Neue diese Woche</div>
+      <div class="value" style="color:var(--info)">63</div>
+      <div class="change up">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="18 15 12 9 6 15"/></svg>
+        +23% vs. letzte Woche
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="label">Gesperrte</div>
+      <div class="value" style="color:var(--error)">8</div>
+      <div class="change neutral">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Keine &Auml;nderung
+      </div>
+    </div>
+  </div>
+
+  <!-- Filters -->
+  <div class="filters-row">
+    <div class="search-wrap">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input type="text" class="search-input" placeholder="Benutzer suchen...">
+    </div>
+    <select class="filter-select">
+      <option>Alle Rollen</option>
+      <option>Admin</option>
+      <option>Editor</option>
+      <option>Viewer</option>
+    </select>
+    <select class="filter-select">
+      <option>Alle Status</option>
+      <option>Aktiv</option>
+      <option>Inaktiv</option>
+      <option>Gesperrt</option>
+    </select>
+  </div>
+
+  <!-- Table -->
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Benutzer</th>
+          <th>E-Mail</th>
+          <th>Rolle</th>
+          <th>Status</th>
+          <th>Letzte Aktivit&auml;t</th>
+          <th>Aktionen</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <div class="user-cell">
+              <div class="avatar" style="background:{{PRIMARY}}">MK</div>
+              <div class="user-name">Max Keller</div>
+            </div>
+          </td>
+          <td class="user-email">max.keller@{{BRAND_DOMAIN}}</td>
+          <td><span class="badge badge-admin">Admin</span></td>
+          <td><span class="status-aktiv"><span class="status-dot"></span><span class="status-label">Aktiv</span></span></td>
+          <td style="color:var(--muted);font-size:13px">Vor 2 Minuten</td>
+          <td>
+            <div class="actions-cell">
+              <button class="btn-icon" title="Bearbeiten"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
+              <button class="btn-icon danger" title="Deaktivieren"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg></button>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <div class="user-cell">
+              <div class="avatar" style="background:{{INFO}}">LW</div>
+              <div class="user-name">Lena Widmer</div>
+            </div>
+          </td>
+          <td class="user-email">lena.widmer@{{BRAND_DOMAIN}}</td>
+          <td><span class="badge badge-editor">Editor</span></td>
+          <td><span class="status-aktiv"><span class="status-dot"></span><span class="status-label">Aktiv</span></span></td>
+          <td style="color:var(--muted);font-size:13px">Vor 15 Minuten</td>
+          <td>
+            <div class="actions-cell">
+              <button class="btn-icon" title="Bearbeiten"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
+              <button class="btn-icon danger" title="Deaktivieren"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg></button>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <div class="user-cell">
+              <div class="avatar" style="background:{{WARNING}}">TB</div>
+              <div class="user-name">Thomas Brunner</div>
+            </div>
+          </td>
+          <td class="user-email">thomas.brunner@{{BRAND_DOMAIN}}</td>
+          <td><span class="badge badge-viewer">Viewer</span></td>
+          <td><span class="status-inaktiv"><span class="status-dot"></span><span class="status-label">Inaktiv</span></span></td>
+          <td style="color:var(--muted);font-size:13px">Vor 3 Tagen</td>
+          <td>
+            <div class="actions-cell">
+              <button class="btn-icon" title="Bearbeiten"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
+              <button class="btn-icon danger" title="Deaktivieren"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg></button>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <div class="user-cell">
+              <div class="avatar" style="background:{{SUCCESS}}">SR</div>
+              <div class="user-name">Sarah R&uuml;egg</div>
+            </div>
+          </td>
+          <td class="user-email">sarah.ruegg@{{BRAND_DOMAIN}}</td>
+          <td><span class="badge badge-admin">Admin</span></td>
+          <td><span class="status-aktiv"><span class="status-dot"></span><span class="status-label">Aktiv</span></span></td>
+          <td style="color:var(--muted);font-size:13px">Vor 1 Stunde</td>
+          <td>
+            <div class="actions-cell">
+              <button class="btn-icon" title="Bearbeiten"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
+              <button class="btn-icon danger" title="Deaktivieren"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg></button>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <div class="user-cell">
+              <div class="avatar" style="background:{{ERROR}}">PH</div>
+              <div class="user-name">Peter Hofmann</div>
+            </div>
+          </td>
+          <td class="user-email">peter.hofmann@{{BRAND_DOMAIN}}</td>
+          <td><span class="badge badge-editor">Editor</span></td>
+          <td><span class="status-gesperrt"><span class="status-dot"></span><span class="status-label">Gesperrt</span></span></td>
+          <td style="color:var(--muted);font-size:13px">Vor 14 Tagen</td>
+          <td>
+            <div class="actions-cell">
+              <button class="btn-icon" title="Bearbeiten"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
+              <button class="btn-icon danger" title="Deaktivieren"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg></button>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <div class="user-cell">
+              <div class="avatar" style="background:#8b5cf6">AM</div>
+              <div class="user-name">Anna M&uuml;ller</div>
+            </div>
+          </td>
+          <td class="user-email">anna.mueller@{{BRAND_DOMAIN}}</td>
+          <td><span class="badge badge-viewer">Viewer</span></td>
+          <td><span class="status-aktiv"><span class="status-dot"></span><span class="status-label">Aktiv</span></span></td>
+          <td style="color:var(--muted);font-size:13px">Vor 30 Minuten</td>
+          <td>
+            <div class="actions-cell">
+              <button class="btn-icon" title="Bearbeiten"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
+              <button class="btn-icon danger" title="Deaktivieren"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg></button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="pagination">
+      <div class="info">Zeige 1-6 von 1.247 Benutzer</div>
+      <div class="pages">
+        <button class="page-btn" disabled>&laquo;</button>
+        <button class="page-btn active">1</button>
+        <button class="page-btn">2</button>
+        <button class="page-btn">3</button>
+        <button class="page-btn">...</button>
+        <button class="page-btn">208</button>
+        <button class="page-btn">&raquo;</button>
+      </div>
+    </div>
+  </div>
+</main>
+
+</body>
+</html>

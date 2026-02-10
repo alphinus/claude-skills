@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{BRAND_NAME}} Feature Update - 1080x1080</title>
+<style>
+  :root {
+    --dark-bg: {{BG}};
+    --cyan: {{PRIMARY}};
+    --cyan-dark: {{PRIMARY_DARK}};
+    --cloud: {{TEXT}};
+    --muted: {{MUTED}};
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #080e1a;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    font-family: system-ui, -apple-system, sans-serif;
+    color: var(--cloud);
+    padding: 40px 20px;
+  }
+
+  .meta {
+    color: var(--muted);
+    font-size: 14px;
+    margin-bottom: 20px;
+    text-align: center;
+    letter-spacing: 0.5px;
+  }
+  .meta strong { color: var(--cyan); }
+
+  .template {
+    width: 1080px;
+    height: 1080px;
+    background: var(--dark-bg);
+    position: relative;
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+
+  /* Subtle grid bg */
+  .grid-bg {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba({{PRIMARY_RGB}}, 0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba({{PRIMARY_RGB}}, 0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+  }
+
+  /* Top accent line */
+  .top-accent {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, transparent, var(--cyan), var(--cyan-dark), transparent);
+  }
+
+  /* Gradient orb */
+  .bg-orb {
+    position: absolute;
+    width: 600px; height: 600px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba({{PRIMARY_RGB}}, 0.08), transparent 70%);
+    top: -200px; right: -200px;
+    filter: blur(40px);
+  }
+
+  /* Content */
+  .content {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    padding: 64px 80px 56px;
+  }
+
+  /* Badge */
+  .new-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: linear-gradient(135deg, var(--cyan), var(--cyan-dark));
+    color: var(--dark-bg);
+    padding: 10px 24px;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    width: fit-content;
+    margin-bottom: 36px;
+  }
+  .new-badge .spark {
+    display: inline-block;
+    animation: sparkle 2s ease-in-out infinite;
+  }
+  @keyframes sparkle {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.6; transform: scale(0.8); }
+  }
+
+  /* Feature name */
+  .feature-name {
+    font-size: 68px;
+    font-weight: 800;
+    line-height: 1.1;
+    margin-bottom: 8px;
+    color: var(--cloud);
+  }
+  .feature-name span {
+    background: linear-gradient(135deg, var(--cyan), var(--cyan-dark));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .feature-subtitle {
+    font-size: 22px;
+    color: var(--muted);
+    margin-bottom: 40px;
+    font-weight: 400;
+  }
+
+  /* Mockup card */
+  .mockup-card {
+    background: rgba(15, 23, 42, 0.9);
+    border: 1px solid rgba({{PRIMARY_RGB}}, 0.15);
+    border-radius: 16px;
+    padding: 28px 32px;
+    margin-bottom: 40px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    position: relative;
+    overflow: hidden;
+  }
+  .mockup-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--cyan), transparent);
+    opacity: 0.5;
+  }
+  .mockup-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+  .mockup-dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+  }
+  .mockup-dot.red { background: #fc8181; }
+  .mockup-dot.yellow { background: #f6ad55; }
+  .mockup-dot.green { background: #68d391; }
+  .mockup-title {
+    font-size: 14px;
+    color: var(--muted);
+    margin-left: 8px;
+    font-family: 'SF Mono', 'Fira Code', monospace;
+  }
+  .mockup-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba({{PRIMARY_RGB}}, 0.06);
+  }
+  .mockup-row:last-child { border-bottom: none; }
+  .mockup-indicator {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--cyan);
+    animation: pulse 2s ease-in-out infinite;
+    flex-shrink: 0;
+  }
+  .mockup-indicator.delayed { animation-delay: 0.5s; }
+  .mockup-indicator.delayed2 { animation-delay: 1s; }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba({{PRIMARY_RGB}}, 0.4); }
+    50% { opacity: 0.6; box-shadow: 0 0 8px 2px rgba({{PRIMARY_RGB}}, 0.2); }
+  }
+  .mockup-event {
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    font-size: 15px;
+    color: var(--cloud);
+    opacity: 0.9;
+  }
+  .mockup-event .key { color: var(--cyan); }
+  .mockup-event .val { color: #f6ad55; }
+  .mockup-time {
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    font-size: 13px;
+    color: var(--muted);
+    margin-left: auto;
+    flex-shrink: 0;
+  }
+
+  /* Bullet points */
+  .bullets {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-bottom: 40px;
+  }
+  .bullet {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    font-size: 20px;
+    color: var(--cloud);
+    font-weight: 400;
+  }
+  .bullet-check {
+    width: 32px; height: 32px;
+    border-radius: 8px;
+    background: rgba({{PRIMARY_RGB}}, 0.1);
+    border: 1px solid rgba({{PRIMARY_RGB}}, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .bullet-check svg {
+    width: 18px; height: 18px;
+    color: var(--cyan);
+  }
+
+  /* CTA */
+  .cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: linear-gradient(135deg, var(--cyan), var(--cyan-dark));
+    color: var(--dark-bg);
+    padding: 16px 36px;
+    border-radius: 12px;
+    font-size: 20px;
+    font-weight: 700;
+    width: fit-content;
+    letter-spacing: 0.5px;
+  }
+  .cta svg { width: 20px; height: 20px; }
+
+  /* Footer */
+  .footer {
+    margin-top: auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 24px;
+    border-top: 1px solid rgba({{PRIMARY_RGB}}, 0.08);
+  }
+  .footer-logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .footer-logo svg { width: 32px; height: 32px; }
+  .footer-logo-text {
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: 4px;
+    color: var(--cloud);
+  }
+  .footer-url {
+    font-size: 18px;
+    color: var(--cyan);
+    font-weight: 500;
+    letter-spacing: 1px;
+  }
+
+  .meta-bottom {
+    color: var(--muted);
+    font-size: 14px;
+    margin-top: 20px;
+    text-align: center;
+  }
+</style>
+</head>
+<body>
+
+<div class="meta">
+  <strong>Feature Update</strong> &mdash; 1080 &times; 1080px &mdash; Instagram / LinkedIn Feed
+</div>
+
+<div class="template">
+  <div class="grid-bg"></div>
+  <div class="top-accent"></div>
+  <div class="bg-orb"></div>
+
+  <div class="content">
+    <div class="new-badge">
+      <span class="spark">&#9733;</span>
+      Neues Feature
+    </div>
+
+    <div class="feature-name">Event <span>Streams</span></div>
+    <div class="feature-subtitle">Echtzeit-Datenverarbeitung, neu definiert</div>
+
+    <!-- Mockup -->
+    <div class="mockup-card">
+      <div class="mockup-header">
+        <div class="mockup-dot red"></div>
+        <div class="mockup-dot yellow"></div>
+        <div class="mockup-dot green"></div>
+        <span class="mockup-title">event-stream.log</span>
+      </div>
+      <div class="mockup-row">
+        <div class="mockup-indicator"></div>
+        <span class="mockup-event"><span class="key">stream:</span> <span class="val">"user.signup"</span></span>
+        <span class="mockup-time">2ms</span>
+      </div>
+      <div class="mockup-row">
+        <div class="mockup-indicator delayed"></div>
+        <span class="mockup-event"><span class="key">stream:</span> <span class="val">"payment.confirmed"</span></span>
+        <span class="mockup-time">5ms</span>
+      </div>
+      <div class="mockup-row">
+        <div class="mockup-indicator delayed2"></div>
+        <span class="mockup-event"><span class="key">stream:</span> <span class="val">"order.processed"</span></span>
+        <span class="mockup-time">3ms</span>
+      </div>
+    </div>
+
+    <!-- Bullets -->
+    <div class="bullets">
+      <div class="bullet">
+        <div class="bullet-check">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+        </div>
+        Parallele Event-Verarbeitung in Echtzeit
+      </div>
+      <div class="bullet">
+        <div class="bullet-check">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+        </div>
+        Automatische Skalierung bei Lastspitzen
+      </div>
+      <div class="bullet">
+        <div class="bullet-check">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+        </div>
+        Integriertes Monitoring & Alerting
+      </div>
+    </div>
+
+    <!-- CTA -->
+    <div class="cta">
+      Jetzt verfügbar
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+      <div class="footer-logo">
+        <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M16 2L29 9.5v13L16 30 3 22.5v-13L16 2z" stroke="{{PRIMARY}}" stroke-width="1.5" fill="rgba({{PRIMARY_RGB}},0.06)"/>
+          <circle cx="16" cy="16" r="4" fill="{{PRIMARY}}" opacity="0.9"/>
+          <circle cx="16" cy="16" r="2" fill="{{BG}}"/>
+        </svg>
+        <span class="footer-logo-text">{{BRAND_NAME}}</span>
+      </div>
+      <span class="footer-url">{{BRAND_DOMAIN}}</span>
+    </div>
+  </div>
+</div>
+
+<div class="meta-bottom">
+  Empfohlen: Instagram Feed, LinkedIn Post, Twitter/X Post
+</div>
+
+</body>
+</html>

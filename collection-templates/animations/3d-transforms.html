@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{BRAND_NAME}} - 3D CSS Transformationen</title>
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --dark-bg:{{BG}};--cyan:{{PRIMARY}};--cyan-dark:{{PRIMARY_DARK}};--cloud:{{TEXT}};--muted:{{MUTED}};
+    --card-bg:#1e293b;--border:#334155;
+  }
+  body{font-family:system-ui,-apple-system,sans-serif;background:var(--dark-bg);color:var(--cloud);line-height:1.6;min-height:100vh}
+
+  .header{text-align:center;padding:60px 24px 48px}
+  .header h1{font-size:clamp(1.8rem,4vw,2.8rem);font-weight:800}
+  .header h1 span{color:var(--cyan)}
+  .header p{color:var(--muted);margin-top:10px;font-size:1.05rem}
+
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:32px;max-width:1100px;margin:0 auto;padding:0 24px 80px}
+
+  .demo-card{background:var(--card-bg);border:1px solid var(--border);border-radius:20px;padding:24px;min-height:380px;display:flex;flex-direction:column}
+  .demo-label{font-size:.8rem;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:6px}
+  .demo-title{font-size:1.2rem;font-weight:700;margin-bottom:16px}
+  .demo-area{flex:1;display:flex;align-items:center;justify-content:center;perspective:800px}
+
+  /* 1. Card Flip */
+  .flip-container{width:220px;height:160px;cursor:pointer}
+  .flip-inner{position:relative;width:100%;height:100%;transition:transform .7s;transform-style:preserve-3d}
+  .flip-container:hover .flip-inner{transform:rotateY(180deg)}
+  .flip-front,.flip-back{position:absolute;inset:0;border-radius:14px;display:flex;align-items:center;justify-content:center;backface-visibility:hidden;padding:20px;text-align:center}
+  .flip-front{background:linear-gradient(135deg,var(--cyan-dark),var(--cyan));color:var(--dark-bg)}
+  .flip-front .flip-icon{font-size:2.4rem;margin-bottom:8px;display:block}
+  .flip-front .flip-label{font-weight:700;font-size:1.1rem}
+  .flip-back{background:var(--dark-bg);border:2px solid var(--cyan);transform:rotateY(180deg);flex-direction:column;gap:8px}
+  .flip-back .flip-detail{font-size:.85rem;color:var(--cloud)}
+  .flip-back .flip-stat{font-size:1.6rem;font-weight:800;color:var(--cyan)}
+
+  /* 2. 3D Tilt */
+  .tilt-card{width:220px;height:160px;background:linear-gradient(145deg,#1e293b,#334155);border:1px solid var(--border);border-radius:14px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:8px;transition:transform .1s ease-out,box-shadow .1s ease-out;transform-style:preserve-3d;cursor:default;will-change:transform}
+  .tilt-card .tilt-icon{font-size:2rem;transform:translateZ(30px)}
+  .tilt-card .tilt-text{font-weight:600;transform:translateZ(20px)}
+  .tilt-card .tilt-sub{font-size:.8rem;color:var(--muted);transform:translateZ(10px)}
+  .tilt-shine{position:absolute;inset:0;border-radius:14px;background:radial-gradient(circle at 50% 50%,rgba({{PRIMARY_RGB}},.15),transparent 60%);pointer-events:none;opacity:0;transition:opacity .2s}
+
+  /* 3. Rotating Cube */
+  .cube-scene{width:140px;height:140px;perspective:600px}
+  .cube{width:140px;height:140px;position:relative;transform-style:preserve-3d;animation:cubeRotate 8s linear infinite}
+  @keyframes cubeRotate{
+    0%{transform:rotateX(-20deg) rotateY(0deg)}
+    100%{transform:rotateX(-20deg) rotateY(360deg)}
+  }
+  .cube-face{position:absolute;width:140px;height:140px;border:2px solid var(--cyan);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:.85rem;font-weight:600;opacity:.85;background:rgba(15,23,42,.85);backface-visibility:visible}
+  .cube-face.front{transform:translateZ(70px)}
+  .cube-face.back{transform:rotateY(180deg) translateZ(70px)}
+  .cube-face.right{transform:rotateY(90deg) translateZ(70px)}
+  .cube-face.left{transform:rotateY(-90deg) translateZ(70px)}
+  .cube-face.top{transform:rotateX(90deg) translateZ(70px)}
+  .cube-face.bottom{transform:rotateX(-90deg) translateZ(70px)}
+  .cube-face .face-icon{font-size:1.6rem;display:block;margin-bottom:4px}
+
+  /* 4. Perspective Zoom */
+  .zoom-container{perspective:600px;width:220px;height:160px;position:relative;cursor:pointer}
+  .zoom-layers{position:relative;width:100%;height:100%;transform-style:preserve-3d;transition:transform .5s ease}
+  .zoom-container:hover .zoom-layers{transform:translateZ(60px)}
+  .zoom-layer{position:absolute;inset:0;border-radius:14px;display:flex;align-items:center;justify-content:center;transition:transform .5s ease,opacity .5s ease}
+  .zoom-layer.l1{background:var(--border);transform:translateZ(-40px);font-size:.8rem;color:var(--muted)}
+  .zoom-layer.l2{background:rgba({{PRIMARY_RGB}},.1);border:1px solid rgba({{PRIMARY_RGB}},.3);transform:translateZ(-20px);inset:10px}
+  .zoom-layer.l3{background:rgba({{PRIMARY_RGB}},.15);border:1px solid var(--cyan);transform:translateZ(0);inset:20px;font-weight:700;color:var(--cyan);font-size:1.1rem}
+  .zoom-container:hover .zoom-layer.l1{transform:translateZ(-80px);opacity:.5}
+  .zoom-container:hover .zoom-layer.l2{transform:translateZ(-30px)}
+  .zoom-container:hover .zoom-layer.l3{transform:translateZ(20px)}
+
+  /* 5. 3D Carousel */
+  .carousel-scene{width:240px;height:160px;perspective:800px;position:relative}
+  .carousel{width:100%;height:100%;position:relative;transform-style:preserve-3d;animation:carouselSpin 12s linear infinite}
+  @keyframes carouselSpin{from{transform:rotateY(0)}to{transform:rotateY(360deg)}}
+  .carousel-item{position:absolute;width:160px;height:120px;left:40px;top:20px;border-radius:12px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:6px;font-weight:600;font-size:.85rem;border:1px solid var(--border);background:rgba(30,41,59,.9);backface-visibility:visible}
+  .carousel-item:nth-child(1){transform:rotateY(0deg) translateZ(160px)}
+  .carousel-item:nth-child(2){transform:rotateY(60deg) translateZ(160px)}
+  .carousel-item:nth-child(3){transform:rotateY(120deg) translateZ(160px)}
+  .carousel-item:nth-child(4){transform:rotateY(180deg) translateZ(160px)}
+  .carousel-item:nth-child(5){transform:rotateY(240deg) translateZ(160px)}
+  .carousel-item:nth-child(6){transform:rotateY(300deg) translateZ(160px)}
+  .carousel-icon{font-size:1.6rem}
+
+  /* 6. Folding Panel */
+  .fold-container{width:240px;cursor:pointer;perspective:800px}
+  .fold-top{background:linear-gradient(135deg,var(--cyan-dark),var(--cyan));border-radius:14px 14px 0 0;padding:24px;text-align:center;color:var(--dark-bg);font-weight:700;position:relative;z-index:2}
+  .fold-bottom-wrap{transform-origin:top center;transform-style:preserve-3d;transition:transform .6s ease}
+  .fold-container:hover .fold-bottom-wrap{transform:rotateX(-180deg)}
+  .fold-bottom{background:var(--dark-bg);border:2px solid var(--cyan);border-top:none;border-radius:0 0 14px 14px;padding:20px;text-align:center;font-size:.85rem;color:var(--muted);backface-visibility:hidden}
+  .fold-back{position:absolute;inset:0;background:var(--cyan);border-radius:0 0 14px 14px;transform:rotateX(180deg);backface-visibility:hidden;display:flex;align-items:center;justify-content:center;color:var(--dark-bg);font-weight:700;font-size:1rem}
+  .fold-bottom-wrap{position:relative}
+
+  @media(max-width:700px){
+    .grid{grid-template-columns:1fr}
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>3D CSS <span>Transformationen</span></h1>
+  <p>Sechs interaktive Demonstrations-Karten mit reinen CSS-3D-Effekten</p>
+</div>
+
+<div class="grid">
+
+  <!-- 1. Card Flip -->
+  <div class="demo-card">
+    <div class="demo-label">Effekt 1</div>
+    <div class="demo-title">Karten-Flip</div>
+    <div class="demo-area">
+      <div class="flip-container">
+        <div class="flip-inner">
+          <div class="flip-front">
+            <div>
+              <span class="flip-icon">&#9889;</span>
+              <span class="flip-label">Hover mich</span>
+            </div>
+          </div>
+          <div class="flip-back">
+            <div class="flip-stat">34ms</div>
+            <div class="flip-detail">Durchschnittliche Latenz</div>
+            <div class="flip-detail" style="color:var(--cyan);font-size:.75rem">99.9% Uptime</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. 3D Tilt -->
+  <div class="demo-card">
+    <div class="demo-label">Effekt 2</div>
+    <div class="demo-title">3D-Neigung (Mausverfolgung)</div>
+    <div class="demo-area">
+      <div class="tilt-card" id="tiltCard">
+        <div class="tilt-shine" id="tiltShine"></div>
+        <span class="tilt-icon">&#128171;</span>
+        <span class="tilt-text">Bewege die Maus</span>
+        <span class="tilt-sub">uber diese Karte</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. Rotating Cube -->
+  <div class="demo-card">
+    <div class="demo-label">Effekt 3</div>
+    <div class="demo-title">Rotierender Wurfel</div>
+    <div class="demo-area">
+      <div class="cube-scene">
+        <div class="cube">
+          <div class="cube-face front"><div><span class="face-icon">&#9889;</span><br>Events</div></div>
+          <div class="cube-face back"><div><span class="face-icon">&#129302;</span><br>AI</div></div>
+          <div class="cube-face right"><div><span class="face-icon">&#128200;</span><br>Analytics</div></div>
+          <div class="cube-face left"><div><span class="face-icon">&#128172;</span><br>Chat</div></div>
+          <div class="cube-face top"><div><span class="face-icon">&#128274;</span><br>Sicherheit</div></div>
+          <div class="cube-face bottom"><div><span class="face-icon">&#128640;</span><br>Deploy</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4. Perspective Zoom -->
+  <div class="demo-card">
+    <div class="demo-label">Effekt 4</div>
+    <div class="demo-title">Perspektiv-Zoom</div>
+    <div class="demo-area">
+      <div class="zoom-container">
+        <div class="zoom-layers">
+          <div class="zoom-layer l1">Hintergrund</div>
+          <div class="zoom-layer l2"></div>
+          <div class="zoom-layer l3">{{BRAND_NAME}}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5. 3D Carousel -->
+  <div class="demo-card">
+    <div class="demo-label">Effekt 5</div>
+    <div class="demo-title">3D-Karussell</div>
+    <div class="demo-area">
+      <div class="carousel-scene">
+        <div class="carousel">
+          <div class="carousel-item"><span class="carousel-icon">&#9889;</span>Events</div>
+          <div class="carousel-item"><span class="carousel-icon">&#129302;</span>AI</div>
+          <div class="carousel-item"><span class="carousel-icon">&#128200;</span>Daten</div>
+          <div class="carousel-item"><span class="carousel-icon">&#128172;</span>Bot</div>
+          <div class="carousel-item"><span class="carousel-icon">&#128274;</span>Sicher</div>
+          <div class="carousel-item"><span class="carousel-icon">&#128640;</span>Deploy</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 6. Folding Panel -->
+  <div class="demo-card">
+    <div class="demo-label">Effekt 6</div>
+    <div class="demo-title">Falt-Panel</div>
+    <div class="demo-area">
+      <div class="fold-container">
+        <div class="fold-top">
+          &#128230; {{BRAND_NAME}} Pro
+        </div>
+        <div class="fold-bottom-wrap">
+          <div class="fold-bottom">
+            <p>CHF 49 / Monat</p>
+            <p>100'000 Events inkl.</p>
+          </div>
+          <div class="fold-back">Jetzt starten &#8594;</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// 3D Tilt Effect
+const tiltCard = document.getElementById('tiltCard');
+const tiltShine = document.getElementById('tiltShine');
+
+tiltCard.addEventListener('mousemove', (e) => {
+  const rect = tiltCard.getBoundingClientRect();
+  const x = e.clientX - rect.left;
+  const y = e.clientY - rect.top;
+  const centerX = rect.width / 2;
+  const centerY = rect.height / 2;
+
+  const rotateX = ((y - centerY) / centerY) * -15;
+  const rotateY = ((x - centerX) / centerX) * 15;
+
+  tiltCard.style.transform = `perspective(600px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.05)`;
+  tiltCard.style.boxShadow = `${-rotateY * 1.5}px ${rotateX * 1.5}px 30px rgba({{PRIMARY_RGB}},.2)`;
+
+  tiltShine.style.opacity = '1';
+  tiltShine.style.background = `radial-gradient(circle at ${x}px ${y}px, rgba({{PRIMARY_RGB}},.25), transparent 60%)`;
+});
+
+tiltCard.addEventListener('mouseleave', () => {
+  tiltCard.style.transform = 'perspective(600px) rotateX(0) rotateY(0) scale(1)';
+  tiltCard.style.boxShadow = 'none';
+  tiltShine.style.opacity = '0';
+});
+</script>
+</body>
+</html>

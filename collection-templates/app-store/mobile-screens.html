@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{BRAND_NAME}} - Mobile App Screens</title>
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  :root{--dark-bg:{{BG}};--cyan:{{PRIMARY}};--cyan-dark:{{PRIMARY_DARK}};--cloud:{{TEXT}};--muted:{{MUTED}};--surface:#1e293b;--card:rgba(255,255,255,.06)}
+  body{font-family:system-ui,-apple-system,sans-serif;background:#080e1e;color:var(--cloud);min-height:100vh;padding:40px 20px}
+  .container{max-width:1400px;margin:0 auto;text-align:center}
+  h1{font-size:2.2rem;font-weight:700;margin-bottom:6px;background:linear-gradient(135deg,var(--cyan),var(--cyan-dark));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+  .subtitle{color:var(--muted);margin-bottom:48px}
+  .phones{display:flex;justify-content:center;gap:32px;flex-wrap:wrap;align-items:flex-start}
+
+  /* Phone Frame */
+  .phone{width:375px;border-radius:44px;background:var(--dark-bg);border:3px solid #2d3748;position:relative;overflow:hidden;box-shadow:0 24px 60px rgba(0,0,0,.5),inset 0 0 0 1px rgba(255,255,255,.05);flex-shrink:0}
+  .phone-inner{height:812px;overflow:hidden;position:relative}
+  .notch{position:absolute;top:0;left:50%;transform:translateX(-50%);width:150px;height:30px;background:#000;border-radius:0 0 20px 20px;z-index:10}
+  .status-bar{display:flex;justify-content:space-between;align-items:center;padding:12px 24px 0;font-size:12px;font-weight:600;position:relative;z-index:5}
+  .status-bar .time{margin-left:4px}
+  .status-bar .icons{display:flex;gap:6px;margin-right:4px}
+  .status-bar .icons svg{width:14px;height:14px;fill:var(--cloud)}
+  .screen-label{margin-top:16px;font-size:.85rem;color:var(--muted);font-weight:500}
+
+  /* Screen Content Area */
+  .screen{padding:52px 16px 16px;height:100%}
+
+  /* Screen 1: Dashboard */
+  .dash-header{display:flex;justify-content:space-between;align-items:center;padding:12px 0 16px}
+  .dash-greeting{font-size:1.3rem;font-weight:700}
+  .dash-avatar{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--cyan-dark),var(--cyan));display:flex;align-items:center;justify-content:center;font-size:.8rem;font-weight:700;color:var(--dark-bg)}
+  .stat-cards{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px}
+  .stat-card{background:var(--card);border-radius:14px;padding:14px;text-align:left}
+  .stat-card .label{font-size:.7rem;color:var(--muted);margin-bottom:4px}
+  .stat-card .value{font-size:1.3rem;font-weight:700}
+  .stat-card .change{font-size:.7rem;margin-top:4px}
+  .stat-card .change.up{color:#48bb78}
+  .stat-card .change.down{color:#fc8181}
+  .mini-chart{background:var(--card);border-radius:14px;padding:16px;margin-bottom:16px}
+  .mini-chart .chart-title{font-size:.8rem;color:var(--muted);margin-bottom:12px}
+  .chart-bars{display:flex;align-items:flex-end;gap:6px;height:100px}
+  .chart-bar{flex:1;border-radius:4px 4px 0 0;background:linear-gradient(180deg,var(--cyan),var(--cyan-dark));min-width:0;transition:height .3s}
+  .quick-actions{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+  .qa-btn{background:var(--card);border-radius:12px;padding:12px 4px;text-align:center}
+  .qa-btn svg{width:20px;height:20px;margin-bottom:4px}
+  .qa-btn .qa-label{font-size:.65rem;color:var(--muted)}
+
+  /* Screen 2: Event List */
+  .pull-indicator{text-align:center;padding:8px 0 12px}
+  .pull-indicator .arrow{display:inline-block;color:var(--muted);font-size:.75rem}
+  .pull-indicator svg{width:20px;height:20px;fill:var(--muted);animation:pullBounce 1.5s ease infinite}
+  @keyframes pullBounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
+  .event-tabs{display:flex;gap:0;margin-bottom:14px;background:rgba(255,255,255,.04);border-radius:10px;padding:3px}
+  .ev-tab{flex:1;padding:8px;font-size:.78rem;font-weight:600;text-align:center;border-radius:8px;color:var(--muted);cursor:pointer}
+  .ev-tab.active{background:rgba({{PRIMARY_RGB}},.12);color:var(--cyan)}
+  .search-bar{background:var(--card);border-radius:10px;padding:10px 14px;font-size:.82rem;color:var(--muted);margin-bottom:14px;display:flex;align-items:center;gap:8px}
+  .search-bar svg{width:16px;height:16px;fill:var(--muted);flex-shrink:0}
+  .event-item{background:var(--card);border-radius:12px;padding:14px;margin-bottom:8px;display:flex;align-items:center;gap:12px}
+  .ev-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+  .ev-dot.success{background:#48bb78}
+  .ev-dot.warn{background:#ed8936}
+  .ev-dot.error{background:#fc8181}
+  .ev-dot.info{background:var(--cyan)}
+  .ev-content{flex:1;min-width:0}
+  .ev-name{font-size:.85rem;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .ev-meta{font-size:.7rem;color:var(--muted);margin-top:2px}
+  .ev-time{font-size:.7rem;color:var(--muted);white-space:nowrap}
+
+  /* Screen 3: Event Detail */
+  .detail-back{display:flex;align-items:center;gap:6px;color:var(--cyan);font-size:.85rem;font-weight:600;padding:8px 0 16px}
+  .detail-back svg{width:18px;height:18px;fill:var(--cyan)}
+  .detail-title{font-size:1.2rem;font-weight:700;margin-bottom:4px}
+  .detail-id{font-size:.75rem;color:var(--muted);margin-bottom:16px;font-family:monospace}
+  .detail-badges{display:flex;gap:8px;margin-bottom:16px}
+  .detail-badge{padding:5px 12px;border-radius:8px;font-size:.72rem;font-weight:600}
+  .detail-badge.success{background:rgba(72,187,120,.12);color:#48bb78}
+  .detail-badge.type{background:rgba({{PRIMARY_RGB}},.12);color:var(--cyan)}
+  .json-block{background:#0a0f1e;border:1px solid rgba(255,255,255,.06);border-radius:12px;padding:14px;font-family:'SF Mono',Monaco,Consolas,monospace;font-size:.72rem;line-height:1.7;overflow-x:auto;text-align:left;margin-bottom:16px}
+  .json-key{color:var(--cyan)}
+  .json-str{color:#48bb78}
+  .json-num{color:#ed8936}
+  .json-bool{color:#9f7aea}
+  .detail-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  .detail-btn{padding:12px;border-radius:10px;font-size:.82rem;font-weight:600;text-align:center}
+  .detail-btn.primary{background:var(--cyan);color:var(--dark-bg)}
+  .detail-btn.secondary{background:var(--card);color:var(--cloud)}
+
+  /* Screen 4: Settings */
+  .settings-header{font-size:1.3rem;font-weight:700;padding:12px 0 20px;text-align:center}
+  .settings-avatar-wrap{text-align:center;margin-bottom:20px}
+  .settings-avatar{width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,var(--cyan-dark),var(--cyan));display:inline-flex;align-items:center;justify-content:center;font-size:1.3rem;font-weight:700;color:var(--dark-bg)}
+  .settings-name{font-weight:600;margin-top:8px;font-size:.95rem}
+  .settings-email{font-size:.78rem;color:var(--muted)}
+  .settings-group{margin-bottom:16px}
+  .settings-group-label{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--muted);padding:0 4px 8px}
+  .setting-item{display:flex;justify-content:space-between;align-items:center;padding:14px;background:var(--card);margin-bottom:2px}
+  .setting-item:first-of-type{border-radius:12px 12px 0 0}
+  .setting-item:last-of-type{border-radius:0 0 12px 12px;margin-bottom:0}
+  .setting-item:only-of-type{border-radius:12px}
+  .setting-left{display:flex;align-items:center;gap:12px}
+  .setting-icon{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center}
+  .setting-icon svg{width:16px;height:16px}
+  .setting-label{font-size:.88rem;font-weight:500}
+  .toggle{width:44px;height:26px;border-radius:13px;position:relative;cursor:pointer;transition:background .2s}
+  .toggle.on{background:var(--cyan)}
+  .toggle.off{background:#4a5568}
+  .toggle::after{content:'';width:22px;height:22px;border-radius:50%;background:#fff;position:absolute;top:2px;transition:left .2s}
+  .toggle.on::after{left:20px}
+  .toggle.off::after{left:2px}
+  .setting-arrow{color:var(--muted);font-size:1.1rem}
+
+  /* Bottom Nav */
+  .bottom-nav{position:absolute;bottom:0;left:0;right:0;display:flex;justify-content:space-around;align-items:center;padding:8px 0 28px;background:rgba(15,23,42,.95);border-top:1px solid rgba(255,255,255,.06);backdrop-filter:blur(10px)}
+  .nav-item{text-align:center;flex:1}
+  .nav-item svg{width:22px;height:22px;fill:var(--muted)}
+  .nav-item.active svg{fill:var(--cyan)}
+  .nav-label{font-size:.62rem;margin-top:2px;color:var(--muted)}
+  .nav-item.active .nav-label{color:var(--cyan)}
+
+  @media(max-width:800px){.phones{gap:20px}.phone{width:320px;transform:scale(.85);transform-origin:top center}}
+  @media(max-width:500px){.phones{gap:10px}.phone{transform:scale(.7);margin:-40px -20px}}
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>Mobile App Screens</h1>
+  <p class="subtitle">{{BRAND_NAME}} App - Vier zentrale Ansichten</p>
+  <div class="phones">
+
+    <!-- Screen 1: Dashboard -->
+    <div>
+    <div class="phone">
+      <div class="phone-inner">
+        <div class="notch"></div>
+        <div class="screen">
+          <div class="status-bar"><span class="time">09:41</span><span class="icons"><svg viewBox="0 0 24 24"><path d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.08 2.93 1 9zm8 8l3 3 3-3a4.24 4.24 0 0 0-6 0zm-4-4l2 2a7.07 7.07 0 0 1 10 0l2-2C15.14 9.14 8.87 9.14 5 13z"/></svg><svg viewBox="0 0 24 24"><path d="M15.67 4H14V2h-4v2H8.33C7.6 4 7 4.6 7 5.33v15.33C7 21.4 7.6 22 8.33 22h7.33c.74 0 1.34-.6 1.34-1.33V5.33C17 4.6 16.4 4 15.67 4z"/></svg></span></div>
+          <div class="dash-header">
+            <div class="dash-greeting">Hallo, Jonas</div>
+            <div class="dash-avatar">JB</div>
+          </div>
+          <div class="stat-cards">
+            <div class="stat-card"><div class="label">Events heute</div><div class="value" style="color:var(--cyan)">1.247</div><div class="change up">+12.4%</div></div>
+            <div class="stat-card"><div class="label">Aktive Streams</div><div class="value">9</div><div class="change up">+2 neu</div></div>
+            <div class="stat-card"><div class="label">Latenz</div><div class="value">8ms</div><div class="change up">-3ms</div></div>
+            <div class="stat-card"><div class="label">Fehlerrate</div><div class="value" style="color:#48bb78">0.02%</div><div class="change down">+0.01%</div></div>
+          </div>
+          <div class="mini-chart">
+            <div class="chart-title">Events letzte 7 Tage</div>
+            <div class="chart-bars">
+              <div class="chart-bar" style="height:45%"></div>
+              <div class="chart-bar" style="height:62%"></div>
+              <div class="chart-bar" style="height:55%"></div>
+              <div class="chart-bar" style="height:78%"></div>
+              <div class="chart-bar" style="height:70%"></div>
+              <div class="chart-bar" style="height:88%"></div>
+              <div class="chart-bar" style="height:95%"></div>
+            </div>
+          </div>
+          <div class="quick-actions">
+            <div class="qa-btn"><svg viewBox="0 0 24 24" fill="none" stroke="var(--cyan)" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg><div class="qa-label">Neuer Event</div></div>
+            <div class="qa-btn"><svg viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h16"/></svg><div class="qa-label">Streams</div></div>
+            <div class="qa-btn"><svg viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg><div class="qa-label">Suche</div></div>
+            <div class="qa-btn"><svg viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 0 1-3.46 0"/></svg><div class="qa-label">Alerts</div></div>
+          </div>
+        </div>
+        <div class="bottom-nav">
+          <div class="nav-item active"><svg viewBox="0 0 24 24"><path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/></svg><div class="nav-label">Dashboard</div></div>
+          <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg><div class="nav-label">Events</div></div>
+          <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg><div class="nav-label">Streams</div></div>
+          <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M19.14 12.94a7.07 7.07 0 0 0 .06-.94 7.07 7.07 0 0 0-.06-.94l2.03-1.58a.49.49 0 0 0 .12-.61l-1.92-3.32a.49.49 0 0 0-.59-.22l-2.39.96a7.04 7.04 0 0 0-1.62-.94l-.36-2.54a.48.48 0 0 0-.48-.41h-3.84a.48.48 0 0 0-.48.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96a.49.49 0 0 0-.59.22L2.74 8.87a.48.48 0 0 0 .12.61l2.03 1.58a7.07 7.07 0 0 0-.06.94c0 .32.02.64.06.94L2.86 14.5a.49.49 0 0 0-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.36 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.48-.41l.36-2.54c.59-.24 1.13-.57 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.03-1.58zM12 15.6A3.6 3.6 0 1 1 12 8.4a3.6 3.6 0 0 1 0 7.2z"/></svg><div class="nav-label">Mehr</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="screen-label">Dashboard</div>
+    </div>
+
+    <!-- Screen 2: Event List -->
+    <div>
+    <div class="phone">
+      <div class="phone-inner">
+        <div class="notch"></div>
+        <div class="screen">
+          <div class="status-bar"><span class="time">09:41</span><span class="icons"><svg viewBox="0 0 24 24"><path d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.08 2.93 1 9zm8 8l3 3 3-3a4.24 4.24 0 0 0-6 0zm-4-4l2 2a7.07 7.07 0 0 1 10 0l2-2C15.14 9.14 8.87 9.14 5 13z"/></svg><svg viewBox="0 0 24 24"><path d="M15.67 4H14V2h-4v2H8.33C7.6 4 7 4.6 7 5.33v15.33C7 21.4 7.6 22 8.33 22h7.33c.74 0 1.34-.6 1.34-1.33V5.33C17 4.6 16.4 4 15.67 4z"/></svg></span></div>
+          <div class="pull-indicator">
+            <svg viewBox="0 0 24 24"><path d="M12 4l-6 6h4v4h4v-4h4l-6-6zm-6 10v2h12v-2H6z"/></svg>
+            <div class="arrow">Zum Aktualisieren herunterziehen</div>
+          </div>
+          <div class="event-tabs">
+            <div class="ev-tab active">Alle</div>
+            <div class="ev-tab">Erfolg</div>
+            <div class="ev-tab">Fehler</div>
+            <div class="ev-tab">Warnung</div>
+          </div>
+          <div class="search-bar"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8" fill="none" stroke="{{MUTED}}" stroke-width="2"/><path d="M21 21l-4.35-4.35" fill="none" stroke="{{MUTED}}" stroke-width="2"/></svg> Events durchsuchen...</div>
+          <div class="event-item"><div class="ev-dot success"></div><div class="ev-content"><div class="ev-name">user.session.started</div><div class="ev-meta">Stream: auth-events</div></div><div class="ev-time">Jetzt</div></div>
+          <div class="event-item"><div class="ev-dot success"></div><div class="ev-content"><div class="ev-name">payment.completed</div><div class="ev-meta">Stream: billing</div></div><div class="ev-time">2 Min</div></div>
+          <div class="event-item"><div class="ev-dot warn"></div><div class="ev-content"><div class="ev-name">api.rate_limit.warning</div><div class="ev-meta">Stream: monitoring</div></div><div class="ev-time">5 Min</div></div>
+          <div class="event-item"><div class="ev-dot error"></div><div class="ev-content"><div class="ev-name">webhook.delivery.failed</div><div class="ev-meta">Stream: webhooks</div></div><div class="ev-time">8 Min</div></div>
+          <div class="event-item"><div class="ev-dot info"></div><div class="ev-content"><div class="ev-name">ai.analysis.completed</div><div class="ev-meta">Stream: ai-pipeline</div></div><div class="ev-time">12 Min</div></div>
+          <div class="event-item"><div class="ev-dot success"></div><div class="ev-content"><div class="ev-name">data.export.finished</div><div class="ev-meta">Stream: exports</div></div><div class="ev-time">15 Min</div></div>
+        </div>
+        <div class="bottom-nav">
+          <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/></svg><div class="nav-label">Dashboard</div></div>
+          <div class="nav-item active"><svg viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg><div class="nav-label">Events</div></div>
+          <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg><div class="nav-label">Streams</div></div>
+          <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M19.14 12.94a7.07 7.07 0 0 0 .06-.94 7.07 7.07 0 0 0-.06-.94l2.03-1.58a.49.49 0 0 0 .12-.61l-1.92-3.32a.49.49 0 0 0-.59-.22l-2.39.96a7.04 7.04 0 0 0-1.62-.94l-.36-2.54a.48.48 0 0 0-.48-.41h-3.84a.48.48 0 0 0-.48.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96a.49.49 0 0 0-.59.22L2.74 8.87a.48.48 0 0 0 .12.61l2.03 1.58a7.07 7.07 0 0 0-.06.94c0 .32.02.64.06.94L2.86 14.5a.49.49 0 0 0-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.36 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.48-.41l.36-2.54c.59-.24 1.13-.57 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.03-1.58zM12 15.6A3.6 3.6 0 1 1 12 8.4a3.6 3.6 0 0 1 0 7.2z"/></svg><div class="nav-label">Mehr</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="screen-label">Event-Liste</div>
+    </div>
+
+    <!-- Screen 3: Event Detail -->
+    <div>
+    <div class="phone">
+      <div class="phone-inner">
+        <div class="notch"></div>
+        <div class="screen">
+          <div class="status-bar"><span class="time">09:41</span><span class="icons"><svg viewBox="0 0 24 24"><path d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.08 2.93 1 9zm8 8l3 3 3-3a4.24 4.24 0 0 0-6 0zm-4-4l2 2a7.07 7.07 0 0 1 10 0l2-2C15.14 9.14 8.87 9.14 5 13z"/></svg><svg viewBox="0 0 24 24"><path d="M15.67 4H14V2h-4v2H8.33C7.6 4 7 4.6 7 5.33v15.33C7 21.4 7.6 22 8.33 22h7.33c.74 0 1.34-.6 1.34-1.33V5.33C17 4.6 16.4 4 15.67 4z"/></svg></span></div>
+          <div class="detail-back"><svg viewBox="0 0 24 24"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg> Zurueck</div>
+          <div class="detail-title">payment.completed</div>
+          <div class="detail-id">evt_2f8a3c91-e4b7-4d2f-a1c3-8f92d4e6b7a1</div>
+          <div class="detail-badges">
+            <div class="detail-badge success">Erfolgreich</div>
+            <div class="detail-badge type">billing</div>
+          </div>
+          <div class="json-block"><span class="json-key">{</span><br>&nbsp;&nbsp;<span class="json-key">"event"</span>: <span class="json-str">"payment.completed"</span>,<br>&nbsp;&nbsp;<span class="json-key">"timestamp"</span>: <span class="json-str">"2026-02-10T09:38:12Z"</span>,<br>&nbsp;&nbsp;<span class="json-key">"data"</span>: {<br>&nbsp;&nbsp;&nbsp;&nbsp;<span class="json-key">"amount"</span>: <span class="json-num">49.90</span>,<br>&nbsp;&nbsp;&nbsp;&nbsp;<span class="json-key">"currency"</span>: <span class="json-str">"CHF"</span>,<br>&nbsp;&nbsp;&nbsp;&nbsp;<span class="json-key">"customer_id"</span>: <span class="json-str">"cus_8x2k"</span>,<br>&nbsp;&nbsp;&nbsp;&nbsp;<span class="json-key">"plan"</span>: <span class="json-str">"pro"</span>,<br>&nbsp;&nbsp;&nbsp;&nbsp;<span class="json-key">"recurring"</span>: <span class="json-bool">true</span><br>&nbsp;&nbsp;},<br>&nbsp;&nbsp;<span class="json-key">"metadata"</span>: {<br>&nbsp;&nbsp;&nbsp;&nbsp;<span class="json-key">"source"</span>: <span class="json-str">"stripe"</span>,<br>&nbsp;&nbsp;&nbsp;&nbsp;<span class="json-key">"latency_ms"</span>: <span class="json-num">7</span><br>&nbsp;&nbsp;}<br><span class="json-key">}</span></div>
+          <div class="detail-actions">
+            <div class="detail-btn primary">Erneut senden</div>
+            <div class="detail-btn secondary">JSON kopieren</div>
+          </div>
+        </div>
+        <div class="bottom-nav">
+          <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/></svg><div class="nav-label">Dashboard</div></div>
+          <div class="nav-item active"><svg viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg><div class="nav-label">Events</div></div>
+          <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg><div class="nav-label">Streams</div></div>
+          <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M19.14 12.94a7.07 7.07 0 0 0 .06-.94 7.07 7.07 0 0 0-.06-.94l2.03-1.58a.49.49 0 0 0 .12-.61l-1.92-3.32a.49.49 0 0 0-.59-.22l-2.39.96a7.04 7.04 0 0 0-1.62-.94l-.36-2.54a.48.48 0 0 0-.48-.41h-3.84a.48.48 0 0 0-.48.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96a.49.49 0 0 0-.59.22L2.74 8.87a.48.48 0 0 0 .12.61l2.03 1.58a7.07 7.07 0 0 0-.06.94c0 .32.02.64.06.94L2.86 14.5a.49.49 0 0 0-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.36 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.48-.41l.36-2.54c.59-.24 1.13-.57 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.03-1.58zM12 15.6A3.6 3.6 0 1 1 12 8.4a3.6 3.6 0 0 1 0 7.2z"/></svg><div class="nav-label">Mehr</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="screen-label">Event-Detail</div>
+    </div>
+
+    <!-- Screen 4: Settings -->
+    <div>
+    <div class="phone">
+      <div class="phone-inner">
+        <div class="notch"></div>
+        <div class="screen" style="overflow-y:auto">
+          <div class="status-bar"><span class="time">09:41</span><span class="icons"><svg viewBox="0 0 24 24"><path d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.08 2.93 1 9zm8 8l3 3 3-3a4.24 4.24 0 0 0-6 0zm-4-4l2 2a7.07 7.07 0 0 1 10 0l2-2C15.14 9.14 8.87 9.14 5 13z"/></svg><svg viewBox="0 0 24 24"><path d="M15.67 4H14V2h-4v2H8.33C7.6 4 7 4.6 7 5.33v15.33C7 21.4 7.6 22 8.33 22h7.33c.74 0 1.34-.6 1.34-1.33V5.33C17 4.6 16.4 4 15.67 4z"/></svg></span></div>
+          <div class="settings-header">Einstellungen</div>
+          <div class="settings-avatar-wrap">
+            <div class="settings-avatar">JB</div>
+            <div class="settings-name">Jonas Braun</div>
+            <div class="settings-email">jonas@{{BRAND_DOMAIN}}</div>
+          </div>
+          <div class="settings-group">
+            <div class="settings-group-label">Benachrichtigungen</div>
+            <div class="setting-item"><div class="setting-left"><div class="setting-icon" style="background:rgba({{PRIMARY_RGB}},.12)"><svg viewBox="0 0 24 24" fill="none" stroke="var(--cyan)" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg></div><div class="setting-label">Push-Nachrichten</div></div><div class="toggle on"></div></div>
+            <div class="setting-item"><div class="setting-left"><div class="setting-icon" style="background:rgba({{PRIMARY_RGB}},.12)"><svg viewBox="0 0 24 24" fill="none" stroke="var(--cyan)" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 7l-10 7L2 7"/></svg></div><div class="setting-label">E-Mail Alerts</div></div><div class="toggle on"></div></div>
+            <div class="setting-item"><div class="setting-left"><div class="setting-icon" style="background:rgba(252,129,129,.12)"><svg viewBox="0 0 24 24" fill="none" stroke="#fc8181" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div><div class="setting-label">Fehler-Alerts</div></div><div class="toggle on"></div></div>
+          </div>
+          <div class="settings-group">
+            <div class="settings-group-label">Allgemein</div>
+            <div class="setting-item"><div class="setting-left"><div class="setting-icon" style="background:rgba(159,122,234,.12)"><svg viewBox="0 0 24 24" fill="none" stroke="#9f7aea" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2m0 18v2M4.22 4.22l1.42 1.42m12.72 12.72l1.42 1.42M1 12h2m18 0h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg></div><div class="setting-label">Dark Mode</div></div><div class="toggle on"></div></div>
+            <div class="setting-item"><div class="setting-left"><div class="setting-icon" style="background:rgba(237,137,54,.12)"><svg viewBox="0 0 24 24" fill="none" stroke="#ed8936" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div><div class="setting-label">Biometrie</div></div><div class="toggle off"></div></div>
+            <div class="setting-item"><div class="setting-left"><div class="setting-icon" style="background:rgba(72,187,120,.12)"><svg viewBox="0 0 24 24" fill="none" stroke="#48bb78" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></div><div class="setting-label">Offline-Modus</div></div><div class="toggle off"></div></div>
+          </div>
+          <div class="settings-group">
+            <div class="settings-group-label">Konto</div>
+            <div class="setting-item"><div class="setting-left"><div class="setting-icon" style="background:rgba(255,255,255,.05)"><svg viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div><div class="setting-label">Profil bearbeiten</div></div><div class="setting-arrow">&rsaquo;</div></div>
+            <div class="setting-item"><div class="setting-left"><div class="setting-icon" style="background:rgba(255,255,255,.05)"><svg viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div><div class="setting-label">Sicherheit</div></div><div class="setting-arrow">&rsaquo;</div></div>
+          </div>
+        </div>
+        <div class="bottom-nav">
+          <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/></svg><div class="nav-label">Dashboard</div></div>
+          <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg><div class="nav-label">Events</div></div>
+          <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg><div class="nav-label">Streams</div></div>
+          <div class="nav-item active"><svg viewBox="0 0 24 24"><path d="M19.14 12.94a7.07 7.07 0 0 0 .06-.94 7.07 7.07 0 0 0-.06-.94l2.03-1.58a.49.49 0 0 0 .12-.61l-1.92-3.32a.49.49 0 0 0-.59-.22l-2.39.96a7.04 7.04 0 0 0-1.62-.94l-.36-2.54a.48.48 0 0 0-.48-.41h-3.84a.48.48 0 0 0-.48.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96a.49.49 0 0 0-.59.22L2.74 8.87a.48.48 0 0 0 .12.61l2.03 1.58a7.07 7.07 0 0 0-.06.94c0 .32.02.64.06.94L2.86 14.5a.49.49 0 0 0-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.36 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.48-.41l.36-2.54c.59-.24 1.13-.57 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.03-1.58zM12 15.6A3.6 3.6 0 1 1 12 8.4a3.6 3.6 0 0 1 0 7.2z"/></svg><div class="nav-label">Mehr</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="screen-label">Einstellungen</div>
+    </div>
+
+  </div>
+</div>
+</body>
+</html>

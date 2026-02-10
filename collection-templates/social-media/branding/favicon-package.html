@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{BRAND_NAME}} - Favicon Package</title>
+<style>
+  :root {
+    --dark-bg: {{BG}};
+    --cyan: {{PRIMARY}};
+    --cyan-dark: {{PRIMARY_DARK}};
+    --cloud: {{TEXT}};
+    --muted: {{MUTED}};
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #080e1e;
+    color: var(--cloud);
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    min-height: 100vh;
+    padding: 40px 20px;
+  }
+
+  .header {
+    text-align: center;
+    margin-bottom: 48px;
+  }
+
+  h1 { font-size: 28px; font-weight: 700; letter-spacing: 0.05em; margin-bottom: 8px; }
+  h1 span { color: var(--cyan); }
+  .subtitle { color: var(--muted); font-size: 14px; }
+
+  .favicon-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 32px;
+    justify-content: center;
+    max-width: 1200px;
+    margin: 0 auto 60px;
+  }
+
+  .favicon-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    padding: 24px;
+    background: var(--dark-bg);
+    border: 1px solid rgba({{PRIMARY_RGB}},0.1);
+    border-radius: 12px;
+    transition: border-color 0.2s;
+  }
+
+  .favicon-item:hover {
+    border-color: rgba({{PRIMARY_RGB}},0.3);
+  }
+
+  .favicon-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 80px;
+    min-height: 80px;
+  }
+
+  .favicon-container.large {
+    min-width: auto;
+    min-height: auto;
+  }
+
+  .favicon-label {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--cyan);
+    letter-spacing: 0.03em;
+  }
+
+  .favicon-use {
+    font-size: 11px;
+    color: var(--muted);
+    text-align: center;
+    max-width: 160px;
+    line-height: 1.4;
+  }
+
+  /* Checker background to show transparency */
+  .checker-bg {
+    background-image:
+      linear-gradient(45deg, rgba(255,255,255,0.03) 25%, transparent 25%),
+      linear-gradient(-45deg, rgba(255,255,255,0.03) 25%, transparent 25%),
+      linear-gradient(45deg, transparent 75%, rgba(255,255,255,0.03) 75%),
+      linear-gradient(-45deg, transparent 75%, rgba(255,255,255,0.03) 75%);
+    background-size: 8px 8px;
+    background-position: 0 0, 0 4px, 4px -4px, -4px 0px;
+    padding: 12px;
+    border-radius: 6px;
+  }
+
+  .code-section {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .code-section h2 {
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    text-align: center;
+  }
+
+  .code-section h2 span { color: var(--cyan); }
+
+  .code-desc {
+    text-align: center;
+    color: var(--muted);
+    font-size: 13px;
+    margin-bottom: 20px;
+  }
+
+  .code-block {
+    background: var(--dark-bg);
+    border: 1px solid rgba({{PRIMARY_RGB}},0.15);
+    border-radius: 12px;
+    padding: 24px;
+    overflow-x: auto;
+    position: relative;
+  }
+
+  .code-block pre {
+    font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', monospace;
+    font-size: 13px;
+    line-height: 1.7;
+    color: var(--cloud);
+    white-space: pre;
+    margin: 0;
+  }
+
+  .code-block .tag { color: var(--cyan); }
+  .code-block .attr { color: #b794f4; }
+  .code-block .val { color: #68d391; }
+  .code-block .cmt { color: var(--muted); font-style: italic; }
+
+  .code-label {
+    position: absolute;
+    top: 12px;
+    right: 16px;
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1><span>{{BRAND_NAME}}</span> Favicon Package</h1>
+  <p class="subtitle">Hexagon-E Favicon in allen Standardgroessen</p>
+</div>
+
+<div class="favicon-grid">
+
+  <!-- 16x16 -->
+  <div class="favicon-item">
+    <div class="favicon-container checker-bg">
+      <svg width="16" height="16" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <polygon points="32,2 60,17 60,47 32,62 4,47 4,17" fill="{{BG}}" stroke="{{PRIMARY}}" stroke-width="4"/>
+        <text x="32" y="44" text-anchor="middle" fill="{{PRIMARY}}" font-size="32" font-weight="800" font-family="system-ui, sans-serif">E</text>
+      </svg>
+    </div>
+    <span class="favicon-label">16 x 16</span>
+    <span class="favicon-use">Browser Tab Favicon</span>
+  </div>
+
+  <!-- 32x32 -->
+  <div class="favicon-item">
+    <div class="favicon-container checker-bg">
+      <svg width="32" height="32" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <polygon points="32,2 60,17 60,47 32,62 4,47 4,17" fill="{{BG}}" stroke="{{PRIMARY}}" stroke-width="3.5"/>
+        <text x="32" y="44" text-anchor="middle" fill="{{PRIMARY}}" font-size="32" font-weight="800" font-family="system-ui, sans-serif">E</text>
+      </svg>
+    </div>
+    <span class="favicon-label">32 x 32</span>
+    <span class="favicon-use">Standard Favicon</span>
+  </div>
+
+  <!-- 48x48 -->
+  <div class="favicon-item">
+    <div class="favicon-container checker-bg">
+      <svg width="48" height="48" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <polygon points="32,2 60,17 60,47 32,62 4,47 4,17" fill="{{BG}}" stroke="{{PRIMARY}}" stroke-width="3"/>
+        <text x="32" y="44" text-anchor="middle" fill="{{PRIMARY}}" font-size="32" font-weight="800" font-family="system-ui, sans-serif">E</text>
+      </svg>
+    </div>
+    <span class="favicon-label">48 x 48</span>
+    <span class="favicon-use">Windows Taskleiste</span>
+  </div>
+
+  <!-- 64x64 -->
+  <div class="favicon-item">
+    <div class="favicon-container checker-bg">
+      <svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <polygon points="32,2 60,17 60,47 32,62 4,47 4,17" fill="{{BG}}" stroke="{{PRIMARY}}" stroke-width="2.5"/>
+        <text x="32" y="44" text-anchor="middle" fill="{{PRIMARY}}" font-size="32" font-weight="800" font-family="system-ui, sans-serif">E</text>
+      </svg>
+    </div>
+    <span class="favicon-label">64 x 64</span>
+    <span class="favicon-use">Windows Website Shortcut</span>
+  </div>
+
+  <!-- 128x128 -->
+  <div class="favicon-item">
+    <div class="favicon-container checker-bg large">
+      <svg width="128" height="128" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <polygon points="32,2 60,17 60,47 32,62 4,47 4,17" fill="{{BG}}" stroke="{{PRIMARY}}" stroke-width="2"/>
+        <text x="32" y="44" text-anchor="middle" fill="{{PRIMARY}}" font-size="32" font-weight="800" font-family="system-ui, sans-serif">E</text>
+      </svg>
+    </div>
+    <span class="favicon-label">128 x 128</span>
+    <span class="favicon-use">Chrome Web Store</span>
+  </div>
+
+  <!-- 180x180 Apple Touch -->
+  <div class="favicon-item">
+    <div class="favicon-container checker-bg large">
+      <svg width="180" height="180" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect width="64" height="64" rx="12" fill="{{BG}}"/>
+        <polygon points="32,6 56,19 56,45 32,58 8,45 8,19" fill="none" stroke="{{PRIMARY}}" stroke-width="1.8"/>
+        <text x="32" y="42" text-anchor="middle" fill="{{PRIMARY}}" font-size="28" font-weight="800" font-family="system-ui, sans-serif">E</text>
+      </svg>
+    </div>
+    <span class="favicon-label">180 x 180</span>
+    <span class="favicon-use">Apple Touch Icon (iOS Homescreen)</span>
+  </div>
+
+  <!-- 192x192 Android -->
+  <div class="favicon-item">
+    <div class="favicon-container checker-bg large">
+      <svg width="192" height="192" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect width="64" height="64" rx="12" fill="{{BG}}"/>
+        <polygon points="32,6 56,19 56,45 32,58 8,45 8,19" fill="none" stroke="{{PRIMARY}}" stroke-width="1.8"/>
+        <text x="32" y="42" text-anchor="middle" fill="{{PRIMARY}}" font-size="28" font-weight="800" font-family="system-ui, sans-serif">E</text>
+      </svg>
+    </div>
+    <span class="favicon-label">192 x 192</span>
+    <span class="favicon-use">Android Chrome Icon</span>
+  </div>
+
+  <!-- 512x512 PWA -->
+  <div class="favicon-item">
+    <div class="favicon-container checker-bg large">
+      <svg width="240" height="240" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect width="64" height="64" rx="10" fill="{{BG}}"/>
+        <polygon points="32,6 56,19 56,45 32,58 8,45 8,19" fill="none" stroke="{{PRIMARY}}" stroke-width="1.5"/>
+        <text x="32" y="42" text-anchor="middle" fill="{{PRIMARY}}" font-size="28" font-weight="800" font-family="system-ui, sans-serif">E</text>
+      </svg>
+    </div>
+    <span class="favicon-label">512 x 512</span>
+    <span class="favicon-use">PWA Splash Icon (hier 240px Vorschau)</span>
+  </div>
+
+</div>
+
+<!-- Meta Tags Code Block -->
+<div class="code-section">
+  <h2>HTML <span>Meta Tags</span></h2>
+  <p class="code-desc">Diesen Code in den &lt;head&gt;-Bereich deiner Website einfuegen:</p>
+
+  <div class="code-block">
+    <span class="code-label">HTML</span>
+    <pre><span class="cmt">&lt;!-- {{BRAND_NAME}} Favicon Package --&gt;</span>
+
+<span class="cmt">&lt;!-- Standard Favicons --&gt;</span>
+<span class="tag">&lt;link</span> <span class="attr">rel=</span><span class="val">"icon"</span> <span class="attr">type=</span><span class="val">"image/svg+xml"</span> <span class="attr">href=</span><span class="val">"/favicon.svg"</span><span class="tag">&gt;</span>
+<span class="tag">&lt;link</span> <span class="attr">rel=</span><span class="val">"icon"</span> <span class="attr">type=</span><span class="val">"image/png"</span> <span class="attr">sizes=</span><span class="val">"16x16"</span> <span class="attr">href=</span><span class="val">"/favicon-16x16.png"</span><span class="tag">&gt;</span>
+<span class="tag">&lt;link</span> <span class="attr">rel=</span><span class="val">"icon"</span> <span class="attr">type=</span><span class="val">"image/png"</span> <span class="attr">sizes=</span><span class="val">"32x32"</span> <span class="attr">href=</span><span class="val">"/favicon-32x32.png"</span><span class="tag">&gt;</span>
+<span class="tag">&lt;link</span> <span class="attr">rel=</span><span class="val">"icon"</span> <span class="attr">type=</span><span class="val">"image/png"</span> <span class="attr">sizes=</span><span class="val">"48x48"</span> <span class="attr">href=</span><span class="val">"/favicon-48x48.png"</span><span class="tag">&gt;</span>
+
+<span class="cmt">&lt;!-- Apple Touch Icon --&gt;</span>
+<span class="tag">&lt;link</span> <span class="attr">rel=</span><span class="val">"apple-touch-icon"</span> <span class="attr">sizes=</span><span class="val">"180x180"</span> <span class="attr">href=</span><span class="val">"/apple-touch-icon.png"</span><span class="tag">&gt;</span>
+
+<span class="cmt">&lt;!-- Android / Chrome --&gt;</span>
+<span class="tag">&lt;link</span> <span class="attr">rel=</span><span class="val">"icon"</span> <span class="attr">type=</span><span class="val">"image/png"</span> <span class="attr">sizes=</span><span class="val">"192x192"</span> <span class="attr">href=</span><span class="val">"/android-chrome-192x192.png"</span><span class="tag">&gt;</span>
+<span class="tag">&lt;link</span> <span class="attr">rel=</span><span class="val">"icon"</span> <span class="attr">type=</span><span class="val">"image/png"</span> <span class="attr">sizes=</span><span class="val">"512x512"</span> <span class="attr">href=</span><span class="val">"/android-chrome-512x512.png"</span><span class="tag">&gt;</span>
+
+<span class="cmt">&lt;!-- Web App Manifest --&gt;</span>
+<span class="tag">&lt;link</span> <span class="attr">rel=</span><span class="val">"manifest"</span> <span class="attr">href=</span><span class="val">"/site.webmanifest"</span><span class="tag">&gt;</span>
+
+<span class="cmt">&lt;!-- Microsoft --&gt;</span>
+<span class="tag">&lt;meta</span> <span class="attr">name=</span><span class="val">"msapplication-TileColor"</span> <span class="attr">content=</span><span class="val">"{{BG}}"</span><span class="tag">&gt;</span>
+<span class="tag">&lt;meta</span> <span class="attr">name=</span><span class="val">"msapplication-TileImage"</span> <span class="attr">content=</span><span class="val">"/mstile-144x144.png"</span><span class="tag">&gt;</span>
+
+<span class="cmt">&lt;!-- Theme Color --&gt;</span>
+<span class="tag">&lt;meta</span> <span class="attr">name=</span><span class="val">"theme-color"</span> <span class="attr">content=</span><span class="val">"{{BG}}"</span><span class="tag">&gt;</span></pre>
+  </div>
+</div>
+
+</body>
+</html>

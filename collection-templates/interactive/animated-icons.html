@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{BRAND_NAME}} - Animated Icons</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  :root { --dark-bg: {{BG}}; --cyan: {{PRIMARY}}; --cyan-dark: {{PRIMARY_DARK}}; --cloud: {{TEXT}}; --muted: {{MUTED}}; }
+  body { background: var(--dark-bg); font-family: system-ui, -apple-system, sans-serif; color: var(--cloud); padding: 60px 40px; }
+  h1 { font-size: 36px; font-weight: 200; text-align: center; margin-bottom: 12px; }
+  h1 span { background: linear-gradient(135deg, var(--cyan), var(--cyan-dark)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+  .subtitle { text-align: center; color: var(--muted); font-size: 14px; margin-bottom: 60px; font-weight: 300; }
+
+  .grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 24px; max-width: 900px; margin: 0 auto; }
+  .icon-card {
+    background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 16px; padding: 32px; display: flex; flex-direction: column;
+    align-items: center; gap: 14px; cursor: pointer; transition: all 0.3s;
+  }
+  .icon-card:hover {
+    border-color: rgba({{PRIMARY_RGB}},0.2); background: rgba({{PRIMARY_RGB}},0.03);
+    transform: translateY(-4px); box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+  }
+  .icon-label { font-size: 11px; color: var(--muted); letter-spacing: 1px; font-weight: 300; }
+
+  .icon-card svg {
+    width: 32px; height: 32px; stroke: var(--cyan); fill: none;
+    stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round;
+  }
+
+  /* Draw-on-hover animations */
+  .icon-card svg path, .icon-card svg circle, .icon-card svg rect,
+  .icon-card svg line, .icon-card svg polyline, .icon-card svg polygon {
+    transition: all 0.4s ease;
+  }
+
+  /* Specific hover animations */
+  .icon-card:hover svg { stroke: var(--cloud); filter: drop-shadow(0 0 6px rgba({{PRIMARY_RGB}},0.4)); }
+
+  /* Bolt - pulse */
+  .icon-bolt:hover svg { animation: iconPulse 0.4s ease; }
+  @keyframes iconPulse { 0% { transform: scale(1); } 50% { transform: scale(1.2); } 100% { transform: scale(1); } }
+
+  /* Refresh - spin */
+  .icon-refresh:hover svg { animation: iconSpin 0.6s ease; }
+  @keyframes iconSpin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+  /* Bell - shake */
+  .icon-bell:hover svg { animation: iconShake 0.5s ease; }
+  @keyframes iconShake { 0%,100% { transform: rotate(0); } 20%,60% { transform: rotate(12deg); } 40%,80% { transform: rotate(-12deg); } }
+
+  /* Heart - beat */
+  .icon-heart:hover svg { animation: iconBeat 0.6s ease; }
+  @keyframes iconBeat { 0%,100% { transform: scale(1); } 14% { transform: scale(1.3); } 28% { transform: scale(1); } 42% { transform: scale(1.3); } 70% { transform: scale(1); } }
+
+  /* Upload - bounce up */
+  .icon-upload:hover svg { animation: iconUp 0.4s ease; }
+  @keyframes iconUp { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
+
+  /* Check - pop */
+  .icon-check:hover svg { animation: iconPop 0.3s ease; }
+  @keyframes iconPop { 0% { transform: scale(1); } 50% { transform: scale(0.8); } 100% { transform: scale(1.1); } }
+
+  /* Search - wobble */
+  .icon-search:hover svg { animation: iconWobble 0.4s ease; }
+  @keyframes iconWobble { 0%,100% { transform: rotate(0); } 25% { transform: rotate(-8deg); } 75% { transform: rotate(8deg); } }
+
+  /* Settings - slow spin */
+  .icon-settings:hover svg { animation: iconSlowSpin 1s linear infinite; }
+  @keyframes iconSlowSpin { to { transform: rotate(360deg); } }
+
+  /* Lock - jiggle */
+  .icon-lock:hover svg { animation: iconJiggle 0.3s ease; }
+  @keyframes iconJiggle { 0%,100% { transform: translateX(0); } 25% { transform: translateX(-3px); } 75% { transform: translateX(3px); } }
+
+  /* Star - twinkle */
+  .icon-star:hover svg { animation: iconTwinkle 0.6s ease; }
+  @keyframes iconTwinkle { 0%,100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.5; transform: scale(0.9) rotate(72deg); } }
+
+  /* Globe - spin Y */
+  .icon-globe:hover svg { animation: iconFlipY 0.6s ease; }
+  @keyframes iconFlipY { 0% { transform: rotateY(0); } 100% { transform: rotateY(360deg); } }
+
+  /* Download - drop */
+  .icon-download:hover svg { animation: iconDrop 0.4s ease; }
+  @keyframes iconDrop { 0%,100% { transform: translateY(0); } 60% { transform: translateY(5px); } }
+</style>
+</head>
+<body>
+
+<h1>Animated <span>Icons</span></h1>
+<p class="subtitle">Hover über die Icons für Micro-Animationen</p>
+
+<div class="grid">
+  <div class="icon-card icon-bolt"><svg viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg><span class="icon-label">Event</span></div>
+  <div class="icon-card icon-refresh"><svg viewBox="0 0 24 24"><path d="M1 4v6h6"/><path d="M23 20v-6h-6"/><path d="M20.49 9A9 9 0 005.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 013.51 15"/></svg><span class="icon-label">Sync</span></div>
+  <div class="icon-card icon-bell"><svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg><span class="icon-label">Alert</span></div>
+  <div class="icon-card icon-heart"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg><span class="icon-label">Favorite</span></div>
+  <div class="icon-card icon-upload"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg><span class="icon-label">Upload</span></div>
+  <div class="icon-card icon-check"><svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg><span class="icon-label">Success</span></div>
+  <div class="icon-card icon-search"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><span class="icon-label">Search</span></div>
+  <div class="icon-card icon-settings"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg><span class="icon-label">Settings</span></div>
+  <div class="icon-card icon-lock"><svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg><span class="icon-label">Security</span></div>
+  <div class="icon-card icon-star"><svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><span class="icon-label">Star</span></div>
+  <div class="icon-card icon-globe"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg><span class="icon-label">i18n</span></div>
+  <div class="icon-card icon-download"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg><span class="icon-label">Export</span></div>
+</div>
+
+</body>
+</html>

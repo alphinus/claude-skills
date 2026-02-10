@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{BRAND_NAME}} Story Templates - 1080x1920px</title>
+<style>
+  :root {
+    --dark-bg: {{BG}};
+    --cyan: {{PRIMARY}};
+    --cyan-dark: {{PRIMARY_DARK}};
+    --cloud: {{TEXT}};
+    --muted: {{MUTED}};
+    --card-bg: #1e293b;
+    --border: #334155;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #0a0f1c;
+    color: var(--cloud);
+    font-family: system-ui, -apple-system, sans-serif;
+    padding: 40px;
+    min-height: 100vh;
+  }
+
+  .page-header {
+    text-align: center;
+    margin-bottom: 48px;
+  }
+
+  .page-header h1 {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--cloud);
+    letter-spacing: -0.5px;
+  }
+
+  .page-header h1 span { color: var(--cyan); }
+
+  .page-header p {
+    color: var(--muted);
+    margin-top: 8px;
+    font-size: 15px;
+  }
+
+  .stories-row {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    flex-wrap: wrap;
+  }
+
+  .variant-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .variant-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--cyan);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-bottom: 12px;
+  }
+
+  .variant-dims {
+    font-size: 11px;
+    color: var(--muted);
+    margin-bottom: 16px;
+  }
+
+  .story-frame {
+    width: 360px;
+    height: 640px;
+    overflow: hidden;
+    border-radius: 16px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.4), 0 0 0 1px var(--border);
+    position: relative;
+  }
+
+  .story-canvas {
+    width: 1080px;
+    height: 1920px;
+    transform: scale(0.3333);
+    transform-origin: top left;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* =========================================
+     VARIANT 1: PRODUCT TEASER
+     ========================================= */
+  .product-teaser {
+    background: linear-gradient(165deg, {{BG}} 0%, #1a2744 30%, {{BG}} 60%, #132035 100%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0;
+    position: relative;
+  }
+
+  .product-teaser .glow-top {
+    position: absolute;
+    top: -200px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 800px;
+    height: 800px;
+    background: radial-gradient(circle, rgba({{PRIMARY_RGB}},0.12) 0%, transparent 65%);
+    pointer-events: none;
+  }
+
+  .product-teaser .glow-bottom {
+    position: absolute;
+    bottom: -100px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 600px;
+    height: 400px;
+    background: radial-gradient(circle, rgba(56,178,172,0.1) 0%, transparent 65%);
+    pointer-events: none;
+  }
+
+  .product-teaser .logo-area {
+    margin-top: 120px;
+    text-align: center;
+    position: relative;
+    z-index: 2;
+  }
+
+  .product-teaser .logo-text {
+    font-size: 72px;
+    font-weight: 900;
+    color: var(--cloud);
+    letter-spacing: 12px;
+  }
+
+  .product-teaser .logo-sub {
+    font-size: 22px;
+    color: var(--cyan);
+    letter-spacing: 6px;
+    text-transform: uppercase;
+    margin-top: 8px;
+  }
+
+  .product-teaser .feature-showcase {
+    margin-top: 160px;
+    width: 100%;
+    padding: 0 80px;
+    position: relative;
+    z-index: 2;
+  }
+
+  .product-teaser .feature-card {
+    background: rgba(30, 41, 59, 0.7);
+    border: 1px solid var(--border);
+    border-radius: 28px;
+    padding: 56px;
+    backdrop-filter: blur(20px);
+    margin-bottom: 32px;
+  }
+
+  .product-teaser .fc-icon {
+    width: 72px;
+    height: 72px;
+    background: rgba({{PRIMARY_RGB}},0.12);
+    border: 1px solid rgba({{PRIMARY_RGB}},0.2);
+    border-radius: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 28px;
+  }
+
+  .product-teaser .fc-title {
+    font-size: 36px;
+    font-weight: 700;
+    color: var(--cloud);
+    margin-bottom: 14px;
+  }
+
+  .product-teaser .fc-desc {
+    font-size: 24px;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+
+  .product-teaser .feature-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    padding: 0 80px;
+    position: relative;
+    z-index: 2;
+  }
+
+  .product-teaser .pill {
+    background: rgba({{PRIMARY_RGB}},0.1);
+    border: 1px solid rgba({{PRIMARY_RGB}},0.2);
+    border-radius: 100px;
+    padding: 16px 28px;
+    font-size: 20px;
+    color: var(--cyan);
+    font-weight: 500;
+  }
+
+  .product-teaser .swipe-cta {
+    position: absolute;
+    bottom: 80px;
+    left: 0;
+    right: 0;
+    text-align: center;
+    z-index: 2;
+  }
+
+  .product-teaser .swipe-arrow {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .product-teaser .swipe-text {
+    font-size: 22px;
+    color: var(--muted);
+    font-weight: 500;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+
+  /* =========================================
+     VARIANT 2: BEHIND THE SCENES
+     ========================================= */
+  .bts {
+    background: var(--dark-bg);
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+    position: relative;
+  }
+
+  .bts .overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(15,23,42,0.95) 0%, rgba(15,23,42,0.7) 40%, rgba(15,23,42,0.9) 100%);
+    z-index: 1;
+  }
+
+  .bts .code-bg {
+    position: absolute;
+    inset: 0;
+    padding: 60px;
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    font-size: 18px;
+    color: rgba({{PRIMARY_RGB}},0.06);
+    line-height: 2;
+    overflow: hidden;
+    word-break: break-all;
+  }
+
+  .bts .content {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding: 80px;
+  }
+
+  .bts .top-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 60px;
+  }
+
+  .bts .logo {
+    font-size: 28px;
+    font-weight: 800;
+    color: var(--cloud);
+    letter-spacing: 4px;
+  }
+
+  .bts .live-dot {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 18px;
+    color: var(--cyan);
+    font-weight: 600;
+  }
+
+  .bts .live-indicator {
+    width: 12px;
+    height: 12px;
+    background: var(--cyan);
+    border-radius: 50%;
+    box-shadow: 0 0 12px var(--cyan);
+  }
+
+  .bts .header-text {
+    font-size: 56px;
+    font-weight: 800;
+    color: var(--cloud);
+    letter-spacing: -1px;
+    margin-bottom: 16px;
+  }
+
+  .bts .header-sub {
+    font-size: 26px;
+    color: var(--muted);
+    margin-bottom: 80px;
+  }
+
+  .bts .code-preview {
+    background: rgba(15,23,42,0.8);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    overflow: hidden;
+    margin-bottom: 60px;
+  }
+
+  .bts .code-titlebar {
+    background: rgba(30,41,59,0.8);
+    padding: 20px 28px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .bts .dot { width: 14px; height: 14px; border-radius: 50%; }
+  .bts .dot-r { background: {{ERROR}}; }
+  .bts .dot-y { background: {{WARNING}}; }
+  .bts .dot-g { background: #22c55e; }
+
+  .bts .code-file {
+    margin-left: 16px;
+    font-size: 18px;
+    color: var(--muted);
+    font-family: 'SF Mono', monospace;
+  }
+
+  .bts .code-body {
+    padding: 32px;
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    font-size: 22px;
+    line-height: 1.8;
+    color: var(--cloud);
+  }
+
+  .bts .code-body .kw { color: #c084fc; }
+  .bts .code-body .fn { color: #60a5fa; }
+  .bts .code-body .str { color: #34d399; }
+  .bts .code-body .cm { color: var(--muted); }
+  .bts .code-body .cy { color: var(--cyan); }
+
+  .bts .dev-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin-top: auto;
+    margin-bottom: 40px;
+  }
+
+  .bts .stat-card {
+    background: rgba(30,41,59,0.6);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 32px;
+  }
+
+  .bts .stat-value {
+    font-size: 44px;
+    font-weight: 800;
+    color: var(--cyan);
+  }
+
+  .bts .stat-label {
+    font-size: 20px;
+    color: var(--muted);
+    margin-top: 4px;
+  }
+
+  .bts .footer-url {
+    text-align: center;
+    font-size: 22px;
+    color: var(--muted);
+    letter-spacing: 1px;
+    padding-bottom: 20px;
+  }
+
+  /* =========================================
+     VARIANT 3: LAUNCH COUNTDOWN
+     ========================================= */
+  .countdown {
+    background: var(--dark-bg);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .countdown .bg-hex {
+    position: absolute;
+    opacity: 0.04;
+  }
+
+  .countdown .bg-hex-1 { top: -80px; right: -100px; }
+  .countdown .bg-hex-2 { bottom: 200px; left: -120px; }
+  .countdown .bg-hex-3 { top: 400px; right: -80px; }
+
+  .countdown .glow {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 900px;
+    height: 900px;
+    background: radial-gradient(circle, rgba({{PRIMARY_RGB}},0.06) 0%, transparent 65%);
+    pointer-events: none;
+  }
+
+  .countdown .content {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100%;
+    padding: 100px 80px;
+    text-align: center;
+  }
+
+  .countdown .logo {
+    font-size: 32px;
+    font-weight: 800;
+    color: var(--cloud);
+    letter-spacing: 6px;
+    margin-bottom: 120px;
+  }
+
+  .countdown .soon-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    background: rgba({{PRIMARY_RGB}},0.1);
+    border: 1px solid rgba({{PRIMARY_RGB}},0.25);
+    border-radius: 100px;
+    padding: 16px 36px;
+    margin-bottom: 60px;
+  }
+
+  .countdown .soon-pulse {
+    width: 10px;
+    height: 10px;
+    background: var(--cyan);
+    border-radius: 50%;
+    box-shadow: 0 0 12px var(--cyan);
+  }
+
+  .countdown .soon-text {
+    font-size: 22px;
+    color: var(--cyan);
+    font-weight: 600;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+  }
+
+  .countdown .coming-text {
+    font-size: 48px;
+    font-weight: 300;
+    color: var(--muted);
+    margin-bottom: 40px;
+  }
+
+  .countdown .numbers-row {
+    display: flex;
+    gap: 28px;
+    margin-bottom: 20px;
+  }
+
+  .countdown .num-block {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .countdown .num-value {
+    width: 180px;
+    height: 200px;
+    background: rgba(30,41,59,0.7);
+    border: 1.5px solid var(--border);
+    border-radius: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 96px;
+    font-weight: 900;
+    color: var(--cloud);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .countdown .num-label {
+    margin-top: 18px;
+    font-size: 20px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+  }
+
+  .countdown .num-sep {
+    font-size: 80px;
+    color: var(--cyan);
+    align-self: flex-start;
+    margin-top: 50px;
+    opacity: 0.5;
+  }
+
+  .countdown .feature-hint {
+    margin-top: 80px;
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--cloud);
+    margin-bottom: 16px;
+  }
+
+  .countdown .feature-desc {
+    font-size: 24px;
+    color: var(--muted);
+    line-height: 1.5;
+    max-width: 700px;
+    margin-bottom: 80px;
+  }
+
+  .countdown .email-hint {
+    margin-top: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 40px;
+  }
+
+  .countdown .email-box {
+    width: 700px;
+    height: 80px;
+    background: rgba(30,41,59,0.6);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    padding: 0 28px;
+    gap: 14px;
+  }
+
+  .countdown .email-placeholder {
+    font-size: 22px;
+    color: rgba(113,128,150,0.5);
+    flex: 1;
+  }
+
+  .countdown .email-btn {
+    background: var(--cyan);
+    color: var(--dark-bg);
+    font-size: 18px;
+    font-weight: 700;
+    padding: 14px 28px;
+    border-radius: 10px;
+    white-space: nowrap;
+  }
+
+  .countdown .email-note {
+    font-size: 18px;
+    color: rgba(113,128,150,0.6);
+  }
+
+  .countdown .footer-url {
+    font-size: 22px;
+    color: var(--muted);
+    letter-spacing: 1px;
+  }
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <h1><span>{{BRAND_NAME}}</span> Story Templates</h1>
+  <p>1080 x 1920px &mdash; Instagram / Facebook Stories</p>
+</div>
+
+<div class="stories-row">
+
+  <!-- ======== VARIANT 1: PRODUCT TEASER ======== -->
+  <div class="variant-wrapper">
+    <div class="variant-label">Product Teaser</div>
+    <div class="variant-dims">1080 x 1920px</div>
+    <div class="story-frame">
+      <div class="story-canvas product-teaser">
+        <div class="glow-top"></div>
+        <div class="glow-bottom"></div>
+
+        <div class="logo-area">
+          <div class="logo-text">{{BRAND_NAME}}</div>
+          <div class="logo-sub">Event Ecosystem</div>
+        </div>
+
+        <div class="feature-showcase">
+          <div class="feature-card">
+            <div class="fc-icon">
+              <svg width="36" height="36" viewBox="0 0 36 36" fill="none">
+                <path d="M18 4L32 11V25L18 32L4 25V11L18 4Z" stroke="var(--cyan)" stroke-width="1.5" fill="rgba({{PRIMARY_RGB}},0.1)"/>
+                <path d="M18 14L25 18V26L18 30L11 26V18L18 14Z" stroke="var(--cyan)" stroke-width="1" fill="none"/>
+              </svg>
+            </div>
+            <div class="fc-title">Event Streams</div>
+            <div class="fc-desc">Echtzeit-Verarbeitung tausender Events pro Sekunde mit intelligenter Filterung.</div>
+          </div>
+
+          <div class="feature-card">
+            <div class="fc-icon">
+              <svg width="36" height="36" viewBox="0 0 36 36" fill="none">
+                <circle cx="18" cy="18" r="12" stroke="var(--cyan)" stroke-width="1.5" fill="none"/>
+                <path d="M12 18h12M18 12v12" stroke="var(--cyan)" stroke-width="1.5" stroke-linecap="round"/>
+                <circle cx="18" cy="18" r="4" fill="rgba({{PRIMARY_RGB}},0.2)" stroke="var(--cyan)" stroke-width="1"/>
+              </svg>
+            </div>
+            <div class="fc-title">AI Studio</div>
+            <div class="fc-desc">Automatisierte Insights und pr&auml;diktive Analysen f&uuml;r Ihr Business.</div>
+          </div>
+        </div>
+
+        <div class="feature-pills">
+          <div class="pill">Skalierbar</div>
+          <div class="pill">Event-Driven</div>
+          <div class="pill">Echtzeit</div>
+          <div class="pill">Sicher</div>
+          <div class="pill">Open API</div>
+        </div>
+
+        <div class="swipe-cta">
+          <div class="swipe-arrow">
+            <svg width="28" height="28" viewBox="0 0 28 28">
+              <path d="M14 22V6M8 12l6-6 6 6" stroke="var(--cyan)" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <span class="swipe-text">Mehr erfahren</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======== VARIANT 2: BEHIND THE SCENES ======== -->
+  <div class="variant-wrapper">
+    <div class="variant-label">Behind the Scenes</div>
+    <div class="variant-dims">1080 x 1920px</div>
+    <div class="story-frame">
+      <div class="story-canvas bts">
+        <div class="code-bg">
+          import { EventStream } from '@{{BRAND_NAME_LOWER}}/core'; const stream = new EventStream({ topic: 'user.events', filter: { type: 'conversion' } }); stream.on('data', async (event) =&gt; { await processEvent(event); metrics.increment('processed'); }); stream.on('error', (err) =&gt; { logger.error('Stream error:', err); stream.reconnect(); }); export async function processEvent(event) { const enriched = await enricher.enrich(event); await store.save(enriched); await notifier.broadcast(enriched); return enriched; } const config = { cluster: 'ch-zurich-01', replicas: 3, retention: '30d', compression: 'lz4' };
+        </div>
+        <div class="overlay"></div>
+
+        <div class="content">
+          <div class="top-bar">
+            <div class="logo">{{BRAND_NAME}}</div>
+            <div class="live-dot">
+              <span class="live-indicator"></span>
+              DEV
+            </div>
+          </div>
+
+          <div class="header-text">Hinter den<br>Kulissen</div>
+          <div class="header-sub">Engineering bei {{BRAND_NAME}}</div>
+
+          <div class="code-preview">
+            <div class="code-titlebar">
+              <span class="dot dot-r"></span>
+              <span class="dot dot-y"></span>
+              <span class="dot dot-g"></span>
+              <span class="code-file">event-stream.ts</span>
+            </div>
+            <div class="code-body">
+              <span class="kw">import</span> { <span class="cy">EventStream</span> }<br>
+              &nbsp;&nbsp;<span class="kw">from</span> <span class="str">'@{{BRAND_NAME_LOWER}}/core'</span>;<br>
+              <br>
+              <span class="kw">const</span> stream = <span class="kw">new</span> <span class="fn">EventStream</span>({<br>
+              &nbsp;&nbsp;topic: <span class="str">'user.events'</span>,<br>
+              &nbsp;&nbsp;filter: { type: <span class="str">'conversion'</span> }<br>
+              });<br>
+              <br>
+              <span class="cm">// Echtzeit-Verarbeitung</span><br>
+              stream.<span class="fn">on</span>(<span class="str">'data'</span>, <span class="kw">async</span> (event) =&gt; {<br>
+              &nbsp;&nbsp;<span class="kw">await</span> <span class="fn">processEvent</span>(event);<br>
+              });
+            </div>
+          </div>
+
+          <div class="dev-stats">
+            <div class="stat-card">
+              <div class="stat-value">847</div>
+              <div class="stat-label">Commits diese Woche</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-value">99.9%</div>
+              <div class="stat-label">Uptime</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-value">14ms</div>
+              <div class="stat-label">Avg. Latenz</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-value">23</div>
+              <div class="stat-label">Microservices</div>
+            </div>
+          </div>
+
+          <div class="footer-url">{{BRAND_DOMAIN}}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======== VARIANT 3: LAUNCH COUNTDOWN ======== -->
+  <div class="variant-wrapper">
+    <div class="variant-label">Launch Countdown</div>
+    <div class="variant-dims">1080 x 1920px</div>
+    <div class="story-frame">
+      <div class="story-canvas countdown">
+        <!-- Hexagonal background decorations -->
+        <svg class="bg-hex bg-hex-1" width="400" height="460" viewBox="0 0 400 460">
+          <polygon points="200,0 400,115 400,345 200,460 0,345 0,115" fill="none" stroke="var(--cyan)" stroke-width="2"/>
+        </svg>
+        <svg class="bg-hex bg-hex-2" width="340" height="392" viewBox="0 0 340 392">
+          <polygon points="170,0 340,98 340,294 170,392 0,294 0,98" fill="none" stroke="var(--cyan)" stroke-width="1.5"/>
+        </svg>
+        <svg class="bg-hex bg-hex-3" width="260" height="300" viewBox="0 0 260 300">
+          <polygon points="130,0 260,75 260,225 130,300 0,225 0,75" fill="none" stroke="var(--cyan)" stroke-width="1"/>
+        </svg>
+
+        <div class="glow"></div>
+
+        <div class="content">
+          <div class="logo">{{BRAND_NAME}}</div>
+
+          <div class="soon-badge">
+            <span class="soon-pulse"></span>
+            <span class="soon-text">Bald verf&uuml;gbar</span>
+          </div>
+
+          <div class="coming-text">Launch in</div>
+
+          <div class="numbers-row">
+            <div class="num-block">
+              <div class="num-value">07</div>
+              <div class="num-label">Tage</div>
+            </div>
+            <div class="num-sep">:</div>
+            <div class="num-block">
+              <div class="num-value">14</div>
+              <div class="num-label">Stunden</div>
+            </div>
+            <div class="num-sep">:</div>
+            <div class="num-block">
+              <div class="num-value">32</div>
+              <div class="num-label">Minuten</div>
+            </div>
+          </div>
+
+          <div class="feature-hint">Event Streams v2.0</div>
+          <div class="feature-desc">Die n&auml;chste Generation unserer Event-Verarbeitung &ndash; schneller, intelligenter, skalierbarer.</div>
+
+          <div class="email-hint">
+            <div class="email-box">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                <rect x="2" y="4" width="20" height="16" rx="3" stroke="var(--muted)" stroke-width="1.5"/>
+                <path d="M2 7l10 7 10-7" stroke="var(--muted)" stroke-width="1.5" stroke-linecap="round"/>
+              </svg>
+              <span class="email-placeholder">E-Mail-Adresse eingeben</span>
+              <span class="email-btn">Benachrichtigen</span>
+            </div>
+            <span class="email-note">Als Erste:r beim Launch dabei sein</span>
+          </div>
+
+          <div class="footer-url">{{BRAND_DOMAIN}}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>

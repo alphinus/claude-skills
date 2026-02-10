@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{BRAND_NAME}} - Cookie Banner</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  :root { --dark-bg: {{BG}}; --cyan: {{PRIMARY}}; --cyan-dark: {{PRIMARY_DARK}}; --cloud: {{TEXT}}; --muted: {{MUTED}}; }
+  body { background: var(--dark-bg); font-family: system-ui, -apple-system, sans-serif; color: var(--cloud); min-height: 100vh; display: flex; align-items: center; justify-content: center; }
+
+  .page-content { text-align: center; opacity: 0.3; }
+  .page-content h1 { font-size: 36px; font-weight: 200; }
+  .page-content p { color: var(--muted); margin-top: 8px; }
+
+  /* Banner */
+  .cookie-banner {
+    position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(120px);
+    width: 90%; max-width: 520px;
+    background: rgba(20, 30, 51, 0.95); backdrop-filter: blur(20px);
+    border: 1px solid rgba(255,255,255,0.08); border-radius: 16px;
+    padding: 24px; box-shadow: 0 24px 60px rgba(0,0,0,0.4);
+    animation: bannerSlide 0.6s cubic-bezier(0.4, 0, 0.2, 1) 0.5s forwards;
+    z-index: 1000;
+  }
+
+  @keyframes bannerSlide {
+    to { transform: translateX(-50%) translateY(0); }
+  }
+
+  .cookie-banner.hiding {
+    animation: bannerHide 0.4s ease-in forwards;
+  }
+
+  @keyframes bannerHide {
+    to { transform: translateX(-50%) translateY(120px); opacity: 0; }
+  }
+
+  .cookie-header { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+  .cookie-icon {
+    width: 36px; height: 36px; border-radius: 10px;
+    background: rgba({{PRIMARY_RGB}},0.08); display: flex; align-items: center;
+    justify-content: center; font-size: 18px; flex-shrink: 0;
+  }
+  .cookie-title { font-size: 15px; font-weight: 400; }
+
+  .cookie-text { font-size: 13px; color: var(--muted); font-weight: 300; line-height: 1.7; margin-bottom: 18px; }
+  .cookie-text a { color: var(--cyan); text-decoration: none; }
+  .cookie-text a:hover { text-decoration: underline; }
+
+  /* Toggle options */
+  .cookie-options { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
+  .cookie-opt { display: flex; align-items: center; justify-content: space-between; padding: 10px 14px; border-radius: 8px; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.04); }
+  .cookie-opt-label { font-size: 13px; font-weight: 300; }
+  .cookie-opt-label small { display: block; font-size: 11px; color: var(--muted); margin-top: 1px; }
+
+  .toggle { position: relative; width: 40px; height: 22px; cursor: pointer; flex-shrink: 0; }
+  .toggle input { display: none; }
+  .toggle-track { width: 100%; height: 100%; border-radius: 11px; background: rgba(255,255,255,0.08); transition: background 0.3s; }
+  .toggle-thumb {
+    position: absolute; top: 2px; left: 2px; width: 18px; height: 18px;
+    border-radius: 50%; background: var(--muted); transition: all 0.3s;
+  }
+  .toggle input:checked ~ .toggle-track { background: rgba({{PRIMARY_RGB}},0.3); }
+  .toggle input:checked ~ .toggle-thumb { left: 20px; background: var(--cyan); box-shadow: 0 0 6px rgba({{PRIMARY_RGB}},0.3); }
+  .toggle.disabled { opacity: 0.5; cursor: not-allowed; }
+
+  /* Buttons */
+  .cookie-btns { display: flex; gap: 8px; }
+  .cookie-btn {
+    flex: 1; padding: 10px; border-radius: 8px; font-size: 12px;
+    font-weight: 500; letter-spacing: 0.5px; cursor: pointer; font-family: inherit; transition: all 0.3s;
+  }
+  .btn-reject { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); color: var(--muted); }
+  .btn-reject:hover { border-color: rgba(255,255,255,0.15); color: var(--cloud); }
+  .btn-custom { background: rgba({{PRIMARY_RGB}},0.08); border: 1px solid rgba({{PRIMARY_RGB}},0.2); color: var(--cyan); }
+  .btn-custom:hover { background: rgba({{PRIMARY_RGB}},0.15); }
+  .btn-accept { background: linear-gradient(135deg, var(--cyan), var(--cyan-dark)); border: none; color: var(--dark-bg); font-weight: 600; }
+  .btn-accept:hover { box-shadow: 0 4px 16px rgba({{PRIMARY_RGB}},0.25); }
+</style>
+</head>
+<body>
+
+<div class="page-content">
+  <h1>Deine Seite hier</h1>
+  <p>Der Cookie-Banner erscheint unten</p>
+</div>
+
+<div class="cookie-banner" id="cookieBanner">
+  <div class="cookie-header">
+    <div class="cookie-icon">&#127850;</div>
+    <div class="cookie-title">Cookie-Einstellungen</div>
+  </div>
+
+  <p class="cookie-text">
+    Wir nutzen Cookies um dir die bestmögliche Erfahrung zu bieten. Mehr in unserer <a href="#">Datenschutzerklärung</a>.
+  </p>
+
+  <div class="cookie-options">
+    <div class="cookie-opt">
+      <div class="cookie-opt-label">Notwendig<small>Für grundlegende Funktionen erforderlich</small></div>
+      <label class="toggle disabled"><input type="checkbox" checked disabled><div class="toggle-track"></div><div class="toggle-thumb"></div></label>
+    </div>
+    <div class="cookie-opt">
+      <div class="cookie-opt-label">Analytics<small>Hilft uns die Nutzung zu verstehen</small></div>
+      <label class="toggle"><input type="checkbox" checked><div class="toggle-track"></div><div class="toggle-thumb"></div></label>
+    </div>
+    <div class="cookie-opt">
+      <div class="cookie-opt-label">Marketing<small>Für personalisierte Inhalte</small></div>
+      <label class="toggle"><input type="checkbox"><div class="toggle-track"></div><div class="toggle-thumb"></div></label>
+    </div>
+  </div>
+
+  <div class="cookie-btns">
+    <button class="cookie-btn btn-reject" onclick="closeBanner()">Ablehnen</button>
+    <button class="cookie-btn btn-custom" onclick="closeBanner()">Auswahl speichern</button>
+    <button class="cookie-btn btn-accept" onclick="closeBanner()">Alle akzeptieren</button>
+  </div>
+</div>
+
+<script>
+  function closeBanner() {
+    const banner = document.getElementById('cookieBanner');
+    banner.classList.add('hiding');
+    setTimeout(() => banner.style.display = 'none', 400);
+  }
+</script>
+
+</body>
+</html>

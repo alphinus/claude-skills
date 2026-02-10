@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{BRAND_NAME}} - GitHub Social Card (1280x640)</title>
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:system-ui,-apple-system,sans-serif;background:#1a1a2e;display:flex;align-items:center;justify-content:center;min-height:100vh;padding:40px}
+
+  .card{
+    width:1280px;height:640px;background:{{BG}};border-radius:16px;overflow:hidden;
+    position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;
+    box-shadow:0 20px 60px rgba(0,0,0,.5);
+  }
+
+  /* Hex Pattern Background */
+  .hex-pattern{
+    position:absolute;inset:0;overflow:hidden;opacity:.08;
+  }
+  .hex-pattern svg{width:100%;height:100%}
+
+  /* Gradient overlay */
+  .gradient-overlay{
+    position:absolute;inset:0;
+    background:radial-gradient(ellipse at 30% 50%,rgba({{PRIMARY_RGB}},.12) 0%,transparent 60%),
+               radial-gradient(ellipse at 70% 60%,rgba(56,178,172,.08) 0%,transparent 50%);
+  }
+
+  /* Top border glow */
+  .top-glow{position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,{{PRIMARY}},transparent)}
+
+  .content{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;text-align:center;gap:24px}
+
+  /* Hexagon Logo */
+  .hex-logo{margin-bottom:8px}
+
+  /* Wordmark */
+  .wordmark{font-size:72px;font-weight:800;letter-spacing:8px;color:{{TEXT}};text-transform:uppercase}
+  .wordmark span{color:{{PRIMARY}}}
+
+  .tagline{font-size:22px;color:{{MUTED}};letter-spacing:4px;text-transform:uppercase;font-weight:400}
+
+  /* Tech badges */
+  .tech-badges{display:flex;gap:12px;margin-top:8px}
+  .tech-badge{
+    padding:6px 16px;border-radius:6px;font-size:13px;font-weight:600;letter-spacing:.5px;
+    background:rgba({{PRIMARY_RGB}},.1);color:{{PRIMARY}};border:1px solid rgba({{PRIMARY_RGB}},.2);
+  }
+
+  /* Stats */
+  .stats{display:flex;gap:40px;margin-top:16px}
+  .stat{display:flex;align-items:center;gap:8px;color:{{MUTED}};font-size:14px}
+  .stat-icon{display:flex;align-items:center}
+  .stat-value{font-weight:700;color:{{TEXT}}}
+
+  /* URL */
+  .url{
+    position:absolute;bottom:28px;font-size:14px;color:#4a5568;letter-spacing:1px;
+    font-family:monospace;
+  }
+</style>
+</head>
+<body>
+
+<div class="card">
+  <!-- Hex Pattern -->
+  <div class="hex-pattern">
+    <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%">
+      <defs>
+        <pattern id="hexes" width="56" height="100" patternUnits="userSpaceOnUse" patternTransform="scale(1.5)">
+          <path d="M28 66L0 50L0 16L28 0L56 16L56 50L28 66Z" fill="none" stroke="{{PRIMARY}}" stroke-width="1"/>
+          <path d="M28 166L0 150L0 116L28 100L56 116L56 150L28 166Z" fill="none" stroke="{{PRIMARY}}" stroke-width="1"/>
+        </pattern>
+      </defs>
+      <rect width="100%" height="100%" fill="url(#hexes)"/>
+    </svg>
+  </div>
+
+  <div class="gradient-overlay"></div>
+  <div class="top-glow"></div>
+
+  <div class="content">
+    <!-- Hexagon Logo Icon -->
+    <div class="hex-logo">
+      <svg width="72" height="80" viewBox="0 0 72 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M36 2L68 20V60L36 78L4 60V20L36 2Z" fill="none" stroke="{{PRIMARY}}" stroke-width="2.5"/>
+        <path d="M36 14L56 26V50L36 62L16 50V26L36 14Z" fill="rgba({{PRIMARY_RGB}},0.1)" stroke="{{PRIMARY}}" stroke-width="1.5"/>
+        <path d="M24 32L36 24L48 32V48L36 56L24 48V32Z" fill="rgba({{PRIMARY_RGB}},0.15)"/>
+        <circle cx="36" cy="40" r="6" fill="{{PRIMARY}}" opacity="0.8"/>
+        <!-- Connection lines -->
+        <line x1="36" y1="34" x2="36" y2="24" stroke="{{PRIMARY}}" stroke-width="1" opacity="0.4"/>
+        <line x1="41" y1="37" x2="48" y2="32" stroke="{{PRIMARY}}" stroke-width="1" opacity="0.4"/>
+        <line x1="41" y1="43" x2="48" y2="48" stroke="{{PRIMARY}}" stroke-width="1" opacity="0.4"/>
+        <line x1="36" y1="46" x2="36" y2="56" stroke="{{PRIMARY}}" stroke-width="1" opacity="0.4"/>
+        <line x1="31" y1="43" x2="24" y2="48" stroke="{{PRIMARY}}" stroke-width="1" opacity="0.4"/>
+        <line x1="31" y1="37" x2="24" y2="32" stroke="{{PRIMARY}}" stroke-width="1" opacity="0.4"/>
+      </svg>
+    </div>
+
+    <div class="wordmark"><span>E</span>LUMA</div>
+    <div class="tagline">{{BRAND_TAGLINE}}</div>
+
+    <div class="tech-badges">
+      <span class="tech-badge">TypeScript</span>
+      <span class="tech-badge">React</span>
+      <span class="tech-badge">Express</span>
+      <span class="tech-badge">AI SDK</span>
+    </div>
+
+    <div class="stats">
+      <div class="stat">
+        <div class="stat-icon">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M8 .25a.75.75 0 01.673.418l1.882 3.815 4.21.612a.75.75 0 01.416 1.279l-3.046 2.97.719 4.192a.75.75 0 01-1.088.791L8 12.347l-3.766 1.98a.75.75 0 01-1.088-.79l.72-4.194L.818 6.374a.75.75 0 01.416-1.28l4.21-.611L7.327.668A.75.75 0 018 .25z"/></svg>
+        </div>
+        <span class="stat-value">2.4k</span> Stars
+      </div>
+      <div class="stat">
+        <div class="stat-icon">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M5 3.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm0 2.122a2.25 2.25 0 10-1.5 0v.878A2.25 2.25 0 005.75 8.5h1.5v2.128a2.251 2.251 0 101.5 0V8.5h1.5a2.25 2.25 0 002.25-2.25v-.878a2.25 2.25 0 10-1.5 0v.878a.75.75 0 01-.75.75h-4.5A.75.75 0 015 6.25v-.878zm3.75 7.378a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm3-8.75a.75.75 0 100-1.5.75.75 0 000 1.5z"/></svg>
+        </div>
+        <span class="stat-value">486</span> Forks
+      </div>
+      <div class="stat">
+        <div class="stat-icon">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M1.5 14.25c0 .138.112.25.25.25H4v-1.25a.75.75 0 01.75-.75h2.5a.75.75 0 01.75.75v1.25h2.25a.25.25 0 00.25-.25V1.75a.25.25 0 00-.25-.25h-8.5a.25.25 0 00-.25.25v12.5zM1.75 16A1.75 1.75 0 010 14.25V1.75C0 .784.784 0 1.75 0h8.5C11.216 0 12 .784 12 1.75v12.5c0 .085-.006.168-.018.25h2.268a.25.25 0 00.25-.25V8.285a.25.25 0 00-.111-.208l-1.055-.703a.75.75 0 11.832-1.248l1.055.703c.487.325.777.871.777 1.456v5.965A1.75 1.75 0 0114.25 16h-3.5a.75.75 0 01-.197-.026c-.099.017-.2.026-.303.026h-3a.75.75 0 01-.75-.75V14h-1v1.25a.75.75 0 01-.75.75h-3zM3 3.75A.75.75 0 013.75 3h.5a.75.75 0 010 1.5h-.5A.75.75 0 013 3.75zM3.75 6a.75.75 0 000 1.5h.5a.75.75 0 000-1.5h-.5zM3 9.75A.75.75 0 013.75 9h.5a.75.75 0 010 1.5h-.5A.75.75 0 013 9.75zM7.75 3a.75.75 0 000 1.5h.5a.75.75 0 000-1.5h-.5zM7 6.75A.75.75 0 017.75 6h.5a.75.75 0 010 1.5h-.5A.75.75 0 017 6.75zM7.75 9a.75.75 0 000 1.5h.5a.75.75 0 000-1.5h-.5z"/></svg>
+        </div>
+        <span class="stat-value">38</span> Contributors
+      </div>
+    </div>
+  </div>
+
+  <div class="url">github.com/{{BRAND_NAME_LOWER}}/{{BRAND_NAME_LOWER}}</div>
+</div>
+
+</body>
+</html>

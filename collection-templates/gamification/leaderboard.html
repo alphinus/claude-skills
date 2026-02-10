@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{BRAND_NAME}} - Leaderboard</title>
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  :root{--dark-bg:{{BG}};--cyan:{{PRIMARY}};--cyan-dark:{{PRIMARY_DARK}};--cloud:{{TEXT}};--muted:{{MUTED}};
+    --card-bg:rgba(255,255,255,.04);--gold:#ffd700;--silver:#c0c0c0;--bronze:#cd7f32;--surface:#1e293b}
+  body{font-family:system-ui,-apple-system,sans-serif;background:var(--dark-bg);color:var(--cloud);min-height:100vh;padding:40px 20px}
+  .container{max-width:1000px;margin:0 auto}
+  h1{text-align:center;font-size:2.2rem;font-weight:700;margin-bottom:6px;background:linear-gradient(135deg,var(--cyan),var(--cyan-dark));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+  .subtitle{text-align:center;color:var(--muted);margin-bottom:40px;font-size:1rem}
+
+  /* Tabs */
+  .tabs{display:flex;justify-content:center;gap:4px;margin-bottom:32px;flex-wrap:wrap}
+  .tab{padding:10px 22px;border-radius:10px;font-size:.9rem;font-weight:600;cursor:pointer;border:1px solid transparent;background:var(--card-bg);color:var(--muted);transition:all .2s}
+  .tab:hover{color:var(--cloud);background:rgba(255,255,255,.08)}
+  .tab.active{background:rgba({{PRIMARY_RGB}},.12);color:var(--cyan);border-color:rgba({{PRIMARY_RGB}},.3)}
+
+  /* Filter */
+  .filter-row{display:flex;justify-content:center;gap:8px;margin-bottom:36px}
+  .filter-btn{padding:7px 18px;border-radius:8px;font-size:.82rem;font-weight:600;cursor:pointer;border:1px solid rgba(255,255,255,.1);background:transparent;color:var(--muted);transition:all .2s}
+  .filter-btn:hover{color:var(--cloud)}
+  .filter-btn.active{background:var(--surface);color:var(--cloud);border-color:rgba(255,255,255,.15)}
+
+  /* Podium */
+  .podium{display:flex;justify-content:center;align-items:flex-end;gap:16px;margin-bottom:48px;padding:0 20px}
+  .podium-item{text-align:center;position:relative}
+  .podium-avatar{width:64px;height:64px;border-radius:50%;margin:0 auto 10px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:1.3rem;color:#fff;border:3px solid}
+  .podium-item.gold .podium-avatar{border-color:var(--gold);background:rgba(255,215,0,.15);width:80px;height:80px;font-size:1.5rem}
+  .podium-item.silver .podium-avatar{border-color:var(--silver);background:rgba(192,192,192,.12)}
+  .podium-item.bronze .podium-avatar{border-color:var(--bronze);background:rgba(205,127,50,.12)}
+  .podium-name{font-weight:700;font-size:.95rem;margin-bottom:2px}
+  .podium-score{color:var(--muted);font-size:.82rem}
+  .podium-rank{display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:50%;font-weight:800;font-size:.8rem;margin-bottom:8px}
+  .podium-item.gold .podium-rank{background:var(--gold);color:#1a1a2e}
+  .podium-item.silver .podium-rank{background:var(--silver);color:#1a1a2e}
+  .podium-item.bronze .podium-rank{background:var(--bronze);color:#fff}
+  .podium-bar{border-radius:12px 12px 0 0;width:120px;margin:12px auto 0}
+  .podium-item.gold .podium-bar{height:100px;background:linear-gradient(180deg,rgba(255,215,0,.25),rgba(255,215,0,.05))}
+  .podium-item.silver .podium-bar{height:72px;background:linear-gradient(180deg,rgba(192,192,192,.2),rgba(192,192,192,.04))}
+  .podium-item.bronze .podium-bar{height:52px;background:linear-gradient(180deg,rgba(205,127,50,.2),rgba(205,127,50,.04))}
+
+  /* Table */
+  .table-wrap{background:var(--card-bg);border:1px solid rgba(255,255,255,.06);border-radius:16px;overflow:hidden}
+  table{width:100%;border-collapse:collapse}
+  th{text-align:left;padding:14px 16px;font-size:.78rem;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--muted);border-bottom:1px solid rgba(255,255,255,.06)}
+  td{padding:14px 16px;font-size:.92rem;border-bottom:1px solid rgba(255,255,255,.04)}
+  tr:last-child td{border-bottom:none}
+  tr.current{background:rgba({{PRIMARY_RGB}},.07)}
+  tr.current td{color:var(--cyan)}
+  tr:hover{background:rgba(255,255,255,.02)}
+  .rank-cell{font-weight:700;width:50px}
+  .rank-medal{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:50%;font-size:.75rem;font-weight:800}
+  .rank-1{background:var(--gold);color:#1a1a2e}
+  .rank-2{background:var(--silver);color:#1a1a2e}
+  .rank-3{background:var(--bronze);color:#fff}
+  .avatar-sm{width:34px;height:34px;border-radius:50%;background:var(--surface);display:inline-flex;align-items:center;justify-content:center;font-weight:700;font-size:.8rem;color:var(--cyan);margin-right:10px;vertical-align:middle;border:1px solid rgba(255,255,255,.08)}
+  .name-cell{font-weight:600}
+  .score-cell{font-weight:700;color:var(--cyan)}
+  .trend-up{color:#48bb78}
+  .trend-down{color:#fc8181}
+  .trend-same{color:var(--muted)}
+  .num-cell{color:var(--muted);font-size:.88rem}
+  @media(max-width:700px){
+    .podium-bar{width:80px}
+    th,td{padding:10px 8px;font-size:.8rem}
+    .avatar-sm{width:28px;height:28px;font-size:.7rem;margin-right:6px}
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>Leaderboard</h1>
+  <p class="subtitle">Die aktivsten Mitglieder im {{BRAND_NAME}}-Oekosystem</p>
+
+  <div class="tabs">
+    <div class="tab" onclick="setTab(this)">Heute</div>
+    <div class="tab active" onclick="setTab(this)">Diese Woche</div>
+    <div class="tab" onclick="setTab(this)">Diesen Monat</div>
+    <div class="tab" onclick="setTab(this)">Alle Zeiten</div>
+  </div>
+
+  <div class="filter-row">
+    <button class="filter-btn active" onclick="setFilter(this)">Alle</button>
+    <button class="filter-btn" onclick="setFilter(this)">Teams</button>
+    <button class="filter-btn" onclick="setFilter(this)">Individuell</button>
+  </div>
+
+  <div class="podium">
+    <div class="podium-item silver">
+      <div class="podium-rank">2</div>
+      <div class="podium-avatar">LM</div>
+      <div class="podium-name">Lena Mueller</div>
+      <div class="podium-score">12.480 Punkte</div>
+      <div class="podium-bar"></div>
+    </div>
+    <div class="podium-item gold">
+      <div class="podium-rank">1</div>
+      <div class="podium-avatar">MS</div>
+      <div class="podium-name">Marco Schmidt</div>
+      <div class="podium-score">15.320 Punkte</div>
+      <div class="podium-bar"></div>
+    </div>
+    <div class="podium-item bronze">
+      <div class="podium-rank">3</div>
+      <div class="podium-avatar">AW</div>
+      <div class="podium-name">Anna Weber</div>
+      <div class="podium-score">10.950 Punkte</div>
+      <div class="podium-bar"></div>
+    </div>
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>Rang</th><th>Name</th><th>Events</th><th>Streams</th><th>Score</th><th>Trend</th></tr>
+      </thead>
+      <tbody id="tableBody"></tbody>
+    </table>
+  </div>
+</div>
+
+<script>
+const users=[
+  {rank:1,init:"MS",name:"Marco Schmidt",events:"4.230",streams:"18",score:"15.320",trend:"up"},
+  {rank:2,init:"LM",name:"Lena Mueller",events:"3.890",streams:"15",score:"12.480",trend:"up"},
+  {rank:3,init:"AW",name:"Anna Weber",events:"3.540",streams:"14",score:"10.950",trend:"same"},
+  {rank:4,init:"TH",name:"Thomas Huber",events:"2.980",streams:"12",score:"9.870",trend:"up"},
+  {rank:5,init:"SK",name:"Sarah Koch",events:"2.750",streams:"11",score:"8.640",trend:"down"},
+  {rank:6,init:"JB",name:"Jonas Braun",events:"2.410",streams:"9",score:"7.520",trend:"up",current:true},
+  {rank:7,init:"KF",name:"Katrin Fischer",events:"2.180",streams:"8",score:"6.890",trend:"down"},
+  {rank:8,init:"PW",name:"Patrick Wagner",events:"1.950",streams:"7",score:"5.710",trend:"same"},
+  {rank:9,init:"MR",name:"Maria Richter",events:"1.720",streams:"6",score:"4.980",trend:"down"},
+  {rank:10,init:"DK",name:"David Klein",events:"1.490",streams:"5",score:"4.230",trend:"up"}
+];
+
+const tbody=document.getElementById('tableBody');
+users.forEach(u=>{
+  const medalClass=u.rank<=3?` rank-${u.rank}`:'';
+  const rankContent=u.rank<=3?`<span class="rank-medal${medalClass}">${u.rank}</span>`:`${u.rank}`;
+  const trendIcon=u.trend==='up'?'\u25B2':u.trend==='down'?'\u25BC':'\u25CF';
+  const trendClass=u.trend==='up'?'trend-up':u.trend==='down'?'trend-down':'trend-same';
+  const tr=document.createElement('tr');
+  if(u.current)tr.className='current';
+  tr.innerHTML=`
+    <td class="rank-cell">${rankContent}</td>
+    <td class="name-cell"><span class="avatar-sm">${u.init}</span>${u.name}${u.current?' (Du)':''}</td>
+    <td class="num-cell">${u.events}</td>
+    <td class="num-cell">${u.streams}</td>
+    <td class="score-cell">${u.score}</td>
+    <td class="${trendClass}">${trendIcon}</td>
+  `;
+  tbody.appendChild(tr);
+});
+
+function setTab(el){document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));el.classList.add('active')}
+function setFilter(el){document.querySelectorAll('.filter-btn').forEach(t=>t.classList.remove('active'));el.classList.add('active')}
+</script>
+</body>
+</html>

@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{BRAND_NAME}} - Dokumentation</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  :root { --dark-bg: {{BG}}; --sidebar-bg: {{SIDEBAR_BG}}; --cyan: {{PRIMARY}}; --cyan-dark: {{PRIMARY_DARK}}; --cloud: {{TEXT}}; --muted: {{MUTED}}; --code-bg: #060d1b; --border: rgba(255,255,255,0.06); }
+  body { background: var(--dark-bg); font-family: system-ui, -apple-system, sans-serif; color: var(--cloud); }
+  a { color: var(--cyan); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  /* Layout */
+  .docs-layout { display: grid; grid-template-columns: 280px 1fr 200px; min-height: 100vh; }
+
+  /* Sidebar */
+  .sidebar {
+    background: var(--sidebar-bg); border-right: 1px solid var(--border);
+    position: sticky; top: 0; height: 100vh; overflow-y: auto; padding-bottom: 24px;
+    scrollbar-width: thin; scrollbar-color: rgba(255,255,255,0.08) transparent;
+  }
+  .sidebar::-webkit-scrollbar { width: 3px; }
+  .sidebar::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.08); border-radius: 2px; }
+
+  .sidebar-header { padding: 20px; border-bottom: 1px solid var(--border); }
+  .sidebar-logo { font-size: 16px; font-weight: 300; letter-spacing: 4px; margin-bottom: 16px; }
+  .sidebar-logo em { color: var(--cyan); font-style: normal; }
+  .sidebar-badge { font-size: 10px; color: var(--muted); background: rgba(255,255,255,0.04); padding: 2px 8px; border-radius: 4px; margin-left: 8px; }
+
+  /* Version selector */
+  .version-select {
+    width: 100%; padding: 6px 10px; border-radius: 6px; font-size: 12px;
+    background: rgba(255,255,255,0.03); border: 1px solid var(--border); color: var(--cloud);
+    font-family: inherit; cursor: pointer; margin-bottom: 12px; appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='M3 5l3 3 3-3' fill='none' stroke='%23718096' stroke-width='1.5'/%3E%3C/svg%3E");
+    background-repeat: no-repeat; background-position: right 8px center;
+  }
+
+  /* Search */
+  .sidebar-search {
+    width: 100%; padding: 8px 12px 8px 32px; border-radius: 8px; font-size: 13px;
+    background: rgba(255,255,255,0.03); border: 1px solid var(--border); color: var(--cloud);
+    font-family: inherit; transition: all 0.3s;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%23718096' stroke-width='2'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cline x1='21' y1='21' x2='16.65' y2='16.65'/%3E%3C/svg%3E");
+    background-repeat: no-repeat; background-position: 10px center;
+  }
+  .sidebar-search:focus { outline: none; border-color: rgba({{PRIMARY_RGB}},0.3); background-color: rgba(255,255,255,0.04); }
+  .sidebar-search::placeholder { color: var(--muted); }
+
+  /* Nav sections */
+  .nav-section { padding: 0 12px; }
+  .nav-group { margin-top: 8px; }
+  .nav-group-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 8px 10px; font-size: 12px; font-weight: 500; letter-spacing: 0.5px;
+    color: var(--muted); cursor: pointer; border-radius: 6px; transition: all 0.2s;
+    user-select: none;
+  }
+  .nav-group-header:hover { color: var(--cloud); background: rgba(255,255,255,0.02); }
+  .nav-group-header .arrow { transition: transform 0.2s; font-size: 10px; }
+  .nav-group.open .arrow { transform: rotate(90deg); }
+  .nav-group-items { overflow: hidden; max-height: 0; transition: max-height 0.3s ease; }
+  .nav-group.open .nav-group-items { max-height: 500px; }
+
+  .nav-item {
+    display: block; padding: 6px 10px 6px 28px; font-size: 13px; font-weight: 300;
+    color: var(--muted); border-radius: 6px; transition: all 0.2s; cursor: pointer; text-decoration: none;
+    border-left: 2px solid transparent; margin-left: 12px;
+  }
+  .nav-item:hover { color: var(--cloud); background: rgba(255,255,255,0.02); text-decoration: none; }
+  .nav-item.active { color: var(--cyan); border-left-color: var(--cyan); background: rgba({{PRIMARY_RGB}},0.04); }
+  .nav-item .new-badge { font-size: 9px; padding: 1px 5px; border-radius: 4px; background: rgba({{PRIMARY_RGB}},0.12); color: var(--cyan); margin-left: 6px; }
+
+  /* Main content */
+  .main-content { padding: 32px 48px; max-width: 100%; overflow-x: hidden; }
+
+  /* Breadcrumbs */
+  .breadcrumbs { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--muted); margin-bottom: 24px; font-weight: 300; }
+  .breadcrumbs span { color: rgba(255,255,255,0.15); }
+
+  .page-title { font-size: 32px; font-weight: 200; margin-bottom: 8px; }
+  .page-desc { font-size: 15px; color: var(--muted); font-weight: 300; line-height: 1.7; margin-bottom: 32px; }
+
+  /* Content sections */
+  .section { margin-bottom: 40px; }
+  .section-title { font-size: 20px; font-weight: 300; margin-bottom: 16px; padding-bottom: 8px; border-bottom: 1px solid var(--border); }
+  .section-text { font-size: 14px; color: var(--muted); font-weight: 300; line-height: 1.8; margin-bottom: 16px; }
+
+  /* Code blocks */
+  .code-block { position: relative; margin: 16px 0; border-radius: 10px; overflow: hidden; border: 1px solid var(--border); }
+  .code-header { display: flex; justify-content: space-between; align-items: center; padding: 8px 16px; background: rgba(255,255,255,0.02); border-bottom: 1px solid var(--border); }
+  .code-lang { font-size: 11px; color: var(--muted); letter-spacing: 1px; }
+  .code-copy {
+    font-size: 11px; color: var(--muted); background: none; border: 1px solid var(--border);
+    padding: 3px 10px; border-radius: 4px; cursor: pointer; font-family: inherit; transition: all 0.2s;
+  }
+  .code-copy:hover { color: var(--cyan); border-color: rgba({{PRIMARY_RGB}},0.3); }
+  .code-copy.copied { color: {{SUCCESS}}; border-color: rgba({{SUCCESS_RGB}},0.3); }
+  pre { background: var(--code-bg); padding: 16px; overflow-x: auto; font-size: 13px; line-height: 1.7; }
+  pre code { font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', monospace; color: #e2e8f0; }
+  .hl-key { color: #c084fc; }
+  .hl-str { color: #86efac; }
+  .hl-fn { color: #93c5fd; }
+  .hl-comm { color: #475569; font-style: italic; }
+  .hl-num { color: #fbbf24; }
+  .hl-tag { color: #f472b6; }
+
+  /* Inline code */
+  code:not(pre code) {
+    font-family: 'SF Mono', 'Fira Code', monospace; font-size: 12px;
+    background: rgba({{PRIMARY_RGB}},0.06); color: var(--cyan); padding: 2px 6px; border-radius: 4px;
+  }
+
+  /* Tables */
+  .doc-table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 13px; }
+  .doc-table th {
+    text-align: left; padding: 10px 14px; font-size: 11px; font-weight: 500;
+    letter-spacing: 1px; color: var(--muted); background: rgba(255,255,255,0.02);
+    border-bottom: 1px solid var(--border);
+  }
+  .doc-table td { padding: 10px 14px; border-bottom: 1px solid rgba(255,255,255,0.02); font-weight: 300; color: var(--cloud); }
+  .doc-table tr:hover td { background: rgba(255,255,255,0.01); }
+  .param-required { font-size: 10px; padding: 1px 5px; border-radius: 3px; background: rgba({{ERROR_RGB}},0.1); color: {{ERROR}}; }
+  .param-optional { font-size: 10px; padding: 1px 5px; border-radius: 3px; background: rgba(255,255,255,0.04); color: var(--muted); }
+
+  /* Callouts */
+  .callout { padding: 16px 20px; border-radius: 10px; margin: 20px 0; border-left: 3px solid; font-size: 13px; font-weight: 300; line-height: 1.7; }
+  .callout-title { font-size: 12px; font-weight: 500; letter-spacing: 0.5px; margin-bottom: 4px; display: flex; align-items: center; gap: 6px; }
+  .callout-info { background: rgba({{INFO_RGB}},0.06); border-color: {{INFO}}; }
+  .callout-info .callout-title { color: {{INFO}}; }
+  .callout-warn { background: rgba({{WARNING_RGB}},0.06); border-color: {{WARNING}}; }
+  .callout-warn .callout-title { color: {{WARNING}}; }
+  .callout-tip { background: rgba({{SUCCESS_RGB}},0.06); border-color: {{SUCCESS}}; }
+  .callout-tip .callout-title { color: {{SUCCESS}}; }
+
+  /* Right sidebar (TOC) */
+  .toc {
+    position: sticky; top: 32px; padding: 24px 16px; border-left: 1px solid var(--border);
+    height: fit-content;
+  }
+  .toc-title { font-size: 11px; font-weight: 500; letter-spacing: 2px; color: var(--muted); margin-bottom: 12px; }
+  .toc-item {
+    display: block; font-size: 12px; font-weight: 300; color: var(--muted);
+    padding: 4px 0 4px 12px; border-left: 1px solid rgba(255,255,255,0.06);
+    transition: all 0.2s; cursor: pointer; text-decoration: none;
+  }
+  .toc-item:hover { color: var(--cloud); text-decoration: none; }
+  .toc-item.active { color: var(--cyan); border-left-color: var(--cyan); }
+
+  /* Prev/Next nav */
+  .page-nav { display: flex; justify-content: space-between; margin-top: 48px; padding-top: 24px; border-top: 1px solid var(--border); }
+  .page-nav-link {
+    display: flex; flex-direction: column; gap: 4px; padding: 16px 20px;
+    border-radius: 10px; border: 1px solid var(--border); transition: all 0.2s;
+    text-decoration: none; min-width: 200px;
+  }
+  .page-nav-link:hover { border-color: rgba({{PRIMARY_RGB}},0.3); background: rgba({{PRIMARY_RGB}},0.02); text-decoration: none; }
+  .page-nav-label { font-size: 11px; color: var(--muted); }
+  .page-nav-title { font-size: 14px; font-weight: 400; color: var(--cyan); }
+  .page-nav-link.next { text-align: right; margin-left: auto; }
+
+  /* Mobile sidebar toggle */
+  .sidebar-toggle {
+    display: none; position: fixed; bottom: 20px; left: 20px; z-index: 100;
+    width: 44px; height: 44px; border-radius: 12px;
+    background: rgba({{PRIMARY_RGB}},0.15); border: 1px solid rgba({{PRIMARY_RGB}},0.3);
+    color: var(--cyan); font-size: 20px; cursor: pointer;
+    backdrop-filter: blur(10px); transition: all 0.3s;
+  }
+  .sidebar-toggle:hover { background: rgba({{PRIMARY_RGB}},0.25); }
+
+  @media (max-width: 1100px) {
+    .docs-layout { grid-template-columns: 280px 1fr; }
+    .toc { display: none; }
+  }
+  @media (max-width: 768px) {
+    .docs-layout { grid-template-columns: 1fr; }
+    .sidebar {
+      position: fixed; left: 0; top: 0; bottom: 0; z-index: 50;
+      transform: translateX(-100%); transition: transform 0.3s cubic-bezier(0.4,0,0.2,1);
+    }
+    .sidebar.open { transform: translateX(0); }
+    .sidebar-toggle { display: flex; align-items: center; justify-content: center; }
+    .main-content { padding: 24px 20px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="docs-layout">
+  <!-- Sidebar -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <div class="sidebar-logo">ELUM<em>A</em> <span class="sidebar-badge">DOCS</span></div>
+      <select class="version-select">
+        <option>v2.4.0 (Aktuell)</option>
+        <option>v2.3.1</option>
+        <option>v2.2.0</option>
+        <option>v1.x</option>
+      </select>
+      <input type="text" class="sidebar-search" placeholder="Suche... (Ctrl+K)" id="searchInput">
+    </div>
+
+    <nav class="nav-section">
+      <div class="nav-group open">
+        <div class="nav-group-header" onclick="toggleGroup(this)">Erste Schritte <span class="arrow">&#9654;</span></div>
+        <div class="nav-group-items">
+          <a class="nav-item" href="#">Einführung</a>
+          <a class="nav-item active" href="#">Installation</a>
+          <a class="nav-item" href="#">Schnellstart</a>
+          <a class="nav-item" href="#">Konfiguration</a>
+        </div>
+      </div>
+
+      <div class="nav-group open">
+        <div class="nav-group-header" onclick="toggleGroup(this)">API Referenz <span class="arrow">&#9654;</span></div>
+        <div class="nav-group-items">
+          <a class="nav-item" href="#">Authentifizierung</a>
+          <a class="nav-item" href="#">Events senden</a>
+          <a class="nav-item" href="#">Events abfragen</a>
+          <a class="nav-item" href="#">Webhooks</a>
+          <a class="nav-item" href="#">Rate Limits</a>
+        </div>
+      </div>
+
+      <div class="nav-group">
+        <div class="nav-group-header" onclick="toggleGroup(this)">Events <span class="arrow">&#9654;</span></div>
+        <div class="nav-group-items">
+          <a class="nav-item" href="#">Event-Typen</a>
+          <a class="nav-item" href="#">Event Store</a>
+          <a class="nav-item" href="#">Streams <span class="new-badge">NEU</span></a>
+          <a class="nav-item" href="#">Replay</a>
+        </div>
+      </div>
+
+      <div class="nav-group">
+        <div class="nav-group-header" onclick="toggleGroup(this)">Integrationen <span class="arrow">&#9654;</span></div>
+        <div class="nav-group-items">
+          <a class="nav-item" href="#">Telegram Bot</a>
+          <a class="nav-item" href="#">AI Studio</a>
+          <a class="nav-item" href="#">Slack</a>
+          <a class="nav-item" href="#">Zapier</a>
+        </div>
+      </div>
+
+      <div class="nav-group">
+        <div class="nav-group-header" onclick="toggleGroup(this)">SDK <span class="arrow">&#9654;</span></div>
+        <div class="nav-group-items">
+          <a class="nav-item" href="#">JavaScript</a>
+          <a class="nav-item" href="#">Python</a>
+          <a class="nav-item" href="#">cURL</a>
+        </div>
+      </div>
+    </nav>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    <div class="breadcrumbs">
+      <a href="#">Docs</a> <span>/</span> <a href="#">Erste Schritte</a> <span>/</span> Installation
+    </div>
+
+    <h1 class="page-title" id="installation">Installation</h1>
+    <p class="page-desc">{{BRAND_NAME}} in wenigen Minuten einrichten. Diese Anleitung führt dich durch die Installation und initiale Konfiguration des Event-Systems.</p>
+
+    <div class="callout callout-info">
+      <div class="callout-title">&#8505;&#65039; Hinweis</div>
+      {{BRAND_NAME}} benötigt <code>Node.js 20+</code> und <code>npm 10+</code>. Stelle sicher, dass beide installiert sind bevor du fortfährst.
+    </div>
+
+    <!-- Section: Voraussetzungen -->
+    <div class="section" id="voraussetzungen">
+      <h2 class="section-title">Voraussetzungen</h2>
+      <p class="section-text">Bevor du {{BRAND_NAME}} installierst, stelle sicher dass folgende Abhängigkeiten auf deinem System verfügbar sind:</p>
+      <table class="doc-table">
+        <thead><tr><th>ABHÄNGIGKEIT</th><th>VERSION</th><th>STATUS</th></tr></thead>
+        <tbody>
+          <tr><td><code>Node.js</code></td><td>&#8805; 20.0</td><td><span class="param-required">Erforderlich</span></td></tr>
+          <tr><td><code>npm</code></td><td>&#8805; 10.0</td><td><span class="param-required">Erforderlich</span></td></tr>
+          <tr><td><code>Git</code></td><td>&#8805; 2.0</td><td><span class="param-required">Erforderlich</span></td></tr>
+          <tr><td><code>Docker</code></td><td>&#8805; 24.0</td><td><span class="param-optional">Optional</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Section: Installation -->
+    <div class="section" id="paket-installation">
+      <h2 class="section-title">Paket-Installation</h2>
+      <p class="section-text">Klone das Repository und installiere alle Abhängigkeiten mit einem einzigen Befehl:</p>
+
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">BASH</span><button class="code-copy" onclick="copyCode(this)">Kopieren</button></div>
+        <pre><code><span class="hl-comm"># Repository klonen</span>
+git clone https://github.com/{{BRAND_NAME_LOWER}}/{{BRAND_NAME_LOWER}}.git
+<span class="hl-key">cd</span> {{BRAND_NAME_LOWER}}
+
+<span class="hl-comm"># Abhängigkeiten installieren</span>
+npm install
+
+<span class="hl-comm"># Entwicklungsserver starten</span>
+npm run dev</code></pre>
+      </div>
+
+      <div class="callout callout-tip">
+        <div class="callout-title">&#128161; Tipp</div>
+        Verwende <code>npm run dev</code> im Root-Verzeichnis um alle Workspaces (Server, Client, Shared) gleichzeitig zu starten.
+      </div>
+    </div>
+
+    <!-- Section: Konfiguration -->
+    <div class="section" id="konfiguration">
+      <h2 class="section-title">Konfiguration</h2>
+      <p class="section-text">Erstelle eine <code>.env</code> Datei im Root-Verzeichnis mit den folgenden Umgebungsvariablen:</p>
+
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">ENV</span><button class="code-copy" onclick="copyCode(this)">Kopieren</button></div>
+        <pre><code><span class="hl-comm"># Server</span>
+<span class="hl-key">PORT</span>=<span class="hl-num">3000</span>
+<span class="hl-key">NODE_ENV</span>=<span class="hl-str">development</span>
+
+<span class="hl-comm"># Event Store</span>
+<span class="hl-key">EVENT_STORE_PATH</span>=<span class="hl-str">./data/events.jsonl</span>
+
+<span class="hl-comm"># AI Integration</span>
+<span class="hl-key">AI_PROVIDER</span>=<span class="hl-str">anthropic</span>
+<span class="hl-key">AI_API_KEY</span>=<span class="hl-str">sk-ant-...</span>
+
+<span class="hl-comm"># Telegram Bot</span>
+<span class="hl-key">TELEGRAM_BOT_TOKEN</span>=<span class="hl-str">123456:ABC-DEF...</span></code></pre>
+      </div>
+
+      <div class="callout callout-warn">
+        <div class="callout-title">&#9888;&#65039; Warnung</div>
+        Teile niemals deinen <code>AI_API_KEY</code> oder <code>TELEGRAM_BOT_TOKEN</code>. Füge die <code>.env</code> Datei zu <code>.gitignore</code> hinzu.
+      </div>
+    </div>
+
+    <!-- Section: API -->
+    <div class="section" id="erster-event">
+      <h2 class="section-title">Ersten Event senden</h2>
+      <p class="section-text">Nach der Installation kannst du deinen ersten Event über die API senden:</p>
+
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">JAVASCRIPT</span><button class="code-copy" onclick="copyCode(this)">Kopieren</button></div>
+        <pre><code><span class="hl-key">const</span> response = <span class="hl-key">await</span> <span class="hl-fn">fetch</span>(<span class="hl-str">'http://localhost:3000/api/events'</span>, {
+  <span class="hl-key">method</span>: <span class="hl-str">'POST'</span>,
+  <span class="hl-key">headers</span>: { <span class="hl-str">'Content-Type'</span>: <span class="hl-str">'application/json'</span> },
+  <span class="hl-key">body</span>: <span class="hl-fn">JSON.stringify</span>({
+    <span class="hl-key">type</span>: <span class="hl-str">'user.registered'</span>,
+    <span class="hl-key">data</span>: {
+      <span class="hl-key">userId</span>: <span class="hl-str">'usr_001'</span>,
+      <span class="hl-key">email</span>: <span class="hl-str">'hello@{{BRAND_DOMAIN}}'</span>
+    }
+  })
+});
+
+<span class="hl-key">const</span> event = <span class="hl-key">await</span> response.<span class="hl-fn">json</span>();
+console.<span class="hl-fn">log</span>(event); <span class="hl-comm">// { id: "evt_...", type: "user.registered", ... }</span></code></pre>
+      </div>
+
+      <h3 style="font-size:16px; font-weight:400; margin: 24px 0 12px;">API Parameter</h3>
+      <table class="doc-table">
+        <thead><tr><th>PARAMETER</th><th>TYP</th><th>STATUS</th><th>BESCHREIBUNG</th></tr></thead>
+        <tbody>
+          <tr><td><code>type</code></td><td><code>string</code></td><td><span class="param-required">Erforderlich</span></td><td>Event-Typ im Format <code>resource.action</code></td></tr>
+          <tr><td><code>data</code></td><td><code>object</code></td><td><span class="param-required">Erforderlich</span></td><td>Event-Payload als JSON-Objekt</td></tr>
+          <tr><td><code>stream</code></td><td><code>string</code></td><td><span class="param-optional">Optional</span></td><td>Ziel-Stream für den Event</td></tr>
+          <tr><td><code>metadata</code></td><td><code>object</code></td><td><span class="param-optional">Optional</span></td><td>Zusätzliche Metadaten</td></tr>
+          <tr><td><code>idempotencyKey</code></td><td><code>string</code></td><td><span class="param-optional">Optional</span></td><td>Verhindert doppelte Events</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Section: Nächste Schritte -->
+    <div class="section" id="naechste-schritte">
+      <h2 class="section-title">Nächste Schritte</h2>
+      <p class="section-text">
+        Nachdem {{BRAND_NAME}} läuft, empfehlen wir dir folgende Seiten als nächstes:<br><br>
+        &#8594; <a href="#">Schnellstart-Tutorial</a> - Baue deine erste Event-Pipeline<br>
+        &#8594; <a href="#">Event-Typen</a> - Lerne die verschiedenen Event-Typen kennen<br>
+        &#8594; <a href="#">Telegram Bot einrichten</a> - Verbinde {{BRAND_NAME}} mit Telegram<br>
+        &#8594; <a href="#">AI Studio</a> - Aktiviere KI-gestützte Automatisierungen
+      </p>
+    </div>
+
+    <!-- Prev/Next -->
+    <div class="page-nav">
+      <a class="page-nav-link prev" href="#">
+        <span class="page-nav-label">&#8592; Zurück</span>
+        <span class="page-nav-title">Einführung</span>
+      </a>
+      <a class="page-nav-link next" href="#">
+        <span class="page-nav-label">Weiter &#8594;</span>
+        <span class="page-nav-title">Schnellstart</span>
+      </a>
+    </div>
+  </main>
+
+  <!-- Table of Contents -->
+  <aside class="toc">
+    <div class="toc-title">AUF DIESER SEITE</div>
+    <a class="toc-item active" href="#voraussetzungen" onclick="setToc(this)">Voraussetzungen</a>
+    <a class="toc-item" href="#paket-installation" onclick="setToc(this)">Paket-Installation</a>
+    <a class="toc-item" href="#konfiguration" onclick="setToc(this)">Konfiguration</a>
+    <a class="toc-item" href="#erster-event" onclick="setToc(this)">Ersten Event senden</a>
+    <a class="toc-item" href="#naechste-schritte" onclick="setToc(this)">Nächste Schritte</a>
+  </aside>
+</div>
+
+<button class="sidebar-toggle" id="sidebarToggle" onclick="toggleSidebar()">&#9776;</button>
+
+<script>
+  function toggleGroup(header) {
+    header.parentElement.classList.toggle('open');
+  }
+
+  function toggleSidebar() {
+    document.getElementById('sidebar').classList.toggle('open');
+  }
+
+  function setToc(el) {
+    document.querySelectorAll('.toc-item').forEach(t => t.classList.remove('active'));
+    el.classList.add('active');
+  }
+
+  function copyCode(btn) {
+    const code = btn.closest('.code-block').querySelector('code').textContent;
+    navigator.clipboard.writeText(code).then(() => {
+      btn.textContent = 'Kopiert!';
+      btn.classList.add('copied');
+      setTimeout(() => { btn.textContent = 'Kopieren'; btn.classList.remove('copied'); }, 2000);
+    });
+  }
+
+  // Scroll spy for TOC
+  const sections = document.querySelectorAll('.section');
+  const tocItems = document.querySelectorAll('.toc-item');
+  window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(s => {
+      if (window.scrollY >= s.offsetTop - 100) current = s.id;
+    });
+    tocItems.forEach(t => {
+      t.classList.remove('active');
+      if (t.getAttribute('href') === '#' + current) t.classList.add('active');
+    });
+  });
+
+  // Close sidebar on mobile when clicking a nav item
+  document.querySelectorAll('.nav-item').forEach(item => {
+    item.addEventListener('click', () => {
+      if (window.innerWidth <= 768) document.getElementById('sidebar').classList.remove('open');
+    });
+  });
+</script>
+
+</body>
+</html>

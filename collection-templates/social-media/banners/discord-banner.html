@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{BRAND_NAME}} - Discord Banner (960x540)</title>
+<style>
+  :root {
+    --dark-bg: {{BG}};
+    --cyan: {{PRIMARY}};
+    --cyan-dark: {{PRIMARY_DARK}};
+    --cloud: {{TEXT}};
+    --muted: {{MUTED}};
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #080e1a;
+    font-family: system-ui, -apple-system, sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 40px;
+  }
+
+  .banner {
+    width: 960px;
+    height: 540px;
+    background: var(--dark-bg);
+    position: relative;
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+
+  /* Cyan gradient accent - top right to center */
+  .gradient-accent {
+    position: absolute;
+    width: 700px;
+    height: 700px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba({{PRIMARY_RGB}}, 0.1) 0%, rgba({{PRIMARY_RGB}}, 0.03) 35%, transparent 65%);
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+  }
+
+  /* Secondary gradient accent */
+  .gradient-accent-2 {
+    position: absolute;
+    width: 400px;
+    height: 400px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(56, 178, 172, 0.06) 0%, transparent 60%);
+    top: -100px;
+    right: -50px;
+    pointer-events: none;
+  }
+
+  /* Hex pattern */
+  .hex-pattern {
+    position: absolute;
+    inset: 0;
+    opacity: 0.03;
+  }
+
+  /* Decorative hexagons */
+  .deco-hexes {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+
+  /* Content - centered */
+  .content {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    z-index: 3;
+  }
+
+  .logo-group {
+    display: flex;
+    align-items: center;
+    gap: 28px;
+  }
+
+  .wordmark {
+    font-size: 64px;
+    font-weight: 700;
+    color: var(--cloud);
+    letter-spacing: 0.14em;
+    line-height: 1;
+  }
+
+  .wordmark .accent { color: var(--cyan); }
+
+  .tagline {
+    font-size: 16px;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    font-weight: 400;
+  }
+
+  .cta {
+    margin-top: 16px;
+    padding: 12px 36px;
+    background: linear-gradient(135deg, rgba({{PRIMARY_RGB}}, 0.15), rgba(56, 178, 172, 0.08));
+    border: 1px solid rgba({{PRIMARY_RGB}}, 0.3);
+    border-radius: 8px;
+    color: var(--cyan);
+    font-size: 16px;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+  }
+
+  /* Accent lines */
+  .top-line {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, transparent 10%, var(--cyan) 50%, transparent 90%);
+    opacity: 0.4;
+  }
+
+  .bottom-line {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--cyan-dark), transparent);
+    opacity: 0.2;
+  }
+</style>
+</head>
+<body>
+
+<div class="banner">
+  <!-- Gradients -->
+  <div class="gradient-accent"></div>
+  <div class="gradient-accent-2"></div>
+
+  <!-- Hex pattern -->
+  <div class="hex-pattern">
+    <svg width="960" height="540" viewBox="0 0 960 540">
+      <defs>
+        <pattern id="hexDC" x="0" y="0" width="52" height="46" patternUnits="userSpaceOnUse">
+          <polygon points="26,2 49,13 49,33 26,44 3,33 3,13"
+            fill="none" stroke="{{PRIMARY}}" stroke-width="0.6"/>
+        </pattern>
+      </defs>
+      <rect width="960" height="540" fill="url(#hexDC)"/>
+    </svg>
+  </div>
+
+  <!-- Decorative floating hexagons -->
+  <div class="deco-hexes">
+    <svg width="960" height="540" viewBox="0 0 960 540">
+      <defs>
+        <linearGradient id="cyanGradDC" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="{{PRIMARY}}"/>
+          <stop offset="100%" stop-color="{{PRIMARY_DARK}}"/>
+        </linearGradient>
+      </defs>
+      <!-- Top left hex -->
+      <polygon points="120,50 170,75 170,125 120,150 70,125 70,75"
+        fill="none" stroke="url(#cyanGradDC)" stroke-width="1" opacity="0.08"/>
+      <!-- Top right hex -->
+      <polygon points="820,30 860,50 860,90 820,110 780,90 780,50"
+        fill="none" stroke="url(#cyanGradDC)" stroke-width="0.8" opacity="0.06"/>
+      <!-- Bottom left hex -->
+      <polygon points="80,380 130,405 130,455 80,480 30,455 30,405"
+        fill="none" stroke="url(#cyanGradDC)" stroke-width="0.8" opacity="0.06"/>
+      <!-- Bottom right hex -->
+      <polygon points="860,400 910,425 910,475 860,500 810,475 810,425"
+        fill="none" stroke="url(#cyanGradDC)" stroke-width="1" opacity="0.07"/>
+      <!-- Mid left hex -->
+      <polygon points="50,220 85,240 85,280 50,300 15,280 15,240"
+        fill="none" stroke="{{PRIMARY}}" stroke-width="0.6" opacity="0.05"/>
+      <!-- Mid right hex -->
+      <polygon points="920,250 945,265 945,295 920,310 895,295 895,265"
+        fill="none" stroke="{{PRIMARY}}" stroke-width="0.6" opacity="0.04"/>
+      <!-- Center top small hex -->
+      <polygon points="480,40 505,55 505,85 480,100 455,85 455,55"
+        fill="none" stroke="{{PRIMARY}}" stroke-width="0.5" opacity="0.05"/>
+      <!-- Center bottom small hex -->
+      <polygon points="500,470 520,485 520,505 500,520 480,505 480,485"
+        fill="none" stroke="{{PRIMARY}}" stroke-width="0.5" opacity="0.04"/>
+    </svg>
+  </div>
+
+  <!-- Top accent -->
+  <div class="top-line"></div>
+
+  <!-- Center content -->
+  <div class="content">
+    <div class="logo-group">
+      <!-- Hex logo icon -->
+      <svg width="80" height="90" viewBox="0 0 180 200">
+        <defs>
+          <filter id="glowDC" x="-50%" y="-50%" width="200%" height="200%">
+            <feGaussianBlur stdDeviation="5" result="blur"/>
+            <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+          </filter>
+          <filter id="outerGlowDC" x="-50%" y="-50%" width="200%" height="200%">
+            <feGaussianBlur stdDeviation="12"/>
+          </filter>
+          <linearGradient id="cyanGDC" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="{{PRIMARY}}"/>
+            <stop offset="100%" stop-color="{{PRIMARY_DARK}}"/>
+          </linearGradient>
+        </defs>
+        <polygon points="90,10 165,50 165,130 90,170 15,130 15,50"
+          fill="none" stroke="{{PRIMARY}}" stroke-width="2" opacity="0.2"
+          filter="url(#outerGlowDC)"/>
+        <polygon points="90,15 160,52 160,128 90,165 20,128 20,52"
+          fill="rgba({{PRIMARY_RGB}},0.04)" stroke="url(#cyanGDC)" stroke-width="3" opacity="0.8"/>
+        <g filter="url(#glowDC)">
+          <rect x="60" y="55" width="60" height="6" rx="3" fill="url(#cyanGDC)" opacity="0.95"/>
+          <rect x="60" y="82" width="48" height="6" rx="3" fill="url(#cyanGDC)" opacity="0.95"/>
+          <rect x="60" y="109" width="60" height="6" rx="3" fill="url(#cyanGDC)" opacity="0.95"/>
+          <rect x="60" y="55" width="6" height="60" rx="3" fill="url(#cyanGDC)" opacity="0.95"/>
+        </g>
+      </svg>
+
+      <div class="wordmark">ELUM<span class="accent">A</span></div>
+    </div>
+
+    <div class="tagline">{{BRAND_TAGLINE}}</div>
+
+    <div class="cta">Join the Community</div>
+  </div>
+
+  <!-- Bottom accent -->
+  <div class="bottom-line"></div>
+</div>
+
+</body>
+</html>

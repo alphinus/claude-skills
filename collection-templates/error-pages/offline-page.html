@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Offline – Keine Verbindung | {{BRAND_NAME}}</title>
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{--dark-bg:{{BG}};--cyan:{{PRIMARY}};--cyan-dark:{{PRIMARY_DARK}};--cloud:{{TEXT}};--muted:{{MUTED}}}
+  body{font-family:system-ui,-apple-system,sans-serif;background:var(--dark-bg);color:var(--cloud);min-height:100vh;display:flex;align-items:center;justify-content:center;position:relative}
+  body::before{content:'';position:fixed;inset:0;background-image:radial-gradient(rgba({{PRIMARY_RGB}},.04) 1px,transparent 1px);background-size:32px 32px}
+  .container{text-align:center;position:relative;z-index:2;padding:2rem;max-width:480px}
+  /* Wifi icon with fading waves */
+  .wifi-wrap{width:160px;height:160px;margin:0 auto 2.5rem;position:relative}
+  .wifi-svg{width:100%;height:100%}
+  .wave{opacity:0;animation:wave-fade 3s ease-in-out infinite}
+  .wave:nth-child(1){animation-delay:0s}
+  .wave:nth-child(2){animation-delay:.3s}
+  .wave:nth-child(3){animation-delay:.6s}
+  @keyframes wave-fade{0%{opacity:.7}30%{opacity:.3}60%{opacity:.05}100%{opacity:0}}
+  /* Disconnected line */
+  .disconnect-line{animation:slash-draw 2s ease-in-out infinite}
+  @keyframes slash-draw{0%,100%{opacity:.8}50%{opacity:.3}}
+  h1{font-size:clamp(1.6rem,4vw,2.2rem);font-weight:700;margin-bottom:.75rem}
+  .desc{color:var(--muted);font-size:1.05rem;margin-bottom:2.5rem;line-height:1.6}
+  /* Button */
+  .btn{display:inline-flex;align-items:center;gap:.5rem;padding:.85rem 2.2rem;border-radius:10px;font-size:1rem;font-weight:600;cursor:pointer;border:none;transition:all .25s;text-decoration:none;background:var(--cyan);color:var(--dark-bg);margin-bottom:2rem}
+  .btn:hover{background:var(--cyan-dark);transform:translateY(-2px);box-shadow:0 6px 24px rgba({{PRIMARY_RGB}},.3)}
+  /* Cached content hint */
+  .hint{display:flex;align-items:flex-start;gap:.75rem;text-align:left;background:rgba({{PRIMARY_RGB}},.06);border:1px solid rgba({{PRIMARY_RGB}},.12);border-radius:12px;padding:1.2rem 1.4rem}
+  .hint-icon{flex-shrink:0;margin-top:2px;color:var(--cyan)}
+  .hint-text{font-size:.9rem;color:var(--muted);line-height:1.5}
+  .hint-title{font-weight:600;color:var(--cloud);margin-bottom:.25rem;font-size:.95rem}
+  /* Signal waves animation (background) */
+  .signal-waves{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:0;pointer-events:none}
+  .sig{border:2px solid rgba({{PRIMARY_RGB}},.04);border-radius:50%;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);animation:sig-out 4s ease-out infinite}
+  .sig:nth-child(1){width:200px;height:200px;animation-delay:0s}
+  .sig:nth-child(2){width:360px;height:360px;animation-delay:.8s}
+  .sig:nth-child(3){width:520px;height:520px;animation-delay:1.6s}
+  .sig:nth-child(4){width:680px;height:680px;animation-delay:2.4s}
+  @keyframes sig-out{0%{opacity:.3;border-color:rgba({{PRIMARY_RGB}},.08)}100%{opacity:0;border-color:rgba({{PRIMARY_RGB}},0);transform:translate(-50%,-50%) scale(1.2)}}
+</style>
+</head>
+<body>
+  <div class="signal-waves">
+    <div class="sig"></div><div class="sig"></div><div class="sig"></div><div class="sig"></div>
+  </div>
+  <div class="container">
+    <div class="wifi-wrap">
+      <svg class="wifi-svg" viewBox="0 0 160 160" fill="none">
+        <!-- Wifi waves (fading out to show no connection) -->
+        <path class="wave" d="M80 60 Q50 60 35 80" stroke="{{PRIMARY}}" stroke-width="3" stroke-linecap="round" fill="none" opacity=".15"/>
+        <path class="wave" d="M80 60 Q110 60 125 80" stroke="{{PRIMARY}}" stroke-width="3" stroke-linecap="round" fill="none" opacity=".15"/>
+        <path class="wave" d="M80 44 Q38 44 18 72" stroke="{{PRIMARY}}" stroke-width="3" stroke-linecap="round" fill="none" opacity=".1"/>
+        <path class="wave" d="M80 44 Q122 44 142 72" stroke="{{PRIMARY}}" stroke-width="3" stroke-linecap="round" fill="none" opacity=".1"/>
+        <path class="wave" d="M80 28 Q26 28 2 64" stroke="{{PRIMARY}}" stroke-width="3" stroke-linecap="round" fill="none" opacity=".05"/>
+        <path class="wave" d="M80 28 Q134 28 158 64" stroke="{{PRIMARY}}" stroke-width="3" stroke-linecap="round" fill="none" opacity=".05"/>
+        <!-- Center dot -->
+        <circle cx="80" cy="100" r="8" fill="{{MUTED}}"/>
+        <!-- Disconnect slash -->
+        <line class="disconnect-line" x1="30" y1="130" x2="130" y2="30" stroke="#e53e3e" stroke-width="3" stroke-linecap="round" opacity=".7"/>
+      </svg>
+    </div>
+    <h1>Keine Verbindung</h1>
+    <p class="desc">Du bist offline. Prüfe deine Internetverbindung.</p>
+    <a href="javascript:location.reload()" class="btn">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 2v6h-6"/><path d="M3 12a9 9 0 0 1 15-6.7L21 8"/><path d="M3 22v-6h6"/><path d="M21 12a9 9 0 0 1-15 6.7L3 16"/></svg>
+      Erneut verbinden
+    </a>
+    <div class="hint">
+      <svg class="hint-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      <div>
+        <div class="hint-title">Offline-Inhalte</div>
+        <div class="hint-text">Einige Inhalte sind offline verfügbar. Zuvor besuchte Seiten wurden möglicherweise zwischengespeichert.</div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

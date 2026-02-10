@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{BRAND_NAME}} Suchergebnisse</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --dark-bg: {{BG}}; --cyan: {{PRIMARY}}; --cyan-dark: {{PRIMARY_DARK}}; --cloud: {{TEXT}};
+    --muted: {{MUTED}}; --success: {{SUCCESS}}; --warning: {{WARNING}}; --error: {{ERROR}}; --info: {{INFO}};
+    --surface: #1e293b; --surface-2: #334155; --border: #475569;
+  }
+  body { font-family: system-ui, -apple-system, sans-serif; background: var(--dark-bg); color: var(--cloud); min-height: 100vh; }
+
+  /* Top bar */
+  .topbar { display: flex; align-items: center; gap: 16px; padding: 14px 28px; border-bottom: 1px solid var(--border); background: var(--surface); }
+  .topbar-logo { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+  .topbar-logo svg { width: 28px; height: 28px; }
+  .topbar-logo span { font-size: 16px; font-weight: 700; color: var(--cyan); letter-spacing: 1px; }
+
+  /* Search header */
+  .search-header { padding: 24px 28px; border-bottom: 1px solid var(--border); }
+  .search-input-wrap { position: relative; max-width: 720px; margin-bottom: 16px; }
+  .search-icon { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--muted); }
+  .search-icon svg { width: 20px; height: 20px; }
+  .search-input { width: 100%; background: var(--surface); border: 2px solid var(--border); border-radius: 10px; padding: 13px 16px 13px 48px; color: var(--cloud); font-size: 16px; outline: none; font-family: inherit; }
+  .search-input:focus { border-color: var(--cyan); box-shadow: 0 0 0 4px rgba({{PRIMARY_RGB}},.12); }
+  .search-filters { display: flex; gap: 10px; flex-wrap: wrap; }
+  .filter-chip { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 7px 14px; color: var(--cloud); font-size: 13px; appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%23718096' viewBox='0 0 24 24'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 10px center; padding-right: 30px; cursor: pointer; outline: none; font-family: inherit; }
+  .filter-chip:focus { border-color: var(--cyan); }
+
+  /* Main layout */
+  .content-area { display: grid; grid-template-columns: 240px 1fr; min-height: calc(100vh - 180px); }
+
+  /* Faceted sidebar */
+  .facet-sidebar { border-right: 1px solid var(--border); padding: 20px; background: rgba(30,41,59,.4); }
+  .facet-section { margin-bottom: 24px; }
+  .facet-title { font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: .5px; color: var(--muted); margin-bottom: 10px; }
+  .facet-item { display: flex; align-items: center; gap: 8px; padding: 5px 0; cursor: pointer; font-size: 13px; }
+  .facet-item:hover { color: var(--cyan); }
+  .facet-check { width: 16px; height: 16px; border-radius: 4px; border: 1.5px solid var(--border); display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: all .2s; }
+  .facet-item.active .facet-check { background: var(--cyan); border-color: var(--cyan); }
+  .facet-item.active .facet-check::after { content: ''; display: block; width: 8px; height: 5px; border-left: 2px solid var(--dark-bg); border-bottom: 2px solid var(--dark-bg); transform: rotate(-45deg) translateY(-1px); }
+  .facet-label { flex: 1; }
+  .facet-count { font-size: 11px; color: var(--muted); background: var(--surface-2); padding: 1px 6px; border-radius: 8px; }
+  .facet-date-range { display: flex; flex-direction: column; gap: 6px; }
+  .facet-date-input { background: var(--surface); border: 1px solid var(--border); border-radius: 6px; padding: 6px 10px; color: var(--cloud); font-size: 12px; outline: none; font-family: inherit; }
+  .facet-date-input:focus { border-color: var(--cyan); }
+
+  /* Results area */
+  .results-area { padding: 20px 28px; }
+  .results-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+  .results-count { font-size: 14px; color: var(--muted); }
+  .results-count strong { color: var(--cloud); }
+  .sort-select { background: var(--surface); border: 1px solid var(--border); border-radius: 6px; padding: 6px 28px 6px 10px; color: var(--cloud); font-size: 12px; appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%23718096' viewBox='0 0 24 24'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 8px center; cursor: pointer; outline: none; font-family: inherit; }
+
+  /* Result card */
+  .result-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 16px 20px; margin-bottom: 10px; transition: border-color .2s; }
+  .result-card:hover { border-color: rgba({{PRIMARY_RGB}},.3); }
+  .result-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+  .result-type { display: flex; align-items: center; gap: 8px; }
+  .result-type-badge { font-size: 12px; font-weight: 600; padding: 3px 10px; border-radius: 6px; background: rgba({{PRIMARY_RGB}},.1); color: var(--cyan); font-family: 'SF Mono', 'Fira Code', monospace; }
+  .result-stream { font-size: 12px; color: var(--muted); }
+  .result-meta { display: flex; align-items: center; gap: 12px; }
+  .result-time { font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; }
+  .relevance-bar { display: flex; align-items: center; gap: 4px; }
+  .relevance-label { font-size: 11px; color: var(--muted); }
+  .relevance-dots { display: flex; gap: 2px; }
+  .relevance-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--border); }
+  .relevance-dot.filled { background: var(--cyan); }
+
+  .result-preview { font-size: 13px; line-height: 1.5; color: rgba(248,250,252,.7); margin-bottom: 8px; font-family: 'SF Mono', 'Fira Code', monospace; background: rgba(0,0,0,.2); padding: 10px 14px; border-radius: 6px; border-left: 3px solid var(--border); }
+  .result-preview .hl { color: var(--cyan); font-weight: 600; background: rgba({{PRIMARY_RGB}},.12); padding: 0 2px; border-radius: 2px; }
+
+  .result-footer { display: flex; align-items: center; gap: 12px; }
+  .result-tag { font-size: 11px; color: var(--muted); background: var(--surface-2); padding: 2px 8px; border-radius: 4px; }
+
+  /* Pagination */
+  .pagination { display: flex; align-items: center; justify-content: center; gap: 4px; padding: 24px 0; }
+  .page-btn { width: 34px; height: 34px; border-radius: 6px; border: 1px solid var(--border); background: transparent; color: var(--muted); font-size: 13px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all .2s; font-family: inherit; }
+  .page-btn:hover { border-color: var(--cyan); color: var(--cyan); }
+  .page-btn.active { background: var(--cyan); color: var(--dark-bg); border-color: var(--cyan); font-weight: 600; }
+
+  /* Empty state */
+  .empty-state { margin-top: 32px; padding: 48px 20px; border: 2px dashed var(--border); border-radius: 12px; text-align: center; }
+  .empty-icon { margin-bottom: 16px; }
+  .empty-icon svg { width: 48px; height: 48px; color: var(--muted); }
+  .empty-title { font-size: 16px; font-weight: 600; margin-bottom: 6px; }
+  .empty-desc { font-size: 13px; color: var(--muted); max-width: 360px; margin: 0 auto; }
+
+  /* Separator */
+  .section-sep { margin: 36px 0 20px; padding-top: 20px; border-top: 1px dashed var(--border); }
+  .section-sep-label { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: .5px; margin-bottom: 12px; }
+</style>
+</head>
+<body>
+
+<!-- Top bar -->
+<header class="topbar">
+  <div class="topbar-logo">
+    <svg viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="14" stroke="{{PRIMARY}}" stroke-width="2"/><path d="M10 16c0-3.3 2.7-6 6-6s6 2.7 6 6-2.7 6-6 6" stroke="{{PRIMARY}}" stroke-width="2" stroke-linecap="round"/><circle cx="16" cy="16" r="2" fill="{{PRIMARY}}"/></svg>
+    <span>{{BRAND_NAME}}</span>
+  </div>
+</header>
+
+<!-- Search header -->
+<div class="search-header">
+  <div class="search-input-wrap">
+    <div class="search-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div>
+    <input type="text" class="search-input" value="user.signup">
+  </div>
+  <div class="search-filters">
+    <select class="filter-chip">
+      <option>Alle Typen</option>
+      <option>user.*</option>
+      <option>order.*</option>
+      <option>payment.*</option>
+      <option>webhook.*</option>
+    </select>
+    <select class="filter-chip">
+      <option>Alle Streams</option>
+      <option>auth-stream</option>
+      <option>billing-v2</option>
+      <option>webhooks</option>
+    </select>
+    <select class="filter-chip">
+      <option>Letzter Monat</option>
+      <option>Letzte Woche</option>
+      <option>Heute</option>
+      <option>Letzte 3 Monate</option>
+    </select>
+    <select class="filter-chip">
+      <option>Alle Status</option>
+      <option>Erfolgreich</option>
+      <option>Fehlgeschlagen</option>
+      <option>Ausstehend</option>
+    </select>
+  </div>
+</div>
+
+<!-- Content -->
+<div class="content-area">
+  <!-- Facet sidebar -->
+  <aside class="facet-sidebar">
+    <div class="facet-section">
+      <div class="facet-title">Event-Typ</div>
+      <div class="facet-item active">
+        <div class="facet-check"></div>
+        <span class="facet-label">user.signup</span>
+        <span class="facet-count">89</span>
+      </div>
+      <div class="facet-item">
+        <div class="facet-check"></div>
+        <span class="facet-label">user.signup.confirmed</span>
+        <span class="facet-count">31</span>
+      </div>
+      <div class="facet-item">
+        <div class="facet-check"></div>
+        <span class="facet-label">user.signup.failed</span>
+        <span class="facet-count">14</span>
+      </div>
+      <div class="facet-item">
+        <div class="facet-check"></div>
+        <span class="facet-label">user.signup.pending</span>
+        <span class="facet-count">8</span>
+      </div>
+    </div>
+
+    <div class="facet-section">
+      <div class="facet-title">Stream</div>
+      <div class="facet-item active">
+        <div class="facet-check"></div>
+        <span class="facet-label">auth-stream</span>
+        <span class="facet-count">98</span>
+      </div>
+      <div class="facet-item">
+        <div class="facet-check"></div>
+        <span class="facet-label">billing-v2</span>
+        <span class="facet-count">27</span>
+      </div>
+      <div class="facet-item">
+        <div class="facet-check"></div>
+        <span class="facet-label">webhooks</span>
+        <span class="facet-count">17</span>
+      </div>
+    </div>
+
+    <div class="facet-section">
+      <div class="facet-title">Zeitraum</div>
+      <div class="facet-date-range">
+        <input type="date" class="facet-date-input" value="2026-01-10">
+        <input type="date" class="facet-date-input" value="2026-02-10">
+      </div>
+    </div>
+  </aside>
+
+  <!-- Results -->
+  <div class="results-area">
+    <div class="results-header">
+      <div class="results-count"><strong>142</strong> Ergebnisse f&uuml;r &laquo;<span style="color:var(--cyan)">user.signup</span>&raquo;</div>
+      <select class="sort-select">
+        <option>Relevanz</option>
+        <option>Neueste zuerst</option>
+        <option>&Auml;lteste zuerst</option>
+      </select>
+    </div>
+
+    <!-- Result 1 -->
+    <div class="result-card">
+      <div class="result-top">
+        <div class="result-type">
+          <span class="result-type-badge"><span class="hl">user.signup</span></span>
+          <span class="result-stream">auth-stream</span>
+        </div>
+        <div class="result-meta">
+          <div class="relevance-bar">
+            <span class="relevance-label">Relevanz</span>
+            <div class="relevance-dots">
+              <div class="relevance-dot filled"></div><div class="relevance-dot filled"></div><div class="relevance-dot filled"></div><div class="relevance-dot filled"></div><div class="relevance-dot filled"></div>
+            </div>
+          </div>
+          <span class="result-time">10.02.2026, 14:32</span>
+        </div>
+      </div>
+      <div class="result-preview">{ "type": "<span class="hl">user.signup</span>", "userId": "usr_8f3k2", "email": "max@example.ch", "plan": "pro" }</div>
+      <div class="result-footer">
+        <span class="result-tag">12ms</span>
+        <span class="result-tag" style="color:var(--success)">Erfolgreich</span>
+        <span class="result-tag">v2.4.1</span>
+      </div>
+    </div>
+
+    <!-- Result 2 -->
+    <div class="result-card">
+      <div class="result-top">
+        <div class="result-type">
+          <span class="result-type-badge"><span class="hl">user.signup</span></span>
+          <span class="result-stream">auth-stream</span>
+        </div>
+        <div class="result-meta">
+          <div class="relevance-bar">
+            <span class="relevance-label">Relevanz</span>
+            <div class="relevance-dots">
+              <div class="relevance-dot filled"></div><div class="relevance-dot filled"></div><div class="relevance-dot filled"></div><div class="relevance-dot filled"></div><div class="relevance-dot"></div>
+            </div>
+          </div>
+          <span class="result-time">10.02.2026, 13:17</span>
+        </div>
+      </div>
+      <div class="result-preview">{ "type": "<span class="hl">user.signup</span>", "userId": "usr_7d2m9", "email": "lena@firma.ch", "plan": "starter" }</div>
+      <div class="result-footer">
+        <span class="result-tag">8ms</span>
+        <span class="result-tag" style="color:var(--success)">Erfolgreich</span>
+        <span class="result-tag">v2.4.1</span>
+      </div>
+    </div>
+
+    <!-- Result 3 -->
+    <div class="result-card">
+      <div class="result-top">
+        <div class="result-type">
+          <span class="result-type-badge"><span class="hl">user.signup</span>.confirmed</span>
+          <span class="result-stream">auth-stream</span>
+        </div>
+        <div class="result-meta">
+          <div class="relevance-bar">
+            <span class="relevance-label">Relevanz</span>
+            <div class="relevance-dots">
+              <div class="relevance-dot filled"></div><div class="relevance-dot filled"></div><div class="relevance-dot filled"></div><div class="relevance-dot filled"></div><div class="relevance-dot"></div>
+            </div>
+          </div>
+          <span class="result-time">10.02.2026, 11:42</span>
+        </div>
+      </div>
+      <div class="result-preview">{ "type": "<span class="hl">user.signup</span>.confirmed", "userId": "usr_8f3k2", "confirmed_at": "2026-02-10T11:42:00Z" }</div>
+      <div class="result-footer">
+        <span class="result-tag">15ms</span>
+        <span class="result-tag" style="color:var(--success)">Erfolgreich</span>
+        <span class="result-tag">v2.4.1</span>
+      </div>
+    </div>
+
+    <!-- Result 4 -->
+    <div class="result-card">
+      <div class="result-top">
+        <div class="result-type">
+          <span class="result-type-badge"><span class="hl">user.signup</span>.failed</span>
+          <span class="result-stream">auth-stream</span>
+        </div>
+        <div class="result-meta">
+          <div class="relevance-bar">
+            <span class="relevance-label">Relevanz</span>
+            <div class="relevance-dots">
+              <div class="relevance-dot filled"></div><div class="relevance-dot filled"></div><div class="relevance-dot filled"></div><div class="relevance-dot"></div><div class="relevance-dot"></div>
+            </div>
+          </div>
+          <span class="result-time">09.02.2026, 22:08</span>
+        </div>
+      </div>
+      <div class="result-preview">{ "type": "<span class="hl">user.signup</span>.failed", "reason": "email_exists", "email": "doppelt@test.ch" }</div>
+      <div class="result-footer">
+        <span class="result-tag">6ms</span>
+        <span class="result-tag" style="color:var(--error)">Fehlgeschlagen</span>
+        <span class="result-tag">v2.4.1</span>
+      </div>
+    </div>
+
+    <!-- Result 5 -->
+    <div class="result-card">
+      <div class="result-top">
+        <div class="result-type">
+          <span class="result-type-badge"><span class="hl">user.signup</span></span>
+          <span class="result-stream">billing-v2</span>
+        </div>
+        <div class="result-meta">
+          <div class="relevance-bar">
+            <span class="relevance-label">Relevanz</span>
+            <div class="relevance-dots">
+              <div class="relevance-dot filled"></div><div class="relevance-dot filled"></div><div class="relevance-dot filled"></div><div class="relevance-dot"></div><div class="relevance-dot"></div>
+            </div>
+          </div>
+          <span class="result-time">09.02.2026, 18:33</span>
+        </div>
+      </div>
+      <div class="result-preview">{ "type": "<span class="hl">user.signup</span>", "userId": "usr_4p7n1", "email": "anna@startup.io", "plan": "enterprise" }</div>
+      <div class="result-footer">
+        <span class="result-tag">22ms</span>
+        <span class="result-tag" style="color:var(--success)">Erfolgreich</span>
+        <span class="result-tag">v2.3.9</span>
+      </div>
+    </div>
+
+    <!-- Result 6 -->
+    <div class="result-card">
+      <div class="result-top">
+        <div class="result-type">
+          <span class="result-type-badge"><span class="hl">user.signup</span>.pending</span>
+          <span class="result-stream">auth-stream</span>
+        </div>
+        <div class="result-meta">
+          <div class="relevance-bar">
+            <span class="relevance-label">Relevanz</span>
+            <div class="relevance-dots">
+              <div class="relevance-dot filled"></div><div class="relevance-dot filled"></div><div class="relevance-dot"></div><div class="relevance-dot"></div><div class="relevance-dot"></div>
+            </div>
+          </div>
+          <span class="result-time">09.02.2026, 15:12</span>
+        </div>
+      </div>
+      <div class="result-preview">{ "type": "<span class="hl">user.signup</span>.pending", "userId": "usr_9k1x3", "awaiting": "email_verification" }</div>
+      <div class="result-footer">
+        <span class="result-tag">9ms</span>
+        <span class="result-tag" style="color:var(--warning)">Ausstehend</span>
+        <span class="result-tag">v2.3.9</span>
+      </div>
+    </div>
+
+    <!-- Pagination -->
+    <div class="pagination">
+      <button class="page-btn">&laquo;</button>
+      <button class="page-btn active">1</button>
+      <button class="page-btn">2</button>
+      <button class="page-btn">3</button>
+      <button class="page-btn">...</button>
+      <button class="page-btn">24</button>
+      <button class="page-btn">&raquo;</button>
+    </div>
+
+    <!-- Empty state variant -->
+    <div class="section-sep">
+      <div class="section-sep-label">Leerer-Zustand Variante</div>
+    </div>
+    <div class="empty-state">
+      <div class="empty-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="8" y1="11" x2="14" y2="11"/></svg>
+      </div>
+      <div class="empty-title">Keine Ergebnisse</div>
+      <div class="empty-desc">F&uuml;r deine Suche wurden keine passenden Events gefunden. Versuche andere Suchbegriffe oder passe die Filter an.</div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

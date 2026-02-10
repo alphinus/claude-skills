@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{BRAND_NAME}} - Barrierefreiheit / Accessibility</title>
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --dark-bg:{{BG}};--cyan:{{PRIMARY}};--cyan-dark:{{PRIMARY_DARK}};--cloud:{{TEXT}};--muted:{{MUTED}};
+    --surface:#1e293b;--border:#334155;--success:#48bb78;--danger:#e53e3e;--warning:#ecc94b;--info:#4299e1;
+  }
+  body{font-family:system-ui,-apple-system,sans-serif;background:var(--dark-bg);color:var(--cloud);line-height:1.6}
+
+  .page-header{padding:48px 64px;border-bottom:1px solid var(--border)}
+  .page-header h1{font-size:36px;font-weight:700;letter-spacing:-1px}
+  .page-header h1 span{color:var(--cyan)}
+  .page-header .subtitle{font-size:20px;color:var(--muted);margin-top:4px}
+  .page-header p{color:var(--muted);font-size:15px;margin-top:8px}
+
+  .container{max-width:1400px;margin:0 auto;padding:48px 64px}
+  .section{margin-bottom:64px}
+  .section-title{font-size:24px;font-weight:700;margin-bottom:8px}
+  .section-title::before{content:'';display:inline-block;width:4px;height:24px;background:var(--cyan);border-radius:2px;margin-right:12px;vertical-align:middle}
+  .section-desc{color:var(--muted);margin-bottom:24px;font-size:14px}
+  .divider{height:1px;background:var(--border);margin:48px 0}
+
+  /* Contrast Checker */
+  .contrast-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px}
+  .contrast-card{
+    border-radius:12px;overflow:hidden;border:1px solid var(--border);cursor:pointer;
+    transition:transform .2s,box-shadow .2s;
+  }
+  .contrast-card:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.3)}
+  .contrast-preview{padding:20px;min-height:80px;display:flex;flex-direction:column;justify-content:center}
+  .contrast-preview .sample-text{font-size:16px;font-weight:600}
+  .contrast-preview .sample-small{font-size:13px;margin-top:4px}
+  .contrast-meta{padding:12px 16px;background:var(--surface);display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}
+  .contrast-meta .colors{font-size:11px;color:var(--muted);font-family:monospace}
+  .contrast-meta .ratio{font-size:12px;font-weight:700;font-family:monospace}
+  .contrast-badges{display:flex;gap:6px}
+  .wcag-badge{padding:2px 8px;border-radius:4px;font-size:10px;font-weight:700;letter-spacing:.5px}
+  .wcag-pass{background:rgba(72,187,120,.15);color:var(--success);border:1px solid rgba(72,187,120,.3)}
+  .wcag-fail{background:rgba(229,62,62,.15);color:var(--danger);border:1px solid rgba(229,62,62,.3)}
+
+  /* Ratio Detail */
+  .ratio-detail{
+    display:none;padding:16px;background:var(--dark-bg);border-top:1px solid var(--border);
+    font-size:13px;color:var(--muted);
+  }
+  .ratio-detail.visible{display:block}
+  .ratio-detail .ratio-big{font-size:32px;font-weight:700;color:var(--cloud);margin-bottom:8px}
+  .ratio-detail .ratio-explain{line-height:1.6}
+
+  /* Focus Demo */
+  .focus-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px}
+  .focus-item{
+    padding:16px 20px;background:var(--surface);border:2px solid var(--border);border-radius:8px;
+    text-align:center;font-size:14px;cursor:pointer;transition:all .2s;outline:none;
+  }
+  .focus-item:focus{
+    border-color:var(--cyan);box-shadow:0 0 0 3px rgba({{PRIMARY_RGB}},.3);
+  }
+  .focus-item:focus .focus-hint{opacity:1}
+  .focus-hint{font-size:11px;color:var(--cyan);margin-top:6px;opacity:0;transition:opacity .2s}
+  .focus-instruction{
+    background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:16px 20px;
+    margin-bottom:20px;display:flex;align-items:center;gap:12px;
+  }
+  .focus-instruction .key{
+    display:inline-flex;align-items:center;justify-content:center;padding:4px 10px;
+    background:var(--dark-bg);border:1px solid var(--border);border-radius:4px;font-size:12px;
+    font-family:monospace;color:var(--cloud);min-width:36px;
+  }
+  .focus-instruction span{font-size:13px;color:var(--muted)}
+
+  /* ARIA Labels */
+  .aria-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px}
+  .aria-item{
+    background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:20px;
+    position:relative;
+  }
+  .aria-element{margin-bottom:12px;display:flex;align-items:center;gap:10px}
+  .aria-tag{
+    display:inline-block;padding:3px 10px;border-radius:4px;font-size:11px;font-weight:600;
+    background:rgba({{PRIMARY_RGB}},.1);color:var(--cyan);border:1px solid rgba({{PRIMARY_RGB}},.2);
+    font-family:monospace;
+  }
+  .aria-desc{font-size:12px;color:var(--muted);line-height:1.5}
+  .aria-visual{
+    padding:10px 14px;background:var(--dark-bg);border-radius:6px;font-size:14px;
+    display:flex;align-items:center;gap:8px;
+  }
+  .aria-btn{
+    padding:8px 16px;background:var(--cyan);color:var(--dark-bg);border:none;border-radius:6px;
+    font-weight:600;font-size:13px;cursor:pointer;font-family:inherit;
+  }
+  .aria-input{
+    padding:8px 12px;background:var(--dark-bg);border:1px solid var(--border);border-radius:6px;
+    color:var(--cloud);font-size:13px;font-family:inherit;width:100%;
+  }
+  .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);border:0}
+
+  /* Font Scale */
+  .font-scale{display:flex;flex-direction:column;gap:16px}
+  .font-row{
+    display:flex;align-items:center;gap:24px;padding:16px 20px;
+    background:var(--surface);border:1px solid var(--border);border-radius:8px;
+  }
+  .font-sample{flex:1;min-width:0}
+  .font-meta{display:flex;gap:16px;align-items:center;flex-shrink:0}
+  .font-meta .size{font-size:12px;color:var(--muted);font-family:monospace;min-width:60px}
+  .font-meta .score{
+    padding:3px 10px;border-radius:4px;font-size:11px;font-weight:700;
+  }
+  .score-excellent{background:rgba(72,187,120,.15);color:var(--success)}
+  .score-good{background:rgba(66,153,225,.15);color:var(--info)}
+  .score-fair{background:rgba(236,201,75,.15);color:var(--warning)}
+  .score-poor{background:rgba(229,62,62,.15);color:var(--danger)}
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <h1><span>Barrierefreiheit</span> - Accessibility</h1>
+  <div class="subtitle">WCAG 2.1 Konformitaetspruefung</div>
+  <p>Farbkontrast, Fokus-Indikatoren, ARIA-Kennzeichnungen und Schriftgroessen-Skala des {{BRAND_NAME}} Design Systems.</p>
+</div>
+
+<div class="container">
+
+  <!-- Color Contrast -->
+  <div class="section">
+    <h2 class="section-title">Farbkontrast-Pruefung</h2>
+    <p class="section-desc">Klicken Sie auf eine Kombination, um das Kontrastverhaeltnis im Detail zu sehen. WCAG AA erfordert 4.5:1 fuer normalen Text, 3:1 fuer grossen Text. AAA erfordert 7:1 / 4.5:1.</p>
+
+    <div class="contrast-grid" id="contrastGrid">
+      <!-- Cards generated by JS -->
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- Focus Indicators -->
+  <div class="section">
+    <h2 class="section-title">Fokus-Indikatoren</h2>
+    <p class="section-desc">Sichtbare Fokus-Ringe fuer Tastaturnavigation. Alle interaktiven Elemente muessen einen deutlichen Fokus-Zustand haben.</p>
+
+    <div class="focus-instruction">
+      <span class="key">Tab</span>
+      <span>Druecken Sie die Tab-Taste, um durch die Elemente zu navigieren und die Fokus-Ringe zu sehen.</span>
+    </div>
+
+    <div class="focus-grid">
+      <button class="focus-item" tabindex="0" role="button" aria-label="Primaere Schaltflaeche">
+        Primaerer Button
+        <div class="focus-hint">Fokussiert - Cyan-Ring sichtbar</div>
+      </button>
+      <button class="focus-item" tabindex="0" role="button" aria-label="Sekundaere Schaltflaeche">
+        Sekundaerer Button
+        <div class="focus-hint">Fokussiert - Cyan-Ring sichtbar</div>
+      </button>
+      <a href="#" class="focus-item" tabindex="0" role="link" aria-label="Navigationslink">
+        Link-Element
+        <div class="focus-hint">Fokussiert - Cyan-Ring sichtbar</div>
+      </a>
+      <div class="focus-item" tabindex="0" role="textbox" aria-label="Eingabefeld">
+        Eingabefeld
+        <div class="focus-hint">Fokussiert - Cyan-Ring sichtbar</div>
+      </div>
+      <div class="focus-item" tabindex="0" role="checkbox" aria-label="Kontrollkaestchen">
+        Checkbox
+        <div class="focus-hint">Fokussiert - Cyan-Ring sichtbar</div>
+      </div>
+      <div class="focus-item" tabindex="0" role="menuitem" aria-label="Menueeintrag">
+        Menueeintrag
+        <div class="focus-hint">Fokussiert - Cyan-Ring sichtbar</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ARIA Labels -->
+  <div class="section">
+    <h2 class="section-title">Screenreader-Hinweise (ARIA)</h2>
+    <p class="section-desc">ARIA-Attribute stellen sicher, dass Screenreader den Zweck jedes Elements vermitteln koennen.</p>
+
+    <div class="aria-grid">
+      <div class="aria-item">
+        <div class="aria-element">
+          <div class="aria-visual">
+            <button class="aria-btn" aria-label="Neues Ereignis erstellen">+ Erstellen</button>
+          </div>
+        </div>
+        <div class="aria-tag">aria-label="Neues Ereignis erstellen"</div>
+        <div class="aria-desc" style="margin-top:8px">Der Button-Text allein ist nicht beschreibend genug. Das aria-label gibt Screenreadern den vollen Kontext.</div>
+      </div>
+
+      <div class="aria-item">
+        <div class="aria-element">
+          <div class="aria-visual" style="width:100%">
+            <input class="aria-input" type="text" placeholder="Suchen..." aria-label="Ereignisse durchsuchen" aria-describedby="search-help">
+          </div>
+        </div>
+        <div class="aria-tag">aria-label="Ereignisse durchsuchen"</div>
+        <div class="aria-desc" style="margin-top:8px">Eingabefelder ohne sichtbares Label benoetigen aria-label fuer die Zugaenglichkeit.</div>
+      </div>
+
+      <div class="aria-item">
+        <div class="aria-element">
+          <div class="aria-visual">
+            <span style="color:var(--success);font-size:20px" role="img" aria-label="Status: Aktiv">&#9679;</span>
+            <span>Aktiv</span>
+          </div>
+        </div>
+        <div class="aria-tag">role="img" aria-label="Status: Aktiv"</div>
+        <div class="aria-desc" style="margin-top:8px">Farbige Punkte als Statusanzeige benoetigen ein aria-label, da Farbe allein nicht ausreicht.</div>
+      </div>
+
+      <div class="aria-item">
+        <div class="aria-element">
+          <div class="aria-visual">
+            <nav aria-label="Hauptnavigation">
+              <span style="font-size:13px;color:var(--muted)">[Dashboard] [Ereignisse] [Streams]</span>
+            </nav>
+          </div>
+        </div>
+        <div class="aria-tag">aria-label="Hauptnavigation"</div>
+        <div class="aria-desc" style="margin-top:8px">Navigation-Landmarks erhalten ein Label zur Unterscheidung mehrerer nav-Elemente.</div>
+      </div>
+
+      <div class="aria-item">
+        <div class="aria-element">
+          <div class="aria-visual">
+            <div role="alert" aria-live="polite" style="color:var(--danger);font-size:13px">Fehler: Verbindung unterbrochen</div>
+          </div>
+        </div>
+        <div class="aria-tag">role="alert" aria-live="polite"</div>
+        <div class="aria-desc" style="margin-top:8px">Dynamische Fehlermeldungen werden durch aria-live automatisch von Screenreadern vorgelesen.</div>
+      </div>
+
+      <div class="aria-item">
+        <div class="aria-element">
+          <div class="aria-visual">
+            <div role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" aria-label="Upload-Fortschritt: 75%"
+                 style="width:100%;height:8px;background:var(--border);border-radius:4px;overflow:hidden">
+              <div style="width:75%;height:100%;background:var(--cyan);border-radius:4px"></div>
+            </div>
+          </div>
+        </div>
+        <div class="aria-tag">role="progressbar" aria-valuenow="75"</div>
+        <div class="aria-desc" style="margin-top:8px">Fortschrittsbalken benoetigen ARIA-Attribute fuer den aktuellen Wert und die Grenzen.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- Font Scale -->
+  <div class="section">
+    <h2 class="section-title">Schriftgroessen-Skala</h2>
+    <p class="section-desc">Lesbarkeit und empfohlene Verwendung jeder Schriftgroesse im {{BRAND_NAME}} Design System.</p>
+
+    <div class="font-scale">
+      <div class="font-row">
+        <div class="font-sample" style="font-size:48px;font-weight:700;letter-spacing:-1px">Ueberschrift H1</div>
+        <div class="font-meta">
+          <span class="size">48px / 3rem</span>
+          <span class="score score-excellent">Ausgezeichnet</span>
+        </div>
+      </div>
+      <div class="font-row">
+        <div class="font-sample" style="font-size:36px;font-weight:700;letter-spacing:-0.5px">Ueberschrift H2</div>
+        <div class="font-meta">
+          <span class="size">36px / 2.25rem</span>
+          <span class="score score-excellent">Ausgezeichnet</span>
+        </div>
+      </div>
+      <div class="font-row">
+        <div class="font-sample" style="font-size:24px;font-weight:600">Ueberschrift H3</div>
+        <div class="font-meta">
+          <span class="size">24px / 1.5rem</span>
+          <span class="score score-excellent">Ausgezeichnet</span>
+        </div>
+      </div>
+      <div class="font-row">
+        <div class="font-sample" style="font-size:18px;font-weight:600">Ueberschrift H4</div>
+        <div class="font-meta">
+          <span class="size">18px / 1.125rem</span>
+          <span class="score score-good">Gut</span>
+        </div>
+      </div>
+      <div class="font-row">
+        <div class="font-sample" style="font-size:16px">Fliesstext (Body) - Standard fuer Absaetze und laengere Texte. Gut lesbar auf allen Geraeten.</div>
+        <div class="font-meta">
+          <span class="size">16px / 1rem</span>
+          <span class="score score-good">Gut</span>
+        </div>
+      </div>
+      <div class="font-row">
+        <div class="font-sample" style="font-size:14px">Kleiner Text - Beschreibungen, Labels und sekundaere Informationen.</div>
+        <div class="font-meta">
+          <span class="size">14px / 0.875rem</span>
+          <span class="score score-fair">Akzeptabel</span>
+        </div>
+      </div>
+      <div class="font-row">
+        <div class="font-sample" style="font-size:12px;color:var(--muted)">Kleinster Text - Hinweise, Metadaten und technische Angaben. Sparsam verwenden.</div>
+        <div class="font-meta">
+          <span class="size">12px / 0.75rem</span>
+          <span class="score score-poor">Kritisch</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  // Contrast calculation
+  function hexToRgb(hex) {
+    const r = parseInt(hex.slice(1,3),16);
+    const g = parseInt(hex.slice(3,5),16);
+    const b = parseInt(hex.slice(5,7),16);
+    return {r,g,b};
+  }
+  function luminance(r,g,b) {
+    const [rs,gs,bs] = [r,g,b].map(c => {
+      c = c/255;
+      return c <= 0.03928 ? c/12.92 : Math.pow((c+0.055)/1.055,2.4);
+    });
+    return 0.2126*rs + 0.7152*gs + 0.0722*bs;
+  }
+  function contrastRatio(hex1,hex2) {
+    const c1 = hexToRgb(hex1);
+    const c2 = hexToRgb(hex2);
+    const l1 = luminance(c1.r,c1.g,c1.b);
+    const l2 = luminance(c2.r,c2.g,c2.b);
+    const lighter = Math.max(l1,l2);
+    const darker = Math.min(l1,l2);
+    return (lighter + 0.05)/(darker + 0.05);
+  }
+
+  const combos = [
+    {bg:'{{BG}}',fg:'{{TEXT}}',bgName:'Dark BG',fgName:'Cloud'},
+    {bg:'{{BG}}',fg:'{{PRIMARY}}',bgName:'Dark BG',fgName:'Cyan'},
+    {bg:'{{BG}}',fg:'{{MUTED}}',bgName:'Dark BG',fgName:'Muted'},
+    {bg:'#1e293b',fg:'{{TEXT}}',bgName:'Surface',fgName:'Cloud'},
+    {bg:'#1e293b',fg:'{{PRIMARY}}',bgName:'Surface',fgName:'Cyan'},
+    {bg:'#1e293b',fg:'{{MUTED}}',bgName:'Surface',fgName:'Muted'},
+    {bg:'{{TEXT}}',fg:'{{BG}}',bgName:'Cloud',fgName:'Dark BG'},
+    {bg:'{{TEXT}}',fg:'{{PRIMARY_DARK}}',bgName:'Cloud',fgName:'Cyan Dark'},
+    {bg:'{{TEXT}}',fg:'{{MUTED}}',bgName:'Cloud',fgName:'Muted'},
+    {bg:'{{BG}}',fg:'#e53e3e',bgName:'Dark BG',fgName:'Danger'},
+    {bg:'{{BG}}',fg:'#48bb78',bgName:'Dark BG',fgName:'Success'},
+    {bg:'{{BG}}',fg:'#ecc94b',bgName:'Dark BG',fgName:'Warning'},
+  ];
+
+  const grid = document.getElementById('contrastGrid');
+  combos.forEach((c,i) => {
+    const ratio = contrastRatio(c.bg,c.fg);
+    const ratioStr = ratio.toFixed(2);
+    const aaPass = ratio >= 4.5;
+    const aaaPass = ratio >= 7;
+    const aaLargePass = ratio >= 3;
+
+    const card = document.createElement('div');
+    card.className = 'contrast-card';
+    card.innerHTML = `
+      <div class="contrast-preview" style="background:${c.bg};color:${c.fg}">
+        <div class="sample-text">Beispieltext Aa</div>
+        <div class="sample-small">${c.fgName} auf ${c.bgName}</div>
+      </div>
+      <div class="contrast-meta">
+        <span class="colors">${c.fg} / ${c.bg}</span>
+        <span class="ratio">${ratioStr}:1</span>
+        <div class="contrast-badges">
+          <span class="wcag-badge ${aaPass?'wcag-pass':'wcag-fail'}">AA ${aaPass?'Ja':'Nein'}</span>
+          <span class="wcag-badge ${aaaPass?'wcag-pass':'wcag-fail'}">AAA ${aaaPass?'Ja':'Nein'}</span>
+        </div>
+      </div>
+      <div class="ratio-detail" id="detail-${i}">
+        <div class="ratio-big">${ratioStr}:1</div>
+        <div class="ratio-explain">
+          <strong>WCAG AA (Normaltext 4.5:1):</strong> ${aaPass?'Bestanden':'Nicht bestanden'}<br>
+          <strong>WCAG AA (Grosser Text 3:1):</strong> ${aaLargePass?'Bestanden':'Nicht bestanden'}<br>
+          <strong>WCAG AAA (Normaltext 7:1):</strong> ${aaaPass?'Bestanden':'Nicht bestanden'}<br>
+          <strong>Vordergrund:</strong> ${c.fg} (${c.fgName})<br>
+          <strong>Hintergrund:</strong> ${c.bg} (${c.bgName})
+        </div>
+      </div>
+    `;
+    card.addEventListener('click', () => {
+      const detail = document.getElementById(`detail-${i}`);
+      detail.classList.toggle('visible');
+    });
+    grid.appendChild(card);
+  });
+</script>
+
+</body>
+</html>

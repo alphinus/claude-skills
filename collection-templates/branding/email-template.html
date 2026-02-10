@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{BRAND_NAME}} - Email Template</title>
+</head>
+<body style="margin:0;padding:0;background:{{BG}};font-family:system-ui,-apple-system,sans-serif;">
+
+<!-- Preview Text -->
+<div style="display:none;max-height:0;overflow:hidden;">Dein {{BRAND_NAME}} Workspace ist bereit. Starte jetzt mit Event Sourcing.</div>
+
+<table width="100%" cellpadding="0" cellspacing="0" style="background:{{BG}};padding:40px 20px;">
+<tr><td align="center">
+<table width="560" cellpadding="0" cellspacing="0" style="max-width:560px;">
+
+  <!-- Header -->
+  <tr><td style="padding:32px 0;text-align:center;">
+    <span style="font-size:20px;font-weight:300;letter-spacing:6px;color:{{TEXT}};">ELUM</span><span style="font-size:20px;font-weight:300;letter-spacing:6px;color:{{PRIMARY}};">A</span>
+  </td></tr>
+
+  <!-- Main Card -->
+  <tr><td>
+    <table width="100%" cellpadding="0" cellspacing="0" style="background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.06);border-radius:16px;overflow:hidden;">
+
+      <!-- Gradient Top Bar -->
+      <tr><td style="height:3px;background:linear-gradient(90deg,{{PRIMARY_DARK}},{{PRIMARY}},{{PRIMARY_DARK}});"></td></tr>
+
+      <!-- Content -->
+      <tr><td style="padding:40px;">
+
+        <!-- Greeting -->
+        <p style="font-size:16px;color:{{TEXT}};font-weight:300;margin:0 0 8px;">Hallo Marco,</p>
+        <h1 style="font-size:28px;font-weight:200;color:{{TEXT}};margin:0 0 20px;">Dein Workspace ist <span style="color:{{PRIMARY}};">bereit</span></h1>
+
+        <p style="font-size:15px;color:{{MUTED}};font-weight:300;line-height:1.8;margin:0 0 28px;">
+          Dein neuer {{BRAND_NAME}} Workspace wurde erfolgreich erstellt. Du kannst jetzt Event-Streams anlegen, dein Team einladen und die AI-Integration aktivieren.
+        </p>
+
+        <!-- Stats Row -->
+        <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:28px;">
+        <tr>
+          <td width="33%" style="text-align:center;padding:16px;background:rgba({{PRIMARY_RGB}},0.04);border-radius:10px 0 0 10px;">
+            <div style="font-size:24px;font-weight:200;color:{{PRIMARY}};">0</div>
+            <div style="font-size:11px;color:{{MUTED}};letter-spacing:1px;">EVENTS</div>
+          </td>
+          <td width="33%" style="text-align:center;padding:16px;background:rgba({{PRIMARY_RGB}},0.04);border-left:1px solid rgba(255,255,255,0.04);border-right:1px solid rgba(255,255,255,0.04);">
+            <div style="font-size:24px;font-weight:200;color:{{PRIMARY}};">1</div>
+            <div style="font-size:11px;color:{{MUTED}};letter-spacing:1px;">WORKSPACE</div>
+          </td>
+          <td width="33%" style="text-align:center;padding:16px;background:rgba({{PRIMARY_RGB}},0.04);border-radius:0 10px 10px 0;">
+            <div style="font-size:24px;font-weight:200;color:{{PRIMARY}};">Pro</div>
+            <div style="font-size:11px;color:{{MUTED}};letter-spacing:1px;">PLAN</div>
+          </td>
+        </tr>
+        </table>
+
+        <!-- CTA Button -->
+        <table width="100%" cellpadding="0" cellspacing="0">
+        <tr><td align="center">
+          <a href="#" style="display:inline-block;padding:14px 40px;background:linear-gradient(135deg,{{PRIMARY}},{{PRIMARY_DARK}});color:{{BG}};font-size:14px;font-weight:600;letter-spacing:1px;text-decoration:none;border-radius:8px;">
+            DASHBOARD ÖFFNEN
+          </a>
+        </td></tr>
+        </table>
+
+        <!-- Checklist -->
+        <div style="margin-top:32px;padding:24px;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.04);border-radius:10px;">
+          <p style="font-size:13px;color:{{TEXT}};font-weight:400;margin:0 0 14px;letter-spacing:1px;">NÄCHSTE SCHRITTE</p>
+          <table cellpadding="0" cellspacing="0" width="100%">
+            <tr><td style="padding:6px 0;font-size:14px;color:{{MUTED}};font-weight:300;">
+              <span style="color:{{PRIMARY}};margin-right:8px;">&#10003;</span> Workspace erstellt
+            </td></tr>
+            <tr><td style="padding:6px 0;font-size:14px;color:{{MUTED}};font-weight:300;">
+              <span style="color:{{MUTED}};margin-right:8px;">&#9675;</span> Ersten Event-Stream anlegen
+            </td></tr>
+            <tr><td style="padding:6px 0;font-size:14px;color:{{MUTED}};font-weight:300;">
+              <span style="color:{{MUTED}};margin-right:8px;">&#9675;</span> Team-Mitglieder einladen
+            </td></tr>
+            <tr><td style="padding:6px 0;font-size:14px;color:{{MUTED}};font-weight:300;">
+              <span style="color:{{MUTED}};margin-right:8px;">&#9675;</span> AI Integration aktivieren
+            </td></tr>
+          </table>
+        </div>
+
+      </td></tr>
+    </table>
+  </td></tr>
+
+  <!-- Footer -->
+  <tr><td style="padding:32px 0;text-align:center;">
+    <p style="font-size:12px;color:{{MUTED}};font-weight:300;margin:0 0 8px;">
+      <a href="#" style="color:{{PRIMARY}};text-decoration:none;margin:0 10px;">Docs</a>
+      <a href="#" style="color:{{PRIMARY}};text-decoration:none;margin:0 10px;">Support</a>
+      <a href="#" style="color:{{PRIMARY}};text-decoration:none;margin:0 10px;">Settings</a>
+    </p>
+    <p style="font-size:11px;color:#4a5568;font-weight:300;margin:0 0 4px;">
+      {{BRAND_NAME}} GmbH &middot; Zürich, Schweiz
+    </p>
+    <p style="font-size:11px;color:#4a5568;font-weight:300;margin:0;">
+      <a href="#" style="color:#4a5568;text-decoration:underline;">Abmelden</a> &middot; <a href="#" style="color:#4a5568;text-decoration:underline;">Einstellungen</a>
+    </p>
+  </td></tr>
+
+</table>
+</td></tr>
+</table>
+
+</body>
+</html>

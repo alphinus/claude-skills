@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{BRAND_NAME}} - Watermark Overlay Designs</title>
+<style>
+  :root {
+    --dark-bg: {{BG}};
+    --cyan: {{PRIMARY}};
+    --cyan-dark: {{PRIMARY_DARK}};
+    --cloud: {{TEXT}};
+    --muted: {{MUTED}};
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #080e1e;
+    color: var(--cloud);
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    min-height: 100vh;
+    padding: 40px 20px;
+  }
+
+  .header {
+    text-align: center;
+    margin-bottom: 48px;
+  }
+
+  h1 { font-size: 28px; font-weight: 700; letter-spacing: 0.05em; margin-bottom: 8px; }
+  h1 span { color: var(--cyan); }
+  .subtitle { color: var(--muted); font-size: 14px; }
+
+  .watermarks-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+    gap: 32px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .watermark-card {
+    border: 1px solid rgba({{PRIMARY_RGB}},0.1);
+    border-radius: 16px;
+    overflow: hidden;
+  }
+
+  .watermark-card h3 {
+    padding: 16px 20px;
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    background: var(--dark-bg);
+    border-bottom: 1px solid rgba({{PRIMARY_RGB}},0.08);
+  }
+
+  .watermark-card h3 span { color: var(--cyan); font-weight: 600; }
+
+  .sample-bg {
+    width: 100%;
+    height: 340px;
+    position: relative;
+    overflow: hidden;
+    /* Simulated dark screenshot background */
+    background:
+      linear-gradient(135deg, #1a2332 0%, {{BG}} 40%, #162033 70%, #0d1424 100%);
+  }
+
+  /* Fake UI elements on the background to simulate a screenshot */
+  .fake-ui {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+
+  .fake-ui::before {
+    content: '';
+    position: absolute;
+    top: 20px; left: 20px; right: 20px;
+    height: 32px;
+    background: rgba({{PRIMARY_RGB}},0.05);
+    border-radius: 6px;
+  }
+
+  .fake-ui::after {
+    content: '';
+    position: absolute;
+    top: 68px; left: 20px;
+    width: 60%;
+    height: 12px;
+    background: rgba(248,250,252,0.06);
+    border-radius: 3px;
+  }
+
+  .fake-line {
+    position: absolute;
+    height: 8px;
+    background: rgba(248,250,252,0.04);
+    border-radius: 3px;
+  }
+
+  .fake-line:nth-child(1) { top: 92px; left: 20px; width: 80%; }
+  .fake-line:nth-child(2) { top: 110px; left: 20px; width: 70%; }
+  .fake-line:nth-child(3) { top: 128px; left: 20px; width: 45%; }
+
+  .fake-box {
+    position: absolute;
+    border-radius: 8px;
+    background: rgba({{PRIMARY_RGB}},0.04);
+    border: 1px solid rgba({{PRIMARY_RGB}},0.06);
+  }
+
+  .fake-box:nth-child(4) { top: 155px; left: 20px; width: 48%; height: 100px; }
+  .fake-box:nth-child(5) { top: 155px; right: 20px; width: 44%; height: 100px; }
+  .fake-box:nth-child(6) { top: 270px; left: 20px; width: 70%; height: 50px; }
+
+  /* ===== WATERMARK STYLE 1: CORNER BADGE ===== */
+  .wm-corner-badge {
+    position: absolute;
+    bottom: 16px;
+    right: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    opacity: 0.25;
+    z-index: 10;
+  }
+
+  .wm-corner-badge svg {
+    width: 28px;
+    height: 28px;
+  }
+
+  .wm-corner-badge .wm-text {
+    font-size: 14px;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    color: var(--cloud);
+  }
+
+  /* ===== WATERMARK STYLE 2: SUBTLE CENTER ===== */
+  .wm-center {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(-20deg);
+    opacity: 0.06;
+    z-index: 10;
+    font-size: 100px;
+    font-weight: 900;
+    letter-spacing: 0.15em;
+    color: var(--cloud);
+    white-space: nowrap;
+    user-select: none;
+  }
+
+  /* ===== WATERMARK STYLE 3: BOTTOM STRIP ===== */
+  .wm-strip {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 36px;
+    background: rgba(15,23,42,0.7);
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    opacity: 0.3;
+    z-index: 10;
+  }
+
+  .wm-strip svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  .wm-strip .wm-strip-text {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    color: var(--cloud);
+  }
+
+  .wm-strip .wm-strip-url {
+    font-size: 11px;
+    color: var(--cyan);
+    letter-spacing: 0.03em;
+  }
+
+  .wm-strip .wm-strip-divider {
+    width: 1px;
+    height: 14px;
+    background: rgba(248,250,252,0.2);
+  }
+
+  /* ===== WATERMARK STYLE 4: MINIMAL HEXAGON ===== */
+  .wm-minimal {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    opacity: 0.12;
+    z-index: 10;
+  }
+
+  .wm-minimal svg {
+    width: 40px;
+    height: 40px;
+  }
+
+  .style-desc {
+    padding: 12px 20px;
+    background: var(--dark-bg);
+    border-top: 1px solid rgba({{PRIMARY_RGB}},0.08);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .style-desc .desc-text {
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+
+  .style-desc .opacity-badge {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--cyan);
+    background: rgba({{PRIMARY_RGB}},0.1);
+    padding: 4px 10px;
+    border-radius: 20px;
+    white-space: nowrap;
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1><span>{{BRAND_NAME}}</span> Watermark Designs</h1>
+  <p class="subtitle">4 Wasserzeichen-Stile fuer Screenshots und Bilder</p>
+</div>
+
+<div class="watermarks-grid">
+
+  <!-- STYLE 1: Corner Badge -->
+  <div class="watermark-card">
+    <h3>Stil 1: <span>Corner Badge</span></h3>
+    <div class="sample-bg">
+      <div class="fake-ui">
+        <div class="fake-line"></div>
+        <div class="fake-line"></div>
+        <div class="fake-line"></div>
+        <div class="fake-box"></div>
+        <div class="fake-box"></div>
+        <div class="fake-box"></div>
+      </div>
+      <div class="wm-corner-badge">
+        <svg viewBox="0 0 40 40" fill="none">
+          <polygon points="20,2 36,11 36,29 20,38 4,29 4,11" fill="none" stroke="{{TEXT}}" stroke-width="2.5"/>
+          <text x="20" y="26" text-anchor="middle" fill="{{TEXT}}" font-size="16" font-weight="800" font-family="system-ui">E</text>
+        </svg>
+        <span class="wm-text">{{BRAND_NAME}}</span>
+      </div>
+    </div>
+    <div class="style-desc">
+      <span class="desc-text">Hexagon + Logo unten rechts. Dezent aber sichtbar.</span>
+      <span class="opacity-badge">25% Deckkraft</span>
+    </div>
+  </div>
+
+  <!-- STYLE 2: Subtle Center -->
+  <div class="watermark-card">
+    <h3>Stil 2: <span>Subtle Center</span></h3>
+    <div class="sample-bg">
+      <div class="fake-ui">
+        <div class="fake-line"></div>
+        <div class="fake-line"></div>
+        <div class="fake-line"></div>
+        <div class="fake-box"></div>
+        <div class="fake-box"></div>
+        <div class="fake-box"></div>
+      </div>
+      <div class="wm-center">{{BRAND_NAME}}</div>
+    </div>
+    <div class="style-desc">
+      <span class="desc-text">Grosser zentrierter Text, leicht gedreht. Kaum sichtbar aber schwer zu entfernen.</span>
+      <span class="opacity-badge">6% Deckkraft</span>
+    </div>
+  </div>
+
+  <!-- STYLE 3: Bottom Strip -->
+  <div class="watermark-card">
+    <h3>Stil 3: <span>Bottom Strip</span></h3>
+    <div class="sample-bg">
+      <div class="fake-ui">
+        <div class="fake-line"></div>
+        <div class="fake-line"></div>
+        <div class="fake-line"></div>
+        <div class="fake-box"></div>
+        <div class="fake-box"></div>
+        <div class="fake-box"></div>
+      </div>
+      <div class="wm-strip">
+        <svg viewBox="0 0 40 40" fill="none">
+          <polygon points="20,2 36,11 36,29 20,38 4,29 4,11" fill="none" stroke="{{TEXT}}" stroke-width="2.5"/>
+          <text x="20" y="26" text-anchor="middle" fill="{{TEXT}}" font-size="16" font-weight="800" font-family="system-ui">E</text>
+        </svg>
+        <span class="wm-strip-text">{{BRAND_NAME}}</span>
+        <div class="wm-strip-divider"></div>
+        <span class="wm-strip-url">{{BRAND_DOMAIN}}</span>
+      </div>
+    </div>
+    <div class="style-desc">
+      <span class="desc-text">Durchgehender Streifen am unteren Rand mit Logo, Name und URL.</span>
+      <span class="opacity-badge">30% Deckkraft</span>
+    </div>
+  </div>
+
+  <!-- STYLE 4: Minimal -->
+  <div class="watermark-card">
+    <h3>Stil 4: <span>Minimal</span></h3>
+    <div class="sample-bg">
+      <div class="fake-ui">
+        <div class="fake-line"></div>
+        <div class="fake-line"></div>
+        <div class="fake-line"></div>
+        <div class="fake-box"></div>
+        <div class="fake-box"></div>
+        <div class="fake-box"></div>
+      </div>
+      <div class="wm-minimal">
+        <svg viewBox="0 0 40 40" fill="none">
+          <polygon points="20,2 36,11 36,29 20,38 4,29 4,11" fill="none" stroke="{{TEXT}}" stroke-width="2"/>
+          <text x="20" y="26" text-anchor="middle" fill="{{TEXT}}" font-size="16" font-weight="800" font-family="system-ui">E</text>
+        </svg>
+      </div>
+    </div>
+    <div class="style-desc">
+      <span class="desc-text">Nur das Hexagon-Icon. Extrem dezent, fast unsichtbar.</span>
+      <span class="opacity-badge">12% Deckkraft</span>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>

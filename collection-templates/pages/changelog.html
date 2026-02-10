@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{BRAND_NAME}} - Changelog</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  :root { --dark-bg: {{BG}}; --cyan: {{PRIMARY}}; --cyan-dark: {{PRIMARY_DARK}}; --cloud: {{TEXT}}; --muted: {{MUTED}}; --success: {{SUCCESS}}; --warning: {{WARNING}}; --info: {{INFO}}; }
+  body { background: var(--dark-bg); font-family: system-ui, -apple-system, sans-serif; color: var(--cloud); min-height: 100vh; padding: 60px 40px; }
+
+  .page-header { text-align: center; margin-bottom: 64px; }
+  .page-header h1 { font-size: 42px; font-weight: 200; margin-bottom: 8px; }
+  .page-header h1 span { background: linear-gradient(135deg, var(--cyan), var(--cyan-dark)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+  .page-header p { font-size: 15px; color: var(--muted); font-weight: 300; }
+
+  .changelog { max-width: 700px; margin: 0 auto; position: relative; padding-left: 32px; }
+
+  /* Timeline line */
+  .changelog::before {
+    content: ''; position: absolute; left: 7px; top: 8px; bottom: 0;
+    width: 1px; background: linear-gradient(to bottom, var(--cyan), rgba({{PRIMARY_RGB}},0.1));
+  }
+
+  .release { margin-bottom: 56px; position: relative; }
+
+  /* Dot on timeline */
+  .release::before {
+    content: ''; position: absolute; left: -28px; top: 8px;
+    width: 12px; height: 12px; border-radius: 50%;
+    background: var(--dark-bg); border: 2px solid var(--cyan);
+    box-shadow: 0 0 10px rgba({{PRIMARY_RGB}},0.2);
+  }
+
+  .release.latest::before {
+    background: var(--cyan);
+    box-shadow: 0 0 12px rgba({{PRIMARY_RGB}},0.4);
+  }
+
+  .release-header { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
+  .release-version {
+    font-size: 18px; font-weight: 400; background: linear-gradient(135deg, var(--cyan), var(--cyan-dark));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  }
+  .release-date { font-size: 13px; color: var(--muted); font-weight: 300; }
+  .release-tag {
+    font-size: 10px; padding: 2px 10px; border-radius: 10px; letter-spacing: 1px; font-weight: 500;
+  }
+  .tag-latest { background: rgba({{PRIMARY_RGB}},0.12); color: var(--cyan); }
+  .tag-beta { background: rgba({{WARNING_RGB}},0.12); color: var(--warning); }
+
+  .release-body { background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); border-radius: 14px; padding: 24px; }
+
+  .change-group { margin-bottom: 16px; }
+  .change-group:last-child { margin-bottom: 0; }
+  .change-type { font-size: 11px; letter-spacing: 2px; font-weight: 500; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
+  .change-type .dot { width: 6px; height: 6px; border-radius: 50%; }
+  .type-added .dot { background: var(--success); }
+  .type-added { color: var(--success); }
+  .type-changed .dot { background: var(--info); }
+  .type-changed { color: var(--info); }
+  .type-fixed .dot { background: var(--warning); }
+  .type-fixed { color: var(--warning); }
+
+  .change-list { list-style: none; }
+  .change-list li {
+    font-size: 14px; font-weight: 300; color: var(--cloud); padding: 6px 0;
+    padding-left: 14px; position: relative; line-height: 1.6;
+  }
+  .change-list li::before {
+    content: ''; position: absolute; left: 0; top: 13px;
+    width: 4px; height: 4px; border-radius: 50%; background: rgba(255,255,255,0.2);
+  }
+  .change-list code {
+    font-family: 'SF Mono', Monaco, monospace; font-size: 12px;
+    background: rgba({{PRIMARY_RGB}},0.08); color: var(--cyan); padding: 2px 6px; border-radius: 4px;
+  }
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <h1>Change<span>log</span></h1>
+  <p>Alle Updates und Verbesserungen im Überblick</p>
+</div>
+
+<div class="changelog">
+  <!-- v0.3.0 -->
+  <div class="release latest">
+    <div class="release-header">
+      <span class="release-version">v0.3.0</span>
+      <span class="release-date">10. Feb 2026</span>
+      <span class="release-tag tag-latest">LATEST</span>
+    </div>
+    <div class="release-body">
+      <div class="change-group">
+        <div class="change-type type-added"><span class="dot"></span>ADDED</div>
+        <ul class="change-list">
+          <li>AI-gestützte Event-Analyse mit <code>AI SDK v6</code> Integration</li>
+          <li>Telegram Bot Commands für Team-Notifications</li>
+          <li>Neues Dashboard mit Echtzeit Event-Volumen Chart</li>
+          <li>Multi-Workspace Support mit Team-Verwaltung</li>
+        </ul>
+      </div>
+      <div class="change-group">
+        <div class="change-type type-changed"><span class="dot"></span>CHANGED</div>
+        <ul class="change-list">
+          <li>Event Store Migration von JSON zu <code>JSONL</code> Format</li>
+          <li>Verbesserte i18n mit automatischer Spracherkennung</li>
+        </ul>
+      </div>
+      <div class="change-group">
+        <div class="change-type type-fixed"><span class="dot"></span>FIXED</div>
+        <ul class="change-list">
+          <li>Memory Leak bei langlebigen WebSocket-Verbindungen</li>
+          <li>Timezone-Bug bei Event-Timestamps in UTC+1</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- v0.2.0 -->
+  <div class="release">
+    <div class="release-header">
+      <span class="release-version">v0.2.0</span>
+      <span class="release-date">28. Jan 2026</span>
+      <span class="release-tag tag-beta">BETA</span>
+    </div>
+    <div class="release-body">
+      <div class="change-group">
+        <div class="change-type type-added"><span class="dot"></span>ADDED</div>
+        <ul class="change-list">
+          <li>Event Sourcing Engine mit append-only <code>EventStore</code></li>
+          <li>React Dashboard mit Vite und Hot Reload</li>
+          <li>i18n System mit DE/EN Support</li>
+        </ul>
+      </div>
+      <div class="change-group">
+        <div class="change-type type-fixed"><span class="dot"></span>FIXED</div>
+        <ul class="change-list">
+          <li>TypeScript Build-Fehler im Shared Package</li>
+          <li>CORS-Konfiguration für lokale Entwicklung</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- v0.1.0 -->
+  <div class="release">
+    <div class="release-header">
+      <span class="release-version">v0.1.0</span>
+      <span class="release-date">15. Jan 2026</span>
+    </div>
+    <div class="release-body">
+      <div class="change-group">
+        <div class="change-type type-added"><span class="dot"></span>ADDED</div>
+        <ul class="change-list">
+          <li>Initiales Monorepo Setup mit <code>shared/</code>, <code>server/</code>, <code>client/</code></li>
+          <li>Express Backend mit TypeScript</li>
+          <li>PM2 Deployment Konfiguration</li>
+          <li>Basis-Projektstruktur und Build-Pipeline</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

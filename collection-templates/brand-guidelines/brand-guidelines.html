@@ -1,0 +1,1396 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{BRAND_NAME}} Brand Guidelines</title>
+<style>
+  /* ========== RESET & BASE ========== */
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --dark-bg: {{BG}};
+    --cyan: {{PRIMARY}};
+    --cyan-dark: {{PRIMARY_DARK}};
+    --cloud: {{TEXT}};
+    --muted: {{MUTED}};
+    --card-bg: #1a2332;
+    --card-border: rgba({{PRIMARY_RGB}}, 0.1);
+    --success: {{SUCCESS}};
+    --warning: {{WARNING}};
+    --error: {{ERROR}};
+    --info: {{INFO}};
+    --sidebar-w: 240px;
+    --base-unit: 8px;
+  }
+
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
+    background-color: var(--dark-bg);
+    color: var(--cloud);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* ========== SIDEBAR NAV ========== */
+  .sidebar {
+    position: fixed;
+    top: 0; left: 0;
+    width: var(--sidebar-w);
+    height: 100vh;
+    background: #0c1220;
+    border-right: 1px solid var(--card-border);
+    padding: 32px 0;
+    overflow-y: auto;
+    z-index: 100;
+  }
+  .sidebar-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 0 24px 28px 24px;
+    border-bottom: 1px solid rgba({{PRIMARY_RGB}},0.08);
+    margin-bottom: 20px;
+  }
+  .sidebar-logo span {
+    font-size: 18px;
+    font-weight: 600;
+    letter-spacing: 3px;
+    color: var(--cloud);
+  }
+  .sidebar nav { display: flex; flex-direction: column; gap: 2px; padding: 0 12px; }
+  .sidebar nav a {
+    display: block;
+    padding: 9px 16px;
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 400;
+    border-radius: 8px;
+    transition: all 0.2s;
+    letter-spacing: 0.2px;
+  }
+  .sidebar nav a:hover {
+    color: var(--cloud);
+    background: rgba({{PRIMARY_RGB}},0.06);
+  }
+  .sidebar nav a.section-label {
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--cyan);
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 16px 16px 6px;
+    cursor: default;
+  }
+  .sidebar nav a.section-label:hover { background: transparent; color: var(--cyan); }
+
+  /* ========== MAIN CONTENT ========== */
+  .main {
+    margin-left: var(--sidebar-w);
+    min-height: 100vh;
+  }
+
+  section {
+    padding: 80px 60px;
+    border-bottom: 1px solid rgba({{PRIMARY_RGB}},0.06);
+    max-width: 1100px;
+  }
+
+  .section-badge {
+    display: inline-block;
+    padding: 4px 14px;
+    background: rgba({{PRIMARY_RGB}},0.1);
+    border: 1px solid rgba({{PRIMARY_RGB}},0.2);
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--cyan);
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+  .section-title {
+    font-size: 36px;
+    font-weight: 700;
+    color: var(--cloud);
+    margin-bottom: 12px;
+    line-height: 1.2;
+  }
+  .section-desc {
+    font-size: 16px;
+    color: var(--muted);
+    max-width: 640px;
+    line-height: 1.7;
+    margin-bottom: 40px;
+  }
+
+  .subsection-title {
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--cloud);
+    margin: 40px 0 16px 0;
+  }
+
+  /* ========== HERO ========== */
+  .hero {
+    padding: 120px 60px 100px;
+    background: linear-gradient(180deg, rgba({{PRIMARY_RGB}},0.06) 0%, transparent 60%);
+    text-align: center;
+    max-width: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .hero-logo {
+    margin-bottom: 32px;
+  }
+  .hero h1 {
+    font-size: 48px;
+    font-weight: 700;
+    color: var(--cloud);
+    margin-bottom: 16px;
+    letter-spacing: -0.5px;
+  }
+  .hero p {
+    font-size: 18px;
+    color: var(--muted);
+    max-width: 520px;
+    line-height: 1.7;
+  }
+  .hero .version-tag {
+    display: inline-block;
+    margin-top: 24px;
+    padding: 6px 16px;
+    background: rgba({{PRIMARY_RGB}},0.08);
+    border: 1px solid rgba({{PRIMARY_RGB}},0.15);
+    border-radius: 6px;
+    font-size: 12px;
+    color: var(--cyan);
+    font-weight: 500;
+  }
+
+  /* ========== GRID HELPERS ========== */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 24px; }
+  .grid-4 { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 20px; }
+  .grid-6 { display: grid; grid-template-columns: repeat(6, 1fr); gap: 16px; }
+
+  /* ========== CARDS ========== */
+  .card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 12px;
+    padding: 28px;
+    transition: border-color 0.2s;
+  }
+  .card:hover { border-color: rgba({{PRIMARY_RGB}},0.2); }
+  .card-label {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--cyan);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+
+  /* ========== LOGO SECTION ========== */
+  .logo-display {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 140px;
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 12px;
+    padding: 32px;
+  }
+  .logo-display.light-bg {
+    background: var(--cloud);
+  }
+
+  .clearspace-demo {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 48px;
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 12px;
+  }
+  .clearspace-guide {
+    position: absolute;
+    border: 1px dashed rgba({{PRIMARY_RGB}},0.4);
+  }
+  .clearspace-guide.top { top: 16px; left: 16px; right: 16px; height: 0; }
+  .clearspace-guide.bottom { bottom: 16px; left: 16px; right: 16px; height: 0; }
+  .clearspace-guide.left { left: 16px; top: 16px; bottom: 16px; width: 0; }
+  .clearspace-guide.right { right: 16px; top: 16px; bottom: 16px; width: 0; }
+  .clearspace-arrow {
+    position: absolute;
+    color: var(--cyan);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+  }
+
+  .dont-example {
+    position: relative;
+    overflow: hidden;
+    border-radius: 10px;
+  }
+  .dont-example::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border: 2px solid var(--error);
+    border-radius: 10px;
+    pointer-events: none;
+  }
+  .do-example {
+    position: relative;
+    overflow: hidden;
+    border-radius: 10px;
+  }
+  .do-example::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border: 2px solid var(--success);
+    border-radius: 10px;
+    pointer-events: none;
+  }
+  .example-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .example-label.do { color: var(--success); }
+  .example-label.dont { color: var(--error); }
+
+  /* ========== COLOR SWATCHES ========== */
+  .color-swatch {
+    border-radius: 12px;
+    overflow: hidden;
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+  }
+  .color-swatch .swatch-block {
+    height: 120px;
+    border-radius: 12px 12px 0 0;
+  }
+  .color-swatch .swatch-info {
+    padding: 16px 18px;
+  }
+  .color-swatch .swatch-name {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--cloud);
+    margin-bottom: 8px;
+  }
+  .color-swatch .swatch-values {
+    font-size: 11px;
+    color: var(--muted);
+    line-height: 1.8;
+    font-family: 'SF Mono', 'Cascadia Code', 'Fira Code', monospace;
+  }
+
+  /* ========== TYPOGRAPHY DEMO ========== */
+  .type-row {
+    display: flex;
+    align-items: baseline;
+    gap: 24px;
+    padding: 20px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+  }
+  .type-row:last-child { border-bottom: none; }
+  .type-meta {
+    min-width: 120px;
+    font-size: 12px;
+    color: var(--muted);
+    font-family: 'SF Mono', 'Cascadia Code', monospace;
+    line-height: 1.4;
+  }
+
+  .weight-demo {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 12px;
+    padding: 28px;
+  }
+  .weight-row {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+  .weight-label {
+    min-width: 80px;
+    font-size: 12px;
+    color: var(--muted);
+    font-family: 'SF Mono', 'Cascadia Code', monospace;
+  }
+
+  /* ========== ICON GRID ========== */
+  .icon-cell {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 12px;
+    padding: 24px 16px;
+    text-align: center;
+  }
+  .icon-cell span {
+    font-size: 11px;
+    color: var(--muted);
+  }
+
+  /* ========== VOICE CARDS ========== */
+  .voice-card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 12px;
+    padding: 28px;
+  }
+  .voice-card h4 {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--cloud);
+    margin-bottom: 6px;
+  }
+  .voice-card .voice-trait {
+    font-size: 13px;
+    color: var(--cyan);
+    margin-bottom: 14px;
+  }
+  .voice-card p {
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.7;
+  }
+  .voice-card blockquote {
+    margin: 14px 0 0 0;
+    padding: 14px 18px;
+    background: rgba({{PRIMARY_RGB}},0.04);
+    border-left: 3px solid var(--cyan);
+    border-radius: 0 8px 8px 0;
+    font-size: 13px;
+    color: #a0aec0;
+    line-height: 1.6;
+    font-style: italic;
+  }
+
+  /* ========== SPACING SECTION ========== */
+  .spacing-scale {
+    display: flex;
+    align-items: flex-end;
+    gap: 16px;
+    padding: 32px 0;
+  }
+  .spacing-unit {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+  }
+  .spacing-block {
+    background: linear-gradient(135deg, var(--cyan), var(--cyan-dark));
+    border-radius: 4px;
+    opacity: 0.8;
+  }
+  .spacing-label {
+    font-size: 11px;
+    color: var(--muted);
+    font-family: 'SF Mono', 'Cascadia Code', monospace;
+  }
+  .spacing-px {
+    font-size: 10px;
+    color: var(--cyan);
+    font-weight: 500;
+  }
+
+  /* ========== USAGE PREVIEWS ========== */
+  .usage-preview {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  .usage-preview .preview-display {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 200px;
+    background: linear-gradient(135deg, #0c1220, #1a2332);
+    border-bottom: 1px solid var(--card-border);
+    padding: 24px;
+  }
+  .usage-preview .preview-label {
+    padding: 16px 20px;
+  }
+  .usage-preview .preview-label span {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--cloud);
+  }
+  .usage-preview .preview-label p {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 4px;
+  }
+
+  /* ========== RESPONSIVE ========== */
+  @media (max-width: 1024px) {
+    .sidebar { display: none; }
+    .main { margin-left: 0; }
+    section { padding: 60px 32px; }
+    .hero { padding: 80px 32px 60px; }
+    .grid-3 { grid-template-columns: 1fr 1fr; }
+    .grid-4 { grid-template-columns: 1fr 1fr; }
+    .grid-6 { grid-template-columns: repeat(4, 1fr); }
+  }
+  @media (max-width: 640px) {
+    .grid-2, .grid-3 { grid-template-columns: 1fr; }
+    .grid-4 { grid-template-columns: 1fr 1fr; }
+    .grid-6 { grid-template-columns: repeat(3, 1fr); }
+    .hero h1 { font-size: 32px; }
+    .section-title { font-size: 28px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ============================== SIDEBAR ============================== -->
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 40 40">
+      <defs><linearGradient id="sideGrad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="{{PRIMARY}}"/><stop offset="100%" stop-color="{{PRIMARY_DARK}}"/></linearGradient></defs>
+      <circle cx="20" cy="20" r="18" fill="none" stroke="url(#sideGrad)" stroke-width="2.5"/>
+      <circle cx="20" cy="20" r="6" fill="{{PRIMARY}}" opacity="0.9"/>
+      <circle cx="20" cy="10" r="2.5" fill="{{PRIMARY}}" opacity="0.6"/>
+      <circle cx="28" cy="26" r="2.5" fill="{{PRIMARY_DARK}}" opacity="0.6"/>
+      <circle cx="12" cy="26" r="2.5" fill="{{PRIMARY}}" opacity="0.6"/>
+    </svg>
+    <span>{{BRAND_NAME}}</span>
+  </div>
+  <nav>
+    <a href="#" class="section-label">Grundlagen</a>
+    <a href="#logo">Logo</a>
+    <a href="#colors">Farbpalette</a>
+    <a href="#typography">Typografie</a>
+    <a href="#" class="section-label">Elemente</a>
+    <a href="#iconography">Ikonografie</a>
+    <a href="#spacing">Abstände & Raster</a>
+    <a href="#" class="section-label">Anwendung</a>
+    <a href="#voice">Stimme & Ton</a>
+    <a href="#usage">Anwendungsbeispiele</a>
+  </nav>
+</aside>
+
+<!-- ============================== MAIN ============================== -->
+<main class="main">
+
+  <!-- ============ HERO ============ -->
+  <section class="hero" id="hero">
+    <div class="hero-logo">
+      <svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 80 80">
+        <defs>
+          <linearGradient id="heroGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="{{PRIMARY}}"/><stop offset="100%" stop-color="{{PRIMARY_DARK}}"/>
+          </linearGradient>
+        </defs>
+        <circle cx="40" cy="40" r="36" fill="none" stroke="url(#heroGrad)" stroke-width="3"/>
+        <circle cx="40" cy="40" r="12" fill="{{PRIMARY}}" opacity="0.9"/>
+        <circle cx="40" cy="20" r="5" fill="{{PRIMARY}}" opacity="0.6"/>
+        <circle cx="56" cy="52" r="5" fill="{{PRIMARY_DARK}}" opacity="0.6"/>
+        <circle cx="24" cy="52" r="5" fill="{{PRIMARY}}" opacity="0.6"/>
+        <line x1="40" y1="28" x2="40" y2="25" stroke="{{PRIMARY}}" stroke-width="2" opacity="0.4"/>
+        <line x1="50" y1="44" x2="53" y2="48" stroke="{{PRIMARY_DARK}}" stroke-width="2" opacity="0.4"/>
+        <line x1="30" y1="44" x2="27" y2="48" stroke="{{PRIMARY}}" stroke-width="2" opacity="0.4"/>
+      </svg>
+    </div>
+    <h1>{{BRAND_NAME}} Brand Guidelines</h1>
+    <p>Der vollständige Leitfaden zur visuellen Identität von {{BRAND_NAME}}. Einheitlich, modern und wiedererkennbar - über alle Kanäle hinweg.</p>
+    <span class="version-tag">Version 2.0 &middot; Februar 2026</span>
+  </section>
+
+  <!-- ============ LOGO ============ -->
+  <section id="logo">
+    <span class="section-badge">01 &middot; Logo</span>
+    <h2 class="section-title">Logo</h2>
+    <p class="section-desc">Das {{BRAND_NAME}}-Logo repräsentiert das {{BRAND_TAGLINE}}: vernetzte Knoten, die Datenflüsse symbolisieren. Es wird in vier Varianten bereitgestellt.</p>
+
+    <!-- Logo Variations -->
+    <h3 class="subsection-title">Varianten</h3>
+    <div class="grid-2" style="margin-bottom:32px;">
+      <!-- Full Logo Dark -->
+      <div>
+        <div class="logo-display">
+          <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48" style="margin-right:14px;">
+            <defs><linearGradient id="lv1" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="{{PRIMARY}}"/><stop offset="100%" stop-color="{{PRIMARY_DARK}}"/></linearGradient></defs>
+            <circle cx="24" cy="24" r="21" fill="none" stroke="url(#lv1)" stroke-width="2.5"/>
+            <circle cx="24" cy="24" r="7" fill="{{PRIMARY}}" opacity="0.9"/>
+            <circle cx="24" cy="12" r="3" fill="{{PRIMARY}}" opacity="0.6"/>
+            <circle cx="33" cy="31" r="3" fill="{{PRIMARY_DARK}}" opacity="0.6"/>
+            <circle cx="15" cy="31" r="3" fill="{{PRIMARY}}" opacity="0.6"/>
+            <line x1="24" y1="17" x2="24" y2="15" stroke="{{PRIMARY}}" stroke-width="1.5" opacity="0.4"/>
+            <line x1="30" y1="27" x2="31.5" y2="29" stroke="{{PRIMARY_DARK}}" stroke-width="1.5" opacity="0.4"/>
+            <line x1="18" y1="27" x2="16.5" y2="29" stroke="{{PRIMARY}}" stroke-width="1.5" opacity="0.4"/>
+          </svg>
+          <span style="font-size:30px;font-weight:600;color:{{TEXT}};letter-spacing:4px;">{{BRAND_NAME}}</span>
+        </div>
+        <p style="font-size:12px;color:var(--muted);margin-top:10px;">Volllogo auf dunklem Hintergrund (primär)</p>
+      </div>
+      <!-- Full Logo Light -->
+      <div>
+        <div class="logo-display light-bg">
+          <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48" style="margin-right:14px;">
+            <defs><linearGradient id="lv2" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="{{PRIMARY_DARK}}"/><stop offset="100%" stop-color="#2c7a7b"/></linearGradient></defs>
+            <circle cx="24" cy="24" r="21" fill="none" stroke="url(#lv2)" stroke-width="2.5"/>
+            <circle cx="24" cy="24" r="7" fill="{{PRIMARY_DARK}}" opacity="0.9"/>
+            <circle cx="24" cy="12" r="3" fill="{{PRIMARY_DARK}}" opacity="0.6"/>
+            <circle cx="33" cy="31" r="3" fill="#2c7a7b" opacity="0.6"/>
+            <circle cx="15" cy="31" r="3" fill="{{PRIMARY_DARK}}" opacity="0.6"/>
+            <line x1="24" y1="17" x2="24" y2="15" stroke="{{PRIMARY_DARK}}" stroke-width="1.5" opacity="0.4"/>
+            <line x1="30" y1="27" x2="31.5" y2="29" stroke="#2c7a7b" stroke-width="1.5" opacity="0.4"/>
+            <line x1="18" y1="27" x2="16.5" y2="29" stroke="{{PRIMARY_DARK}}" stroke-width="1.5" opacity="0.4"/>
+          </svg>
+          <span style="font-size:30px;font-weight:600;color:{{BG}};letter-spacing:4px;">{{BRAND_NAME}}</span>
+        </div>
+        <p style="font-size:12px;color:var(--muted);margin-top:10px;">Volllogo auf hellem Hintergrund</p>
+      </div>
+      <!-- Icon Only Dark -->
+      <div>
+        <div class="logo-display">
+          <svg xmlns="http://www.w3.org/2000/svg" width="56" height="56" viewBox="0 0 48 48">
+            <defs><linearGradient id="lv3" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="{{PRIMARY}}"/><stop offset="100%" stop-color="{{PRIMARY_DARK}}"/></linearGradient></defs>
+            <circle cx="24" cy="24" r="21" fill="none" stroke="url(#lv3)" stroke-width="2.5"/>
+            <circle cx="24" cy="24" r="7" fill="{{PRIMARY}}" opacity="0.9"/>
+            <circle cx="24" cy="12" r="3" fill="{{PRIMARY}}" opacity="0.6"/>
+            <circle cx="33" cy="31" r="3" fill="{{PRIMARY_DARK}}" opacity="0.6"/>
+            <circle cx="15" cy="31" r="3" fill="{{PRIMARY}}" opacity="0.6"/>
+            <line x1="24" y1="17" x2="24" y2="15" stroke="{{PRIMARY}}" stroke-width="1.5" opacity="0.4"/>
+            <line x1="30" y1="27" x2="31.5" y2="29" stroke="{{PRIMARY_DARK}}" stroke-width="1.5" opacity="0.4"/>
+            <line x1="18" y1="27" x2="16.5" y2="29" stroke="{{PRIMARY}}" stroke-width="1.5" opacity="0.4"/>
+          </svg>
+        </div>
+        <p style="font-size:12px;color:var(--muted);margin-top:10px;">Icon-only (Favicons, App-Icons)</p>
+      </div>
+      <!-- Icon Only Light -->
+      <div>
+        <div class="logo-display light-bg">
+          <svg xmlns="http://www.w3.org/2000/svg" width="56" height="56" viewBox="0 0 48 48">
+            <defs><linearGradient id="lv4" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="{{PRIMARY_DARK}}"/><stop offset="100%" stop-color="#2c7a7b"/></linearGradient></defs>
+            <circle cx="24" cy="24" r="21" fill="none" stroke="url(#lv4)" stroke-width="2.5"/>
+            <circle cx="24" cy="24" r="7" fill="{{PRIMARY_DARK}}" opacity="0.9"/>
+            <circle cx="24" cy="12" r="3" fill="{{PRIMARY_DARK}}" opacity="0.6"/>
+            <circle cx="33" cy="31" r="3" fill="#2c7a7b" opacity="0.6"/>
+            <circle cx="15" cy="31" r="3" fill="{{PRIMARY_DARK}}" opacity="0.6"/>
+            <line x1="24" y1="17" x2="24" y2="15" stroke="{{PRIMARY_DARK}}" stroke-width="1.5" opacity="0.4"/>
+            <line x1="30" y1="27" x2="31.5" y2="29" stroke="#2c7a7b" stroke-width="1.5" opacity="0.4"/>
+            <line x1="18" y1="27" x2="16.5" y2="29" stroke="{{PRIMARY_DARK}}" stroke-width="1.5" opacity="0.4"/>
+          </svg>
+        </div>
+        <p style="font-size:12px;color:var(--muted);margin-top:10px;">Icon-only auf hellem Hintergrund</p>
+      </div>
+    </div>
+
+    <!-- Clear Space -->
+    <h3 class="subsection-title">Schutzzone</h3>
+    <p style="font-size:14px;color:var(--muted);margin-bottom:24px;max-width:540px;">
+      Rund um das Logo muss ein Mindestabstand eingehalten werden, der der Höhe des "E" in {{BRAND_NAME}} entspricht. Dieser Raum darf nicht von anderen Elementen besetzt werden.
+    </p>
+    <div style="display:inline-block;margin-bottom:32px;">
+      <div class="clearspace-demo">
+        <div class="clearspace-guide top"></div>
+        <div class="clearspace-guide bottom"></div>
+        <div class="clearspace-guide left"></div>
+        <div class="clearspace-guide right"></div>
+        <span class="clearspace-arrow" style="top:4px;left:50%;transform:translateX(-50%);">E</span>
+        <span class="clearspace-arrow" style="bottom:3px;left:50%;transform:translateX(-50%);">E</span>
+        <span class="clearspace-arrow" style="left:4px;top:50%;transform:translateY(-50%) rotate(-90deg);">E</span>
+        <span class="clearspace-arrow" style="right:4px;top:50%;transform:translateY(-50%) rotate(90deg);">E</span>
+        <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 48 48" style="margin-right:10px;">
+          <defs><linearGradient id="csGrad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="{{PRIMARY}}"/><stop offset="100%" stop-color="{{PRIMARY_DARK}}"/></linearGradient></defs>
+          <circle cx="24" cy="24" r="21" fill="none" stroke="url(#csGrad)" stroke-width="2.5"/>
+          <circle cx="24" cy="24" r="7" fill="{{PRIMARY}}" opacity="0.9"/>
+          <circle cx="24" cy="12" r="3" fill="{{PRIMARY}}" opacity="0.6"/>
+          <circle cx="33" cy="31" r="3" fill="{{PRIMARY_DARK}}" opacity="0.6"/>
+          <circle cx="15" cy="31" r="3" fill="{{PRIMARY}}" opacity="0.6"/>
+        </svg>
+        <span style="font-size:22px;font-weight:600;color:{{TEXT}};letter-spacing:3px;">{{BRAND_NAME}}</span>
+      </div>
+    </div>
+
+    <!-- Minimum Sizes -->
+    <h3 class="subsection-title">Mindestgrössen</h3>
+    <div style="display:flex;align-items:flex-end;gap:40px;margin-bottom:40px;">
+      <div style="text-align:center;">
+        <svg xmlns="http://www.w3.org/2000/svg" width="80" height="24" viewBox="0 0 120 24">
+          <circle cx="12" cy="12" r="10" fill="none" stroke="{{PRIMARY}}" stroke-width="1.5"/>
+          <circle cx="12" cy="12" r="3.5" fill="{{PRIMARY}}" opacity="0.8"/>
+          <text x="30" y="16" font-family="system-ui,sans-serif" font-size="14" font-weight="600" fill="{{TEXT}}" letter-spacing="2">{{BRAND_NAME}}</text>
+        </svg>
+        <p style="font-size:11px;color:var(--muted);margin-top:8px;">Digital: min. 80px breit</p>
+      </div>
+      <div style="text-align:center;">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24">
+          <circle cx="12" cy="12" r="10" fill="none" stroke="{{PRIMARY}}" stroke-width="1.5"/>
+          <circle cx="12" cy="12" r="3.5" fill="{{PRIMARY}}" opacity="0.8"/>
+        </svg>
+        <p style="font-size:11px;color:var(--muted);margin-top:8px;">Icon: min. 16px</p>
+      </div>
+      <div style="text-align:center;">
+        <p style="font-size:11px;color:var(--muted);">Print: min. 20mm breit</p>
+      </div>
+    </div>
+
+    <!-- Do's and Don'ts -->
+    <h3 class="subsection-title">Richtig & Falsch</h3>
+    <div class="grid-3">
+      <!-- DO: Correct -->
+      <div>
+        <div class="do-example" style="background:var(--card-bg);padding:28px;display:flex;align-items:center;justify-content:center;min-height:100px;">
+          <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 48 48" style="margin-right:8px;">
+            <circle cx="24" cy="24" r="21" fill="none" stroke="{{PRIMARY}}" stroke-width="2.5"/>
+            <circle cx="24" cy="24" r="7" fill="{{PRIMARY}}" opacity="0.9"/>
+          </svg>
+          <span style="font-size:18px;font-weight:600;color:{{TEXT}};letter-spacing:3px;">{{BRAND_NAME}}</span>
+        </div>
+        <div class="example-label do">
+          <svg width="14" height="14" viewBox="0 0 14 14"><circle cx="7" cy="7" r="6" fill="none" stroke="currentColor" stroke-width="1.5"/><polyline points="4.5 7 6.5 9 9.5 5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Korrekte Verwendung
+        </div>
+      </div>
+      <!-- DO: On dark -->
+      <div>
+        <div class="do-example" style="background:{{BG}};padding:28px;display:flex;align-items:center;justify-content:center;min-height:100px;">
+          <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 48 48" style="margin-right:8px;">
+            <circle cx="24" cy="24" r="21" fill="none" stroke="{{PRIMARY}}" stroke-width="2.5"/>
+            <circle cx="24" cy="24" r="7" fill="{{PRIMARY}}" opacity="0.9"/>
+          </svg>
+          <span style="font-size:18px;font-weight:600;color:{{TEXT}};letter-spacing:3px;">{{BRAND_NAME}}</span>
+        </div>
+        <div class="example-label do">
+          <svg width="14" height="14" viewBox="0 0 14 14"><circle cx="7" cy="7" r="6" fill="none" stroke="currentColor" stroke-width="1.5"/><polyline points="4.5 7 6.5 9 9.5 5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Auf dunklem Hintergrund
+        </div>
+      </div>
+      <!-- DONT: Stretched -->
+      <div>
+        <div class="dont-example" style="background:var(--card-bg);padding:28px;display:flex;align-items:center;justify-content:center;min-height:100px;">
+          <span style="font-size:18px;font-weight:600;color:{{TEXT}};letter-spacing:3px;transform:scaleX(1.5);display:inline-block;">{{BRAND_NAME}}</span>
+        </div>
+        <div class="example-label dont">
+          <svg width="14" height="14" viewBox="0 0 14 14"><circle cx="7" cy="7" r="6" fill="none" stroke="currentColor" stroke-width="1.5"/><line x1="4.5" y1="4.5" x2="9.5" y2="9.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="9.5" y1="4.5" x2="4.5" y2="9.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          Nicht verzerren
+        </div>
+      </div>
+      <!-- DONT: Wrong color -->
+      <div>
+        <div class="dont-example" style="background:var(--card-bg);padding:28px;display:flex;align-items:center;justify-content:center;min-height:100px;">
+          <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 48 48" style="margin-right:8px;">
+            <circle cx="24" cy="24" r="21" fill="none" stroke="{{ERROR}}" stroke-width="2.5"/>
+            <circle cx="24" cy="24" r="7" fill="{{ERROR}}" opacity="0.9"/>
+          </svg>
+          <span style="font-size:18px;font-weight:600;color:{{ERROR}};letter-spacing:3px;">{{BRAND_NAME}}</span>
+        </div>
+        <div class="example-label dont">
+          <svg width="14" height="14" viewBox="0 0 14 14"><circle cx="7" cy="7" r="6" fill="none" stroke="currentColor" stroke-width="1.5"/><line x1="4.5" y1="4.5" x2="9.5" y2="9.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="9.5" y1="4.5" x2="4.5" y2="9.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          Keine falschen Farben
+        </div>
+      </div>
+      <!-- DONT: Rotated -->
+      <div>
+        <div class="dont-example" style="background:var(--card-bg);padding:28px;display:flex;align-items:center;justify-content:center;min-height:100px;">
+          <span style="font-size:18px;font-weight:600;color:{{TEXT}};letter-spacing:3px;transform:rotate(15deg);display:inline-block;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 48 48" style="margin-right:6px;vertical-align:middle;">
+              <circle cx="24" cy="24" r="21" fill="none" stroke="{{PRIMARY}}" stroke-width="2.5"/>
+              <circle cx="24" cy="24" r="7" fill="{{PRIMARY}}" opacity="0.9"/>
+            </svg>{{BRAND_NAME}}
+          </span>
+        </div>
+        <div class="example-label dont">
+          <svg width="14" height="14" viewBox="0 0 14 14"><circle cx="7" cy="7" r="6" fill="none" stroke="currentColor" stroke-width="1.5"/><line x1="4.5" y1="4.5" x2="9.5" y2="9.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="9.5" y1="4.5" x2="4.5" y2="9.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          Nicht rotieren
+        </div>
+      </div>
+      <!-- DONT: Low contrast -->
+      <div>
+        <div class="dont-example" style="background:{{PRIMARY_DARK}};padding:28px;display:flex;align-items:center;justify-content:center;min-height:100px;">
+          <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 48 48" style="margin-right:8px;">
+            <circle cx="24" cy="24" r="21" fill="none" stroke="{{PRIMARY}}" stroke-width="2.5"/>
+            <circle cx="24" cy="24" r="7" fill="{{PRIMARY}}" opacity="0.9"/>
+          </svg>
+          <span style="font-size:18px;font-weight:600;color:{{PRIMARY}};letter-spacing:3px;">{{BRAND_NAME}}</span>
+        </div>
+        <div class="example-label dont">
+          <svg width="14" height="14" viewBox="0 0 14 14"><circle cx="7" cy="7" r="6" fill="none" stroke="currentColor" stroke-width="1.5"/><line x1="4.5" y1="4.5" x2="9.5" y2="9.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="9.5" y1="4.5" x2="4.5" y2="9.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          Kein niedriger Kontrast
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ COLORS ============ -->
+  <section id="colors">
+    <span class="section-badge">02 &middot; Farben</span>
+    <h2 class="section-title">Farbpalette</h2>
+    <p class="section-desc">Die {{BRAND_NAME}}-Farbpalette basiert auf tiefen, dunklen Tönen mit lebhaften Cyan-Akzenten. Jede Farbe hat eine klare Funktion im System.</p>
+
+    <!-- Primary Colors -->
+    <h3 class="subsection-title">Primärfarben</h3>
+    <div class="grid-3" style="margin-bottom:32px;">
+      <div class="color-swatch">
+        <div class="swatch-block" style="background:{{PRIMARY}};"></div>
+        <div class="swatch-info">
+          <div class="swatch-name">Cyan (Primary)</div>
+          <div class="swatch-values">
+            HEX {{PRIMARY}}<br>
+            RGB {{PRIMARY_RGB}}<br>
+            HSL 175°, 57%, 56%
+          </div>
+        </div>
+      </div>
+      <div class="color-swatch">
+        <div class="swatch-block" style="background:{{PRIMARY_DARK}};"></div>
+        <div class="swatch-info">
+          <div class="swatch-name">Cyan Dark (Secondary)</div>
+          <div class="swatch-values">
+            HEX {{PRIMARY_DARK}}<br>
+            RGB 56, 178, 172<br>
+            HSL 177°, 52%, 46%
+          </div>
+        </div>
+      </div>
+      <div class="color-swatch">
+        <div class="swatch-block" style="background:{{BG}};"></div>
+        <div class="swatch-info">
+          <div class="swatch-name">Dark (Background)</div>
+          <div class="swatch-values">
+            HEX {{BG}}<br>
+            RGB 15, 23, 42<br>
+            HSL 222°, 47%, 11%
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid-3" style="margin-bottom:40px;">
+      <div class="color-swatch">
+        <div class="swatch-block" style="background:{{TEXT}};"></div>
+        <div class="swatch-info">
+          <div class="swatch-name">Cloud (Text)</div>
+          <div class="swatch-values">
+            HEX {{TEXT}}<br>
+            RGB 248, 250, 252<br>
+            HSL 210°, 40%, 98%
+          </div>
+        </div>
+      </div>
+      <div class="color-swatch">
+        <div class="swatch-block" style="background:{{MUTED}};"></div>
+        <div class="swatch-info">
+          <div class="swatch-name">Muted (Secondary Text)</div>
+          <div class="swatch-values">
+            HEX {{MUTED}}<br>
+            RGB 113, 128, 150<br>
+            HSL 216°, 15%, 52%
+          </div>
+        </div>
+      </div>
+      <div class="color-swatch">
+        <div class="swatch-block" style="background:#1a2332;"></div>
+        <div class="swatch-info">
+          <div class="swatch-name">Card (Surfaces)</div>
+          <div class="swatch-values">
+            HEX #1a2332<br>
+            RGB 26, 35, 50<br>
+            HSL 218°, 32%, 15%
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Semantic Colors -->
+    <h3 class="subsection-title">Semantische Farben</h3>
+    <div class="grid-4" style="margin-bottom:20px;">
+      <div class="color-swatch">
+        <div class="swatch-block" style="background:{{SUCCESS}};height:90px;"></div>
+        <div class="swatch-info">
+          <div class="swatch-name">Success</div>
+          <div class="swatch-values">
+            HEX {{SUCCESS}}<br>
+            RGB {{SUCCESS_RGB}}<br>
+            HSL 160°, 84%, 39%
+          </div>
+        </div>
+      </div>
+      <div class="color-swatch">
+        <div class="swatch-block" style="background:{{WARNING}};height:90px;"></div>
+        <div class="swatch-info">
+          <div class="swatch-name">Warning</div>
+          <div class="swatch-values">
+            HEX {{WARNING}}<br>
+            RGB {{WARNING_RGB}}<br>
+            HSL 38°, 92%, 50%
+          </div>
+        </div>
+      </div>
+      <div class="color-swatch">
+        <div class="swatch-block" style="background:{{ERROR}};height:90px;"></div>
+        <div class="swatch-info">
+          <div class="swatch-name">Error</div>
+          <div class="swatch-values">
+            HEX {{ERROR}}<br>
+            RGB {{ERROR_RGB}}<br>
+            HSL 0°, 84%, 60%
+          </div>
+        </div>
+      </div>
+      <div class="color-swatch">
+        <div class="swatch-block" style="background:{{INFO}};height:90px;"></div>
+        <div class="swatch-info">
+          <div class="swatch-name">Info</div>
+          <div class="swatch-values">
+            HEX {{INFO}}<br>
+            RGB {{INFO_RGB}}<br>
+            HSL 217°, 91%, 60%
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ TYPOGRAPHY ============ -->
+  <section id="typography">
+    <span class="section-badge">03 &middot; Typografie</span>
+    <h2 class="section-title">Typografie</h2>
+    <p class="section-desc">{{BRAND_NAME}} verwendet den System-Font-Stack für optimale Lesbarkeit und Performance. Keine externen Fonts nötig.</p>
+
+    <!-- Font Stack -->
+    <div class="card" style="margin-bottom:32px;">
+      <div class="card-label">Font Stack</div>
+      <p style="font-size:14px;color:var(--muted);font-family:'SF Mono','Cascadia Code',monospace;line-height:1.8;word-break:break-all;">
+        system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif
+      </p>
+    </div>
+
+    <!-- Heading Scale -->
+    <h3 class="subsection-title">Heading Scale</h3>
+    <div style="background:var(--card-bg);border:1px solid var(--card-border);border-radius:12px;padding:28px 32px;margin-bottom:32px;">
+      <div class="type-row">
+        <div class="type-meta">H1<br>48px / 600</div>
+        <span style="font-size:48px;font-weight:600;color:var(--cloud);line-height:1.1;letter-spacing:-0.5px;">Event Streams</span>
+      </div>
+      <div class="type-row">
+        <div class="type-meta">H2<br>36px / 600</div>
+        <span style="font-size:36px;font-weight:600;color:var(--cloud);line-height:1.2;">Event Streams</span>
+      </div>
+      <div class="type-row">
+        <div class="type-meta">H3<br>28px / 600</div>
+        <span style="font-size:28px;font-weight:600;color:var(--cloud);line-height:1.3;">Event Streams</span>
+      </div>
+      <div class="type-row">
+        <div class="type-meta">H4<br>22px / 500</div>
+        <span style="font-size:22px;font-weight:500;color:var(--cloud);line-height:1.4;">Event Streams</span>
+      </div>
+      <div class="type-row">
+        <div class="type-meta">H5<br>18px / 500</div>
+        <span style="font-size:18px;font-weight:500;color:var(--cloud);line-height:1.4;">Event Streams</span>
+      </div>
+      <div class="type-row">
+        <div class="type-meta">H6<br>15px / 600</div>
+        <span style="font-size:15px;font-weight:600;color:var(--cloud);line-height:1.4;text-transform:uppercase;letter-spacing:1px;">Event Streams</span>
+      </div>
+    </div>
+
+    <!-- Body Text -->
+    <h3 class="subsection-title">Body Text</h3>
+    <div class="grid-2" style="margin-bottom:32px;">
+      <div class="card">
+        <div class="card-label">Body Large - 18px</div>
+        <p style="font-size:18px;color:var(--cloud);line-height:1.7;margin-top:8px;">
+          {{BRAND_NAME}} verbindet Events in Echtzeit. Unser {{BRAND_TAGLINE}} ermöglicht es dir, Daten zu verarbeiten und Systeme nahtlos zu integrieren.
+        </p>
+      </div>
+      <div class="card">
+        <div class="card-label">Body Regular - 16px</div>
+        <p style="font-size:16px;color:#a0aec0;line-height:1.7;margin-top:8px;">
+          {{BRAND_NAME}} verbindet Events in Echtzeit. Unser {{BRAND_TAGLINE}} ermöglicht es dir, Daten zu verarbeiten und Systeme nahtlos zu integrieren.
+        </p>
+      </div>
+      <div class="card">
+        <div class="card-label">Body Small - 14px</div>
+        <p style="font-size:14px;color:var(--muted);line-height:1.6;margin-top:8px;">
+          {{BRAND_NAME}} verbindet Events in Echtzeit. Unser {{BRAND_TAGLINE}} ermöglicht es dir, Daten zu verarbeiten und Systeme nahtlos zu integrieren.
+        </p>
+      </div>
+      <div class="card">
+        <div class="card-label">Caption - 12px</div>
+        <p style="font-size:12px;color:var(--muted);line-height:1.5;margin-top:8px;">
+          {{BRAND_NAME}} verbindet Events in Echtzeit. Unser {{BRAND_TAGLINE}} ermöglicht es dir, Daten zu verarbeiten und Systeme nahtlos zu integrieren.
+        </p>
+      </div>
+    </div>
+
+    <!-- Font Weights -->
+    <h3 class="subsection-title">Schriftschnitte</h3>
+    <div class="weight-demo">
+      <div class="weight-row">
+        <span class="weight-label">200 Thin</span>
+        <span style="font-size:24px;font-weight:200;color:var(--cloud);">{{BRAND_NAME}} {{BRAND_TAGLINE}}</span>
+      </div>
+      <div class="weight-row">
+        <span class="weight-label">300 Light</span>
+        <span style="font-size:24px;font-weight:300;color:var(--cloud);">{{BRAND_NAME}} {{BRAND_TAGLINE}}</span>
+      </div>
+      <div class="weight-row">
+        <span class="weight-label">400 Regular</span>
+        <span style="font-size:24px;font-weight:400;color:var(--cloud);">{{BRAND_NAME}} {{BRAND_TAGLINE}}</span>
+      </div>
+      <div class="weight-row">
+        <span class="weight-label">500 Medium</span>
+        <span style="font-size:24px;font-weight:500;color:var(--cloud);">{{BRAND_NAME}} {{BRAND_TAGLINE}}</span>
+      </div>
+      <div class="weight-row">
+        <span class="weight-label">600 Semi</span>
+        <span style="font-size:24px;font-weight:600;color:var(--cloud);">{{BRAND_NAME}} {{BRAND_TAGLINE}}</span>
+      </div>
+    </div>
+
+    <!-- Letter Spacing -->
+    <h3 class="subsection-title">Letter-Spacing Regeln</h3>
+    <div class="grid-3">
+      <div class="card">
+        <div class="card-label">Headlines</div>
+        <p style="font-size:13px;color:var(--muted);margin-bottom:10px;">letter-spacing: -0.5px</p>
+        <span style="font-size:28px;font-weight:600;color:var(--cloud);letter-spacing:-0.5px;">Event Streams</span>
+      </div>
+      <div class="card">
+        <div class="card-label">Body Text</div>
+        <p style="font-size:13px;color:var(--muted);margin-bottom:10px;">letter-spacing: normal</p>
+        <span style="font-size:16px;color:var(--cloud);">Verarbeite Daten in Echtzeit</span>
+      </div>
+      <div class="card">
+        <div class="card-label">Labels / Uppercase</div>
+        <p style="font-size:13px;color:var(--muted);margin-bottom:10px;">letter-spacing: 1.5px</p>
+        <span style="font-size:12px;font-weight:600;color:var(--cyan);letter-spacing:1.5px;text-transform:uppercase;">Event Streams</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ ICONOGRAPHY ============ -->
+  <section id="iconography">
+    <span class="section-badge">04 &middot; Icons</span>
+    <h2 class="section-title">Ikonografie</h2>
+    <p class="section-desc">Icons folgen einem einheitlichen Stil: 24x24 Viewbox, 1.5-1.8px Stroke, abgerundete Ecken (round caps/joins). Konsistenz ist entscheidend.</p>
+
+    <!-- Style Guide -->
+    <div class="grid-3" style="margin-bottom:32px;">
+      <div class="card">
+        <div class="card-label">Stroke Width</div>
+        <p style="font-size:28px;font-weight:600;color:var(--cloud);">1.5 - 1.8px</p>
+        <p style="font-size:13px;color:var(--muted);margin-top:4px;">Konsistent über alle Icons</p>
+      </div>
+      <div class="card">
+        <div class="card-label">Viewbox</div>
+        <p style="font-size:28px;font-weight:600;color:var(--cloud);">24 x 24</p>
+        <p style="font-size:13px;color:var(--muted);margin-top:4px;">Standard-Grösse, skalierbar</p>
+      </div>
+      <div class="card">
+        <div class="card-label">Style</div>
+        <p style="font-size:28px;font-weight:600;color:var(--cloud);">Outline</p>
+        <p style="font-size:13px;color:var(--muted);margin-top:4px;">Round cap, round join</p>
+      </div>
+    </div>
+
+    <!-- 8 Sample Icons -->
+    <h3 class="subsection-title">Beispiel-Icons</h3>
+    <div class="grid-4">
+      <!-- Dashboard -->
+      <div class="icon-cell">
+        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="{{PRIMARY}}" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/>
+        </svg>
+        <span>Dashboard</span>
+      </div>
+      <!-- Event -->
+      <div class="icon-cell">
+        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="{{PRIMARY}}" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+        </svg>
+        <span>Event</span>
+      </div>
+      <!-- Notification -->
+      <div class="icon-cell">
+        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="{{PRIMARY}}" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+        </svg>
+        <span>Notification</span>
+      </div>
+      <!-- Settings -->
+      <div class="icon-cell">
+        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="{{PRIMARY}}" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9c.26.604.852.997 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+        </svg>
+        <span>Einstellungen</span>
+      </div>
+      <!-- Security -->
+      <div class="icon-cell">
+        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="{{PRIMARY}}" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+        </svg>
+        <span>Sicherheit</span>
+      </div>
+      <!-- Analytics -->
+      <div class="icon-cell">
+        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="{{PRIMARY}}" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/>
+        </svg>
+        <span>Analytics</span>
+      </div>
+      <!-- Users -->
+      <div class="icon-cell">
+        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="{{PRIMARY}}" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+        </svg>
+        <span>Benutzer</span>
+      </div>
+      <!-- Connection -->
+      <div class="icon-cell">
+        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="{{PRIMARY}}" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
+        </svg>
+        <span>Verbindung</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ VOICE & TONE ============ -->
+  <section id="voice">
+    <span class="section-badge">05 &middot; Stimme</span>
+    <h2 class="section-title">Stimme & Ton</h2>
+    <p class="section-desc">{{BRAND_NAME}} kommuniziert klar, professionell und zugänglich. Der Ton passt sich dem Kontext an - von technisch bis freundlich.</p>
+
+    <!-- Brand Personality -->
+    <h3 class="subsection-title">Markenpersönlichkeit</h3>
+    <div class="grid-4" style="margin-bottom:40px;">
+      <div class="card" style="text-align:center;">
+        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="{{PRIMARY}}" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom:12px;">
+          <rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/>
+        </svg>
+        <h4 style="font-size:15px;font-weight:600;color:var(--cloud);margin-bottom:4px;">Professionell</h4>
+        <p style="font-size:12px;color:var(--muted);line-height:1.5;">Kompetent und vertrauenswürdig. Wir kennen unser Fachgebiet.</p>
+      </div>
+      <div class="card" style="text-align:center;">
+        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="{{PRIMARY}}" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom:12px;">
+          <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+        </svg>
+        <h4 style="font-size:15px;font-weight:600;color:var(--cloud);margin-bottom:4px;">Innovativ</h4>
+        <p style="font-size:12px;color:var(--muted);line-height:1.5;">Zukunftsorientiert und technologiebegeistert. Immer einen Schritt voraus.</p>
+      </div>
+      <div class="card" style="text-align:center;">
+        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="{{PRIMARY}}" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom:12px;">
+          <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+        </svg>
+        <h4 style="font-size:15px;font-weight:600;color:var(--cloud);margin-bottom:4px;">Zugänglich</h4>
+        <p style="font-size:12px;color:var(--muted);line-height:1.5;">Freundlich und einladend. Technologie soll für alle verständlich sein.</p>
+      </div>
+      <div class="card" style="text-align:center;">
+        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="{{PRIMARY}}" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom:12px;">
+          <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+        </svg>
+        <h4 style="font-size:15px;font-weight:600;color:var(--cloud);margin-bottom:4px;">Klar</h4>
+        <p style="font-size:12px;color:var(--muted);line-height:1.5;">Präzise und direkt. Kein Fachjargon ohne Erklärung.</p>
+      </div>
+    </div>
+
+    <!-- Context Examples -->
+    <h3 class="subsection-title">Kontextbeispiele</h3>
+    <div class="grid-3">
+      <div class="voice-card">
+        <h4>Marketing</h4>
+        <div class="voice-trait">Begeisternd, visionär</div>
+        <p>Im Marketing-Kontext darf {{BRAND_NAME}} inspirieren und begeistern. Der Ton ist energisch und zukunftsorientiert.</p>
+        <blockquote>
+          "Verbinde alles. In Echtzeit. {{BRAND_NAME}} ist das {{BRAND_TAGLINE}}, das deine Daten zum Leben erweckt."
+        </blockquote>
+      </div>
+      <div class="voice-card">
+        <h4>Support</h4>
+        <div class="voice-trait">Hilfsbereit, empathisch</div>
+        <p>Im Support sprechen wir auf Augenhöhe, ruhig und lösungsorientiert. Wir nehmen jedes Anliegen ernst.</p>
+        <blockquote>
+          "Wir verstehen, dass das frustrierend sein kann. Lass uns das gemeinsam lösen - hier ist der nächste Schritt."
+        </blockquote>
+      </div>
+      <div class="voice-card">
+        <h4>Technisch</h4>
+        <div class="voice-trait">Präzise, sachlich</div>
+        <p>Technische Dokumentation ist klar und strukturiert. Fachbegriffe werden verwendet, aber erklärt.</p>
+        <blockquote>
+          "Der Event-Stream akzeptiert JSON-Payloads bis 256KB. Konfiguriere den Retention-Zeitraum über die API oder das Dashboard."
+        </blockquote>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ SPACING & GRID ============ -->
+  <section id="spacing">
+    <span class="section-badge">06 &middot; Layout</span>
+    <h2 class="section-title">Abstände & Raster</h2>
+    <p class="section-desc">Das {{BRAND_NAME}} Layout-System basiert auf einem 4px/8px Base-Unit. Alle Abstände sind Vielfache dieser Grundeinheit für harmonische Proportionen.</p>
+
+    <!-- Base Units -->
+    <h3 class="subsection-title">Basiseinheiten</h3>
+    <div class="grid-2" style="margin-bottom:32px;">
+      <div class="card">
+        <div class="card-label">Micro Unit</div>
+        <div style="display:flex;align-items:center;gap:12px;margin-top:8px;">
+          <div style="width:16px;height:16px;background:var(--cyan);border-radius:2px;opacity:0.7;"></div>
+          <span style="font-size:24px;font-weight:600;color:var(--cloud);">4px</span>
+        </div>
+        <p style="font-size:13px;color:var(--muted);margin-top:6px;">Für feine Abstände, Icon-Padding</p>
+      </div>
+      <div class="card">
+        <div class="card-label">Base Unit</div>
+        <div style="display:flex;align-items:center;gap:12px;margin-top:8px;">
+          <div style="width:24px;height:24px;background:var(--cyan);border-radius:3px;opacity:0.7;"></div>
+          <span style="font-size:24px;font-weight:600;color:var(--cloud);">8px</span>
+        </div>
+        <p style="font-size:13px;color:var(--muted);margin-top:6px;">Standard-Grundeinheit des Systems</p>
+      </div>
+    </div>
+
+    <!-- Spacing Scale -->
+    <h3 class="subsection-title">Spacing Scale</h3>
+    <div style="background:var(--card-bg);border:1px solid var(--card-border);border-radius:12px;padding:32px;margin-bottom:32px;">
+      <div class="spacing-scale">
+        <div class="spacing-unit">
+          <div class="spacing-block" style="width:16px;height:16px;"></div>
+          <span class="spacing-px">4px</span>
+          <span class="spacing-label">xs</span>
+        </div>
+        <div class="spacing-unit">
+          <div class="spacing-block" style="width:20px;height:20px;"></div>
+          <span class="spacing-px">8px</span>
+          <span class="spacing-label">sm</span>
+        </div>
+        <div class="spacing-unit">
+          <div class="spacing-block" style="width:28px;height:28px;"></div>
+          <span class="spacing-px">12px</span>
+          <span class="spacing-label">md</span>
+        </div>
+        <div class="spacing-unit">
+          <div class="spacing-block" style="width:36px;height:36px;"></div>
+          <span class="spacing-px">16px</span>
+          <span class="spacing-label">lg</span>
+        </div>
+        <div class="spacing-unit">
+          <div class="spacing-block" style="width:48px;height:48px;"></div>
+          <span class="spacing-px">24px</span>
+          <span class="spacing-label">xl</span>
+        </div>
+        <div class="spacing-unit">
+          <div class="spacing-block" style="width:60px;height:60px;"></div>
+          <span class="spacing-px">32px</span>
+          <span class="spacing-label">2xl</span>
+        </div>
+        <div class="spacing-unit">
+          <div class="spacing-block" style="width:76px;height:76px;"></div>
+          <span class="spacing-px">48px</span>
+          <span class="spacing-label">3xl</span>
+        </div>
+        <div class="spacing-unit">
+          <div class="spacing-block" style="width:96px;height:96px;"></div>
+          <span class="spacing-px">64px</span>
+          <span class="spacing-label">4xl</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Layout Example -->
+    <h3 class="subsection-title">Layout Beispiel</h3>
+    <div style="background:var(--card-bg);border:1px solid var(--card-border);border-radius:12px;padding:32px;">
+      <!-- Simulated layout grid -->
+      <div style="display:grid;grid-template-columns:1fr 2fr 1fr;gap:16px;min-height:200px;">
+        <div style="background:rgba({{PRIMARY_RGB}},0.08);border:1px dashed rgba({{PRIMARY_RGB}},0.25);border-radius:8px;padding:16px;display:flex;flex-direction:column;gap:8px;">
+          <div style="height:12px;background:rgba({{PRIMARY_RGB}},0.15);border-radius:3px;width:80%;"></div>
+          <div style="height:12px;background:rgba({{PRIMARY_RGB}},0.1);border-radius:3px;width:60%;"></div>
+          <div style="height:12px;background:rgba({{PRIMARY_RGB}},0.1);border-radius:3px;width:70%;"></div>
+          <div style="height:12px;background:rgba({{PRIMARY_RGB}},0.1);border-radius:3px;width:50%;"></div>
+          <p style="font-size:10px;color:var(--cyan);margin-top:auto;opacity:0.6;">Sidebar (240px)</p>
+        </div>
+        <div style="background:rgba({{PRIMARY_RGB}},0.04);border:1px dashed rgba({{PRIMARY_RGB}},0.15);border-radius:8px;padding:16px;">
+          <div style="height:20px;background:rgba({{PRIMARY_RGB}},0.12);border-radius:4px;width:50%;margin-bottom:16px;"></div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px;">
+            <div style="height:60px;background:rgba({{PRIMARY_RGB}},0.06);border-radius:6px;border:1px dashed rgba({{PRIMARY_RGB}},0.12);"></div>
+            <div style="height:60px;background:rgba({{PRIMARY_RGB}},0.06);border-radius:6px;border:1px dashed rgba({{PRIMARY_RGB}},0.12);"></div>
+          </div>
+          <div style="height:12px;background:rgba({{PRIMARY_RGB}},0.08);border-radius:3px;width:90%;margin-bottom:8px;"></div>
+          <div style="height:12px;background:rgba({{PRIMARY_RGB}},0.06);border-radius:3px;width:75%;"></div>
+          <p style="font-size:10px;color:var(--cyan);margin-top:16px;opacity:0.6;">Content Area (flexible)</p>
+        </div>
+        <div style="background:rgba({{PRIMARY_RGB}},0.04);border:1px dashed rgba({{PRIMARY_RGB}},0.15);border-radius:8px;padding:16px;display:flex;flex-direction:column;gap:10px;">
+          <div style="height:40px;background:rgba({{PRIMARY_RGB}},0.08);border-radius:6px;"></div>
+          <div style="height:40px;background:rgba({{PRIMARY_RGB}},0.06);border-radius:6px;"></div>
+          <div style="height:40px;background:rgba({{PRIMARY_RGB}},0.06);border-radius:6px;"></div>
+          <p style="font-size:10px;color:var(--cyan);margin-top:auto;opacity:0.6;">Panel (280px)</p>
+        </div>
+      </div>
+      <p style="font-size:12px;color:var(--muted);margin-top:16px;text-align:center;">Standard-Layout: Sidebar + Content + Seitenpanel mit 16px Grid-Gap</p>
+    </div>
+  </section>
+
+  <!-- ============ USAGE EXAMPLES ============ -->
+  <section id="usage">
+    <span class="section-badge">07 &middot; Anwendung</span>
+    <h2 class="section-title">Anwendungsbeispiele</h2>
+    <p class="section-desc">Beispiele für die Anwendung der Brand Guidelines in verschiedenen Medien und Formaten.</p>
+
+    <div class="grid-2">
+      <!-- Business Card -->
+      <div class="usage-preview">
+        <div class="preview-display" style="padding:32px;">
+          <!-- Mini business card -->
+          <div style="width:260px;height:150px;background:{{BG}};border-radius:10px;border:1px solid rgba({{PRIMARY_RGB}},0.15);padding:20px;display:flex;flex-direction:column;justify-content:space-between;box-shadow:0 8px 32px rgba(0,0,0,0.3);">
+            <div style="display:flex;align-items:center;gap:8px;">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 40 40">
+                <circle cx="20" cy="20" r="17" fill="none" stroke="{{PRIMARY}}" stroke-width="2.5"/>
+                <circle cx="20" cy="20" r="5.5" fill="{{PRIMARY}}" opacity="0.9"/>
+              </svg>
+              <span style="font-size:11px;font-weight:600;color:{{TEXT}};letter-spacing:2.5px;">{{BRAND_NAME}}</span>
+            </div>
+            <div>
+              <div style="font-size:12px;font-weight:500;color:{{TEXT}};">Max Müller</div>
+              <div style="font-size:9px;color:{{MUTED}};margin-top:2px;">Head of Engineering</div>
+              <div style="font-size:9px;color:{{PRIMARY}};margin-top:6px;">max@{{BRAND_DOMAIN}} &middot; +41 44 555 12 34</div>
+            </div>
+          </div>
+        </div>
+        <div class="preview-label">
+          <span>Visitenkarte</span>
+          <p>Dunkles Design mit Cyan-Akzenten auf 85x55mm</p>
+        </div>
+      </div>
+
+      <!-- Social Media -->
+      <div class="usage-preview">
+        <div class="preview-display" style="padding:32px;">
+          <div style="width:240px;height:150px;background:linear-gradient(135deg,{{BG}},#1a2332);border-radius:10px;border:1px solid rgba({{PRIMARY_RGB}},0.15);padding:20px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;box-shadow:0 8px 32px rgba(0,0,0,0.3);">
+            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 40 40" style="margin-bottom:10px;">
+              <circle cx="20" cy="20" r="17" fill="none" stroke="{{PRIMARY}}" stroke-width="2.5"/>
+              <circle cx="20" cy="20" r="5.5" fill="{{PRIMARY}}" opacity="0.9"/>
+              <circle cx="20" cy="10" r="2" fill="{{PRIMARY}}" opacity="0.5"/>
+              <circle cx="27" cy="25" r="2" fill="{{PRIMARY_DARK}}" opacity="0.5"/>
+              <circle cx="13" cy="25" r="2" fill="{{PRIMARY}}" opacity="0.5"/>
+            </svg>
+            <div style="font-size:14px;font-weight:600;color:{{TEXT}};margin-bottom:4px;">Event Streams</div>
+            <div style="font-size:9px;color:{{PRIMARY}};letter-spacing:0.5px;">Jetzt verfügbar</div>
+            <div style="margin-top:10px;padding:4px 12px;background:linear-gradient(135deg,{{PRIMARY}},{{PRIMARY_DARK}});border-radius:4px;">
+              <span style="font-size:8px;font-weight:600;color:{{BG}};">MEHR ERFAHREN</span>
+            </div>
+          </div>
+        </div>
+        <div class="preview-label">
+          <span>Social Media Post</span>
+          <p>Feature-Announcement für Instagram/LinkedIn</p>
+        </div>
+      </div>
+
+      <!-- Email Preview -->
+      <div class="usage-preview">
+        <div class="preview-display" style="padding:32px;">
+          <div style="width:220px;height:160px;background:#1a2332;border-radius:8px;border:1px solid rgba({{PRIMARY_RGB}},0.1);padding:14px;overflow:hidden;box-shadow:0 8px 32px rgba(0,0,0,0.3);">
+            <div style="display:flex;align-items:center;gap:6px;margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid rgba({{PRIMARY_RGB}},0.08);">
+              <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 40 40">
+                <circle cx="20" cy="20" r="17" fill="none" stroke="{{PRIMARY}}" stroke-width="3"/>
+                <circle cx="20" cy="20" r="5.5" fill="{{PRIMARY}}" opacity="0.9"/>
+              </svg>
+              <span style="font-size:8px;font-weight:600;color:{{TEXT}};letter-spacing:1.5px;">{{BRAND_NAME}}</span>
+            </div>
+            <div style="font-size:10px;font-weight:500;color:{{TEXT}};margin-bottom:6px;">Willkommen!</div>
+            <div style="height:6px;background:rgba(255,255,255,0.06);border-radius:2px;width:90%;margin-bottom:4px;"></div>
+            <div style="height:6px;background:rgba(255,255,255,0.04);border-radius:2px;width:75%;margin-bottom:4px;"></div>
+            <div style="height:6px;background:rgba(255,255,255,0.04);border-radius:2px;width:80%;margin-bottom:10px;"></div>
+            <div style="width:60px;height:18px;background:linear-gradient(135deg,{{PRIMARY}},{{PRIMARY_DARK}});border-radius:4px;display:flex;align-items:center;justify-content:center;">
+              <span style="font-size:6px;font-weight:600;color:{{BG}};">DASHBOARD</span>
+            </div>
+          </div>
+        </div>
+        <div class="preview-label">
+          <span>E-Mail Template</span>
+          <p>Willkommens-Mail mit dunklem Farbschema</p>
+        </div>
+      </div>
+
+      <!-- UI Element -->
+      <div class="usage-preview">
+        <div class="preview-display" style="padding:32px;">
+          <div style="width:240px;background:{{BG}};border-radius:10px;border:1px solid rgba({{PRIMARY_RGB}},0.12);padding:18px;box-shadow:0 8px 32px rgba(0,0,0,0.3);">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
+              <span style="font-size:11px;font-weight:600;color:{{TEXT}};">Event Activity</span>
+              <span style="font-size:8px;color:{{PRIMARY}};padding:2px 6px;background:rgba({{PRIMARY_RGB}},0.1);border-radius:3px;">Live</span>
+            </div>
+            <!-- Mini chart bars -->
+            <div style="display:flex;align-items:flex-end;gap:3px;height:50px;margin-bottom:10px;">
+              <div style="width:100%;height:30%;background:rgba({{PRIMARY_RGB}},0.3);border-radius:2px 2px 0 0;"></div>
+              <div style="width:100%;height:55%;background:rgba({{PRIMARY_RGB}},0.4);border-radius:2px 2px 0 0;"></div>
+              <div style="width:100%;height:40%;background:rgba({{PRIMARY_RGB}},0.3);border-radius:2px 2px 0 0;"></div>
+              <div style="width:100%;height:75%;background:rgba({{PRIMARY_RGB}},0.5);border-radius:2px 2px 0 0;"></div>
+              <div style="width:100%;height:60%;background:rgba({{PRIMARY_RGB}},0.4);border-radius:2px 2px 0 0;"></div>
+              <div style="width:100%;height:85%;background:rgba({{PRIMARY_RGB}},0.6);border-radius:2px 2px 0 0;"></div>
+              <div style="width:100%;height:45%;background:rgba({{PRIMARY_RGB}},0.35);border-radius:2px 2px 0 0;"></div>
+              <div style="width:100%;height:90%;background:linear-gradient(to top,{{PRIMARY_DARK}},{{PRIMARY}});border-radius:2px 2px 0 0;"></div>
+              <div style="width:100%;height:65%;background:rgba({{PRIMARY_RGB}},0.45);border-radius:2px 2px 0 0;"></div>
+              <div style="width:100%;height:50%;background:rgba({{PRIMARY_RGB}},0.35);border-radius:2px 2px 0 0;"></div>
+            </div>
+            <div style="display:flex;justify-content:space-between;">
+              <span style="font-size:8px;color:{{MUTED}};">12,847 Events</span>
+              <span style="font-size:8px;color:{{SUCCESS}};">+12.4%</span>
+            </div>
+          </div>
+        </div>
+        <div class="preview-label">
+          <span>Dashboard Widget</span>
+          <p>Event-Activity Chart mit Live-Indikator</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ FOOTER ============ -->
+  <footer style="padding:48px 60px;text-align:center;border-top:1px solid rgba({{PRIMARY_RGB}},0.06);">
+    <div style="display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:16px;">
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 40 40">
+        <circle cx="20" cy="20" r="17" fill="none" stroke="{{PRIMARY}}" stroke-width="2.5" opacity="0.4"/>
+        <circle cx="20" cy="20" r="5.5" fill="{{PRIMARY}}" opacity="0.4"/>
+      </svg>
+      <span style="font-size:14px;font-weight:600;color:var(--muted);letter-spacing:2px;">{{BRAND_NAME}}</span>
+    </div>
+    <p style="font-size:13px;color:#4a5568;">
+      Brand Guidelines v2.0 &middot; Februar 2026<br>
+      Bei Fragen: <a href="mailto:brand@{{BRAND_DOMAIN}}" style="color:var(--cyan);text-decoration:none;">brand@{{BRAND_DOMAIN}}</a>
+    </p>
+    <p style="font-size:11px;color:#2d3748;margin-top:12px;">
+      &copy; 2026 {{BRAND_NAME}} AG. Alle Rechte vorbehalten.
+    </p>
+  </footer>
+
+</main>
+
+</body>
+</html>

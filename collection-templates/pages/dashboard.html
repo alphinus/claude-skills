@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{BRAND_NAME}} - Dashboard</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  :root { --dark-bg: {{BG}}; --sidebar-bg: {{SIDEBAR_BG}}; --cyan: {{PRIMARY}}; --cyan-dark: {{PRIMARY_DARK}}; --{{BRAND_NAME_LOWER}}-blue: {{SURFACE}}; --cloud: {{TEXT}}; --muted: {{MUTED}}; --success: {{SUCCESS}}; --warning: {{WARNING}}; --error: {{ERROR}}; }
+  body { background: var(--dark-bg); font-family: system-ui, -apple-system, sans-serif; color: var(--cloud); display: flex; min-height: 100vh; }
+
+  /* Sidebar */
+  .sidebar {
+    width: 240px; background: var(--sidebar-bg); border-right: 1px solid rgba(255,255,255,0.04);
+    padding: 24px 0; display: flex; flex-direction: column; flex-shrink: 0;
+  }
+  .sidebar-logo { padding: 0 20px 24px; font-size: 18px; font-weight: 300; letter-spacing: 5px; border-bottom: 1px solid rgba(255,255,255,0.04); }
+  .sidebar-logo em { color: var(--cyan); font-style: normal; }
+
+  .sidebar-nav { flex: 1; padding: 16px 12px; display: flex; flex-direction: column; gap: 2px; }
+  .nav-section { font-size: 10px; letter-spacing: 3px; color: var(--muted); padding: 16px 12px 8px; opacity: 0.5; }
+  .nav-item {
+    display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 8px;
+    font-size: 13px; color: var(--muted); font-weight: 300; cursor: pointer; transition: all 0.2s;
+    text-decoration: none;
+  }
+  .nav-item:hover { color: var(--cloud); background: rgba(255,255,255,0.03); }
+  .nav-item.active { color: var(--cyan); background: rgba({{PRIMARY_RGB}},0.06); }
+  .nav-item svg { width: 18px; height: 18px; stroke: currentColor; fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0; }
+  .nav-badge { margin-left: auto; font-size: 10px; padding: 2px 8px; border-radius: 10px; background: rgba({{PRIMARY_RGB}},0.12); color: var(--cyan); }
+
+  .sidebar-user { padding: 16px 20px; border-top: 1px solid rgba(255,255,255,0.04); display: flex; align-items: center; gap: 10px; }
+  .user-avatar { width: 32px; height: 32px; border-radius: 8px; background: linear-gradient(135deg, var(--cyan), var(--cyan-dark)); display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 600; color: var(--dark-bg); }
+  .user-name { font-size: 13px; font-weight: 400; }
+  .user-plan { font-size: 11px; color: var(--cyan); font-weight: 300; }
+
+  /* Main */
+  .main { flex: 1; padding: 28px 32px; overflow-y: auto; }
+
+  /* Header */
+  .page-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 32px; }
+  .page-title { font-size: 24px; font-weight: 300; }
+  .page-title small { font-size: 13px; color: var(--muted); font-weight: 300; margin-left: 8px; }
+  .header-actions { display: flex; gap: 10px; }
+  .hdr-btn { padding: 8px 16px; border-radius: 8px; font-size: 12px; cursor: pointer; font-family: inherit; transition: all 0.2s; }
+  .hdr-btn-ghost { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); color: var(--muted); }
+  .hdr-btn-ghost:hover { border-color: rgba(255,255,255,0.12); color: var(--cloud); }
+  .hdr-btn-primary { background: linear-gradient(135deg, var(--cyan), var(--cyan-dark)); border: none; color: var(--dark-bg); font-weight: 600; letter-spacing: 0.5px; }
+  .hdr-btn-primary:hover { box-shadow: 0 4px 16px rgba({{PRIMARY_RGB}},0.2); }
+
+  /* Stats Cards */
+  .stats-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 28px; }
+  .stat-card {
+    background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05);
+    border-radius: 14px; padding: 20px; position: relative; overflow: hidden;
+  }
+  .stat-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; }
+  .stat-card:nth-child(1)::before { background: linear-gradient(90deg, var(--cyan), transparent); }
+  .stat-card:nth-child(2)::before { background: linear-gradient(90deg, var(--success), transparent); }
+  .stat-card:nth-child(3)::before { background: linear-gradient(90deg, var(--warning), transparent); }
+  .stat-card:nth-child(4)::before { background: linear-gradient(90deg, {{INFO}}, transparent); }
+
+  .stat-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+  .stat-label { font-size: 12px; color: var(--muted); font-weight: 300; letter-spacing: 1px; }
+  .stat-trend { font-size: 11px; font-weight: 400; padding: 2px 8px; border-radius: 6px; }
+  .trend-up { background: rgba({{SUCCESS_RGB}},0.1); color: var(--success); }
+  .trend-down { background: rgba({{ERROR_RGB}},0.1); color: var(--error); }
+  .stat-value { font-size: 28px; font-weight: 200; margin-bottom: 4px; }
+  .stat-sub { font-size: 11px; color: var(--muted); font-weight: 300; }
+
+  /* Chart + Table Row */
+  .content-row { display: grid; grid-template-columns: 2fr 1fr; gap: 16px; margin-bottom: 28px; }
+
+  .panel { background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); border-radius: 14px; padding: 20px; }
+  .panel-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+  .panel-title { font-size: 14px; font-weight: 400; }
+  .panel-tabs { display: flex; gap: 4px; }
+  .panel-tab { padding: 4px 12px; border-radius: 6px; font-size: 11px; color: var(--muted); cursor: pointer; transition: all 0.2s; background: transparent; border: none; font-family: inherit; }
+  .panel-tab.active { background: rgba({{PRIMARY_RGB}},0.08); color: var(--cyan); }
+
+  /* Fake chart */
+  .chart-area { height: 200px; display: flex; align-items: flex-end; gap: 4px; padding: 0 8px; }
+  .chart-bar {
+    flex: 1; border-radius: 4px 4px 0 0; min-height: 8px;
+    background: linear-gradient(to top, rgba({{PRIMARY_RGB}},0.2), rgba({{PRIMARY_RGB}},0.6));
+    transition: all 0.3s; cursor: pointer; position: relative;
+  }
+  .chart-bar:hover { background: linear-gradient(to top, rgba({{PRIMARY_RGB}},0.3), var(--cyan)); }
+  .chart-bar::after {
+    content: attr(data-val); position: absolute; top: -20px; left: 50%; transform: translateX(-50%);
+    font-size: 10px; color: var(--cyan); opacity: 0; transition: opacity 0.2s; white-space: nowrap;
+  }
+  .chart-bar:hover::after { opacity: 1; }
+
+  /* Activity feed */
+  .activity-list { display: flex; flex-direction: column; gap: 0; }
+  .activity-item {
+    display: flex; align-items: flex-start; gap: 12px; padding: 12px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.03);
+  }
+  .activity-item:last-child { border-bottom: none; }
+  .activity-dot { width: 8px; height: 8px; border-radius: 50%; margin-top: 5px; flex-shrink: 0; }
+  .dot-cyan { background: var(--cyan); box-shadow: 0 0 6px rgba({{PRIMARY_RGB}},0.3); }
+  .dot-green { background: var(--success); box-shadow: 0 0 6px rgba({{SUCCESS_RGB}},0.3); }
+  .dot-yellow { background: var(--warning); box-shadow: 0 0 6px rgba({{WARNING_RGB}},0.3); }
+  .dot-red { background: var(--error); box-shadow: 0 0 6px rgba({{ERROR_RGB}},0.3); }
+  .activity-text { font-size: 13px; font-weight: 300; line-height: 1.5; }
+  .activity-text strong { font-weight: 500; color: var(--cloud); }
+  .activity-time { font-size: 11px; color: var(--muted); margin-top: 2px; }
+
+  /* Event Table */
+  .table-wrap { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; }
+  th { font-size: 11px; color: var(--muted); letter-spacing: 1px; font-weight: 400; text-align: left; padding: 10px 12px; border-bottom: 1px solid rgba(255,255,255,0.06); }
+  td { font-size: 13px; font-weight: 300; padding: 12px; border-bottom: 1px solid rgba(255,255,255,0.03); }
+  tr:hover td { background: rgba(255,255,255,0.01); }
+  .badge { padding: 3px 10px; border-radius: 6px; font-size: 11px; font-weight: 400; }
+  .badge-success { background: rgba({{SUCCESS_RGB}},0.1); color: var(--success); }
+  .badge-warning { background: rgba({{WARNING_RGB}},0.1); color: var(--warning); }
+  .badge-info { background: rgba({{PRIMARY_RGB}},0.1); color: var(--cyan); }
+  .mono { font-family: 'SF Mono', Monaco, monospace; font-size: 12px; color: var(--muted); }
+</style>
+</head>
+<body>
+
+<!-- Sidebar -->
+<aside class="sidebar">
+  <div class="sidebar-logo">ELUM<em>A</em></div>
+  <nav class="sidebar-nav">
+    <div class="nav-section">MAIN</div>
+    <a class="nav-item active" href="#"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>Dashboard</a>
+    <a class="nav-item" href="#"><svg viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>Events<span class="nav-badge">142</span></a>
+    <a class="nav-item" href="#"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>Telegram</a>
+    <a class="nav-item" href="#"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4"/></svg>AI Studio</a>
+    <div class="nav-section">SYSTEM</div>
+    <a class="nav-item" href="#"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06"/></svg>Settings</a>
+    <a class="nav-item" href="#"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>Security</a>
+  </nav>
+  <div class="sidebar-user">
+    <div class="user-avatar">MK</div>
+    <div><div class="user-name">Marco Keller</div><div class="user-plan">Pro Plan</div></div>
+  </div>
+</aside>
+
+<!-- Main Content -->
+<main class="main">
+  <div class="page-header">
+    <div class="page-title">Dashboard <small>Heute, 10. Feb 2026</small></div>
+    <div class="header-actions">
+      <button class="hdr-btn hdr-btn-ghost">Export</button>
+      <button class="hdr-btn hdr-btn-primary">+ Neuer Event</button>
+    </div>
+  </div>
+
+  <!-- Stats -->
+  <div class="stats-row">
+    <div class="stat-card">
+      <div class="stat-header"><span class="stat-label">EVENTS HEUTE</span><span class="stat-trend trend-up">+12%</span></div>
+      <div class="stat-value">2'847</div><div class="stat-sub">vs. 2'541 gestern</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-header"><span class="stat-label">AKTIVE STREAMS</span><span class="stat-trend trend-up">+2</span></div>
+      <div class="stat-value">18</div><div class="stat-sub">3 Streams pausiert</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-header"><span class="stat-label">AVG. LATENZ</span><span class="stat-trend trend-down">+3ms</span></div>
+      <div class="stat-value">47ms</div><div class="stat-sub">P95: 120ms</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-header"><span class="stat-label">AI ACTIONS</span><span class="stat-trend trend-up">+28%</span></div>
+      <div class="stat-value">384</div><div class="stat-sub">142 automatisch</div>
+    </div>
+  </div>
+
+  <!-- Chart + Activity -->
+  <div class="content-row">
+    <div class="panel">
+      <div class="panel-header">
+        <div class="panel-title">Event-Volumen</div>
+        <div class="panel-tabs"><button class="panel-tab active">7 Tage</button><button class="panel-tab">30 Tage</button><button class="panel-tab">90 Tage</button></div>
+      </div>
+      <div class="chart-area" id="chart"></div>
+    </div>
+    <div class="panel">
+      <div class="panel-header"><div class="panel-title">Letzte Aktivität</div></div>
+      <div class="activity-list">
+        <div class="activity-item"><div class="activity-dot dot-cyan"></div><div><div class="activity-text"><strong>user.created</strong> Event empfangen</div><div class="activity-time">vor 2 Min.</div></div></div>
+        <div class="activity-item"><div class="activity-dot dot-green"></div><div><div class="activity-text">AI hat <strong>3 Docs</strong> generiert</div><div class="activity-time">vor 8 Min.</div></div></div>
+        <div class="activity-item"><div class="activity-dot dot-yellow"></div><div><div class="activity-text">Rate Limit bei <strong>85%</strong></div><div class="activity-time">vor 15 Min.</div></div></div>
+        <div class="activity-item"><div class="activity-dot dot-cyan"></div><div><div class="activity-text"><strong>payment.success</strong> verarbeitet</div><div class="activity-time">vor 23 Min.</div></div></div>
+        <div class="activity-item"><div class="activity-dot dot-red"></div><div><div class="activity-text">Webhook Retry für <strong>order.failed</strong></div><div class="activity-time">vor 41 Min.</div></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Event Table -->
+  <div class="panel">
+    <div class="panel-header"><div class="panel-title">Letzte Events</div></div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>EVENT</th><th>STREAM</th><th>STATUS</th><th>LATENZ</th><th>ZEIT</th></tr></thead>
+        <tbody>
+          <tr><td>user.subscription.created</td><td class="mono">billing-stream</td><td><span class="badge badge-success">Verarbeitet</span></td><td class="mono">23ms</td><td class="mono">14:32:01</td></tr>
+          <tr><td>document.ai.generated</td><td class="mono">ai-stream</td><td><span class="badge badge-success">Verarbeitet</span></td><td class="mono">187ms</td><td class="mono">14:31:45</td></tr>
+          <tr><td>notification.telegram.sent</td><td class="mono">notif-stream</td><td><span class="badge badge-info">Pending</span></td><td class="mono">--</td><td class="mono">14:31:30</td></tr>
+          <tr><td>order.payment.failed</td><td class="mono">order-stream</td><td><span class="badge badge-warning">Retry #2</span></td><td class="mono">452ms</td><td class="mono">14:30:58</td></tr>
+          <tr><td>user.profile.updated</td><td class="mono">user-stream</td><td><span class="badge badge-success">Verarbeitet</span></td><td class="mono">18ms</td><td class="mono">14:30:22</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</main>
+
+<script>
+  // Generate chart bars
+  const chart = document.getElementById('chart');
+  const data = [65,78,45,92,88,72,95,60,85,70,98,80,55,90,75,82,68,93,87,71,96,62,84,77];
+  data.forEach(v => {
+    const bar = document.createElement('div');
+    bar.className = 'chart-bar';
+    bar.style.height = v + '%';
+    bar.setAttribute('data-val', Math.round(v * 30) + ' Events');
+    chart.appendChild(bar);
+  });
+</script>
+
+</body>
+</html>

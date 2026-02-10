@@ -1,0 +1,1335 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{BRAND_NAME}} - Pitch Deck</title>
+<style>
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --dark-bg: {{BG}};
+  --dark-bg-alt: #1a2332;
+  --dark-card: #1e293b;
+  --cyan: {{PRIMARY}};
+  --cyan-dark: {{PRIMARY_DARK}};
+  --cyan-glow: rgba({{PRIMARY_RGB}}, 0.15);
+  --cloud: {{TEXT}};
+  --muted: {{MUTED}};
+  --slide-transition: 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: var(--dark-bg);
+  color: var(--cloud);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ── Progress Bar ── */
+#progress-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--cyan), var(--cyan-dark));
+  z-index: 1000;
+  transition: width 0.5s ease;
+  box-shadow: 0 0 12px var(--cyan);
+}
+
+/* ── Slide Counter ── */
+#slide-counter {
+  position: fixed;
+  bottom: 28px;
+  right: 36px;
+  font-size: 14px;
+  color: var(--muted);
+  z-index: 1000;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.05em;
+}
+
+/* ── Navigation Dots ── */
+#nav-dots {
+  position: fixed;
+  bottom: 28px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 10px;
+  z-index: 1000;
+}
+
+.nav-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgba(113, 128, 150, 0.4);
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  padding: 0;
+}
+
+.nav-dot:hover {
+  background: var(--muted);
+  transform: scale(1.3);
+}
+
+.nav-dot.active {
+  background: var(--cyan);
+  box-shadow: 0 0 8px var(--cyan);
+  transform: scale(1.2);
+}
+
+/* ── Slides Container ── */
+#slides-container {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.slide {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transform: translateY(20px);
+  pointer-events: none;
+  transition: opacity var(--slide-transition), transform var(--slide-transition);
+  padding: 60px 80px;
+  overflow: hidden;
+}
+
+.slide.active {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+/* ── Staggered Entrance Animations ── */
+.slide .anim {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.slide.active .anim {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.slide.active .anim:nth-child(1) { transition-delay: 0.1s; }
+.slide.active .anim:nth-child(2) { transition-delay: 0.2s; }
+.slide.active .anim:nth-child(3) { transition-delay: 0.3s; }
+.slide.active .anim:nth-child(4) { transition-delay: 0.4s; }
+.slide.active .anim:nth-child(5) { transition-delay: 0.5s; }
+.slide.active .anim:nth-child(6) { transition-delay: 0.6s; }
+.slide.active .anim:nth-child(7) { transition-delay: 0.7s; }
+.slide.active .anim:nth-child(8) { transition-delay: 0.8s; }
+
+/* ── Background Decorations ── */
+.bg-hex {
+  position: absolute;
+  opacity: 0.03;
+  pointer-events: none;
+}
+
+.bg-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  pointer-events: none;
+}
+
+/* ── Shared Typography ── */
+.slide-label {
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: var(--cyan);
+  margin-bottom: 12px;
+  font-weight: 600;
+}
+
+.slide-title {
+  font-size: clamp(36px, 5vw, 56px);
+  font-weight: 800;
+  color: var(--cloud);
+  margin-bottom: 16px;
+  line-height: 1.15;
+}
+
+.slide-subtitle {
+  font-size: clamp(16px, 2vw, 20px);
+  color: var(--muted);
+  max-width: 640px;
+  text-align: center;
+  line-height: 1.6;
+}
+
+/* ── Cards ── */
+.card {
+  background: var(--dark-card);
+  border: 1px solid rgba({{PRIMARY_RGB}}, 0.1);
+  border-radius: 16px;
+  padding: 32px 28px;
+  transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  border-color: rgba({{PRIMARY_RGB}}, 0.3);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), 0 0 20px var(--cyan-glow);
+}
+
+.card-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background: var(--cyan-glow);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 18px;
+  color: var(--cyan);
+  font-size: 22px;
+}
+
+.card h3 {
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 8px;
+  color: var(--cloud);
+}
+
+.card p {
+  font-size: 14px;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+/* ── Badge ── */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--dark-card);
+  border: 1px solid rgba({{PRIMARY_RGB}}, 0.1);
+  border-radius: 12px;
+  padding: 16px 24px;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--cloud);
+  transition: transform 0.3s ease, border-color 0.3s ease;
+}
+
+.badge:hover {
+  transform: translateY(-3px);
+  border-color: rgba({{PRIMARY_RGB}}, 0.3);
+}
+
+.badge svg, .badge .badge-icon {
+  width: 28px;
+  height: 28px;
+  color: var(--cyan);
+  flex-shrink: 0;
+}
+
+/* ── Overview Modal ── */
+#overview {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.95);
+  backdrop-filter: blur(12px);
+  z-index: 2000;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 48px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+#overview.visible {
+  display: flex;
+  opacity: 1;
+}
+
+#overview-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  max-width: 1100px;
+  width: 100%;
+}
+
+.overview-thumb {
+  aspect-ratio: 16 / 9;
+  background: var(--dark-card);
+  border: 2px solid rgba(113, 128, 150, 0.2);
+  border-radius: 12px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--muted);
+  transition: all 0.3s ease;
+  text-align: center;
+  padding: 12px;
+  line-height: 1.4;
+}
+
+.overview-thumb:hover {
+  border-color: var(--cyan);
+  color: var(--cloud);
+  transform: scale(1.04);
+  box-shadow: 0 0 20px var(--cyan-glow);
+}
+
+.overview-thumb.current {
+  border-color: var(--cyan);
+  color: var(--cyan);
+}
+
+#overview-label {
+  position: absolute;
+  top: 32px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--muted);
+}
+
+/* ── Particle Canvas ── */
+#particles {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+/* ══════════════════════════════════════
+   SLIDE 1 - TITLE
+   ══════════════════════════════════════ */
+#slide-1 {
+  background: radial-gradient(ellipse at 50% 40%, rgba({{PRIMARY_RGB}}, 0.06) 0%, transparent 60%);
+}
+
+#slide-1 .hero-logo {
+  margin-bottom: 36px;
+}
+
+#slide-1 .hero-title {
+  font-size: clamp(56px, 8vw, 96px);
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  background: linear-gradient(135deg, var(--cloud) 0%, var(--cyan) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 16px;
+}
+
+#slide-1 .hero-tagline {
+  font-size: clamp(18px, 2.5vw, 26px);
+  color: var(--muted);
+  letter-spacing: 0.08em;
+  font-weight: 400;
+}
+
+#slide-1 .hero-sub {
+  margin-top: 40px;
+  font-size: 14px;
+  color: rgba(113, 128, 150, 0.6);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+
+/* ══════════════════════════════════════
+   SLIDE 2 - PROBLEM
+   ══════════════════════════════════════ */
+.pain-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 28px;
+  max-width: 960px;
+  width: 100%;
+  margin-top: 48px;
+}
+
+.pain-card {
+  text-align: center;
+  padding: 40px 28px;
+}
+
+.pain-card .pain-icon {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: rgba({{ERROR_RGB}}, 0.1);
+  border: 1px solid rgba({{ERROR_RGB}}, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 20px;
+  font-size: 28px;
+  color: #f87171;
+}
+
+.pain-card h3 {
+  color: var(--cloud);
+  margin-bottom: 10px;
+}
+
+.pain-card p {
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.65;
+}
+
+/* ══════════════════════════════════════
+   SLIDE 3 - SOLUTION
+   ══════════════════════════════════════ */
+.solution-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 28px;
+  max-width: 1000px;
+  width: 100%;
+  margin-top: 48px;
+  position: relative;
+}
+
+.solution-card {
+  text-align: center;
+  padding: 40px 28px;
+  position: relative;
+}
+
+.solution-card .sol-icon {
+  width: 64px;
+  height: 64px;
+  border-radius: 16px;
+  background: var(--cyan-glow);
+  border: 1px solid rgba({{PRIMARY_RGB}}, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 20px;
+  color: var(--cyan);
+  font-size: 26px;
+}
+
+.solution-connector {
+  position: absolute;
+  top: 50%;
+  width: 28px;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--cyan), transparent);
+  opacity: 0.4;
+}
+
+.solution-connector-1 {
+  left: calc(33.33% - 14px);
+}
+
+.solution-connector-2 {
+  left: calc(66.66% - 14px);
+}
+
+/* ══════════════════════════════════════
+   SLIDE 4 - HOW IT WORKS
+   ══════════════════════════════════════ */
+.flow-container {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  margin-top: 56px;
+  max-width: 1050px;
+  width: 100%;
+  justify-content: center;
+}
+
+.flow-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  flex: 0 0 180px;
+}
+
+.flow-circle {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: var(--dark-card);
+  border: 2px solid var(--cyan);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--cyan);
+  font-size: 28px;
+  margin-bottom: 18px;
+  box-shadow: 0 0 20px var(--cyan-glow);
+  position: relative;
+}
+
+.flow-circle .flow-num {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--cyan);
+  color: var(--dark-bg);
+  font-size: 12px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.flow-step h3 {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--cloud);
+  margin-bottom: 6px;
+}
+
+.flow-step p {
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.5;
+  max-width: 160px;
+}
+
+.flow-arrow {
+  flex: 0 0 60px;
+  height: 2px;
+  position: relative;
+  margin-bottom: 52px;
+}
+
+.flow-arrow-line {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, var(--cyan-dark), var(--cyan));
+  opacity: 0.5;
+}
+
+.flow-arrow-dot {
+  position: absolute;
+  top: -3px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--cyan);
+  animation: flowPulse 2s ease-in-out infinite;
+}
+
+@keyframes flowPulse {
+  0%, 100% { left: 0; opacity: 1; }
+  50% { left: calc(100% - 8px); opacity: 0.4; }
+}
+
+.flow-arrow:nth-of-type(2) .flow-arrow-dot { animation-delay: 0.3s; }
+.flow-arrow:nth-of-type(3) .flow-arrow-dot { animation-delay: 0.6s; }
+
+/* ══════════════════════════════════════
+   SLIDE 5 - FEATURES
+   ══════════════════════════════════════ */
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  max-width: 960px;
+  width: 100%;
+  margin-top: 48px;
+}
+
+.feature-card {
+  padding: 28px 24px;
+}
+
+.feature-card .card-icon {
+  font-size: 24px;
+}
+
+/* ══════════════════════════════════════
+   SLIDE 6 - TECH STACK
+   ══════════════════════════════════════ */
+.tech-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+  max-width: 800px;
+  margin-top: 48px;
+}
+
+.tech-badge {
+  padding: 20px 32px;
+  font-size: 16px;
+}
+
+.tech-badge .badge-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ══════════════════════════════════════
+   SLIDE 7 - METRICS
+   ══════════════════════════════════════ */
+.metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 28px;
+  max-width: 960px;
+  width: 100%;
+  margin-top: 56px;
+}
+
+.metric-card {
+  text-align: center;
+  padding: 40px 20px;
+}
+
+.metric-value {
+  font-size: clamp(36px, 4vw, 52px);
+  font-weight: 900;
+  color: var(--cyan);
+  margin-bottom: 4px;
+  font-variant-numeric: tabular-nums;
+  line-height: 1.1;
+}
+
+.metric-unit {
+  font-size: 18px;
+  font-weight: 400;
+  color: var(--cyan-dark);
+}
+
+.metric-label {
+  font-size: 14px;
+  color: var(--muted);
+  margin-top: 8px;
+  font-weight: 500;
+}
+
+/* ══════════════════════════════════════
+   SLIDE 8 - CTA
+   ══════════════════════════════════════ */
+#slide-8 {
+  background: radial-gradient(ellipse at 50% 50%, rgba({{PRIMARY_RGB}}, 0.08) 0%, transparent 60%);
+}
+
+.cta-title {
+  font-size: clamp(48px, 7vw, 80px);
+  font-weight: 900;
+  margin-bottom: 20px;
+  background: linear-gradient(135deg, var(--cloud) 0%, var(--cyan) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.cta-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 36px;
+  padding: 18px 48px;
+  background: linear-gradient(135deg, var(--cyan-dark), var(--cyan));
+  color: var(--dark-bg);
+  font-size: 18px;
+  font-weight: 700;
+  border-radius: 60px;
+  text-decoration: none;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  letter-spacing: 0.03em;
+}
+
+.cta-link:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 32px rgba({{PRIMARY_RGB}}, 0.3);
+}
+
+.cta-contact {
+  margin-top: 32px;
+  font-size: 15px;
+  color: var(--muted);
+}
+
+.cta-contact a {
+  color: var(--cyan);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.2s;
+}
+
+.cta-contact a:hover {
+  border-bottom-color: var(--cyan);
+}
+
+/* ── Hexagon background pattern ── */
+.hex-pattern {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  opacity: 0.025;
+}
+
+.hex-pattern svg {
+  width: 100%;
+  height: 100%;
+}
+
+/* ── Responsive ── */
+@media (max-width: 800px) {
+  .slide { padding: 40px 28px; }
+  .pain-grid, .solution-grid, .features-grid { grid-template-columns: 1fr; max-width: 400px; }
+  .metrics-grid { grid-template-columns: repeat(2, 1fr); }
+  .flow-container { flex-direction: column; gap: 12px; }
+  .flow-arrow { width: 2px; height: 40px; flex: 0 0 40px; margin-bottom: 0; }
+  .flow-arrow-line { width: 2px; height: 100%; }
+  .flow-step { flex: none; }
+  #overview-grid { grid-template-columns: repeat(2, 1fr); }
+  .tech-grid { gap: 12px; }
+  .tech-badge { padding: 14px 20px; font-size: 14px; }
+}
+</style>
+</head>
+<body>
+
+<!-- Progress Bar -->
+<div id="progress-bar"></div>
+
+<!-- Slide Counter -->
+<div id="slide-counter">1 / 8</div>
+
+<!-- Navigation Dots -->
+<div id="nav-dots"></div>
+
+<!-- Overview Modal -->
+<div id="overview">
+  <div id="overview-label">Folien&uuml;bersicht &middot; ESC zum Schlie&szlig;en</div>
+  <div id="overview-grid"></div>
+</div>
+
+<!-- ════════════════════════════════════════════
+     SLIDES
+     ════════════════════════════════════════════ -->
+<div id="slides-container">
+
+  <!-- ── SLIDE 1: TITLE ── -->
+  <div class="slide active" id="slide-1" data-title="{{BRAND_NAME}}">
+    <div class="hex-pattern">
+      <svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <pattern id="hex" width="56" height="100" patternUnits="userSpaceOnUse" patternTransform="scale(2)">
+            <polygon points="28,2 52,17 52,47 28,62 4,47 4,17" fill="none" stroke="currentColor" stroke-width="0.5"/>
+            <polygon points="28,52 52,67 52,97 28,112 4,97 4,67" fill="none" stroke="currentColor" stroke-width="0.5"/>
+          </pattern>
+        </defs>
+        <rect width="100%" height="100%" fill="url(#hex)"/>
+      </svg>
+    </div>
+    <canvas id="particles"></canvas>
+    <div class="bg-orb" style="width:500px;height:500px;background:rgba({{PRIMARY_RGB}},0.04);top:-100px;right:-100px;"></div>
+    <div class="bg-orb" style="width:400px;height:400px;background:rgba(56,178,172,0.03);bottom:-80px;left:-80px;"></div>
+
+    <div class="anim hero-logo">
+      <svg width="88" height="100" viewBox="0 0 88 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M44 2 L82 24 L82 68 L44 90 L6 68 L6 24 Z" stroke="url(#logoGrad)" stroke-width="2.5" fill="none"/>
+        <path d="M44 18 L68 32 L68 60 L44 74 L20 60 L20 32 Z" stroke="url(#logoGrad)" stroke-width="1.5" fill="rgba({{PRIMARY_RGB}},0.05)"/>
+        <circle cx="44" cy="46" r="8" fill="url(#logoGrad)" opacity="0.8"/>
+        <line x1="44" y1="38" x2="44" y2="18" stroke="var(--cyan)" stroke-width="1" opacity="0.4"/>
+        <line x1="50" y1="50" x2="68" y2="60" stroke="var(--cyan)" stroke-width="1" opacity="0.4"/>
+        <line x1="38" y1="50" x2="20" y2="60" stroke="var(--cyan)" stroke-width="1" opacity="0.4"/>
+        <defs>
+          <linearGradient id="logoGrad" x1="6" y1="2" x2="82" y2="90">
+            <stop offset="0%" stop-color="{{PRIMARY}}"/>
+            <stop offset="100%" stop-color="{{PRIMARY_DARK}}"/>
+          </linearGradient>
+        </defs>
+      </svg>
+    </div>
+    <div class="anim hero-title">{{BRAND_NAME}}</div>
+    <div class="anim hero-tagline">{{BRAND_TAGLINE}}</div>
+    <div class="anim hero-sub">Alles verbunden. Alles in Echtzeit.</div>
+  </div>
+
+  <!-- ── SLIDE 2: PROBLEM ── -->
+  <div class="slide" id="slide-2" data-title="Das Problem">
+    <div class="bg-orb" style="width:600px;height:600px;background:rgba({{ERROR_RGB}},0.03);top:-150px;left:-100px;"></div>
+    <div class="anim slide-label">Herausforderung</div>
+    <div class="anim slide-title" style="text-align:center;">Das Problem</div>
+    <div class="anim slide-subtitle">Moderne Systeme erzeugen unz&auml;hlige Events &ndash; doch ohne die richtige Infrastruktur gehen Daten verloren, Reaktionen kommen zu sp&auml;t und Teams verlieren den &Uuml;berblick.</div>
+
+    <div class="pain-grid">
+      <div class="card pain-card anim">
+        <div class="pain-icon">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>
+        </div>
+        <h3>Fragmentierte Daten</h3>
+        <p>Events verteilt &uuml;ber Dutzende Services, Logs und Datenbanken &ndash; kein einheitliches Bild.</p>
+      </div>
+      <div class="card pain-card anim">
+        <div class="pain-icon">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        </div>
+        <h3>Verz&ouml;gerte Reaktion</h3>
+        <p>Batch-Verarbeitung statt Echtzeit &ndash; kritische Events werden erst Stunden sp&auml;ter erkannt.</p>
+      </div>
+      <div class="card pain-card anim">
+        <div class="pain-icon">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        </div>
+        <h3>Keine KI-Integration</h3>
+        <p>Manuelle Auswertung ohne intelligente Mustererkennung und automatisierte Entscheidungen.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── SLIDE 3: SOLUTION ── -->
+  <div class="slide" id="slide-3" data-title="Die L&ouml;sung">
+    <div class="bg-orb" style="width:500px;height:500px;background:rgba({{PRIMARY_RGB}},0.04);bottom:-100px;right:-80px;"></div>
+    <div class="anim slide-label">Unser Ansatz</div>
+    <div class="anim slide-title" style="text-align:center;">Die L&ouml;sung</div>
+    <div class="anim slide-subtitle">{{BRAND_NAME}} vereint Event-Speicherung, Echtzeit-Verarbeitung und KI in einem durchdachten &Ouml;kosystem.</div>
+
+    <div class="solution-grid">
+      <div class="solution-connector solution-connector-1"></div>
+      <div class="solution-connector solution-connector-2"></div>
+      <div class="card solution-card anim">
+        <div class="sol-icon">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
+        </div>
+        <h3>Event Store</h3>
+        <p>JSONL-basierter, append-only Event Store &ndash; jede &Auml;nderung wird unverf&auml;lschbar gespeichert.</p>
+      </div>
+      <div class="card solution-card anim">
+        <div class="sol-icon">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        </div>
+        <h3>Echtzeit-Verarbeitung</h3>
+        <p>Event-driven Architecture mit sofortiger Reaktion auf eingehende Daten&auml;nderungen.</p>
+      </div>
+      <div class="card solution-card anim">
+        <div class="sol-icon">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a4 4 0 014 4c0 1.95-1.4 3.58-3.25 3.93"/><path d="M12 2a4 4 0 00-4 4c0 1.95 1.4 3.58 3.25 3.93"/><path d="M12 10v4"/><circle cx="12" cy="18" r="4"/><path d="M10 18h4"/></svg>
+        </div>
+        <h3>KI-Integration</h3>
+        <p>AI SDK v6 f&uuml;r intelligente Analyse, Mustererkennung und automatisierte Workflows.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── SLIDE 4: HOW IT WORKS ── -->
+  <div class="slide" id="slide-4" data-title="So funktioniert's">
+    <div class="hex-pattern">
+      <svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <pattern id="hex2" width="56" height="100" patternUnits="userSpaceOnUse" patternTransform="scale(3)">
+            <polygon points="28,2 52,17 52,47 28,62 4,47 4,17" fill="none" stroke="currentColor" stroke-width="0.3"/>
+          </pattern>
+        </defs>
+        <rect width="100%" height="100%" fill="url(#hex2)"/>
+      </svg>
+    </div>
+    <div class="anim slide-label">Architektur</div>
+    <div class="anim slide-title" style="text-align:center;">So funktioniert's</div>
+
+    <div class="flow-container anim">
+      <div class="flow-step">
+        <div class="flow-circle">
+          <span class="flow-num">1</span>
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+        </div>
+        <h3>Event</h3>
+        <p>Eingehende Daten aus APIs, Bots und Webhooks</p>
+      </div>
+
+      <div class="flow-arrow">
+        <div class="flow-arrow-line"></div>
+        <div class="flow-arrow-dot"></div>
+      </div>
+
+      <div class="flow-step">
+        <div class="flow-circle">
+          <span class="flow-num">2</span>
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
+        </div>
+        <h3>Store</h3>
+        <p>Persistierung im JSONL Event Store</p>
+      </div>
+
+      <div class="flow-arrow">
+        <div class="flow-arrow-line"></div>
+        <div class="flow-arrow-dot"></div>
+      </div>
+
+      <div class="flow-step">
+        <div class="flow-circle">
+          <span class="flow-num">3</span>
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+        </div>
+        <h3>Process</h3>
+        <p>KI-Analyse und Regelauswertung</p>
+      </div>
+
+      <div class="flow-arrow">
+        <div class="flow-arrow-line"></div>
+        <div class="flow-arrow-dot"></div>
+      </div>
+
+      <div class="flow-step">
+        <div class="flow-circle">
+          <span class="flow-num">4</span>
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+        </div>
+        <h3>Act</h3>
+        <p>Automatisierte Aktionen und Benachrichtigungen</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── SLIDE 5: FEATURES ── -->
+  <div class="slide" id="slide-5" data-title="Features">
+    <div class="bg-orb" style="width:400px;height:400px;background:rgba({{PRIMARY_RGB}},0.03);top:-60px;left:-60px;"></div>
+    <div class="anim slide-label">&Ouml;kosystem</div>
+    <div class="anim slide-title" style="text-align:center;">Features</div>
+
+    <div class="features-grid">
+      <div class="card feature-card anim">
+        <div class="card-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--cyan)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+        </div>
+        <h3>Events</h3>
+        <p>Append-only JSONL Event Store mit vollst&auml;ndiger Historie und Replay-F&auml;higkeit.</p>
+      </div>
+      <div class="card feature-card anim">
+        <div class="card-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--cyan)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+        </div>
+        <h3>Telegram Bot</h3>
+        <p>gramm&Yuml;-basierter Bot f&uuml;r Echtzeit-Interaktion und Benachrichtigungen via Telegram.</p>
+      </div>
+      <div class="card feature-card anim">
+        <div class="card-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--cyan)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a4 4 0 014 4c0 1.95-1.4 3.58-3.25 3.93"/><path d="M12 2a4 4 0 00-4 4c0 1.95 1.4 3.58 3.25 3.93"/><path d="M12 10v4"/><circle cx="12" cy="18" r="4"/><path d="M10 18h4"/></svg>
+        </div>
+        <h3>AI Studio</h3>
+        <p>Vercel AI SDK v6 mit Multi-Provider-Support f&uuml;r intelligente Event-Analyse.</p>
+      </div>
+      <div class="card feature-card anim">
+        <div class="card-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--cyan)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>
+        </div>
+        <h3>Dashboard</h3>
+        <p>React-basiertes Dashboard mit Echtzeit-Updates &uuml;ber Server-Sent Events.</p>
+      </div>
+      <div class="card feature-card anim">
+        <div class="card-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--cyan)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg>
+        </div>
+        <h3>Webhooks</h3>
+        <p>Flexibles Webhook-System f&uuml;r bidirektionale Integration mit externen Services.</p>
+      </div>
+      <div class="card feature-card anim">
+        <div class="card-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--cyan)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+        </div>
+        <h3>Analytics</h3>
+        <p>Event-basierte Analysen mit Trends, Muster&shy;erkennung und Export-Funktionen.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── SLIDE 6: TECH STACK ── -->
+  <div class="slide" id="slide-6" data-title="Technologie">
+    <div class="hex-pattern">
+      <svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <pattern id="hex3" width="56" height="100" patternUnits="userSpaceOnUse" patternTransform="scale(2.5)">
+            <polygon points="28,2 52,17 52,47 28,62 4,47 4,17" fill="none" stroke="currentColor" stroke-width="0.3"/>
+          </pattern>
+        </defs>
+        <rect width="100%" height="100%" fill="url(#hex3)"/>
+      </svg>
+    </div>
+    <div class="anim slide-label">Stack</div>
+    <div class="anim slide-title" style="text-align:center;">Technologie</div>
+    <div class="anim slide-subtitle">Bew&auml;hrte Open-Source-Technologien, modern kombiniert.</div>
+
+    <div class="tech-grid">
+      <div class="badge tech-badge anim">
+        <div class="badge-icon">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--cyan)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+        </div>
+        Express
+      </div>
+      <div class="badge tech-badge anim">
+        <div class="badge-icon">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--cyan)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="4"/><line x1="4.93" y1="4.93" x2="9.17" y2="9.17"/><line x1="14.83" y1="14.83" x2="19.07" y2="19.07"/><line x1="14.83" y1="9.17" x2="19.07" y2="4.93"/><line x1="4.93" y1="19.07" x2="9.17" y2="14.83"/></svg>
+        </div>
+        React
+      </div>
+      <div class="badge tech-badge anim">
+        <div class="badge-icon">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--cyan)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+        </div>
+        Vite
+      </div>
+      <div class="badge tech-badge anim">
+        <div class="badge-icon">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--cyan)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a4 4 0 014 4c0 1.95-1.4 3.58-3.25 3.93"/><path d="M12 2a4 4 0 00-4 4c0 1.95 1.4 3.58 3.25 3.93"/><path d="M12 10v4"/><circle cx="12" cy="18" r="4"/></svg>
+        </div>
+        AI SDK v6
+      </div>
+      <div class="badge tech-badge anim">
+        <div class="badge-icon">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--cyan)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+        </div>
+        gramm&Yuml;
+      </div>
+      <div class="badge tech-badge anim">
+        <div class="badge-icon">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--cyan)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+        </div>
+        JSONL
+      </div>
+    </div>
+  </div>
+
+  <!-- ── SLIDE 7: METRICS ── -->
+  <div class="slide" id="slide-7" data-title="Zahlen">
+    <div class="bg-orb" style="width:500px;height:500px;background:rgba({{PRIMARY_RGB}},0.04);top:50%;left:50%;transform:translate(-50%,-50%);"></div>
+    <div class="anim slide-label">Performance</div>
+    <div class="anim slide-title" style="text-align:center;">Zahlen</div>
+    <div class="anim slide-subtitle">Zuverl&auml;ssig, schnell und skalierbar &ndash; rund um die Uhr.</div>
+
+    <div class="metrics-grid">
+      <div class="card metric-card anim">
+        <div class="metric-value"><span class="counter" data-target="12400" data-suffix="">0</span><span class="metric-unit">+</span></div>
+        <div class="metric-label">Events / Tag</div>
+      </div>
+      <div class="card metric-card anim">
+        <div class="metric-value"><span class="counter" data-target="23" data-suffix="ms">0</span></div>
+        <div class="metric-label">Latenz (P95)</div>
+      </div>
+      <div class="card metric-card anim">
+        <div class="metric-value"><span class="counter" data-target="99.9" data-suffix="%" data-decimals="1">0</span></div>
+        <div class="metric-label">Uptime</div>
+      </div>
+      <div class="card metric-card anim">
+        <div class="metric-value"><span class="counter" data-target="8" data-suffix="">0</span></div>
+        <div class="metric-label">Event Streams</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── SLIDE 8: CTA ── -->
+  <div class="slide" id="slide-8" data-title="Bereit?">
+    <div class="hex-pattern">
+      <svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <pattern id="hex4" width="56" height="100" patternUnits="userSpaceOnUse" patternTransform="scale(2)">
+            <polygon points="28,2 52,17 52,47 28,62 4,47 4,17" fill="none" stroke="currentColor" stroke-width="0.4"/>
+          </pattern>
+        </defs>
+        <rect width="100%" height="100%" fill="url(#hex4)"/>
+      </svg>
+    </div>
+    <div class="bg-orb" style="width:600px;height:600px;background:rgba({{PRIMARY_RGB}},0.05);top:50%;left:50%;transform:translate(-50%,-50%);"></div>
+
+    <div class="anim slide-label">N&auml;chster Schritt</div>
+    <div class="anim cta-title">Bereit?</div>
+    <div class="anim slide-subtitle">Entdecke, wie {{BRAND_NAME}} dein Event-Management transformiert.</div>
+    <a href="https://{{BRAND_DOMAIN}}" target="_blank" class="anim cta-link">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+      {{BRAND_DOMAIN}}
+    </a>
+    <div class="anim cta-contact">
+      Kontakt: <a href="mailto:hello@{{BRAND_DOMAIN}}">hello@{{BRAND_DOMAIN}}</a>
+    </div>
+  </div>
+
+</div>
+
+<script>
+(function() {
+  'use strict';
+
+  const TOTAL = 8;
+  let current = 0;
+  let overviewOpen = false;
+
+  const slides = document.querySelectorAll('.slide');
+  const progressBar = document.getElementById('progress-bar');
+  const counter = document.getElementById('slide-counter');
+  const dotsContainer = document.getElementById('nav-dots');
+  const overview = document.getElementById('overview');
+  const overviewGrid = document.getElementById('overview-grid');
+
+  // ── Build navigation dots ──
+  for (let i = 0; i < TOTAL; i++) {
+    const dot = document.createElement('button');
+    dot.className = 'nav-dot' + (i === 0 ? ' active' : '');
+    dot.setAttribute('aria-label', 'Folie ' + (i + 1));
+    dot.addEventListener('click', () => goTo(i));
+    dotsContainer.appendChild(dot);
+  }
+
+  // ── Build overview thumbnails ──
+  const slideTitles = [
+    '{{BRAND_NAME}}', 'Das Problem', 'Die L\u00f6sung',
+    'So funktioniert\u2019s', 'Features', 'Technologie',
+    'Zahlen', 'Bereit?'
+  ];
+  for (let i = 0; i < TOTAL; i++) {
+    const thumb = document.createElement('div');
+    thumb.className = 'overview-thumb' + (i === 0 ? ' current' : '');
+    thumb.textContent = (i + 1) + '. ' + slideTitles[i];
+    thumb.addEventListener('click', () => {
+      goTo(i);
+      closeOverview();
+    });
+    overviewGrid.appendChild(thumb);
+  }
+
+  // ── Navigation ──
+  function goTo(index) {
+    if (index < 0 || index >= TOTAL || index === current) return;
+    slides[current].classList.remove('active');
+    current = index;
+    slides[current].classList.add('active');
+    updateUI();
+    animateCounters();
+  }
+
+  function updateUI() {
+    // Progress bar
+    progressBar.style.width = ((current + 1) / TOTAL * 100) + '%';
+    // Counter
+    counter.textContent = (current + 1) + ' / ' + TOTAL;
+    // Dots
+    const dots = dotsContainer.querySelectorAll('.nav-dot');
+    dots.forEach((d, i) => d.classList.toggle('active', i === current));
+    // Overview thumbs
+    const thumbs = overviewGrid.querySelectorAll('.overview-thumb');
+    thumbs.forEach((t, i) => t.classList.toggle('current', i === current));
+  }
+
+  function openOverview() {
+    overviewOpen = true;
+    overview.style.display = 'flex';
+    requestAnimationFrame(() => overview.classList.add('visible'));
+  }
+
+  function closeOverview() {
+    overviewOpen = false;
+    overview.classList.remove('visible');
+    setTimeout(() => { overview.style.display = 'none'; }, 300);
+  }
+
+  // ── Keyboard Navigation ──
+  document.addEventListener('keydown', (e) => {
+    if (overviewOpen) {
+      if (e.key === 'Escape') closeOverview();
+      return;
+    }
+
+    switch (e.key) {
+      case 'ArrowRight':
+      case 'ArrowDown':
+      case ' ':
+        e.preventDefault();
+        goTo(current + 1);
+        break;
+      case 'ArrowLeft':
+      case 'ArrowUp':
+        e.preventDefault();
+        goTo(current - 1);
+        break;
+      case 'Home':
+        e.preventDefault();
+        goTo(0);
+        break;
+      case 'End':
+        e.preventDefault();
+        goTo(TOTAL - 1);
+        break;
+      case 'Escape':
+        openOverview();
+        break;
+    }
+  });
+
+  // ── Animated counters (Slide 7) ──
+  let countersAnimated = false;
+
+  function animateCounters() {
+    if (current !== 6 || countersAnimated) return;
+    countersAnimated = true;
+
+    document.querySelectorAll('.counter').forEach(el => {
+      const target = parseFloat(el.dataset.target);
+      const suffix = el.dataset.suffix || '';
+      const decimals = parseInt(el.dataset.decimals) || 0;
+      const duration = 2000;
+      const start = performance.now();
+
+      function tick(now) {
+        const elapsed = now - start;
+        const progress = Math.min(elapsed / duration, 1);
+        const eased = 1 - Math.pow(1 - progress, 3);
+        const value = eased * target;
+
+        if (decimals > 0) {
+          el.textContent = value.toFixed(decimals) + suffix;
+        } else {
+          el.textContent = Math.round(value).toLocaleString('de-CH') + suffix;
+        }
+
+        if (progress < 1) {
+          requestAnimationFrame(tick);
+        }
+      }
+
+      requestAnimationFrame(tick);
+    });
+  }
+
+  // ── Particle animation (Slide 1) ──
+  const canvas = document.getElementById('particles');
+  const ctx = canvas.getContext('2d');
+  let particles = [];
+  let animFrame;
+
+  function resizeCanvas() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+
+  function initParticles() {
+    particles = [];
+    const count = Math.floor(window.innerWidth * window.innerHeight / 18000);
+    for (let i = 0; i < count; i++) {
+      particles.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        r: Math.random() * 1.5 + 0.5,
+        vx: (Math.random() - 0.5) * 0.3,
+        vy: (Math.random() - 0.5) * 0.3,
+        alpha: Math.random() * 0.3 + 0.1
+      });
+    }
+  }
+
+  function drawParticles() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // Only draw when on slide 1
+    if (current !== 0) {
+      animFrame = requestAnimationFrame(drawParticles);
+      return;
+    }
+
+    particles.forEach(p => {
+      p.x += p.vx;
+      p.y += p.vy;
+
+      if (p.x < 0) p.x = canvas.width;
+      if (p.x > canvas.width) p.x = 0;
+      if (p.y < 0) p.y = canvas.height;
+      if (p.y > canvas.height) p.y = 0;
+
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba({{PRIMARY_RGB}}, ' + p.alpha + ')';
+      ctx.fill();
+    });
+
+    // Draw connections
+    for (let i = 0; i < particles.length; i++) {
+      for (let j = i + 1; j < particles.length; j++) {
+        const dx = particles[i].x - particles[j].x;
+        const dy = particles[i].y - particles[j].y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist < 120) {
+          ctx.beginPath();
+          ctx.moveTo(particles[i].x, particles[i].y);
+          ctx.lineTo(particles[j].x, particles[j].y);
+          ctx.strokeStyle = 'rgba({{PRIMARY_RGB}}, ' + (0.06 * (1 - dist / 120)) + ')';
+          ctx.lineWidth = 0.5;
+          ctx.stroke();
+        }
+      }
+    }
+
+    animFrame = requestAnimationFrame(drawParticles);
+  }
+
+  window.addEventListener('resize', () => {
+    resizeCanvas();
+    initParticles();
+  });
+
+  resizeCanvas();
+  initParticles();
+  drawParticles();
+
+  // ── Touch / swipe support ──
+  let touchStartX = 0;
+  let touchStartY = 0;
+
+  document.addEventListener('touchstart', (e) => {
+    if (overviewOpen) return;
+    touchStartX = e.changedTouches[0].screenX;
+    touchStartY = e.changedTouches[0].screenY;
+  }, { passive: true });
+
+  document.addEventListener('touchend', (e) => {
+    if (overviewOpen) return;
+    const dx = e.changedTouches[0].screenX - touchStartX;
+    const dy = e.changedTouches[0].screenY - touchStartY;
+
+    if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 50) {
+      if (dx < 0) goTo(current + 1);
+      else goTo(current - 1);
+    }
+  }, { passive: true });
+
+  // ── Init ──
+  updateUI();
+
+})();
+</script>
+</body>
+</html>

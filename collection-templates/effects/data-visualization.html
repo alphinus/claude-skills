@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{BRAND_NAME}} - Data Visualizations</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  :root { --dark-bg: {{BG}}; --cyan: {{PRIMARY}}; --cyan-dark: {{PRIMARY_DARK}}; --cloud: {{TEXT}}; --muted: {{MUTED}}; --success: {{SUCCESS}}; --warning: {{WARNING}}; --error: {{ERROR}}; --info: {{INFO}}; }
+  body { background: var(--dark-bg); font-family: system-ui, -apple-system, sans-serif; color: var(--cloud); padding: 60px 40px; }
+  h1 { font-size: 36px; font-weight: 200; text-align: center; margin-bottom: 12px; }
+  h1 span { background: linear-gradient(135deg, var(--cyan), var(--cyan-dark)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+  .subtitle { text-align: center; color: var(--muted); font-size: 14px; margin-bottom: 48px; font-weight: 300; }
+
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; max-width: 1000px; margin: 0 auto; }
+  .panel { background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.06); border-radius: 16px; padding: 28px; }
+  .panel-title { font-size: 14px; font-weight: 400; margin-bottom: 20px; }
+
+  /* Donut Chart */
+  .donut-wrap { display: flex; align-items: center; gap: 24px; }
+  .donut-chart { position: relative; width: 160px; height: 160px; flex-shrink: 0; }
+  .donut-chart svg { transform: rotate(-90deg); }
+  .donut-chart circle { fill: none; stroke-width: 12; stroke-linecap: round; }
+  .donut-bg { stroke: rgba(255,255,255,0.04); }
+  .donut-seg { transition: stroke-dashoffset 1.5s cubic-bezier(0.4, 0, 0.2, 1); }
+  .donut-center { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+  .donut-val { font-size: 28px; font-weight: 200; }
+  .donut-label { font-size: 11px; color: var(--muted); }
+  .donut-legend { display: flex; flex-direction: column; gap: 10px; }
+  .legend-item { display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 300; color: var(--muted); }
+  .legend-dot { width: 8px; height: 8px; border-radius: 2px; flex-shrink: 0; }
+
+  /* Bar Chart */
+  .bar-chart { display: flex; align-items: flex-end; gap: 8px; height: 180px; padding-top: 10px; }
+  .bar-group { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 8px; }
+  .bar {
+    width: 100%; border-radius: 4px 4px 0 0; min-height: 4px;
+    background: linear-gradient(to top, rgba({{PRIMARY_RGB}},0.3), var(--cyan));
+    transition: height 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: pointer; position: relative;
+  }
+  .bar:hover { filter: brightness(1.2); }
+  .bar-label { font-size: 10px; color: var(--muted); }
+
+  /* Line Chart (Canvas) */
+  .line-canvas { width: 100%; height: 180px; }
+
+  /* Progress Bars */
+  .progress-list { display: flex; flex-direction: column; gap: 18px; }
+  .prog-item {}
+  .prog-header { display: flex; justify-content: space-between; margin-bottom: 6px; }
+  .prog-name { font-size: 13px; font-weight: 300; }
+  .prog-val { font-size: 13px; color: var(--cyan); font-weight: 400; }
+  .prog-track { height: 6px; border-radius: 3px; background: rgba(255,255,255,0.04); overflow: hidden; }
+  .prog-fill { height: 100%; border-radius: 3px; transition: width 1.5s cubic-bezier(0.4, 0, 0.2, 1); width: 0; }
+</style>
+</head>
+<body>
+
+<h1>Data <span>Visualizations</span></h1>
+<p class="subtitle">Animierte Charts und Graphen im {{BRAND_NAME}}-Style</p>
+
+<div class="grid">
+  <!-- Donut -->
+  <div class="panel">
+    <div class="panel-title">Event-Verteilung</div>
+    <div class="donut-wrap">
+      <div class="donut-chart">
+        <svg viewBox="0 0 160 160" width="160" height="160">
+          <circle class="donut-bg" cx="80" cy="80" r="60"/>
+          <circle class="donut-seg" cx="80" cy="80" r="60" stroke="{{PRIMARY}}" stroke-dasharray="377" stroke-dashoffset="377" id="seg1"/>
+          <circle class="donut-seg" cx="80" cy="80" r="60" stroke="{{PRIMARY_DARK}}" stroke-dasharray="377" stroke-dashoffset="377" id="seg2"/>
+          <circle class="donut-seg" cx="80" cy="80" r="60" stroke="{{SURFACE}}" stroke-dasharray="377" stroke-dashoffset="377" id="seg3"/>
+          <circle class="donut-seg" cx="80" cy="80" r="60" stroke="{{MUTED}}" stroke-dasharray="377" stroke-dashoffset="377" id="seg4"/>
+        </svg>
+        <div class="donut-center"><div class="donut-val">2.8k</div><div class="donut-label">Events</div></div>
+      </div>
+      <div class="donut-legend">
+        <div class="legend-item"><div class="legend-dot" style="background:{{PRIMARY}}"></div>User Events (42%)</div>
+        <div class="legend-item"><div class="legend-dot" style="background:{{PRIMARY_DARK}}"></div>System Events (28%)</div>
+        <div class="legend-item"><div class="legend-dot" style="background:{{SURFACE}}"></div>AI Actions (18%)</div>
+        <div class="legend-item"><div class="legend-dot" style="background:{{MUTED}}"></div>Notifications (12%)</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bar Chart -->
+  <div class="panel">
+    <div class="panel-title">Events pro Tag</div>
+    <div class="bar-chart" id="barChart"></div>
+  </div>
+
+  <!-- Line Chart -->
+  <div class="panel">
+    <div class="panel-title">Latenz (ms) - Letzte 24h</div>
+    <canvas class="line-canvas" id="lineChart"></canvas>
+  </div>
+
+  <!-- Progress Bars -->
+  <div class="panel">
+    <div class="panel-title">Stream-Auslastung</div>
+    <div class="progress-list">
+      <div class="prog-item"><div class="prog-header"><span class="prog-name">user-stream</span><span class="prog-val">87%</span></div><div class="prog-track"><div class="prog-fill" data-width="87" style="background:linear-gradient(90deg,{{PRIMARY_DARK}},{{PRIMARY}})"></div></div></div>
+      <div class="prog-item"><div class="prog-header"><span class="prog-name">billing-stream</span><span class="prog-val">64%</span></div><div class="prog-track"><div class="prog-fill" data-width="64" style="background:linear-gradient(90deg,{{PRIMARY_DARK}},{{PRIMARY}})"></div></div></div>
+      <div class="prog-item"><div class="prog-header"><span class="prog-name">ai-stream</span><span class="prog-val">52%</span></div><div class="prog-track"><div class="prog-fill" data-width="52" style="background:linear-gradient(90deg,{{SURFACE}},{{PRIMARY}})"></div></div></div>
+      <div class="prog-item"><div class="prog-header"><span class="prog-name">notif-stream</span><span class="prog-val">38%</span></div><div class="prog-track"><div class="prog-fill" data-width="38" style="background:linear-gradient(90deg,{{SURFACE}},{{PRIMARY_DARK}})"></div></div></div>
+      <div class="prog-item"><div class="prog-header"><span class="prog-name">order-stream</span><span class="prog-val">91%</span></div><div class="prog-track"><div class="prog-fill" data-width="91" style="background:linear-gradient(90deg,{{WARNING}},{{ERROR}})"></div></div></div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Donut animation
+  setTimeout(() => {
+    const c = 377;
+    const segs = [
+      { id: 'seg1', pct: 0.42, offset: 0 },
+      { id: 'seg2', pct: 0.28, offset: 0.42 },
+      { id: 'seg3', pct: 0.18, offset: 0.70 },
+      { id: 'seg4', pct: 0.12, offset: 0.88 }
+    ];
+    segs.forEach(s => {
+      const el = document.getElementById(s.id);
+      el.style.strokeDasharray = `${c * s.pct} ${c * (1 - s.pct)}`;
+      el.style.strokeDashoffset = -c * s.offset;
+    });
+  }, 300);
+
+  // Bar chart
+  const barData = [
+    { label: 'Mo', val: 78 }, { label: 'Di', val: 92 }, { label: 'Mi', val: 65 },
+    { label: 'Do', val: 88 }, { label: 'Fr', val: 95 }, { label: 'Sa', val: 45 }, { label: 'So', val: 38 }
+  ];
+  const bc = document.getElementById('barChart');
+  barData.forEach((d, i) => {
+    const g = document.createElement('div');
+    g.className = 'bar-group';
+    const bar = document.createElement('div');
+    bar.className = 'bar';
+    bar.style.height = '0%';
+    const lbl = document.createElement('div');
+    lbl.className = 'bar-label';
+    lbl.textContent = d.label;
+    g.appendChild(bar);
+    g.appendChild(lbl);
+    bc.appendChild(g);
+    setTimeout(() => { bar.style.height = d.val + '%'; }, 400 + i * 100);
+  });
+
+  // Line chart
+  const lc = document.getElementById('lineChart');
+  const ctx = lc.getContext('2d');
+  const rect = lc.getBoundingClientRect();
+  lc.width = rect.width * 2; lc.height = rect.height * 2;
+  ctx.scale(2, 2);
+  const w = rect.width, h = rect.height;
+  const lineData = [45, 52, 38, 61, 42, 55, 48, 67, 44, 58, 41, 63, 47, 52, 39, 56, 50, 43, 62, 45, 53, 41, 58, 46];
+  const maxV = 80;
+  const pts = lineData.map((v, i) => ({ x: (i / (lineData.length - 1)) * (w - 40) + 20, y: h - 20 - (v / maxV) * (h - 40) }));
+
+  let progress = 0;
+  function drawLine() {
+    progress = Math.min(progress + 0.02, 1);
+    const drawPts = Math.floor(pts.length * progress);
+    ctx.clearRect(0, 0, w, h);
+
+    // Grid
+    for (let i = 0; i < 5; i++) {
+      const y = 20 + (i / 4) * (h - 40);
+      ctx.beginPath(); ctx.moveTo(20, y); ctx.lineTo(w - 20, y);
+      ctx.strokeStyle = 'rgba(255,255,255,0.03)'; ctx.lineWidth = 1; ctx.stroke();
+    }
+
+    if (drawPts < 2) { requestAnimationFrame(drawLine); return; }
+
+    // Area fill
+    ctx.beginPath();
+    ctx.moveTo(pts[0].x, h - 20);
+    for (let i = 0; i < drawPts; i++) ctx.lineTo(pts[i].x, pts[i].y);
+    ctx.lineTo(pts[drawPts - 1].x, h - 20);
+    ctx.closePath();
+    const grad = ctx.createLinearGradient(0, 0, 0, h);
+    grad.addColorStop(0, 'rgba({{PRIMARY_RGB}},0.15)');
+    grad.addColorStop(1, 'rgba({{PRIMARY_RGB}},0)');
+    ctx.fillStyle = grad; ctx.fill();
+
+    // Line
+    ctx.beginPath();
+    for (let i = 0; i < drawPts; i++) {
+      if (i === 0) ctx.moveTo(pts[i].x, pts[i].y);
+      else ctx.lineTo(pts[i].x, pts[i].y);
+    }
+    ctx.strokeStyle = '{{PRIMARY}}'; ctx.lineWidth = 2; ctx.lineCap = 'round'; ctx.stroke();
+
+    // Dots
+    for (let i = 0; i < drawPts; i++) {
+      ctx.beginPath(); ctx.arc(pts[i].x, pts[i].y, 3, 0, Math.PI * 2);
+      ctx.fillStyle = '{{PRIMARY}}'; ctx.fill();
+    }
+
+    if (progress < 1) requestAnimationFrame(drawLine);
+  }
+  setTimeout(drawLine, 500);
+
+  // Progress bars
+  setTimeout(() => {
+    document.querySelectorAll('.prog-fill').forEach(el => {
+      el.style.width = el.dataset.width + '%';
+    });
+  }, 600);
+</script>
+
+</body>
+</html>

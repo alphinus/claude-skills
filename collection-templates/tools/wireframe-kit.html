@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{BRAND_NAME}} - Wireframe Baukasten</title>
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  :root{--dark-bg:{{BG}};--cyan:{{PRIMARY}};--cyan-dark:{{PRIMARY_DARK}};--cloud:{{TEXT}};--muted:{{MUTED}};--surface:#1e293b;
+    --wire:#3a4560;--wire-light:#4a5575;--wire-bg:#1a2235;--wire-fill:rgba(255,255,255,.03)}
+  body{font-family:system-ui,-apple-system,sans-serif;background:var(--dark-bg);color:var(--cloud);min-height:100vh;padding:40px 20px}
+  .container{max-width:1200px;margin:0 auto}
+  h1{text-align:center;font-size:2.2rem;font-weight:700;margin-bottom:6px;background:linear-gradient(135deg,var(--cyan),var(--cyan-dark));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+  .subtitle{text-align:center;color:var(--muted);margin-bottom:48px}
+  .section-title{font-size:1.1rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin:40px 0 20px;padding-bottom:10px;border-bottom:1px solid rgba(255,255,255,.06)}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:24px}
+  .grid-sm{grid-template-columns:repeat(auto-fill,minmax(200px,1fr))}
+
+  /* Wireframe Card */
+  .wf-card{background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.06);border-radius:16px;padding:24px;position:relative}
+  .wf-card:hover{border-color:rgba(255,255,255,.1)}
+  .wf-label{font-size:.85rem;font-weight:700;margin-bottom:4px}
+  .wf-dim{font-size:.72rem;color:var(--muted);margin-bottom:16px;font-family:monospace}
+  .wf-preview{border:1px dashed var(--wire);border-radius:8px;padding:12px;background:var(--wire-bg);min-height:80px;position:relative}
+  .wf-note{font-size:.72rem;color:var(--muted);margin-top:12px;font-style:italic;line-height:1.4}
+
+  /* Wireframe Components (all grey/minimal) */
+  /* Header Bar */
+  .w-header{display:flex;align-items:center;justify-content:space-between;padding:8px 12px;background:rgba(255,255,255,.04);border-radius:6px;border:1px solid var(--wire)}
+  .w-logo{width:24px;height:24px;border-radius:4px;border:1px solid var(--wire);background:var(--wire-fill)}
+  .w-nav{display:flex;gap:8px}
+  .w-nav-item{width:40px;height:6px;border-radius:3px;background:var(--wire)}
+  .w-hamburger{display:flex;flex-direction:column;gap:3px}
+  .w-hamburger span{width:16px;height:2px;background:var(--wire-light);border-radius:1px}
+
+  /* Sidebar */
+  .w-sidebar{display:flex;gap:0;height:120px}
+  .w-sidebar-nav{width:50px;background:rgba(255,255,255,.03);border:1px solid var(--wire);border-radius:6px 0 0 6px;padding:8px 4px;display:flex;flex-direction:column;gap:6px;align-items:center}
+  .w-sidebar-item{width:28px;height:28px;border-radius:6px;border:1px solid var(--wire);background:var(--wire-fill)}
+  .w-sidebar-item.active{border-color:var(--wire-light);background:rgba(255,255,255,.06)}
+  .w-sidebar-content{flex:1;border:1px solid var(--wire);border-left:none;border-radius:0 6px 6px 0;padding:8px;display:flex;flex-direction:column;gap:4px}
+  .w-content-line{height:5px;border-radius:3px;background:var(--wire)}
+  .w-content-line.short{width:60%}
+  .w-content-line.med{width:80%}
+
+  /* Card */
+  .w-card{border:1px solid var(--wire);border-radius:8px;padding:10px;background:var(--wire-fill)}
+  .w-card-img{height:40px;border-radius:4px;background:var(--wire);margin-bottom:8px;display:flex;align-items:center;justify-content:center}
+  .w-card-img svg{width:16px;height:16px;stroke:var(--wire-light);fill:none;stroke-width:1.5}
+  .w-card-title{height:6px;width:70%;border-radius:3px;background:var(--wire-light);margin-bottom:6px}
+  .w-card-text{height:4px;border-radius:2px;background:var(--wire);margin-bottom:3px}
+  .w-card-text.s{width:50%}
+
+  /* Table */
+  .w-table{width:100%;border:1px solid var(--wire);border-radius:6px;overflow:hidden}
+  .w-table-header{display:flex;gap:0;background:rgba(255,255,255,.04);border-bottom:1px solid var(--wire)}
+  .w-table-cell{flex:1;padding:6px 8px;border-right:1px solid var(--wire)}
+  .w-table-cell:last-child{border-right:none}
+  .w-table-cell .line{height:4px;border-radius:2px;background:var(--wire)}
+  .w-table-cell .line.h{background:var(--wire-light)}
+  .w-table-row{display:flex;gap:0;border-bottom:1px solid rgba(255,255,255,.02)}
+  .w-table-row:last-child{border-bottom:none}
+
+  /* Form */
+  .w-form{display:flex;flex-direction:column;gap:8px}
+  .w-form-label{height:4px;width:60px;border-radius:2px;background:var(--wire-light)}
+  .w-form-input{height:28px;border:1px solid var(--wire);border-radius:6px;background:var(--wire-fill);padding:0 8px;display:flex;align-items:center}
+  .w-form-input .placeholder{height:4px;width:50%;border-radius:2px;background:rgba(255,255,255,.04)}
+  .w-form-textarea{height:52px;border:1px solid var(--wire);border-radius:6px;background:var(--wire-fill);padding:6px 8px}
+  .w-form-textarea .placeholder{height:3px;border-radius:2px;background:rgba(255,255,255,.03);margin-bottom:4px}
+
+  /* Chart */
+  .w-chart{border:1px solid var(--wire);border-radius:6px;padding:10px;background:var(--wire-fill);height:80px;position:relative;overflow:hidden}
+  .w-chart svg{width:100%;height:100%}
+
+  /* Button */
+  .w-btn{display:inline-flex;align-items:center;gap:4px;padding:8px 16px;border:1px solid var(--wire);border-radius:6px;background:var(--wire-fill)}
+  .w-btn .label{height:4px;width:40px;border-radius:2px;background:var(--wire-light)}
+  .w-btn.primary{background:rgba(255,255,255,.06);border-color:var(--wire-light)}
+  .w-btn.primary .label{background:var(--wire-light)}
+
+  /* Input */
+  .w-input-demo{display:flex;gap:6px;align-items:center}
+  .w-input-field{flex:1;height:30px;border:1px solid var(--wire);border-radius:6px;background:var(--wire-fill);padding:0 8px;display:flex;align-items:center}
+  .w-input-field .placeholder{height:4px;width:60%;border-radius:2px;background:rgba(255,255,255,.04)}
+
+  /* Avatar */
+  .w-avatars{display:flex;gap:8px;align-items:center}
+  .w-avatar{border-radius:50%;border:1px solid var(--wire);background:var(--wire-fill);display:flex;align-items:center;justify-content:center}
+  .w-avatar svg{stroke:var(--wire-light);fill:none;stroke-width:1.5}
+  .w-avatar.sm{width:28px;height:28px}
+  .w-avatar.sm svg{width:14px;height:14px}
+  .w-avatar.md{width:36px;height:36px}
+  .w-avatar.md svg{width:18px;height:18px}
+  .w-avatar.lg{width:48px;height:48px}
+  .w-avatar.lg svg{width:24px;height:24px}
+
+  /* Badge */
+  .w-badges{display:flex;gap:6px;flex-wrap:wrap}
+  .w-badge{padding:4px 10px;border-radius:6px;border:1px solid var(--wire);background:var(--wire-fill);display:flex;align-items:center;gap:4px}
+  .w-badge .dot{width:6px;height:6px;border-radius:50%;background:var(--wire-light)}
+  .w-badge .text{height:4px;width:28px;border-radius:2px;background:var(--wire)}
+
+  /* Modal */
+  .w-modal{border:1px solid var(--wire);border-radius:8px;background:var(--wire-bg);padding:12px;position:relative}
+  .w-modal-close{position:absolute;top:8px;right:8px;width:16px;height:16px;border-radius:4px;border:1px solid var(--wire);display:flex;align-items:center;justify-content:center;font-size:10px;color:var(--wire-light)}
+  .w-modal-title{height:6px;width:50%;border-radius:3px;background:var(--wire-light);margin-bottom:10px}
+  .w-modal-body{display:flex;flex-direction:column;gap:4px;margin-bottom:12px}
+  .w-modal-body .line{height:4px;border-radius:2px;background:var(--wire)}
+  .w-modal-actions{display:flex;justify-content:flex-end;gap:6px}
+
+  /* Toast */
+  .w-toast{display:flex;align-items:center;gap:8px;padding:10px 14px;border:1px solid var(--wire);border-radius:8px;background:rgba(255,255,255,.03);border-left:3px solid var(--wire-light)}
+  .w-toast-icon{width:20px;height:20px;border-radius:50%;border:1px solid var(--wire);flex-shrink:0}
+  .w-toast-content{flex:1;display:flex;flex-direction:column;gap:3px}
+  .w-toast-close{width:14px;height:14px;color:var(--wire);font-size:12px;flex-shrink:0}
+
+  /* List Item */
+  .w-list{display:flex;flex-direction:column;gap:0}
+  .w-list-item{display:flex;align-items:center;gap:10px;padding:10px;border-bottom:1px solid rgba(255,255,255,.03)}
+  .w-list-item:last-child{border-bottom:none}
+
+  /* Nav Tabs */
+  .w-tabs{display:flex;gap:0;border-bottom:1px solid var(--wire)}
+  .w-tab{flex:1;padding:10px 8px;text-align:center;position:relative}
+  .w-tab .text{height:4px;border-radius:2px;background:var(--wire);margin:0 auto;width:70%}
+  .w-tab.active::after{content:'';position:absolute;bottom:-1px;left:20%;right:20%;height:2px;background:var(--wire-light);border-radius:1px}
+  .w-tab.active .text{background:var(--wire-light)}
+
+  /* Breadcrumb */
+  .w-breadcrumb{display:flex;align-items:center;gap:6px}
+  .w-breadcrumb .crumb{height:4px;border-radius:2px;background:var(--wire)}
+  .w-breadcrumb .sep{color:var(--wire);font-size:10px}
+  .w-breadcrumb .crumb.active{background:var(--wire-light)}
+
+  /* Pagination */
+  .w-pagination{display:flex;align-items:center;gap:4px;justify-content:center}
+  .w-page{width:26px;height:26px;border-radius:6px;border:1px solid var(--wire);display:flex;align-items:center;justify-content:center;font-size:.7rem;color:var(--wire-light)}
+  .w-page.active{background:rgba(255,255,255,.06);border-color:var(--wire-light)}
+  .w-page.arrow{font-size:.8rem}
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>Wireframe Baukasten</h1>
+  <p class="subtitle">Low-Fidelity Wireframe-Bausteine fuer das {{BRAND_NAME}}-Design-System</p>
+
+  <!-- Layout Components -->
+  <div class="section-title">Layout-Komponenten</div>
+  <div class="grid">
+    <!-- Header Bar -->
+    <div class="wf-card">
+      <div class="wf-label">Header Bar</div>
+      <div class="wf-dim">width: 100% | height: 56px</div>
+      <div class="wf-preview">
+        <div class="w-header">
+          <div style="display:flex;align-items:center;gap:10px">
+            <div class="w-logo"></div>
+            <div class="w-nav">
+              <div class="w-nav-item"></div>
+              <div class="w-nav-item"></div>
+              <div class="w-nav-item"></div>
+              <div class="w-nav-item" style="width:30px"></div>
+            </div>
+          </div>
+          <div class="w-hamburger"><span></span><span></span><span></span></div>
+        </div>
+      </div>
+      <div class="wf-note">Horizontale Navigation mit Logo links, Menu-Items und optionalem Hamburger rechts.</div>
+    </div>
+
+    <!-- Sidebar -->
+    <div class="wf-card">
+      <div class="wf-label">Sidebar</div>
+      <div class="wf-dim">width: 240px | height: auto</div>
+      <div class="wf-preview">
+        <div class="w-sidebar">
+          <div class="w-sidebar-nav">
+            <div class="w-sidebar-item active"></div>
+            <div class="w-sidebar-item"></div>
+            <div class="w-sidebar-item"></div>
+            <div class="w-sidebar-item"></div>
+          </div>
+          <div class="w-sidebar-content">
+            <div class="w-content-line short"></div>
+            <div class="w-content-line"></div>
+            <div class="w-content-line med"></div>
+            <div class="w-content-line short"></div>
+            <div class="w-content-line"></div>
+            <div class="w-content-line med"></div>
+          </div>
+        </div>
+      </div>
+      <div class="wf-note">Vertikale Navigation mit Icons. Aktiver Zustand hervorgehoben.</div>
+    </div>
+
+    <!-- Card -->
+    <div class="wf-card">
+      <div class="wf-label">Card</div>
+      <div class="wf-dim">min-width: 240px | padding: 16px</div>
+      <div class="wf-preview">
+        <div class="w-card">
+          <div class="w-card-img"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8" cy="8" r="2"/><path d="M21 15l-5-5L5 21"/></svg></div>
+          <div class="w-card-title"></div>
+          <div class="w-card-text"></div>
+          <div class="w-card-text s"></div>
+        </div>
+      </div>
+      <div class="wf-note">Wiederverwendbare Karte mit optionalem Bild, Titel und Beschreibung.</div>
+    </div>
+
+    <!-- Table -->
+    <div class="wf-card">
+      <div class="wf-label">Table</div>
+      <div class="wf-dim">width: 100% | rows: variabel</div>
+      <div class="wf-preview">
+        <div class="w-table">
+          <div class="w-table-header">
+            <div class="w-table-cell"><div class="line h"></div></div>
+            <div class="w-table-cell"><div class="line h"></div></div>
+            <div class="w-table-cell"><div class="line h"></div></div>
+          </div>
+          <div class="w-table-row">
+            <div class="w-table-cell"><div class="line"></div></div>
+            <div class="w-table-cell"><div class="line"></div></div>
+            <div class="w-table-cell"><div class="line"></div></div>
+          </div>
+          <div class="w-table-row">
+            <div class="w-table-cell"><div class="line"></div></div>
+            <div class="w-table-cell"><div class="line"></div></div>
+            <div class="w-table-cell"><div class="line"></div></div>
+          </div>
+          <div class="w-table-row">
+            <div class="w-table-cell"><div class="line"></div></div>
+            <div class="w-table-cell"><div class="line"></div></div>
+            <div class="w-table-cell"><div class="line"></div></div>
+          </div>
+        </div>
+      </div>
+      <div class="wf-note">Datentabelle mit Kopfzeile und beliebig vielen Zeilen.</div>
+    </div>
+
+    <!-- Form -->
+    <div class="wf-card">
+      <div class="wf-label">Form</div>
+      <div class="wf-dim">width: 100% | gap: 12px</div>
+      <div class="wf-preview">
+        <div class="w-form">
+          <div class="w-form-label"></div>
+          <div class="w-form-input"><div class="placeholder"></div></div>
+          <div class="w-form-label" style="width:80px"></div>
+          <div class="w-form-textarea">
+            <div class="placeholder" style="width:80%"></div>
+            <div class="placeholder" style="width:60%"></div>
+            <div class="placeholder" style="width:40%"></div>
+          </div>
+          <div style="display:flex;gap:6px;justify-content:flex-end">
+            <div class="w-btn"><div class="label"></div></div>
+            <div class="w-btn primary"><div class="label"></div></div>
+          </div>
+        </div>
+      </div>
+      <div class="wf-note">Formular mit Labels, Inputs, Textarea und Action-Buttons.</div>
+    </div>
+
+    <!-- Chart -->
+    <div class="wf-card">
+      <div class="wf-label">Chart Platzhalter</div>
+      <div class="wf-dim">width: 100% | height: 200px</div>
+      <div class="wf-preview">
+        <div class="w-chart">
+          <svg viewBox="0 0 200 60" preserveAspectRatio="none">
+            <polyline points="0,50 20,42 40,48 60,30 80,35 100,20 120,25 140,15 160,22 180,8 200,12" fill="none" stroke="var(--wire-light)" stroke-width="1.5"/>
+            <polyline points="0,50 20,42 40,48 60,30 80,35 100,20 120,25 140,15 160,22 180,8 200,12 200,60 0,60" fill="var(--wire)" opacity=".15"/>
+            <line x1="0" y1="60" x2="200" y2="60" stroke="var(--wire)" stroke-width=".5"/>
+            <line x1="0" y1="40" x2="200" y2="40" stroke="var(--wire)" stroke-width=".3" stroke-dasharray="2"/>
+            <line x1="0" y1="20" x2="200" y2="20" stroke="var(--wire)" stroke-width=".3" stroke-dasharray="2"/>
+          </svg>
+        </div>
+      </div>
+      <div class="wf-note">Generischer Chart-Platzhalter fuer Linien-, Balken- oder Flaechendiagramme.</div>
+    </div>
+  </div>
+
+  <!-- UI Elements -->
+  <div class="section-title">UI-Elemente</div>
+  <div class="grid grid-sm">
+    <!-- Button -->
+    <div class="wf-card">
+      <div class="wf-label">Button</div>
+      <div class="wf-dim">height: 36-44px | padding: 8-12px</div>
+      <div class="wf-preview" style="display:flex;flex-direction:column;gap:8px;align-items:flex-start">
+        <div class="w-btn primary"><div class="label" style="width:50px"></div></div>
+        <div class="w-btn"><div class="label" style="width:50px"></div></div>
+        <div class="w-btn" style="border-style:dashed"><div class="label" style="width:50px"></div></div>
+      </div>
+      <div class="wf-note">Primary, Secondary und Ghost-Varianten.</div>
+    </div>
+
+    <!-- Input -->
+    <div class="wf-card">
+      <div class="wf-label">Input</div>
+      <div class="wf-dim">height: 36px | border-radius: 6px</div>
+      <div class="wf-preview" style="display:flex;flex-direction:column;gap:8px">
+        <div class="w-input-field"><div class="placeholder"></div></div>
+        <div class="w-input-demo">
+          <div class="w-input-field" style="flex:1"><div class="placeholder"></div></div>
+          <div class="w-btn primary" style="padding:8px 12px"><div class="label" style="width:20px"></div></div>
+        </div>
+      </div>
+      <div class="wf-note">Standard-Eingabefeld mit optionalem Action-Button.</div>
+    </div>
+
+    <!-- Avatar -->
+    <div class="wf-card">
+      <div class="wf-label">Avatar</div>
+      <div class="wf-dim">sm: 28px | md: 36px | lg: 48px</div>
+      <div class="wf-preview">
+        <div class="w-avatars">
+          <div class="w-avatar sm"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M20 21v-2a4 4 0 0 0-8 0"/></svg></div>
+          <div class="w-avatar md"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M20 21v-2a4 4 0 0 0-8 0"/></svg></div>
+          <div class="w-avatar lg"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M20 21v-2a4 4 0 0 0-8 0"/></svg></div>
+        </div>
+      </div>
+      <div class="wf-note">Benutzer-Avatar in drei Groessen.</div>
+    </div>
+
+    <!-- Badge -->
+    <div class="wf-card">
+      <div class="wf-label">Badge</div>
+      <div class="wf-dim">height: 22px | border-radius: 6px</div>
+      <div class="wf-preview">
+        <div class="w-badges">
+          <div class="w-badge"><div class="dot"></div><div class="text"></div></div>
+          <div class="w-badge"><div class="dot"></div><div class="text" style="width:36px"></div></div>
+          <div class="w-badge"><div class="text" style="width:24px"></div></div>
+        </div>
+      </div>
+      <div class="wf-note">Status-Badges mit optionalem Farbpunkt.</div>
+    </div>
+
+    <!-- Modal -->
+    <div class="wf-card">
+      <div class="wf-label">Modal</div>
+      <div class="wf-dim">max-width: 480px | centered</div>
+      <div class="wf-preview">
+        <div class="w-modal">
+          <div class="w-modal-close">&times;</div>
+          <div class="w-modal-title"></div>
+          <div class="w-modal-body">
+            <div class="line"></div>
+            <div class="line" style="width:80%"></div>
+            <div class="line" style="width:60%"></div>
+          </div>
+          <div class="w-modal-actions">
+            <div class="w-btn"><div class="label"></div></div>
+            <div class="w-btn primary"><div class="label"></div></div>
+          </div>
+        </div>
+      </div>
+      <div class="wf-note">Dialog-Fenster mit Titel, Inhalt und Aktionen.</div>
+    </div>
+
+    <!-- Toast -->
+    <div class="wf-card">
+      <div class="wf-label">Toast</div>
+      <div class="wf-dim">width: 320px | auto-dismiss</div>
+      <div class="wf-preview">
+        <div class="w-toast">
+          <div class="w-toast-icon"></div>
+          <div class="w-toast-content">
+            <div style="height:5px;width:60%;border-radius:3px;background:var(--wire-light)"></div>
+            <div style="height:3px;width:90%;border-radius:2px;background:var(--wire)"></div>
+          </div>
+          <div class="w-toast-close">&times;</div>
+        </div>
+      </div>
+      <div class="wf-note">Temporaere Benachrichtigung am Bildschirmrand.</div>
+    </div>
+
+    <!-- List Item -->
+    <div class="wf-card">
+      <div class="wf-label">List Item</div>
+      <div class="wf-dim">height: 48px | border-bottom</div>
+      <div class="wf-preview">
+        <div class="w-list">
+          <div class="w-list-item">
+            <div class="w-avatar sm"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M20 21v-2a4 4 0 0 0-8 0"/></svg></div>
+            <div style="flex:1"><div style="height:5px;width:60%;border-radius:3px;background:var(--wire-light);margin-bottom:4px"></div><div style="height:3px;width:40%;border-radius:2px;background:var(--wire)"></div></div>
+          </div>
+          <div class="w-list-item">
+            <div class="w-avatar sm"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M20 21v-2a4 4 0 0 0-8 0"/></svg></div>
+            <div style="flex:1"><div style="height:5px;width:70%;border-radius:3px;background:var(--wire-light);margin-bottom:4px"></div><div style="height:3px;width:50%;border-radius:2px;background:var(--wire)"></div></div>
+          </div>
+        </div>
+      </div>
+      <div class="wf-note">Listen-Element mit Avatar und zweizeiligem Text.</div>
+    </div>
+
+    <!-- Navigation Tabs -->
+    <div class="wf-card">
+      <div class="wf-label">Navigation Tabs</div>
+      <div class="wf-dim">height: 40px | width: 100%</div>
+      <div class="wf-preview">
+        <div class="w-tabs">
+          <div class="w-tab active"><div class="text"></div></div>
+          <div class="w-tab"><div class="text"></div></div>
+          <div class="w-tab"><div class="text"></div></div>
+          <div class="w-tab"><div class="text"></div></div>
+        </div>
+      </div>
+      <div class="wf-note">Horizontale Tab-Navigation mit aktivem Zustand.</div>
+    </div>
+
+    <!-- Breadcrumb -->
+    <div class="wf-card">
+      <div class="wf-label">Breadcrumb</div>
+      <div class="wf-dim">height: 20px | gap: 6px</div>
+      <div class="wf-preview">
+        <div class="w-breadcrumb">
+          <div class="crumb" style="width:30px"></div>
+          <div class="sep">/</div>
+          <div class="crumb" style="width:45px"></div>
+          <div class="sep">/</div>
+          <div class="crumb active" style="width:55px"></div>
+        </div>
+      </div>
+      <div class="wf-note">Hierarchische Pfad-Navigation. Letztes Element aktiv.</div>
+    </div>
+
+    <!-- Pagination -->
+    <div class="wf-card">
+      <div class="wf-label">Pagination</div>
+      <div class="wf-dim">height: 32px | gap: 4px</div>
+      <div class="wf-preview">
+        <div class="w-pagination">
+          <div class="w-page arrow">&lsaquo;</div>
+          <div class="w-page">1</div>
+          <div class="w-page active">2</div>
+          <div class="w-page">3</div>
+          <div class="w-page">...</div>
+          <div class="w-page">12</div>
+          <div class="w-page arrow">&rsaquo;</div>
+        </div>
+      </div>
+      <div class="wf-note">Seitenumbruch-Steuerung mit Ellipsis fuer grosse Bereiche.</div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

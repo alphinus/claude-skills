@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>{{BRAND_NAME}} Briefpapier</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #1a1a2e;
+    font-family: system-ui, -apple-system, sans-serif;
+    display: flex; align-items: center; justify-content: center;
+    min-height: 100vh; padding: 40px;
+  }
+
+  .page {
+    width: 595px; height: 842px;
+    background: #ffffff;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 30px 80px rgba(0,0,0,0.5);
+    border-radius: 2px;
+  }
+
+  /* ── HEADER ── */
+  .header {
+    background: {{BG}};
+    height: 80px;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 40px;
+    position: relative;
+  }
+  .header::after {
+    content: ''; position: absolute; bottom: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, {{PRIMARY}}, {{PRIMARY_DARK}}, transparent);
+  }
+
+  .header-left {
+    display: flex; align-items: center; gap: 14px;
+  }
+  .header .wordmark {
+    font-size: 22px; font-weight: 200; letter-spacing: 8px; color: {{TEXT}};
+  }
+  .header .wordmark span { color: {{PRIMARY}}; }
+
+  .header-right {
+    display: flex; flex-direction: column; align-items: flex-end; gap: 2px;
+  }
+  .header-right .info {
+    font-size: 8px; color: {{MUTED}}; letter-spacing: 0.5px;
+  }
+  .header-right .info a {
+    color: {{PRIMARY}}; text-decoration: none;
+  }
+
+  /* ── BODY ── */
+  .body-content {
+    padding: 50px 40px 40px;
+    position: relative;
+    min-height: 640px;
+  }
+
+  /* Watermark hexagon */
+  .watermark {
+    position: absolute;
+    right: -40px; top: 50%;
+    transform: translateY(-50%);
+    opacity: 0.03;
+  }
+
+  .date-line {
+    text-align: right;
+    font-size: 10px; color: {{MUTED}};
+    margin-bottom: 40px;
+  }
+
+  .address-block {
+    margin-bottom: 30px;
+  }
+  .address-block .line {
+    font-size: 10px; color: #334155;
+    line-height: 1.7;
+  }
+
+  .subject {
+    font-size: 13px; font-weight: 600; color: {{BG}};
+    margin-bottom: 24px;
+    letter-spacing: 0.3px;
+  }
+
+  .salutation {
+    font-size: 10px; color: #334155;
+    margin-bottom: 16px; line-height: 1.7;
+  }
+
+  .placeholder-text {
+    margin-bottom: 12px;
+  }
+  .placeholder-text .text-line {
+    height: 8px; background: #e2e8f0; border-radius: 4px;
+    margin-bottom: 8px;
+  }
+  .placeholder-text .text-line:nth-child(1) { width: 100%; }
+  .placeholder-text .text-line:nth-child(2) { width: 95%; }
+  .placeholder-text .text-line:nth-child(3) { width: 88%; }
+  .placeholder-text .text-line:nth-child(4) { width: 92%; }
+  .placeholder-text .text-line:nth-child(5) { width: 60%; }
+
+  .placeholder-text.short .text-line:nth-child(1) { width: 100%; }
+  .placeholder-text.short .text-line:nth-child(2) { width: 85%; }
+  .placeholder-text.short .text-line:nth-child(3) { width: 45%; }
+
+  .closing {
+    font-size: 10px; color: #334155;
+    margin-top: 24px; line-height: 1.7;
+  }
+
+  .signature-area {
+    margin-top: 30px;
+  }
+  .sig-line {
+    width: 120px; height: 1px; background: #cbd5e0;
+    margin-bottom: 6px;
+  }
+  .sig-name {
+    font-size: 10px; color: #334155; font-weight: 500;
+  }
+  .sig-title {
+    font-size: 8px; color: {{MUTED}};
+  }
+
+  /* ── FOOTER ── */
+  .footer {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    height: 60px;
+    border-top: 1px solid #e2e8f0;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 40px;
+    background: {{TEXT}};
+  }
+
+  .footer-left {
+    display: flex; gap: 20px;
+  }
+  .footer-item {
+    font-size: 7.5px; color: {{MUTED}}; letter-spacing: 0.3px;
+  }
+  .footer-item strong {
+    color: #334155; font-weight: 500;
+  }
+
+  .footer-right {
+    display: flex; align-items: center; gap: 10px;
+  }
+  .social-icon {
+    width: 18px; height: 18px;
+    border-radius: 50%;
+    border: 1px solid #cbd5e0;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .social-icon svg {
+    width: 10px; height: 10px;
+  }
+</style>
+</head>
+<body>
+
+<div class="page">
+  <!-- Header -->
+  <div class="header">
+    <div class="header-left">
+      <svg width="32" height="36" viewBox="0 0 56 64">
+        <polygon points="28,2 54,16 54,48 28,62 2,48 2,16" fill="none" stroke="{{PRIMARY}}" stroke-width="1.5"/>
+        <line x1="18" y1="22" x2="38" y2="22" stroke="{{PRIMARY}}" stroke-width="1.5" stroke-linecap="round"/>
+        <line x1="18" y1="32" x2="34" y2="32" stroke="{{PRIMARY}}" stroke-width="1.5" stroke-linecap="round"/>
+        <line x1="18" y1="42" x2="38" y2="42" stroke="{{PRIMARY}}" stroke-width="1.5" stroke-linecap="round"/>
+        <line x1="18" y1="22" x2="18" y2="42" stroke="{{PRIMARY}}" stroke-width="1.5" stroke-linecap="round"/>
+      </svg>
+      <div class="wordmark">ELUM<span>A</span></div>
+    </div>
+    <div class="header-right">
+      <div class="info"><a>{{BRAND_DOMAIN}}</a></div>
+      <div class="info">hello@{{BRAND_DOMAIN}}</div>
+      <div class="info">+41 44 000 00 00</div>
+    </div>
+  </div>
+
+  <!-- Body -->
+  <div class="body-content">
+    <!-- Watermark -->
+    <svg class="watermark" width="300" height="340" viewBox="0 0 56 64">
+      <polygon points="28,2 54,16 54,48 28,62 2,48 2,16" fill="none" stroke="{{BG}}" stroke-width="0.5"/>
+      <line x1="18" y1="22" x2="38" y2="22" stroke="{{BG}}" stroke-width="0.5"/>
+      <line x1="18" y1="32" x2="34" y2="32" stroke="{{BG}}" stroke-width="0.5"/>
+      <line x1="18" y1="42" x2="38" y2="42" stroke="{{BG}}" stroke-width="0.5"/>
+      <line x1="18" y1="22" x2="18" y2="42" stroke="{{BG}}" stroke-width="0.5"/>
+    </svg>
+
+    <div class="date-line">Zürich, 10. Februar 2026</div>
+
+    <div class="address-block">
+      <div class="line">Firma Muster AG</div>
+      <div class="line">Herr Max Mustermann</div>
+      <div class="line">Bahnhofstrasse 42</div>
+      <div class="line">8001 Zürich</div>
+    </div>
+
+    <div class="subject">Betreff: Zusammenarbeit Event-Driven Plattform</div>
+
+    <div class="salutation">Sehr geehrter Herr Mustermann,</div>
+
+    <div class="placeholder-text">
+      <div class="text-line"></div>
+      <div class="text-line"></div>
+      <div class="text-line"></div>
+      <div class="text-line"></div>
+      <div class="text-line"></div>
+    </div>
+
+    <div class="placeholder-text">
+      <div class="text-line"></div>
+      <div class="text-line"></div>
+      <div class="text-line"></div>
+      <div class="text-line"></div>
+      <div class="text-line"></div>
+    </div>
+
+    <div class="placeholder-text short">
+      <div class="text-line"></div>
+      <div class="text-line"></div>
+      <div class="text-line"></div>
+    </div>
+
+    <div class="closing">
+      Mit freundlichen Grüssen
+    </div>
+
+    <div class="signature-area">
+      <div class="sig-line"></div>
+      <div class="sig-name">Marco Keller</div>
+      <div class="sig-title">Gründer &amp; CTO, {{BRAND_NAME}}</div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="footer">
+    <div class="footer-left">
+      <div class="footer-item"><strong>{{BRAND_NAME}}</strong> &middot; Bahnhofstrasse 10 &middot; 8001 Zürich</div>
+      <div class="footer-item"><strong>Web</strong> {{BRAND_DOMAIN}}</div>
+      <div class="footer-item"><strong>CHE</strong>-000.000.000</div>
+    </div>
+    <div class="footer-right">
+      <!-- GitHub -->
+      <div class="social-icon">
+        <svg viewBox="0 0 16 16" fill="{{MUTED}}">
+          <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/>
+        </svg>
+      </div>
+      <!-- LinkedIn -->
+      <div class="social-icon">
+        <svg viewBox="0 0 16 16" fill="{{MUTED}}">
+          <path d="M0 1.146C0 .513.526 0 1.175 0h13.65C15.474 0 16 .513 16 1.146v13.708c0 .633-.526 1.146-1.175 1.146H1.175C.526 16 0 15.487 0 14.854V1.146zm4.943 12.248V6.169H2.542v7.225h2.401zm-1.2-8.212c.837 0 1.358-.554 1.358-1.248-.015-.709-.52-1.248-1.342-1.248-.822 0-1.359.54-1.359 1.248 0 .694.521 1.248 1.327 1.248h.016zm4.908 8.212V9.359c0-.216.016-.432.08-.586.173-.431.568-.878 1.232-.878.869 0 1.216.662 1.216 1.634v3.865h2.401V9.25c0-2.22-1.184-3.252-2.764-3.252-1.274 0-1.845.7-2.165 1.193v.025h-.016l.016-.025V6.169h-2.4c.03.678 0 7.225 0 7.225h2.4z"/>
+        </svg>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

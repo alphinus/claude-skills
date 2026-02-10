@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Whitepaper – Event-Driven Architecture | {{BRAND_NAME}}</title>
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{--dark-bg:{{BG}};--dark-card:#1a2332;--dark-deeper:#0c1322;--cyan:{{PRIMARY}};--cyan-dark:{{PRIMARY_DARK}};--cloud:{{TEXT}};--muted:{{MUTED}};--border:rgba(248,250,252,.08)}
+  body{font-family:system-ui,-apple-system,sans-serif;background:var(--dark-bg);color:var(--cloud);line-height:1.7}
+  a{color:var(--cyan);text-decoration:none}
+
+  /* Layout */
+  .page-layout{display:grid;grid-template-columns:260px 1fr;min-height:100vh}
+  @media(max-width:860px){.page-layout{grid-template-columns:1fr}.sidebar{display:none}}
+
+  /* Sidebar */
+  .sidebar{background:var(--dark-deeper);border-right:1px solid var(--border);padding:2rem 1.5rem;position:sticky;top:0;height:100vh;overflow-y:auto;display:flex;flex-direction:column}
+  .sidebar-brand{display:flex;align-items:center;gap:.6rem;margin-bottom:2.5rem}
+  .sidebar-logo{width:32px;height:32px;border-radius:8px;background:var(--cyan);display:flex;align-items:center;justify-content:center;font-weight:900;font-size:.9rem;color:var(--dark-bg)}
+  .sidebar-name{font-weight:700;font-size:1rem}
+  .sidebar h4{font-size:.7rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:.75rem}
+  .toc{list-style:none;flex:1}
+  .toc li{margin-bottom:.25rem}
+  .toc a{display:block;padding:.5rem .75rem;border-radius:8px;font-size:.88rem;color:var(--muted);transition:all .15s;font-weight:500}
+  .toc a:hover,.toc a.active{background:rgba({{PRIMARY_RGB}},.08);color:var(--cyan)}
+  .toc a.active{font-weight:600}
+  .toc .sub{padding-left:1.2rem;font-size:.82rem}
+  .sidebar-footer{margin-top:auto;padding-top:1.5rem;border-top:1px solid var(--border)}
+  .sidebar-footer p{font-size:.75rem;color:var(--muted);line-height:1.5}
+  .progress-label{font-size:.7rem;color:var(--muted);margin-bottom:.4rem;text-transform:uppercase;letter-spacing:.05em}
+  .progress-bar{height:4px;background:rgba(248,250,252,.06);border-radius:2px;overflow:hidden;margin-bottom:1rem}
+  .progress-fill{height:100%;width:20%;background:var(--cyan);border-radius:2px;transition:width .3s}
+
+  /* Main content */
+  .main{padding:0;overflow-y:auto}
+
+  /* Cover */
+  .cover{padding:6rem 3rem 5rem;text-align:center;position:relative;overflow:hidden;background:linear-gradient(180deg,rgba({{PRIMARY_RGB}},.04),transparent)}
+  .cover::before{content:'';position:absolute;inset:0;background-image:radial-gradient(rgba({{PRIMARY_RGB}},.06) 1px,transparent 1px);background-size:28px 28px}
+  .cover-badge{display:inline-block;background:rgba({{PRIMARY_RGB}},.1);border:1px solid rgba({{PRIMARY_RGB}},.2);padding:.35rem 1rem;border-radius:20px;font-size:.75rem;color:var(--cyan);font-weight:600;text-transform:uppercase;letter-spacing:.06em;margin-bottom:2rem;position:relative}
+  .cover h1{font-size:clamp(1.8rem,4vw,2.8rem);font-weight:800;max-width:600px;margin:0 auto 1rem;line-height:1.25;position:relative}
+  .cover .subtitle{color:var(--muted);font-size:1.1rem;max-width:480px;margin:0 auto 2.5rem;position:relative}
+  .cover-meta{display:flex;justify-content:center;gap:2.5rem;flex-wrap:wrap;position:relative}
+  .cover-meta-item{text-align:center}
+  .cover-meta-label{font-size:.7rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:.2rem}
+  .cover-meta-value{font-weight:600;font-size:.95rem}
+  .cover-logo{margin:0 auto 2rem;width:48px;height:48px;border-radius:12px;background:var(--cyan);display:flex;align-items:center;justify-content:center;font-weight:900;font-size:1.2rem;color:var(--dark-bg);position:relative}
+
+  /* Chapter */
+  .chapter{padding:3rem;border-bottom:1px solid var(--border)}
+  @media(max-width:640px){.chapter{padding:2rem 1.5rem}}
+  .chapter-num{font-size:.75rem;text-transform:uppercase;letter-spacing:.08em;color:var(--cyan);font-weight:600;margin-bottom:.5rem}
+  .chapter h2{font-size:1.8rem;font-weight:700;margin-bottom:1.5rem;line-height:1.3}
+  .chapter h3{font-size:1.2rem;font-weight:600;margin:2rem 0 .75rem;color:var(--cloud)}
+  .chapter p{color:var(--muted);margin-bottom:1.25rem;font-size:.95rem}
+  .chapter p strong{color:var(--cloud)}
+
+  /* Code block */
+  .code-block{background:var(--dark-deeper);border:1px solid var(--border);border-radius:10px;padding:1.5rem;margin:1.5rem 0;overflow-x:auto;font-family:'SF Mono',SFMono-Regular,Consolas,'Liberation Mono',monospace;font-size:.85rem;line-height:1.6;color:var(--muted)}
+  .code-block .keyword{color:var(--cyan)}
+  .code-block .string{color:#68d391}
+  .code-block .comment{color:#4a5568;font-style:italic}
+  .code-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:.75rem}
+  .code-lang{font-size:.7rem;font-weight:600;color:var(--cyan);text-transform:uppercase;letter-spacing:.06em}
+  .code-copy{font-size:.7rem;color:var(--muted);cursor:pointer;transition:color .2s;background:none;border:none;font-family:inherit}.code-copy:hover{color:var(--cyan)}
+
+  /* Diagram placeholder */
+  .diagram{background:var(--dark-card);border:1px solid var(--border);border-radius:14px;padding:3rem;text-align:center;margin:2rem 0}
+  .diagram-icon{margin:0 auto 1rem;width:48px;height:48px;border-radius:12px;background:rgba({{PRIMARY_RGB}},.08);display:flex;align-items:center;justify-content:center}
+  .diagram-icon svg{color:var(--cyan)}
+  .diagram-label{font-size:.85rem;color:var(--muted)}
+  .diagram-title{font-weight:600;font-size:1rem;margin-bottom:.25rem}
+
+  /* Callout */
+  .callout{background:rgba({{PRIMARY_RGB}},.06);border:1px solid rgba({{PRIMARY_RGB}},.15);border-radius:12px;padding:1.4rem 1.6rem;margin:1.5rem 0;display:flex;gap:1rem;align-items:flex-start}
+  .callout-icon{flex-shrink:0;width:24px;height:24px;color:var(--cyan);margin-top:2px}
+  .callout-content{flex:1}
+  .callout-title{font-weight:600;font-size:.9rem;margin-bottom:.3rem;color:var(--cyan)}
+  .callout-text{font-size:.88rem;color:var(--muted)}
+
+  /* Download CTA */
+  .download-cta{padding:4rem 3rem;text-align:center;background:linear-gradient(0deg,rgba({{PRIMARY_RGB}},.04),transparent)}
+  .download-cta h2{font-size:1.6rem;font-weight:700;margin-bottom:.5rem}
+  .download-cta p{color:var(--muted);margin-bottom:2rem;font-size:1rem}
+  .btn{display:inline-flex;align-items:center;gap:.5rem;padding:.85rem 2rem;border-radius:10px;font-size:1rem;font-weight:600;border:none;cursor:pointer;transition:all .25s;text-decoration:none}
+  .btn-primary{background:var(--cyan);color:var(--dark-bg)}.btn-primary:hover{background:var(--cyan-dark);transform:translateY(-2px);box-shadow:0 6px 24px rgba({{PRIMARY_RGB}},.25)}
+  .btn-secondary{background:transparent;color:var(--cloud);border:2px solid var(--border);margin-left:.75rem}.btn-secondary:hover{border-color:var(--cyan);color:var(--cyan)}
+</style>
+</head>
+<body>
+  <div class="page-layout">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-brand">
+        <div class="sidebar-logo">E</div>
+        <div class="sidebar-name">{{BRAND_NAME}}</div>
+      </div>
+      <div class="progress-label">Lesefortschritt</div>
+      <div class="progress-bar"><div class="progress-fill"></div></div>
+      <h4>Inhaltsverzeichnis</h4>
+      <ol class="toc">
+        <li><a href="#ch1" class="active">1. Einführung</a></li>
+        <li><a href="#ch2">2. Grundlagen der Event-Driven Architecture</a></li>
+        <li><a href="#ch3">3. Architekturmuster in der Praxis</a></li>
+        <li><a href="#ch4">4. Implementation mit {{BRAND_NAME}}</a></li>
+        <li><a href="#ch5">5. Skalierung und Best Practices</a></li>
+      </ol>
+      <div class="sidebar-footer">
+        <p><strong style="color:var(--cloud)">{{BRAND_NAME}} Whitepaper</strong><br>Version 1.0 &middot; Februar 2026<br>&copy; 2026 {{BRAND_NAME}}</p>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main">
+      <!-- Cover -->
+      <div class="cover">
+        <div class="cover-logo">E</div>
+        <div class="cover-badge">Whitepaper</div>
+        <h1>Event-Driven Architecture: Ein Praxisleitfaden</h1>
+        <p class="subtitle">Von den Grundlagen bis zur produktionsreifen Implementierung mit der {{BRAND_NAME}}-Plattform.</p>
+        <div class="cover-meta">
+          <div class="cover-meta-item"><div class="cover-meta-label">Autor</div><div class="cover-meta-value">{{BRAND_NAME}} Engineering</div></div>
+          <div class="cover-meta-item"><div class="cover-meta-label">Datum</div><div class="cover-meta-value">Februar 2026</div></div>
+          <div class="cover-meta-item"><div class="cover-meta-label">Lesezeit</div><div class="cover-meta-value">~25 Min.</div></div>
+          <div class="cover-meta-item"><div class="cover-meta-label">Version</div><div class="cover-meta-value">1.0</div></div>
+        </div>
+      </div>
+
+      <!-- Chapter 1 -->
+      <div class="chapter" id="ch1">
+        <div class="chapter-num">Kapitel 1</div>
+        <h2>Einführung</h2>
+        <p>In einer Welt, in der Echtzeitdaten zum entscheidenden Wettbewerbsvorteil werden, stossen traditionelle Request-Response-Architekturen an ihre Grenzen. <strong>Event-Driven Architecture (EDA)</strong> bietet einen fundamentalen Paradigmenwechsel: Statt synchroner Anfragen reagieren Systeme auf Ereignisse, sobald diese eintreten.</p>
+        <p>Dieses Whitepaper führt Sie von den theoretischen Grundlagen bis zur praktischen Implementierung einer Event-Driven Architecture mit der {{BRAND_NAME}}-Plattform. Sie erfahren, warum führende Unternehmen auf EDA setzen und wie Sie die gleichen Vorteile für Ihre Organisation nutzen können.</p>
+
+        <div class="callout">
+          <svg class="callout-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+          <div class="callout-content">
+            <div class="callout-title">Kernaussage</div>
+            <div class="callout-text">Unternehmen, die auf Event-Driven Architecture umstellen, berichten von einer durchschnittlichen Reduktion der Verarbeitungslatenz um 73% und einer Steigerung des Datendurchsatzes um das 4-fache.</div>
+          </div>
+        </div>
+
+        <h3>Warum Event-Driven?</h3>
+        <p>Drei zentrale Treiber machen EDA zur Architektur der Zukunft: die steigende Nachfrage nach <strong>Echtzeit-Verarbeitung</strong>, die Notwendigkeit <strong>loser Kopplung</strong> in Microservice-Landschaften und die Anforderung an <strong>horizontale Skalierbarkeit</strong> bei unvorhersehbaren Lastspitzen.</p>
+      </div>
+
+      <!-- Chapter 2 Preview -->
+      <div class="chapter" id="ch2">
+        <div class="chapter-num">Kapitel 2</div>
+        <h2>Grundlagen der Event-Driven Architecture</h2>
+        <p>Um Event-Driven Architecture effektiv einzusetzen, müssen wir die grundlegenden Konzepte verstehen. Ein <strong>Event</strong> ist eine unveränderliche Aufzeichnung eines Geschäftsereignisses – etwas, das in der Vergangenheit passiert ist und nicht rückgängig gemacht werden kann.</p>
+
+        <div class="diagram">
+          <div class="diagram-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>
+          </div>
+          <div class="diagram-title">Abbildung 2.1: Event-Driven Architecture – Übersicht</div>
+          <div class="diagram-label">Producer &rarr; Event Broker &rarr; Consumer</div>
+        </div>
+
+        <h3>Event vs. Command vs. Query</h3>
+        <p>Es ist wichtig, zwischen Events, Commands und Queries zu unterscheiden. Während ein <strong>Command</strong> eine Aufforderung darstellt, etwas zu tun, und eine <strong>Query</strong> eine Informationsanfrage ist, beschreibt ein <strong>Event</strong> etwas, das bereits geschehen ist.</p>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">TypeScript</span><button class="code-copy">Kopieren</button></div>
+<span class="comment">// Event Definition</span>
+<span class="keyword">interface</span> OrderPlacedEvent {
+  <span class="keyword">type</span>: <span class="string">'order.placed'</span>;
+  <span class="keyword">timestamp</span>: <span class="keyword">number</span>;
+  <span class="keyword">payload</span>: {
+    orderId: <span class="keyword">string</span>;
+    customerId: <span class="keyword">string</span>;
+    items: OrderItem[];
+    totalAmount: <span class="keyword">number</span>;
+  };
+  <span class="keyword">metadata</span>: {
+    correlationId: <span class="keyword">string</span>;
+    source: <span class="keyword">string</span>;
+  };
+}
+        </div>
+      </div>
+
+      <!-- Chapter 3 Preview -->
+      <div class="chapter" id="ch3">
+        <div class="chapter-num">Kapitel 3</div>
+        <h2>Architekturmuster in der Praxis</h2>
+        <p>In diesem Kapitel untersuchen wir die gängigsten Architekturmuster für Event-Driven Systeme und wann welches Muster am besten geeignet ist.</p>
+
+        <div class="callout">
+          <svg class="callout-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          <div class="callout-content">
+            <div class="callout-title">Best Practice</div>
+            <div class="callout-text">Beginnen Sie mit dem einfachsten Muster, das Ihre Anforderungen erfüllt. Event Notification ist oft der beste Einstiegspunkt, bevor Sie zu komplexeren Mustern wie Event Sourcing übergehen.</div>
+          </div>
+        </div>
+        <p>Die vier wichtigsten Muster sind: <strong>Event Notification</strong>, <strong>Event-Carried State Transfer</strong>, <strong>Event Sourcing</strong> und <strong>CQRS</strong> (Command Query Responsibility Segregation). Jedes Muster hat spezifische Stärken und Trade-offs.</p>
+      </div>
+
+      <!-- Chapter 4 stub -->
+      <div class="chapter" id="ch4">
+        <div class="chapter-num">Kapitel 4</div>
+        <h2>Implementation mit {{BRAND_NAME}}</h2>
+        <p>In diesem Kapitel zeigen wir Schritt für Schritt, wie Sie eine Event-Driven Architecture mit der {{BRAND_NAME}}-Plattform implementieren. Von der Einrichtung des Event Brokers bis zur Integration in Ihre bestehende Microservice-Landschaft.</p>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">TypeScript</span><button class="code-copy">Kopieren</button></div>
+<span class="keyword">import</span> { {{BRAND_NAME}}Client } <span class="keyword">from</span> <span class="string">'@{{BRAND_NAME_LOWER}}/sdk'</span>;
+
+<span class="keyword">const</span> client = <span class="keyword">new</span> {{BRAND_NAME}}Client({
+  endpoint: <span class="string">'wss://stream.{{BRAND_DOMAIN}}'</span>,
+  apiKey: process.env.{{BRAND_NAME}}_API_KEY,
+});
+
+<span class="comment">// Event-Stream abonnieren</span>
+client.subscribe(<span class="string">'orders.*'</span>, <span class="keyword">async</span> (event) => {
+  console.log(<span class="string">`Received: ${event.type}`</span>);
+  <span class="keyword">await</span> processEvent(event);
+});
+        </div>
+      </div>
+
+      <!-- Chapter 5 stub -->
+      <div class="chapter" id="ch5">
+        <div class="chapter-num">Kapitel 5</div>
+        <h2>Skalierung und Best Practices</h2>
+        <p>Skalierung ist einer der grössten Vorteile einer Event-Driven Architecture. In diesem Kapitel behandeln wir Strategien für horizontale Skalierung, Partitionierung von Event Streams und bewährte Praktiken für den Produktivbetrieb.</p>
+
+        <div class="diagram">
+          <div class="diagram-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+          </div>
+          <div class="diagram-title">Abbildung 5.1: Skalierungskurve mit Auto-Scaling</div>
+          <div class="diagram-label">Last &rarr; Automatische Partitionserhöhung &rarr; Lineare Skalierung</div>
+        </div>
+      </div>
+
+      <!-- Download CTA -->
+      <div class="download-cta">
+        <h2>Vollständiges Whitepaper herunterladen</h2>
+        <p>Erhalten Sie den kompletten Leitfaden als PDF mit allen Kapiteln, Code-Beispielen und Diagrammen.</p>
+        <a href="#" class="btn btn-primary">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          PDF herunterladen
+        </a>
+        <a href="https://{{BRAND_DOMAIN}}" class="btn btn-secondary">Mehr erfahren</a>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    // Reading progress
+    (function(){
+      const main=document.querySelector('.main');
+      const fill=document.querySelector('.progress-fill');
+      const links=document.querySelectorAll('.toc a');
+      const chapters=document.querySelectorAll('.chapter');
+      main.addEventListener('scroll',()=>{
+        const pct=main.scrollTop/(main.scrollHeight-main.clientHeight)*100;
+        fill.style.width=Math.min(pct,100)+'%';
+        // Active chapter
+        let current='';
+        chapters.forEach(ch=>{if(ch.offsetTop-main.scrollTop<200)current=ch.id;});
+        links.forEach(l=>{l.classList.toggle('active',l.getAttribute('href')==='#'+current);});
+      });
+    })();
+  </script>
+</body>
+</html>

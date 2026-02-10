@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fallstudie – TechFlow AG | {{BRAND_NAME}}</title>
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{--dark-bg:{{BG}};--dark-card:#1a2332;--cyan:{{PRIMARY}};--cyan-dark:{{PRIMARY_DARK}};--cloud:{{TEXT}};--muted:{{MUTED}};--border:rgba(248,250,252,.08)}
+  body{font-family:system-ui,-apple-system,sans-serif;background:var(--dark-bg);color:var(--cloud);line-height:1.7}
+  a{color:var(--cyan);text-decoration:none}
+  .container{max-width:860px;margin:0 auto;padding:0 1.5rem}
+
+  /* Header */
+  header{padding:4rem 0 3rem;text-align:center;position:relative}
+  header::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 0%,rgba({{PRIMARY_RGB}},.07),transparent 60%)}
+  .badge{display:inline-block;background:rgba({{PRIMARY_RGB}},.1);border:1px solid rgba({{PRIMARY_RGB}},.2);padding:.3rem .9rem;border-radius:20px;font-size:.75rem;color:var(--cyan);font-weight:600;text-transform:uppercase;letter-spacing:.06em;margin-bottom:1.5rem}
+  .client-logo{width:64px;height:64px;border-radius:14px;background:var(--dark-card);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;margin:0 auto 1.5rem;font-weight:800;font-size:1.2rem;color:var(--cyan)}
+  header h1{font-size:clamp(1.6rem,4vw,2.4rem);font-weight:800;max-width:680px;margin:0 auto 1rem;line-height:1.3}
+  .meta{color:var(--muted);font-size:.9rem}
+
+  /* Sections */
+  section{padding:2.5rem 0}
+  .divider{border:none;border-top:1px solid var(--border);margin:0}
+
+  /* Challenge / Solution / Result */
+  .csr-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1.5rem}
+  .csr-card{background:var(--dark-card);border:1px solid var(--border);border-radius:14px;padding:1.8rem}
+  .csr-icon{width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;margin-bottom:1rem}
+  .csr-icon.challenge{background:rgba(229,62,62,.12);color:#fc8181}
+  .csr-icon.solution{background:rgba({{PRIMARY_RGB}},.12);color:var(--cyan)}
+  .csr-icon.result{background:rgba(72,187,120,.12);color:#68d391}
+  .csr-card h3{font-size:1.1rem;font-weight:700;margin-bottom:.6rem}
+  .csr-card p{color:var(--muted);font-size:.95rem}
+
+  /* Quote */
+  .quote-block{background:var(--dark-card);border-left:4px solid var(--cyan);border-radius:0 14px 14px 0;padding:2rem 2.5rem;margin:2.5rem 0;position:relative}
+  .quote-block::before{content:'\201C';position:absolute;top:.5rem;left:1rem;font-size:3rem;color:var(--cyan);opacity:.3;font-family:Georgia,serif;line-height:1}
+  .quote-text{font-size:1.15rem;font-style:italic;color:var(--cloud);margin-bottom:1rem;padding-left:1.5rem}
+  .quote-author{display:flex;align-items:center;gap:.75rem;padding-left:1.5rem}
+  .quote-avatar{width:40px;height:40px;border-radius:50%;background:rgba({{PRIMARY_RGB}},.12);display:flex;align-items:center;justify-content:center}
+  .quote-avatar svg{color:var(--cyan);width:20px;height:20px}
+  .quote-name{font-weight:600;font-size:.9rem}
+  .quote-role{color:var(--muted);font-size:.8rem}
+
+  /* Metrics */
+  .metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;margin:2rem 0}
+  .metric{text-align:center;background:var(--dark-card);border:1px solid var(--border);border-radius:14px;padding:2rem 1rem}
+  .metric-number{font-size:clamp(2.2rem,5vw,3rem);font-weight:900;background:linear-gradient(135deg,var(--cyan),#68d391);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:.25rem;line-height:1.2}
+  .metric-label{color:var(--muted);font-size:.85rem;font-weight:500}
+
+  /* Timeline */
+  .impl-timeline{position:relative;padding-left:2.5rem}
+  .impl-timeline::before{content:'';position:absolute;left:8px;top:8px;bottom:8px;width:2px;background:linear-gradient(to bottom,var(--cyan),rgba({{PRIMARY_RGB}},.1))}
+  .impl-step{position:relative;padding-bottom:2rem}
+  .impl-step:last-child{padding-bottom:0}
+  .impl-dot{position:absolute;left:-2.5rem;top:4px;width:18px;height:18px;border-radius:50%;background:var(--dark-bg);border:3px solid var(--cyan);display:flex;align-items:center;justify-content:center}
+  .impl-dot .inner{width:6px;height:6px;border-radius:50%;background:var(--cyan)}
+  .impl-week{font-size:.75rem;color:var(--cyan);font-weight:600;text-transform:uppercase;letter-spacing:.04em;margin-bottom:.3rem}
+  .impl-title{font-weight:600;margin-bottom:.2rem}
+  .impl-desc{color:var(--muted);font-size:.9rem}
+
+  /* Tech stack badges */
+  .tech-badges{display:flex;flex-wrap:wrap;gap:.6rem;margin-top:1rem}
+  .tech-badge{background:var(--dark-card);border:1px solid var(--border);padding:.4rem 1rem;border-radius:8px;font-size:.8rem;font-weight:600;color:var(--muted);transition:all .2s}
+  .tech-badge:hover{color:var(--cyan);border-color:rgba({{PRIMARY_RGB}},.3)}
+
+  /* CTA */
+  .cta{text-align:center;padding:4rem 0;position:relative}
+  .cta::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 100%,rgba({{PRIMARY_RGB}},.06),transparent 60%)}
+  .cta h2{font-size:clamp(1.4rem,3vw,2rem);font-weight:700;margin-bottom:.75rem;position:relative}
+  .cta p{color:var(--muted);margin-bottom:2rem;position:relative;font-size:1.05rem}
+  .btn{display:inline-flex;align-items:center;gap:.5rem;padding:.85rem 2rem;border-radius:10px;font-size:1rem;font-weight:600;border:none;cursor:pointer;transition:all .25s;text-decoration:none;position:relative}
+  .btn-primary{background:var(--cyan);color:var(--dark-bg)}.btn-primary:hover{background:var(--cyan-dark);transform:translateY(-2px);box-shadow:0 6px 24px rgba({{PRIMARY_RGB}},.25)}
+
+  @media(max-width:640px){.metrics{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+  <!-- Header -->
+  <header>
+    <div class="container">
+      <div class="badge">Fallstudie</div>
+      <div class="client-logo">TF</div>
+      <h1>Wie TechFlow AG ihre Event-Verarbeitung um 60% beschleunigte</h1>
+      <p class="meta">Branche: Fintech &middot; Unternehmensgrösse: 250+ Mitarbeitende &middot; Seit Q3 2025</p>
+    </div>
+  </header>
+
+  <div class="container">
+    <hr class="divider">
+
+    <!-- Challenge / Solution / Result -->
+    <section>
+      <div class="csr-grid">
+        <div class="csr-card">
+          <div class="csr-icon challenge">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          </div>
+          <h3>Herausforderung</h3>
+          <p>TechFlow AG verarbeitete über 50'000 Events pro Sekunde mit einem veralteten Batch-System. Latenzzeiten von über 2 Sekunden führten zu verpassten Echtzeit-Entscheidungen und frustrierten Kunden. Das bestehende System skalierte nicht mehr mit dem Wachstum.</p>
+        </div>
+        <div class="csr-card">
+          <div class="csr-icon solution">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+          </div>
+          <h3>Lösung</h3>
+          <p>Migration auf die {{BRAND_NAME}} Event-Streaming-Plattform mit automatischem Scaling und Sub-Millisekunden-Latenz. Die schrittweise Integration ermöglichte einen risikoarmen Übergang ohne Ausfallzeit.</p>
+        </div>
+        <div class="csr-card">
+          <div class="csr-icon result">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          </div>
+          <h3>Ergebnis</h3>
+          <p>60% schnellere Event-Verarbeitung, 99.9% Verfügbarkeit und die Fähigkeit, dreimal mehr Events zu verarbeiten als zuvor. Die Betriebskosten sanken um 35% dank automatischer Skalierung.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Quote -->
+    <div class="quote-block">
+      <p class="quote-text">{{BRAND_NAME}} hat unsere Event-Infrastruktur von einem Engpass in einen Wettbewerbsvorteil verwandelt. Die Migration war überraschend reibungslos und die Ergebnisse haben unsere Erwartungen übertroffen.</p>
+      <div class="quote-author">
+        <div class="quote-avatar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="8" r="4"/><path d="M20 21a8 8 0 1 0-16 0"/></svg></div>
+        <div><div class="quote-name">Sarah Keller</div><div class="quote-role">CTO, TechFlow AG</div></div>
+      </div>
+    </div>
+
+    <hr class="divider">
+
+    <!-- Metrics -->
+    <section>
+      <h2 style="font-size:1.4rem;font-weight:700;margin-bottom:.5rem">Ergebnisse in Zahlen</h2>
+      <p style="color:var(--muted);margin-bottom:1.5rem">Messbare Verbesserungen nach 90 Tagen im Produktivbetrieb.</p>
+      <div class="metrics">
+        <div class="metric"><div class="metric-number">60%</div><div class="metric-label">schnellere Verarbeitung</div></div>
+        <div class="metric"><div class="metric-number">99.9%</div><div class="metric-label">Uptime</div></div>
+        <div class="metric"><div class="metric-number">3x</div><div class="metric-label">mehr Events verarbeitet</div></div>
+      </div>
+    </section>
+    <hr class="divider">
+
+    <!-- Implementation Timeline -->
+    <section>
+      <h2 style="font-size:1.4rem;font-weight:700;margin-bottom:.5rem">Implementierung</h2>
+      <p style="color:var(--muted);margin-bottom:2rem">Von der Planung bis zum Go-Live in 8 Wochen.</p>
+      <div class="impl-timeline">
+        <div class="impl-step">
+          <div class="impl-dot"><div class="inner"></div></div>
+          <div class="impl-week">Woche 1–2</div>
+          <div class="impl-title">Analyse und Architektur</div>
+          <div class="impl-desc">Bestandsaufnahme der bestehenden Infrastruktur, Definition der Zielarchitektur und Migrationsstrategie.</div>
+        </div>
+        <div class="impl-step">
+          <div class="impl-dot"><div class="inner"></div></div>
+          <div class="impl-week">Woche 3–4</div>
+          <div class="impl-title">Parallelbetrieb</div>
+          <div class="impl-desc">Aufbau der {{BRAND_NAME}}-Infrastruktur parallel zum bestehenden System. Erste Events werden gespiegelt.</div>
+        </div>
+        <div class="impl-step">
+          <div class="impl-dot"><div class="inner"></div></div>
+          <div class="impl-week">Woche 5–6</div>
+          <div class="impl-title">Schrittweise Migration</div>
+          <div class="impl-desc">Sukzessive Umleitung des Event-Traffics auf die {{BRAND_NAME}}-Plattform mit kontinuierlicher Validierung.</div>
+        </div>
+        <div class="impl-step">
+          <div class="impl-dot"><div class="inner"></div></div>
+          <div class="impl-week">Woche 7–8</div>
+          <div class="impl-title">Go-Live und Optimierung</div>
+          <div class="impl-desc">Vollständiger Umstieg, Performance-Tuning und Dekommissionierung des Altsystems.</div>
+        </div>
+      </div>
+    </section>
+    <hr class="divider">
+
+    <!-- Tech Stack -->
+    <section>
+      <h2 style="font-size:1.4rem;font-weight:700;margin-bottom:.5rem">Eingesetzte Technologien</h2>
+      <p style="color:var(--muted);margin-bottom:1rem">Die {{BRAND_NAME}}-Komponenten und Tools, die für diese Lösung eingesetzt wurden.</p>
+      <div class="tech-badges">
+        <span class="tech-badge">{{BRAND_NAME}} Stream Engine</span>
+        <span class="tech-badge">Event Router</span>
+        <span class="tech-badge">Auto-Scaling</span>
+        <span class="tech-badge">{{BRAND_NAME}} SDK (Node.js)</span>
+        <span class="tech-badge">Monitoring Dashboard</span>
+        <span class="tech-badge">Kubernetes</span>
+        <span class="tech-badge">PostgreSQL</span>
+        <span class="tech-badge">Redis</span>
+      </div>
+    </section>
+  </div>
+
+  <!-- CTA -->
+  <div class="cta">
+    <div class="container">
+      <h2>Ähnliche Ergebnisse erzielen?</h2>
+      <p>Erfahren Sie, wie {{BRAND_NAME}} auch Ihre Event-Infrastruktur transformieren kann.</p>
+      <a href="https://{{BRAND_DOMAIN}}/kontakt" class="btn btn-primary">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        Gespräch vereinbaren
+      </a>
+    </div>
+  </div>
+</body>
+</html>

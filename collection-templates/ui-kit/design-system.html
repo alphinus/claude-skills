@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{BRAND_NAME}} Design System</title>
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --dark-bg:{{BG}};--cyan:{{PRIMARY}};--cyan-dark:{{PRIMARY_DARK}};--cloud:{{TEXT}};--muted:{{MUTED}};
+    --dark-surface:#1e293b;--dark-border:#334155;--danger:#e53e3e;--warning:#ecc94b;
+    --success:#48bb78;--info:#4299e1;--dark-hover:#2d3748;
+  }
+  body{font-family:system-ui,-apple-system,sans-serif;background:var(--dark-bg);color:var(--cloud);line-height:1.6;padding:0}
+  .page-header{background:linear-gradient(135deg,var(--dark-bg),var(--dark-surface));border-bottom:1px solid var(--dark-border);padding:48px 64px}
+  .page-header h1{font-size:42px;font-weight:700;letter-spacing:-1px}
+  .page-header h1 span{color:var(--cyan)}
+  .page-header p{color:var(--muted);font-size:18px;margin-top:8px}
+  .container{max-width:1400px;margin:0 auto;padding:48px 64px}
+  .section{margin-bottom:64px}
+  .section-title{font-size:28px;font-weight:700;margin-bottom:8px;color:var(--cloud)}
+  .section-title::before{content:'';display:inline-block;width:4px;height:28px;background:var(--cyan);border-radius:2px;margin-right:12px;vertical-align:middle}
+  .section-desc{color:var(--muted);margin-bottom:32px;font-size:15px}
+  .subsection{margin-bottom:40px}
+  .subsection-title{font-size:18px;font-weight:600;margin-bottom:16px;color:var(--cloud);text-transform:uppercase;letter-spacing:1px;font-size:13px}
+
+  /* Color Swatches */
+  .color-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px}
+  .color-swatch{border-radius:12px;overflow:hidden;background:var(--dark-surface);border:1px solid var(--dark-border);transition:transform .2s,box-shadow .2s}
+  .color-swatch:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.3)}
+  .color-swatch .preview{height:100px;position:relative}
+  .color-swatch .meta{padding:12px 16px}
+  .color-swatch .name{font-weight:600;font-size:14px}
+  .color-swatch .value{color:var(--muted);font-size:13px;font-family:'SF Mono',monospace}
+
+  /* Spacing Scale */
+  .spacing-row{display:flex;align-items:center;gap:16px;margin-bottom:12px}
+  .spacing-box{background:var(--cyan);border-radius:4px;opacity:.7;flex-shrink:0;transition:opacity .2s}
+  .spacing-box:hover{opacity:1}
+  .spacing-label{color:var(--muted);font-size:13px;font-family:'SF Mono',monospace;min-width:80px;text-align:right}
+  .spacing-val{color:var(--cloud);font-size:13px;font-family:'SF Mono',monospace}
+
+  /* Border Radius */
+  .radius-grid{display:flex;gap:24px;flex-wrap:wrap}
+  .radius-item{display:flex;flex-direction:column;align-items:center;gap:8px}
+  .radius-box{width:80px;height:80px;background:var(--dark-surface);border:2px solid var(--cyan);transition:background .2s}
+  .radius-box:hover{background:var(--cyan);opacity:.3}
+  .radius-item span{font-size:12px;color:var(--muted);font-family:'SF Mono',monospace}
+
+  /* Shadows */
+  .shadow-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:24px}
+  .shadow-card{background:var(--dark-surface);border-radius:12px;padding:32px;text-align:center;transition:transform .2s}
+  .shadow-card:hover{transform:translateY(-2px)}
+  .shadow-card .label{font-size:13px;color:var(--muted);margin-top:12px;font-family:'SF Mono',monospace}
+  .shadow-sm{box-shadow:0 1px 2px rgba(0,0,0,.2)}
+  .shadow-md{box-shadow:0 4px 6px rgba(0,0,0,.25)}
+  .shadow-lg{box-shadow:0 10px 15px rgba(0,0,0,.3)}
+  .shadow-xl{box-shadow:0 20px 25px rgba(0,0,0,.4)}
+
+  /* Buttons */
+  .btn-row{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:16px}
+  .btn{display:inline-flex;align-items:center;justify-content:center;font-family:inherit;font-weight:600;border:none;cursor:pointer;border-radius:8px;transition:all .2s;letter-spacing:.3px}
+  .btn:active{transform:scale(.97)}
+  .btn-sm{padding:6px 14px;font-size:13px;border-radius:6px}
+  .btn-md{padding:10px 20px;font-size:14px}
+  .btn-lg{padding:14px 28px;font-size:16px;border-radius:10px}
+  .btn-primary{background:var(--cyan);color:var(--dark-bg)}
+  .btn-primary:hover{background:var(--cyan-dark);box-shadow:0 4px 12px rgba({{PRIMARY_RGB}},.3)}
+  .btn-secondary{background:transparent;color:var(--cyan);border:2px solid var(--cyan)}
+  .btn-secondary:hover{background:rgba({{PRIMARY_RGB}},.1)}
+  .btn-ghost{background:transparent;color:var(--cloud)}
+  .btn-ghost:hover{background:var(--dark-surface)}
+  .btn-danger{background:var(--danger);color:white}
+  .btn-danger:hover{background:#c53030;box-shadow:0 4px 12px rgba(229,62,62,.3)}
+  .btn-disabled{background:var(--dark-border);color:var(--muted);cursor:not-allowed;pointer-events:none}
+
+  /* Badges */
+  .badge-row{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px}
+  .badge{display:inline-flex;align-items:center;padding:4px 12px;border-radius:999px;font-size:12px;font-weight:600;letter-spacing:.3px}
+  .badge-default{background:var(--dark-surface);color:var(--cloud);border:1px solid var(--dark-border)}
+  .badge-success{background:rgba(72,187,120,.15);color:var(--success);border:1px solid rgba(72,187,120,.3)}
+  .badge-warning{background:rgba(236,201,75,.15);color:var(--warning);border:1px solid rgba(236,201,75,.3)}
+  .badge-error{background:rgba(229,62,62,.15);color:var(--danger);border:1px solid rgba(229,62,62,.3)}
+  .badge-info{background:rgba(66,153,225,.15);color:var(--info);border:1px solid rgba(66,153,225,.3)}
+  .badge-dot::before{content:'';width:6px;height:6px;border-radius:50%;margin-right:6px;display:inline-block}
+  .badge-success.badge-dot::before{background:var(--success)}
+  .badge-warning.badge-dot::before{background:var(--warning)}
+  .badge-error.badge-dot::before{background:var(--danger)}
+  .badge-info.badge-dot::before{background:var(--info)}
+
+  /* Input Fields */
+  .input-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:24px}
+  .input-group{display:flex;flex-direction:column;gap:6px}
+  .input-group label{font-size:13px;font-weight:600;color:var(--cloud)}
+  .input-group .hint{font-size:12px;color:var(--muted)}
+  .input-group .error-msg{font-size:12px;color:var(--danger)}
+  .input{width:100%;padding:10px 14px;font-size:14px;font-family:inherit;background:var(--dark-surface);border:2px solid var(--dark-border);border-radius:8px;color:var(--cloud);outline:none;transition:border-color .2s,box-shadow .2s}
+  .input:hover{border-color:var(--muted)}
+  .input:focus{border-color:var(--cyan);box-shadow:0 0 0 3px rgba({{PRIMARY_RGB}},.2)}
+  .input-error{border-color:var(--danger)!important}
+  .input-error:focus{box-shadow:0 0 0 3px rgba(229,62,62,.2)!important}
+  .input-disabled{opacity:.5;cursor:not-allowed;pointer-events:none}
+
+  /* Cards */
+  .card-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:24px}
+  .card{background:var(--dark-surface);border:1px solid var(--dark-border);border-radius:12px;transition:all .25s;overflow:hidden}
+  .card:hover{border-color:var(--cyan);box-shadow:0 8px 24px rgba(0,0,0,.2);transform:translateY(-2px)}
+  .card-body{padding:24px}
+  .card-header{padding:16px 24px;border-bottom:1px solid var(--dark-border);font-weight:600;font-size:15px;display:flex;align-items:center;justify-content:space-between}
+  .card-footer{padding:12px 24px;border-top:1px solid var(--dark-border);display:flex;align-items:center;justify-content:flex-end;gap:8px}
+  .card-title{font-weight:600;font-size:16px;margin-bottom:8px}
+  .card-text{color:var(--muted);font-size:14px;line-height:1.6}
+  .card-active{border-color:var(--cyan);box-shadow:0 0 0 2px rgba({{PRIMARY_RGB}},.2)}
+
+  .divider{height:1px;background:var(--dark-border);margin:48px 0}
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <h1><span>{{BRAND_NAME}}</span> Design System</h1>
+  <p>Vollstaendige Referenz aller Design-Tokens, Komponenten und Varianten</p>
+</div>
+
+<div class="container">
+
+  <!-- DESIGN TOKENS: COLORS -->
+  <div class="section">
+    <h2 class="section-title">Design Tokens</h2>
+    <p class="section-desc">Die grundlegenden visuellen Bausteine des {{BRAND_NAME}} Design Systems.</p>
+
+    <div class="subsection">
+      <h3 class="subsection-title">Farben</h3>
+      <div class="color-grid">
+        <div class="color-swatch"><div class="preview" style="background:{{BG}}"></div><div class="meta"><div class="name">Dark BG</div><div class="value">{{BG}} / --dark-bg</div></div></div>
+        <div class="color-swatch"><div class="preview" style="background:#1e293b"></div><div class="meta"><div class="name">Surface</div><div class="value">#1e293b / --dark-surface</div></div></div>
+        <div class="color-swatch"><div class="preview" style="background:#334155"></div><div class="meta"><div class="name">Border</div><div class="value">#334155 / --dark-border</div></div></div>
+        <div class="color-swatch"><div class="preview" style="background:{{PRIMARY}}"></div><div class="meta"><div class="name">Cyan</div><div class="value">{{PRIMARY}} / --cyan</div></div></div>
+        <div class="color-swatch"><div class="preview" style="background:{{PRIMARY_DARK}}"></div><div class="meta"><div class="name">Cyan Dark</div><div class="value">{{PRIMARY_DARK}} / --cyan-dark</div></div></div>
+        <div class="color-swatch"><div class="preview" style="background:{{TEXT}}"></div><div class="meta"><div class="name">Cloud</div><div class="value">{{TEXT}} / --cloud</div></div></div>
+        <div class="color-swatch"><div class="preview" style="background:{{MUTED}}"></div><div class="meta"><div class="name">Muted</div><div class="value">{{MUTED}} / --muted</div></div></div>
+        <div class="color-swatch"><div class="preview" style="background:#e53e3e"></div><div class="meta"><div class="name">Danger</div><div class="value">#e53e3e / --danger</div></div></div>
+        <div class="color-swatch"><div class="preview" style="background:#ecc94b"></div><div class="meta"><div class="name">Warning</div><div class="value">#ecc94b / --warning</div></div></div>
+        <div class="color-swatch"><div class="preview" style="background:#48bb78"></div><div class="meta"><div class="name">Success</div><div class="value">#48bb78 / --success</div></div></div>
+        <div class="color-swatch"><div class="preview" style="background:#4299e1"></div><div class="meta"><div class="name">Info</div><div class="value">#4299e1 / --info</div></div></div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- SPACING -->
+    <div class="subsection">
+      <h3 class="subsection-title">Abstandsskala (Spacing)</h3>
+      <div>
+        <div class="spacing-row"><span class="spacing-label">4px</span><div class="spacing-box" style="width:4px;height:24px"></div><span class="spacing-val">0.25rem</span></div>
+        <div class="spacing-row"><span class="spacing-label">8px</span><div class="spacing-box" style="width:8px;height:24px"></div><span class="spacing-val">0.5rem</span></div>
+        <div class="spacing-row"><span class="spacing-label">12px</span><div class="spacing-box" style="width:12px;height:24px"></div><span class="spacing-val">0.75rem</span></div>
+        <div class="spacing-row"><span class="spacing-label">16px</span><div class="spacing-box" style="width:16px;height:24px"></div><span class="spacing-val">1rem</span></div>
+        <div class="spacing-row"><span class="spacing-label">24px</span><div class="spacing-box" style="width:24px;height:24px"></div><span class="spacing-val">1.5rem</span></div>
+        <div class="spacing-row"><span class="spacing-label">32px</span><div class="spacing-box" style="width:32px;height:24px"></div><span class="spacing-val">2rem</span></div>
+        <div class="spacing-row"><span class="spacing-label">48px</span><div class="spacing-box" style="width:48px;height:24px"></div><span class="spacing-val">3rem</span></div>
+        <div class="spacing-row"><span class="spacing-label">64px</span><div class="spacing-box" style="width:64px;height:24px"></div><span class="spacing-val">4rem</span></div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- BORDER RADIUS -->
+    <div class="subsection">
+      <h3 class="subsection-title">Eckenradien (Border Radius)</h3>
+      <div class="radius-grid">
+        <div class="radius-item"><div class="radius-box" style="border-radius:0"></div><span>0px - none</span></div>
+        <div class="radius-item"><div class="radius-box" style="border-radius:4px"></div><span>4px - sm</span></div>
+        <div class="radius-item"><div class="radius-box" style="border-radius:8px"></div><span>8px - md</span></div>
+        <div class="radius-item"><div class="radius-box" style="border-radius:12px"></div><span>12px - lg</span></div>
+        <div class="radius-item"><div class="radius-box" style="border-radius:16px"></div><span>16px - xl</span></div>
+        <div class="radius-item"><div class="radius-box" style="border-radius:999px"></div><span>999px - full</span></div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- SHADOWS -->
+    <div class="subsection">
+      <h3 class="subsection-title">Schatten (Shadows)</h3>
+      <div class="shadow-grid">
+        <div class="shadow-card shadow-sm"><div style="font-size:24px;color:var(--cyan)">SM</div><div class="label">shadow-sm</div><div class="label">0 1px 2px</div></div>
+        <div class="shadow-card shadow-md"><div style="font-size:24px;color:var(--cyan)">MD</div><div class="label">shadow-md</div><div class="label">0 4px 6px</div></div>
+        <div class="shadow-card shadow-lg"><div style="font-size:24px;color:var(--cyan)">LG</div><div class="label">shadow-lg</div><div class="label">0 10px 15px</div></div>
+        <div class="shadow-card shadow-xl"><div style="font-size:24px;color:var(--cyan)">XL</div><div class="label">shadow-xl</div><div class="label">0 20px 25px</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- BUTTONS -->
+  <div class="section">
+    <h2 class="section-title">Buttons</h2>
+    <p class="section-desc">Interaktive Schaltflaechen in verschiedenen Varianten und Groessen.</p>
+
+    <div class="subsection">
+      <h3 class="subsection-title">Primary</h3>
+      <div class="btn-row">
+        <button class="btn btn-primary btn-sm">Klein (SM)</button>
+        <button class="btn btn-primary btn-md">Mittel (MD)</button>
+        <button class="btn btn-primary btn-lg">Gross (LG)</button>
+      </div>
+    </div>
+    <div class="subsection">
+      <h3 class="subsection-title">Secondary</h3>
+      <div class="btn-row">
+        <button class="btn btn-secondary btn-sm">Klein (SM)</button>
+        <button class="btn btn-secondary btn-md">Mittel (MD)</button>
+        <button class="btn btn-secondary btn-lg">Gross (LG)</button>
+      </div>
+    </div>
+    <div class="subsection">
+      <h3 class="subsection-title">Ghost</h3>
+      <div class="btn-row">
+        <button class="btn btn-ghost btn-sm">Klein (SM)</button>
+        <button class="btn btn-ghost btn-md">Mittel (MD)</button>
+        <button class="btn btn-ghost btn-lg">Gross (LG)</button>
+      </div>
+    </div>
+    <div class="subsection">
+      <h3 class="subsection-title">Danger</h3>
+      <div class="btn-row">
+        <button class="btn btn-danger btn-sm">Klein (SM)</button>
+        <button class="btn btn-danger btn-md">Mittel (MD)</button>
+        <button class="btn btn-danger btn-lg">Gross (LG)</button>
+      </div>
+    </div>
+    <div class="subsection">
+      <h3 class="subsection-title">Disabled</h3>
+      <div class="btn-row">
+        <button class="btn btn-disabled btn-sm">Klein (SM)</button>
+        <button class="btn btn-disabled btn-md">Mittel (MD)</button>
+        <button class="btn btn-disabled btn-lg">Gross (LG)</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- BADGES -->
+  <div class="section">
+    <h2 class="section-title">Badges / Tags</h2>
+    <p class="section-desc">Status- und Kategorisierungskennzeichnungen.</p>
+
+    <div class="subsection">
+      <h3 class="subsection-title">Varianten</h3>
+      <div class="badge-row">
+        <span class="badge badge-default">Standard</span>
+        <span class="badge badge-success badge-dot">Erfolg</span>
+        <span class="badge badge-warning badge-dot">Warnung</span>
+        <span class="badge badge-error badge-dot">Fehler</span>
+        <span class="badge badge-info badge-dot">Information</span>
+      </div>
+    </div>
+    <div class="subsection">
+      <h3 class="subsection-title">Ohne Punkt-Indikator</h3>
+      <div class="badge-row">
+        <span class="badge badge-default">v2.4.1</span>
+        <span class="badge badge-success">Aktiv</span>
+        <span class="badge badge-warning">Beta</span>
+        <span class="badge badge-error">Veraltet</span>
+        <span class="badge badge-info">Neu</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- INPUT FIELDS -->
+  <div class="section">
+    <h2 class="section-title">Eingabefelder</h2>
+    <p class="section-desc">Formulareingaben in verschiedenen Zustaenden.</p>
+
+    <div class="input-grid">
+      <div class="input-group">
+        <label>Standard</label>
+        <input class="input" type="text" placeholder="Text eingeben...">
+        <span class="hint">Normaler Zustand des Eingabefeldes.</span>
+      </div>
+      <div class="input-group">
+        <label>Fokussiert</label>
+        <input class="input" type="text" value="Aktiver Wert" style="border-color:var(--cyan);box-shadow:0 0 0 3px rgba({{PRIMARY_RGB}},.2)">
+        <span class="hint">Klicken Sie auf das Feld fuer den Fokus-Zustand.</span>
+      </div>
+      <div class="input-group">
+        <label>Fehler</label>
+        <input class="input input-error" type="text" value="Ungueltiger Wert">
+        <span class="error-msg">Dieses Feld ist erforderlich.</span>
+      </div>
+      <div class="input-group">
+        <label>Deaktiviert</label>
+        <input class="input input-disabled" type="text" value="Gesperrter Wert" disabled>
+        <span class="hint">Dieses Feld ist nicht bearbeitbar.</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- CARDS -->
+  <div class="section">
+    <h2 class="section-title">Karten (Cards)</h2>
+    <p class="section-desc">Container-Komponenten fuer strukturierte Inhalte.</p>
+
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-body">
+          <div class="card-title">Standard-Karte</div>
+          <div class="card-text">Eine einfache Karte mit Titel und Textinhalt. Fahren Sie mit der Maus darueber, um den Hover-Effekt zu sehen.</div>
+        </div>
+      </div>
+
+      <div class="card card-active">
+        <div class="card-body">
+          <div class="card-title">Aktive Karte</div>
+          <div class="card-text">Diese Karte hat den aktiven Zustand mit hervorgehobener Umrandung in Cyan.</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <span>Karte mit Kopfzeile</span>
+          <span class="badge badge-success badge-dot">Aktiv</span>
+        </div>
+        <div class="card-body">
+          <div class="card-text">Diese Karte verwendet eine Kopfzeile mit Titel und Status-Badge.</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-body">
+          <div class="card-title">Karte mit Fusszeile</div>
+          <div class="card-text">Diese Karte enthaelt eine Fusszeile mit Aktionsschaltflaechen.</div>
+        </div>
+        <div class="card-footer">
+          <button class="btn btn-ghost btn-sm">Abbrechen</button>
+          <button class="btn btn-primary btn-sm">Speichern</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <span>Vollstaendige Karte</span>
+          <span class="badge badge-info badge-dot">Neu</span>
+        </div>
+        <div class="card-body">
+          <div class="card-text">Kombination aus Kopfzeile, Inhalt und Fusszeile fuer komplexe Layouts.</div>
+        </div>
+        <div class="card-footer">
+          <button class="btn btn-ghost btn-sm">Details</button>
+          <button class="btn btn-primary btn-sm">Oeffnen</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{BRAND_NAME}} - App Store Screenshots</title>
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  :root{--dark-bg:{{BG}};--cyan:{{PRIMARY}};--cyan-dark:{{PRIMARY_DARK}};--cloud:{{TEXT}};--muted:{{MUTED}};--surface:#1e293b}
+  body{font-family:system-ui,-apple-system,sans-serif;background:#060a14;color:var(--cloud);min-height:100vh;padding:40px 20px}
+  .container{max-width:1400px;margin:0 auto;text-align:center}
+  h1{font-size:2.2rem;font-weight:700;margin-bottom:6px;background:linear-gradient(135deg,var(--cyan),var(--cyan-dark));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+  .subtitle{color:var(--muted);margin-bottom:48px}
+  .screenshots{display:flex;justify-content:center;gap:32px;flex-wrap:wrap;align-items:flex-start}
+
+  /* Screenshot Frame - 1290x2796 ratio scaled down */
+  .screenshot{width:320px;aspect-ratio:1290/2796;border-radius:32px;overflow:hidden;position:relative;background:var(--dark-bg);box-shadow:0 24px 80px rgba(0,0,0,.6);flex-shrink:0}
+  .ss-gradient{padding:40px 24px 0;text-align:center;position:relative;z-index:2}
+  .ss-headline{font-size:1.6rem;font-weight:800;line-height:1.2;margin-bottom:8px}
+  .ss-subtitle{font-size:.92rem;color:rgba(255,255,255,.7);line-height:1.4;margin-bottom:28px}
+  .ss-phone{width:240px;margin:0 auto;border-radius:28px;overflow:hidden;background:#0a0f1e;border:2px solid rgba(255,255,255,.08);box-shadow:0 12px 40px rgba(0,0,0,.4)}
+  .ss-phone-inner{padding:0}
+  .ss-notch{width:100px;height:22px;background:#000;border-radius:0 0 14px 14px;margin:0 auto}
+  .ss-screen{padding:8px}
+
+  /* Screenshot 1: Echtzeit Events */
+  .ss1 .ss-gradient{background:linear-gradient(180deg,#0c4a44 0%,var(--dark-bg) 60%)}
+  .ss1 .ss-headline{color:var(--cyan)}
+  /* Dashboard content */
+  .ss-stat-row{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:8px}
+  .ss-stat{background:rgba(255,255,255,.05);border-radius:10px;padding:10px 8px;text-align:left}
+  .ss-stat .ss-label{font-size:.55rem;color:var(--muted)}
+  .ss-stat .ss-val{font-size:1rem;font-weight:700;margin-top:2px}
+  .ss-chart{background:rgba(255,255,255,.04);border-radius:10px;padding:10px;margin-bottom:8px}
+  .ss-chart-title{font-size:.6rem;color:var(--muted);margin-bottom:8px;text-align:left}
+  .ss-bars{display:flex;align-items:flex-end;gap:3px;height:60px}
+  .ss-bar{flex:1;border-radius:3px 3px 0 0;background:linear-gradient(180deg,var(--cyan),var(--cyan-dark))}
+  .ss-list-item{display:flex;align-items:center;gap:8px;padding:8px;background:rgba(255,255,255,.03);border-radius:8px;margin-bottom:4px}
+  .ss-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+  .ss-dot.g{background:#48bb78}.ss-dot.y{background:#ed8936}.ss-dot.r{background:#fc8181}
+  .ss-item-text{font-size:.6rem;font-weight:500;text-align:left;flex:1}
+  .ss-item-time{font-size:.55rem;color:var(--muted)}
+
+  /* Screenshot 2: KI-gestuetzt */
+  .ss2 .ss-gradient{background:linear-gradient(180deg,#2d1854 0%,var(--dark-bg) 60%)}
+  .ss2 .ss-headline{color:#9f7aea}
+  .ss-ai-card{background:rgba(159,122,234,.08);border:1px solid rgba(159,122,234,.15);border-radius:12px;padding:12px;margin-bottom:8px;text-align:left}
+  .ss-ai-title{font-size:.7rem;font-weight:700;color:#9f7aea;margin-bottom:6px;display:flex;align-items:center;gap:6px}
+  .ss-ai-title svg{width:14px;height:14px}
+  .ss-ai-text{font-size:.6rem;color:rgba(255,255,255,.7);line-height:1.5}
+  .ss-ai-tag{display:inline-block;font-size:.5rem;font-weight:600;padding:3px 8px;border-radius:6px;margin-right:4px;margin-top:6px}
+  .ss-ai-tag.p{background:rgba(159,122,234,.12);color:#9f7aea}
+  .ss-ai-tag.c{background:rgba({{PRIMARY_RGB}},.12);color:var(--cyan)}
+  .ss-ai-tag.o{background:rgba(237,137,54,.12);color:#ed8936}
+  .ss-ai-metric{display:flex;justify-content:space-between;align-items:center;padding:10px;background:rgba(255,255,255,.03);border-radius:8px;margin-bottom:4px}
+  .ss-ai-metric-label{font-size:.6rem;color:var(--muted)}
+  .ss-ai-metric-val{font-size:.75rem;font-weight:700;color:#9f7aea}
+
+  /* Screenshot 3: Immer verbunden */
+  .ss3 .ss-gradient{background:linear-gradient(180deg,#1a3a2a 0%,var(--dark-bg) 60%)}
+  .ss3 .ss-headline{color:#48bb78}
+  .ss-notif{display:flex;align-items:flex-start;gap:10px;padding:12px;background:rgba(255,255,255,.04);border-radius:12px;margin-bottom:6px;text-align:left;border-left:3px solid}
+  .ss-notif.success{border-color:#48bb78}
+  .ss-notif.warn{border-color:#ed8936}
+  .ss-notif.info{border-color:var(--cyan)}
+  .ss-notif.error{border-color:#fc8181}
+  .ss-notif-icon{width:28px;height:28px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+  .ss-notif.success .ss-notif-icon{background:rgba(72,187,120,.12)}
+  .ss-notif.warn .ss-notif-icon{background:rgba(237,137,54,.12)}
+  .ss-notif.info .ss-notif-icon{background:rgba({{PRIMARY_RGB}},.12)}
+  .ss-notif.error .ss-notif-icon{background:rgba(252,129,129,.12)}
+  .ss-notif-icon svg{width:14px;height:14px}
+  .ss-notif-title{font-size:.7rem;font-weight:700;margin-bottom:2px}
+  .ss-notif-desc{font-size:.58rem;color:rgba(255,255,255,.6);line-height:1.4}
+  .ss-notif-time{font-size:.5rem;color:var(--muted);margin-top:4px}
+
+  /* Badge */
+  .app-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:12px;padding:8px 16px;margin-top:32px}
+  .app-badge svg{width:24px;height:24px;fill:var(--cloud)}
+  .app-badge-text{text-align:left}
+  .app-badge-text .small{font-size:.6rem;color:var(--muted)}
+  .app-badge-text .big{font-size:.85rem;font-weight:700}
+
+  @media(max-width:1100px){.screenshots{gap:20px}.screenshot{width:280px}}
+  @media(max-width:900px){.screenshot{width:260px}}
+  @media(max-width:500px){.screenshot{width:100%;max-width:320px}}
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>App Store Screenshots</h1>
+  <p class="subtitle">Marketing-Screenshots fuer den App Store</p>
+
+  <div class="screenshots">
+    <!-- Screenshot 1: Echtzeit Events -->
+    <div class="screenshot ss1">
+      <div class="ss-gradient">
+        <div class="ss-headline">Echtzeit Events</div>
+        <div class="ss-subtitle">Alle Events live verfolgen und analysieren</div>
+        <div class="ss-phone">
+          <div class="ss-phone-inner">
+            <div class="ss-notch"></div>
+            <div class="ss-screen">
+              <div class="ss-stat-row">
+                <div class="ss-stat"><div class="ss-label">Events/s</div><div class="ss-val" style="color:var(--cyan)">847</div></div>
+                <div class="ss-stat"><div class="ss-label">Latenz</div><div class="ss-val">6ms</div></div>
+                <div class="ss-stat"><div class="ss-label">Streams</div><div class="ss-val">12</div></div>
+                <div class="ss-stat"><div class="ss-label">Uptime</div><div class="ss-val" style="color:#48bb78">99.9%</div></div>
+              </div>
+              <div class="ss-chart">
+                <div class="ss-chart-title">Event-Durchsatz (24h)</div>
+                <div class="ss-bars">
+                  <div class="ss-bar" style="height:40%"></div>
+                  <div class="ss-bar" style="height:55%"></div>
+                  <div class="ss-bar" style="height:48%"></div>
+                  <div class="ss-bar" style="height:72%"></div>
+                  <div class="ss-bar" style="height:65%"></div>
+                  <div class="ss-bar" style="height:80%"></div>
+                  <div class="ss-bar" style="height:90%"></div>
+                  <div class="ss-bar" style="height:78%"></div>
+                  <div class="ss-bar" style="height:95%"></div>
+                  <div class="ss-bar" style="height:85%"></div>
+                  <div class="ss-bar" style="height:70%"></div>
+                  <div class="ss-bar" style="height:60%"></div>
+                </div>
+              </div>
+              <div class="ss-list-item"><div class="ss-dot g"></div><div class="ss-item-text">user.login.success</div><div class="ss-item-time">Jetzt</div></div>
+              <div class="ss-list-item"><div class="ss-dot g"></div><div class="ss-item-text">payment.processed</div><div class="ss-item-time">2s</div></div>
+              <div class="ss-list-item"><div class="ss-dot y"></div><div class="ss-item-text">api.rate_limit</div><div class="ss-item-time">5s</div></div>
+              <div class="ss-list-item"><div class="ss-dot r"></div><div class="ss-item-text">webhook.timeout</div><div class="ss-item-time">12s</div></div>
+              <div class="ss-list-item"><div class="ss-dot g"></div><div class="ss-item-text">stream.created</div><div class="ss-item-time">18s</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Screenshot 2: KI-gestuetzt -->
+    <div class="screenshot ss2">
+      <div class="ss-gradient">
+        <div class="ss-headline">KI-gestuetzt</div>
+        <div class="ss-subtitle">Intelligente Analyse und Vorhersagen</div>
+        <div class="ss-phone">
+          <div class="ss-phone-inner">
+            <div class="ss-notch"></div>
+            <div class="ss-screen">
+              <div class="ss-ai-card">
+                <div class="ss-ai-title"><svg viewBox="0 0 24 24" fill="none" stroke="#9f7aea" stroke-width="2"><path d="M12 2a7 7 0 0 0-7 7c0 3 1.5 5 3 6.5V18h8v-2.5c1.5-1.5 3-3.5 3-6.5a7 7 0 0 0-7-7z"/><path d="M9 22h6"/></svg> KI-Analyse</div>
+                <div class="ss-ai-text">Anomalie erkannt: Ungewoehnlicher Anstieg der Fehlerrate im Stream "auth-events" um 340% in den letzten 15 Minuten.</div>
+                <div><span class="ss-ai-tag p">Anomalie</span><span class="ss-ai-tag c">auth-events</span><span class="ss-ai-tag o">Hoch</span></div>
+              </div>
+              <div class="ss-ai-card">
+                <div class="ss-ai-title"><svg viewBox="0 0 24 24" fill="none" stroke="#9f7aea" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg> Vorhersage</div>
+                <div class="ss-ai-text">Basierend auf historischen Daten wird ein Peak von ~2.400 Events/s fuer morgen 14:00 prognostiziert.</div>
+              </div>
+              <div class="ss-ai-metric"><div class="ss-ai-metric-label">Erkannte Muster</div><div class="ss-ai-metric-val">24</div></div>
+              <div class="ss-ai-metric"><div class="ss-ai-metric-label">Anomalien (7d)</div><div class="ss-ai-metric-val">3</div></div>
+              <div class="ss-ai-metric"><div class="ss-ai-metric-label">Genauigkeit</div><div class="ss-ai-metric-val">96.8%</div></div>
+              <div class="ss-ai-metric"><div class="ss-ai-metric-label">Verarbeitete Events</div><div class="ss-ai-metric-val">48.2K</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Screenshot 3: Immer verbunden -->
+    <div class="screenshot ss3">
+      <div class="ss-gradient">
+        <div class="ss-headline">Immer verbunden</div>
+        <div class="ss-subtitle">Push-Benachrichtigungen in Echtzeit</div>
+        <div class="ss-phone">
+          <div class="ss-phone-inner">
+            <div class="ss-notch"></div>
+            <div class="ss-screen">
+              <div class="ss-notif success">
+                <div class="ss-notif-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#48bb78" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg></div>
+                <div>
+                  <div class="ss-notif-title">Deployment erfolgreich</div>
+                  <div class="ss-notif-desc">Stream "analytics-v2" wurde erfolgreich deployed und ist aktiv.</div>
+                  <div class="ss-notif-time">Vor 2 Minuten</div>
+                </div>
+              </div>
+              <div class="ss-notif warn">
+                <div class="ss-notif-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#ed8936" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
+                <div>
+                  <div class="ss-notif-title">Rate-Limit Warnung</div>
+                  <div class="ss-notif-desc">API-Auslastung bei 85%. Upgrade empfohlen.</div>
+                  <div class="ss-notif-time">Vor 15 Minuten</div>
+                </div>
+              </div>
+              <div class="ss-notif info">
+                <div class="ss-notif-icon"><svg viewBox="0 0 24 24" fill="none" stroke="var(--cyan)" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg></div>
+                <div>
+                  <div class="ss-notif-title">Neues Team-Mitglied</div>
+                  <div class="ss-notif-desc">Sarah Koch ist deinem Team beigetreten.</div>
+                  <div class="ss-notif-time">Vor 1 Stunde</div>
+                </div>
+              </div>
+              <div class="ss-notif error">
+                <div class="ss-notif-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#fc8181" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg></div>
+                <div>
+                  <div class="ss-notif-title">Webhook fehlgeschlagen</div>
+                  <div class="ss-notif-desc">3 fehlgeschlagene Zustellungen an endpoint /hooks/billing.</div>
+                  <div class="ss-notif-time">Vor 2 Stunden</div>
+                </div>
+              </div>
+              <div class="ss-notif success">
+                <div class="ss-notif-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#48bb78" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg></div>
+                <div>
+                  <div class="ss-notif-title">Badge freigeschaltet</div>
+                  <div class="ss-notif-desc">Du hast "Blitzschnell" erreicht!</div>
+                  <div class="ss-notif-time">Vor 3 Stunden</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div style="margin-top:48px">
+    <div class="app-badge">
+      <svg viewBox="0 0 24 24"><path d="M17.05 20.28c-.98.95-2.05.8-3.08.35-1.09-.46-2.09-.48-3.24 0-1.44.62-2.2.44-3.06-.35C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.5-1.31 2.99-2.54 4.09zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z"/></svg>
+      <div class="app-badge-text">
+        <div class="small">Jetzt laden im</div>
+        <div class="big">App Store</div>
+      </div>
+    </div>
+    <div class="app-badge" style="margin-left:12px">
+      <svg viewBox="0 0 24 24"><path d="M3 20.5v-17c0-.83.52-1.28 1-1.5l10 10-10 10c-.48-.22-1-.67-1-1.5zm14.5-8.5L6 1.5l9 9-9 9 11.5-8.5zM6 1.5l12.16 8.5L14.5 12 6 3.5v-2z"/></svg>
+      <div class="app-badge-text">
+        <div class="small">Jetzt bei</div>
+        <div class="big">Google Play</div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

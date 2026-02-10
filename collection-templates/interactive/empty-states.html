@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{BRAND_NAME}} - Empty States</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  :root { --dark-bg: {{BG}}; --cyan: {{PRIMARY}}; --cyan-dark: {{PRIMARY_DARK}}; --cloud: {{TEXT}}; --muted: {{MUTED}}; }
+  body { background: var(--dark-bg); font-family: system-ui, -apple-system, sans-serif; color: var(--cloud); padding: 60px 40px; }
+
+  h1 { font-size: 36px; font-weight: 200; text-align: center; margin-bottom: 12px; }
+  h1 span { background: linear-gradient(135deg, var(--cyan), var(--cyan-dark)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+  .subtitle { text-align: center; color: var(--muted); font-size: 14px; margin-bottom: 60px; font-weight: 300; }
+
+  .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; max-width: 1000px; margin: 0 auto; }
+
+  .empty-card {
+    background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 16px; padding: 40px 28px; text-align: center;
+    display: flex; flex-direction: column; align-items: center;
+  }
+
+  /* SVG Illustrations */
+  .empty-illust { width: 100px; height: 100px; margin-bottom: 20px; position: relative; }
+  .empty-illust svg { width: 100%; height: 100%; }
+
+  .empty-title { font-size: 16px; font-weight: 400; margin-bottom: 8px; }
+  .empty-desc { font-size: 13px; color: var(--muted); font-weight: 300; line-height: 1.6; margin-bottom: 20px; max-width: 240px; }
+
+  .empty-btn {
+    padding: 10px 24px; border-radius: 8px; font-size: 12px; font-weight: 500;
+    letter-spacing: 1px; cursor: pointer; transition: all 0.3s; font-family: inherit;
+    background: rgba({{PRIMARY_RGB}},0.1); border: 1px solid rgba({{PRIMARY_RGB}},0.3); color: var(--cyan);
+  }
+  .empty-btn:hover { background: rgba({{PRIMARY_RGB}},0.2); transform: translateY(-1px); }
+
+  /* Floating animation for illustrations */
+  .float { animation: float 4s ease-in-out infinite; }
+  @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+</style>
+</head>
+<body>
+
+<h1>Empty <span>States</span></h1>
+<p class="subtitle">Schöne Leerzustände für verschiedene Szenarien</p>
+
+<div class="grid">
+  <!-- No Events -->
+  <div class="empty-card">
+    <div class="empty-illust float">
+      <svg viewBox="0 0 100 100">
+        <polygon points="50,10 85,30 85,70 50,90 15,70 15,30" fill="none" stroke="{{PRIMARY}}" stroke-width="1.5" opacity="0.3"/>
+        <polygon points="50,20 75,35 75,65 50,80 25,65 25,35" fill="none" stroke="{{PRIMARY}}" stroke-width="1" opacity="0.15"/>
+        <circle cx="50" cy="50" r="4" fill="{{PRIMARY}}" opacity="0.5"/>
+        <line x1="50" y1="46" x2="50" y2="38" stroke="{{PRIMARY}}" stroke-width="1.5" stroke-linecap="round" opacity="0.4"/>
+        <circle cx="50" cy="58" r="1.5" fill="{{PRIMARY}}" opacity="0.4"/>
+      </svg>
+    </div>
+    <div class="empty-title">Keine Events</div>
+    <div class="empty-desc">Dein Event-Stream ist leer. Sende deinen ersten Event um loszulegen.</div>
+    <button class="empty-btn">EVENT SENDEN</button>
+  </div>
+
+  <!-- No Results -->
+  <div class="empty-card">
+    <div class="empty-illust float" style="animation-delay:-1s;">
+      <svg viewBox="0 0 100 100">
+        <circle cx="42" cy="42" r="22" fill="none" stroke="{{PRIMARY}}" stroke-width="1.5" opacity="0.3"/>
+        <line x1="58" y1="58" x2="78" y2="78" stroke="{{PRIMARY}}" stroke-width="2" stroke-linecap="round" opacity="0.3"/>
+        <line x1="34" y1="42" x2="50" y2="42" stroke="{{PRIMARY}}" stroke-width="1.5" stroke-linecap="round" opacity="0.4"/>
+        <circle cx="42" cy="42" r="3" fill="none" stroke="{{PRIMARY}}" stroke-width="1" opacity="0.2"/>
+      </svg>
+    </div>
+    <div class="empty-title">Keine Ergebnisse</div>
+    <div class="empty-desc">Deine Suche hat keine Treffer ergeben. Versuche andere Suchbegriffe.</div>
+    <button class="empty-btn">FILTER ZURÜCKSETZEN</button>
+  </div>
+
+  <!-- No Team -->
+  <div class="empty-card">
+    <div class="empty-illust float" style="animation-delay:-2s;">
+      <svg viewBox="0 0 100 100">
+        <circle cx="50" cy="35" r="12" fill="none" stroke="{{PRIMARY}}" stroke-width="1.5" opacity="0.3"/>
+        <path d="M30 75 C30 58, 70 58, 70 75" fill="none" stroke="{{PRIMARY}}" stroke-width="1.5" opacity="0.3"/>
+        <circle cx="28" cy="40" r="8" fill="none" stroke="{{PRIMARY}}" stroke-width="1" opacity="0.15" stroke-dasharray="3 3"/>
+        <circle cx="72" cy="40" r="8" fill="none" stroke="{{PRIMARY}}" stroke-width="1" opacity="0.15" stroke-dasharray="3 3"/>
+        <line x1="65" y1="52" x2="75" y2="52" stroke="{{PRIMARY}}" stroke-width="1.5" stroke-linecap="round" opacity="0.3"/>
+        <line x1="70" y1="47" x2="70" y2="57" stroke="{{PRIMARY}}" stroke-width="1.5" stroke-linecap="round" opacity="0.3"/>
+      </svg>
+    </div>
+    <div class="empty-title">Kein Team</div>
+    <div class="empty-desc">Du arbeitest allein. Lade Team-Mitglieder ein für mehr Produktivität.</div>
+    <button class="empty-btn">TEAM EINLADEN</button>
+  </div>
+
+  <!-- No Streams -->
+  <div class="empty-card">
+    <div class="empty-illust float" style="animation-delay:-0.5s;">
+      <svg viewBox="0 0 100 100">
+        <rect x="20" y="25" width="60" height="50" rx="6" fill="none" stroke="{{PRIMARY}}" stroke-width="1.5" opacity="0.3"/>
+        <line x1="20" y1="40" x2="80" y2="40" stroke="{{PRIMARY}}" stroke-width="1" opacity="0.15"/>
+        <line x1="35" y1="50" x2="65" y2="50" stroke="{{PRIMARY}}" stroke-width="1" stroke-linecap="round" opacity="0.2"/>
+        <line x1="35" y1="58" x2="55" y2="58" stroke="{{PRIMARY}}" stroke-width="1" stroke-linecap="round" opacity="0.15"/>
+        <circle cx="30" cy="33" r="2" fill="{{PRIMARY}}" opacity="0.3"/>
+        <circle cx="37" cy="33" r="2" fill="{{PRIMARY}}" opacity="0.2"/>
+        <circle cx="44" cy="33" r="2" fill="{{PRIMARY}}" opacity="0.15"/>
+      </svg>
+    </div>
+    <div class="empty-title">Keine Streams</div>
+    <div class="empty-desc">Erstelle deinen ersten Event-Stream um Events zu organisieren.</div>
+    <button class="empty-btn">STREAM ERSTELLEN</button>
+  </div>
+
+  <!-- No Notifications -->
+  <div class="empty-card">
+    <div class="empty-illust float" style="animation-delay:-1.5s;">
+      <svg viewBox="0 0 100 100">
+        <path d="M50 20 C50 20, 75 28, 75 55 L75 62 L82 68 L18 68 L25 62 L25 55 C25 28, 50 20, 50 20Z" fill="none" stroke="{{PRIMARY}}" stroke-width="1.5" opacity="0.3"/>
+        <path d="M42 68 C42 75, 58 75, 58 68" fill="none" stroke="{{PRIMARY}}" stroke-width="1.5" opacity="0.3"/>
+        <circle cx="50" cy="20" r="3" fill="{{PRIMARY}}" opacity="0.2"/>
+        <line x1="62" y1="30" x2="68" y2="24" stroke="{{PRIMARY}}" stroke-width="1" stroke-linecap="round" opacity="0.15"/>
+        <line x1="70" y1="26" x2="74" y2="22" stroke="{{PRIMARY}}" stroke-width="1" stroke-linecap="round" opacity="0.1"/>
+      </svg>
+    </div>
+    <div class="empty-title">Alles ruhig</div>
+    <div class="empty-desc">Keine neuen Benachrichtigungen. Wir melden uns sobald es etwas gibt.</div>
+    <button class="empty-btn">EINSTELLUNGEN</button>
+  </div>
+
+  <!-- No AI -->
+  <div class="empty-card">
+    <div class="empty-illust float" style="animation-delay:-2.5s;">
+      <svg viewBox="0 0 100 100">
+        <circle cx="50" cy="45" r="20" fill="none" stroke="{{PRIMARY}}" stroke-width="1.5" opacity="0.3"/>
+        <circle cx="50" cy="45" r="8" fill="none" stroke="{{PRIMARY}}" stroke-width="1" opacity="0.15"/>
+        <line x1="50" y1="25" x2="50" y2="18" stroke="{{PRIMARY}}" stroke-width="1.5" stroke-linecap="round" opacity="0.25"/>
+        <line x1="50" y1="65" x2="50" y2="72" stroke="{{PRIMARY}}" stroke-width="1.5" stroke-linecap="round" opacity="0.25"/>
+        <line x1="30" y1="45" x2="23" y2="45" stroke="{{PRIMARY}}" stroke-width="1.5" stroke-linecap="round" opacity="0.25"/>
+        <line x1="70" y1="45" x2="77" y2="45" stroke="{{PRIMARY}}" stroke-width="1.5" stroke-linecap="round" opacity="0.25"/>
+        <circle cx="50" cy="45" r="3" fill="{{PRIMARY}}" opacity="0.4"/>
+      </svg>
+    </div>
+    <div class="empty-title">AI nicht aktiv</div>
+    <div class="empty-desc">Die AI-Integration ist noch nicht eingerichtet. Aktiviere sie für smarte Automatisierungen.</div>
+    <button class="empty-btn">AI AKTIVIEREN</button>
+  </div>
+</div>
+
+</body>
+</html>

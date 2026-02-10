@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{BRAND_NAME}} - Toast Notifications</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  :root { --dark-bg: {{BG}}; --cyan: {{PRIMARY}}; --cyan-dark: {{PRIMARY_DARK}}; --cloud: {{TEXT}}; --muted: {{MUTED}}; --success: {{SUCCESS}}; --warning: {{WARNING}}; --error: {{ERROR}}; --info: {{INFO}}; }
+  body { background: var(--dark-bg); font-family: system-ui, -apple-system, sans-serif; color: var(--cloud); min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 60px 40px; }
+  h1 { font-size: 36px; font-weight: 200; margin-bottom: 12px; }
+  h1 span { background: linear-gradient(135deg, var(--cyan), var(--cyan-dark)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+  .subtitle { color: var(--muted); font-size: 14px; margin-bottom: 48px; font-weight: 300; }
+
+  .trigger-row { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; }
+  .trigger-btn {
+    padding: 12px 28px; border-radius: 8px; font-size: 13px; letter-spacing: 1px;
+    cursor: pointer; transition: all 0.3s; font-family: inherit; border: 1px solid;
+  }
+  .trigger-btn:hover { transform: translateY(-2px); }
+  .btn-s { background: rgba({{SUCCESS_RGB}},0.1); border-color: rgba({{SUCCESS_RGB}},0.3); color: var(--success); }
+  .btn-s:hover { background: rgba({{SUCCESS_RGB}},0.2); box-shadow: 0 4px 20px rgba({{SUCCESS_RGB}},0.15); }
+  .btn-w { background: rgba({{WARNING_RGB}},0.1); border-color: rgba({{WARNING_RGB}},0.3); color: var(--warning); }
+  .btn-w:hover { background: rgba({{WARNING_RGB}},0.2); box-shadow: 0 4px 20px rgba({{WARNING_RGB}},0.15); }
+  .btn-e { background: rgba({{ERROR_RGB}},0.1); border-color: rgba({{ERROR_RGB}},0.3); color: var(--error); }
+  .btn-e:hover { background: rgba({{ERROR_RGB}},0.2); box-shadow: 0 4px 20px rgba({{ERROR_RGB}},0.15); }
+  .btn-i { background: rgba({{INFO_RGB}},0.1); border-color: rgba({{INFO_RGB}},0.3); color: var(--info); }
+  .btn-i:hover { background: rgba({{INFO_RGB}},0.2); box-shadow: 0 4px 20px rgba({{INFO_RGB}},0.15); }
+  .btn-c { background: rgba({{PRIMARY_RGB}},0.1); border-color: rgba({{PRIMARY_RGB}},0.3); color: var(--cyan); }
+  .btn-c:hover { background: rgba({{PRIMARY_RGB}},0.2); box-shadow: 0 4px 20px rgba({{PRIMARY_RGB}},0.15); }
+
+  /* Toast Container */
+  .toast-container { position: fixed; top: 24px; right: 24px; display: flex; flex-direction: column; gap: 10px; z-index: 1000; pointer-events: none; }
+
+  .toast {
+    min-width: 340px; padding: 16px 20px; border-radius: 12px;
+    background: rgba(20, 30, 51, 0.95); backdrop-filter: blur(16px);
+    border: 1px solid rgba(255,255,255,0.06);
+    display: flex; align-items: flex-start; gap: 14px;
+    pointer-events: auto; position: relative; overflow: hidden;
+    animation: toastIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 16px 40px rgba(0,0,0,0.4);
+  }
+
+  .toast.removing { animation: toastOut 0.3s ease-in forwards; }
+
+  @keyframes toastIn {
+    from { opacity: 0; transform: translateX(100px) scale(0.95); }
+    to { opacity: 1; transform: translateX(0) scale(1); }
+  }
+  @keyframes toastOut {
+    to { opacity: 0; transform: translateX(60px) scale(0.95); height: 0; padding: 0; margin: 0; }
+  }
+
+  .toast-icon {
+    width: 36px; height: 36px; border-radius: 10px; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center; font-size: 16px;
+  }
+
+  .toast-success .toast-icon { background: rgba({{SUCCESS_RGB}},0.15); color: var(--success); }
+  .toast-warning .toast-icon { background: rgba({{WARNING_RGB}},0.15); color: var(--warning); }
+  .toast-error .toast-icon { background: rgba({{ERROR_RGB}},0.15); color: var(--error); }
+  .toast-info .toast-icon { background: rgba({{INFO_RGB}},0.15); color: var(--info); }
+  .toast-custom .toast-icon { background: rgba({{PRIMARY_RGB}},0.15); color: var(--cyan); }
+
+  .toast-body { flex: 1; }
+  .toast-title { font-size: 14px; font-weight: 500; margin-bottom: 2px; }
+  .toast-msg { font-size: 13px; color: var(--muted); font-weight: 300; line-height: 1.5; }
+
+  .toast-close {
+    position: absolute; top: 12px; right: 12px;
+    width: 24px; height: 24px; border-radius: 6px;
+    background: rgba(255,255,255,0.04); border: none;
+    color: var(--muted); cursor: pointer; font-size: 14px;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.2s;
+  }
+  .toast-close:hover { background: rgba(255,255,255,0.1); color: var(--cloud); }
+
+  /* Progress bar */
+  .toast-progress {
+    position: absolute; bottom: 0; left: 0; height: 2px;
+    border-radius: 0 0 12px 12px; animation: progress 4s linear forwards;
+  }
+  .toast-success .toast-progress { background: var(--success); }
+  .toast-warning .toast-progress { background: var(--warning); }
+  .toast-error .toast-progress { background: var(--error); }
+  .toast-info .toast-progress { background: var(--info); }
+  .toast-custom .toast-progress { background: var(--cyan); }
+
+  @keyframes progress { from { width: 100%; } to { width: 0%; } }
+
+  /* Left accent line */
+  .toast::before {
+    content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px;
+    border-radius: 12px 0 0 12px;
+  }
+  .toast-success::before { background: var(--success); }
+  .toast-warning::before { background: var(--warning); }
+  .toast-error::before { background: var(--error); }
+  .toast-info::before { background: var(--info); }
+  .toast-custom::before { background: var(--cyan); }
+</style>
+</head>
+<body>
+
+<h1>Toast <span>Notifications</span></h1>
+<p class="subtitle">Klicke auf die Buttons um verschiedene Toasts auszulösen</p>
+
+<div class="trigger-row">
+  <button class="trigger-btn btn-s" onclick="showToast('success','Erfolgreich gespeichert','Alle Änderungen wurden übernommen.')">SUCCESS</button>
+  <button class="trigger-btn btn-w" onclick="showToast('warning','Achtung','Die API-Rate nähert sich dem Limit.')">WARNING</button>
+  <button class="trigger-btn btn-e" onclick="showToast('error','Fehler aufgetreten','Verbindung zum Server unterbrochen.')">ERROR</button>
+  <button class="trigger-btn btn-i" onclick="showToast('info','Neues Update','Version 0.2.0 ist jetzt verfügbar.')">INFO</button>
+  <button class="trigger-btn btn-c" onclick="showToast('custom','Event empfangen','12 neue Events in der Queue.')">CUSTOM</button>
+</div>
+
+<div class="toast-container" id="toastContainer"></div>
+
+<script>
+  const icons = { success: '&#10003;', warning: '&#9888;', error: '&#10007;', info: 'i', custom: '&#9883;' };
+
+  function showToast(type, title, msg) {
+    const container = document.getElementById('toastContainer');
+    const toast = document.createElement('div');
+    toast.className = `toast toast-${type}`;
+    toast.innerHTML = `
+      <div class="toast-icon">${icons[type]}</div>
+      <div class="toast-body">
+        <div class="toast-title">${title}</div>
+        <div class="toast-msg">${msg}</div>
+      </div>
+      <button class="toast-close" onclick="removeToast(this.parentElement)">&times;</button>
+      <div class="toast-progress"></div>
+    `;
+    container.appendChild(toast);
+    setTimeout(() => removeToast(toast), 4000);
+  }
+
+  function removeToast(el) {
+    if (!el || el.classList.contains('removing')) return;
+    el.classList.add('removing');
+    setTimeout(() => el.remove(), 300);
+  }
+</script>
+
+</body>
+</html>

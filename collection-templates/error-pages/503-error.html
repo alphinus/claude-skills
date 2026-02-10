@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>503 – Dienst nicht verfügbar | {{BRAND_NAME}}</title>
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{--dark-bg:{{BG}};--cyan:{{PRIMARY}};--cyan-dark:{{PRIMARY_DARK}};--cloud:{{TEXT}};--muted:{{MUTED}}}
+  body{font-family:system-ui,-apple-system,sans-serif;background:var(--dark-bg);color:var(--cloud);min-height:100vh;display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative}
+  body::before{content:'';position:fixed;inset:0;background-image:radial-gradient(rgba({{PRIMARY_RGB}},.06) 1px,transparent 1px);background-size:32px 32px;z-index:0}
+  .container{text-align:center;position:relative;z-index:2;padding:2rem}
+  /* Gears illustration */
+  .gears-wrap{width:180px;height:160px;margin:0 auto 2rem;position:relative}
+  .gear{animation-timing-function:linear;animation-iteration-count:infinite;transform-origin:center}
+  .gear-big{animation:spin-cw 6s linear infinite}
+  .gear-small{animation:spin-ccw 4s linear infinite}
+  @keyframes spin-cw{to{transform:rotate(360deg)}}
+  @keyframes spin-ccw{to{transform:rotate(-360deg)}}
+  /* Pulsing glow behind gears */
+  .pulse-glow{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:140px;height:140px;border-radius:50%;background:radial-gradient(circle,rgba({{PRIMARY_RGB}},.12),transparent 70%);animation:pulse-g 2s ease-in-out infinite}
+  @keyframes pulse-g{0%,100%{transform:translate(-50%,-50%) scale(1);opacity:.6}50%{transform:translate(-50%,-50%) scale(1.3);opacity:1}}
+  /* 503 */
+  .error-code{font-size:clamp(7rem,18vw,12rem);font-weight:900;line-height:1;margin-bottom:.75rem;background:linear-gradient(135deg,var(--cloud) 40%,var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+  h1{font-size:clamp(1.3rem,3vw,1.8rem);font-weight:700;margin-bottom:.75rem}
+  .desc{color:var(--muted);font-size:1.05rem;margin-bottom:1.5rem;max-width:440px;margin-inline:auto;line-height:1.6}
+  /* Countdown */
+  .countdown{display:inline-flex;align-items:center;gap:.5rem;background:rgba({{PRIMARY_RGB}},.08);border:1px solid rgba({{PRIMARY_RGB}},.2);padding:.6rem 1.4rem;border-radius:8px;font-size:.95rem;color:var(--cyan);margin-bottom:2rem}
+  .countdown svg{flex-shrink:0}
+  .countdown-num{font-weight:700;font-variant-numeric:tabular-nums;min-width:1.8ch;text-align:center}
+  /* Buttons */
+  .btn-group{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;margin-bottom:2rem}
+  .btn{padding:.85rem 2rem;border-radius:10px;font-size:1rem;font-weight:600;cursor:pointer;border:none;transition:all .25s;text-decoration:none;display:inline-flex;align-items:center;gap:.5rem}
+  .btn-primary{background:var(--cyan);color:var(--dark-bg)}.btn-primary:hover{background:var(--cyan-dark);transform:translateY(-2px);box-shadow:0 6px 24px rgba({{PRIMARY_RGB}},.3)}
+  .btn-secondary{background:transparent;color:var(--cloud);border:2px solid rgba(248,250,252,.2)}.btn-secondary:hover{border-color:var(--cyan);color:var(--cyan);transform:translateY(-2px)}
+  /* Status link */
+  .status-link{margin-top:1.5rem}
+  .status-link a{color:var(--cyan);text-decoration:none;font-size:.95rem;display:inline-flex;align-items:center;gap:.4rem;transition:color .2s}
+  .status-link a:hover{color:var(--cyan-dark)}
+  .status-dot{width:8px;height:8px;border-radius:50%;background:#48bb78;animation:pulse-dot 2s ease-in-out infinite;display:inline-block}
+  @keyframes pulse-dot{0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(72,187,120,.5)}50%{opacity:.8;box-shadow:0 0 0 6px rgba(72,187,120,0)}}
+  /* Pulsing bg rings */
+  .rings{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:0;pointer-events:none}
+  .ring{position:absolute;border:1px solid rgba({{PRIMARY_RGB}},.06);border-radius:50%;top:50%;left:50%;transform:translate(-50%,-50%);animation:ring-pulse 4s ease-out infinite}
+  .ring:nth-child(1){width:300px;height:300px;animation-delay:0s}
+  .ring:nth-child(2){width:500px;height:500px;animation-delay:1s}
+  .ring:nth-child(3){width:700px;height:700px;animation-delay:2s}
+  @keyframes ring-pulse{0%{opacity:.5;transform:translate(-50%,-50%) scale(.8)}100%{opacity:0;transform:translate(-50%,-50%) scale(1.3)}}
+</style>
+</head>
+<body>
+  <div class="rings"><div class="ring"></div><div class="ring"></div><div class="ring"></div></div>
+  <div class="container">
+    <div class="gears-wrap">
+      <div class="pulse-glow"></div>
+      <svg viewBox="0 0 180 160" width="180" height="160">
+        <!-- Big gear -->
+        <g class="gear gear-big" style="transform-origin:70px 80px">
+          <circle cx="70" cy="80" r="28" stroke="{{PRIMARY}}" stroke-width="2" fill="rgba({{PRIMARY_RGB}},.06)"/>
+          <circle cx="70" cy="80" r="10" stroke="{{PRIMARY}}" stroke-width="1.5" fill="var(--dark-bg)"/>
+          <!-- Teeth -->
+          <rect x="62" y="46" width="16" height="10" rx="2" fill="rgba({{PRIMARY_RGB}},.3)"/>
+          <rect x="62" y="104" width="16" height="10" rx="2" fill="rgba({{PRIMARY_RGB}},.3)"/>
+          <rect x="36" y="72" width="10" height="16" rx="2" fill="rgba({{PRIMARY_RGB}},.3)"/>
+          <rect x="94" y="72" width="10" height="16" rx="2" fill="rgba({{PRIMARY_RGB}},.3)"/>
+          <rect x="42" y="54" width="14" height="10" rx="2" fill="rgba({{PRIMARY_RGB}},.3)" transform="rotate(-45 49 59)"/>
+          <rect x="84" y="54" width="14" height="10" rx="2" fill="rgba({{PRIMARY_RGB}},.3)" transform="rotate(45 91 59)"/>
+          <rect x="42" y="96" width="14" height="10" rx="2" fill="rgba({{PRIMARY_RGB}},.3)" transform="rotate(45 49 101)"/>
+          <rect x="84" y="96" width="14" height="10" rx="2" fill="rgba({{PRIMARY_RGB}},.3)" transform="rotate(-45 91 101)"/>
+        </g>
+        <!-- Small gear -->
+        <g class="gear gear-small" style="transform-origin:126px 56px">
+          <circle cx="126" cy="56" r="18" stroke="{{PRIMARY}}" stroke-width="1.5" fill="rgba({{PRIMARY_RGB}},.06)"/>
+          <circle cx="126" cy="56" r="7" stroke="{{PRIMARY}}" stroke-width="1.5" fill="var(--dark-bg)"/>
+          <rect x="120" y="34" width="12" height="8" rx="2" fill="rgba({{PRIMARY_RGB}},.3)"/>
+          <rect x="120" y="70" width="12" height="8" rx="2" fill="rgba({{PRIMARY_RGB}},.3)"/>
+          <rect x="104" y="50" width="8" height="12" rx="2" fill="rgba({{PRIMARY_RGB}},.3)"/>
+          <rect x="140" y="50" width="8" height="12" rx="2" fill="rgba({{PRIMARY_RGB}},.3)"/>
+          <rect x="108" y="38" width="10" height="8" rx="2" fill="rgba({{PRIMARY_RGB}},.25)" transform="rotate(-45 113 42)"/>
+          <rect x="134" y="38" width="10" height="8" rx="2" fill="rgba({{PRIMARY_RGB}},.25)" transform="rotate(45 139 42)"/>
+        </g>
+      </svg>
+    </div>
+    <div class="error-code">503</div>
+    <h1>Dienst vorübergehend nicht verfügbar</h1>
+    <p class="desc">Wir sind gleich zurück. Bitte versuche es in wenigen Minuten erneut.</p>
+    <div class="countdown">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      Automatische Aktualisierung in <span class="countdown-num" id="timer">30</span>s
+    </div>
+    <br>
+    <div class="btn-group">
+      <a href="javascript:location.reload()" class="btn btn-primary">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 2v6h-6"/><path d="M3 12a9 9 0 0 1 15-6.7L21 8"/><path d="M3 22v-6h6"/><path d="M21 12a9 9 0 0 1-15 6.7L3 16"/></svg>
+        Jetzt aktualisieren
+      </a>
+      <a href="https://{{BRAND_DOMAIN}}" class="btn btn-secondary">Zur Startseite</a>
+    </div>
+    <div class="status-link">
+      <a href="https://status.{{BRAND_DOMAIN}}">
+        <span class="status-dot"></span>
+        Aktueller Status: status.{{BRAND_DOMAIN}}
+      </a>
+    </div>
+  </div>
+  <script>
+    (function(){
+      let s=30;const el=document.getElementById('timer');
+      const t=setInterval(()=>{s--;el.textContent=s;if(s<=0){clearInterval(t);location.reload();}},1000);
+    })();
+  </script>
+</body>
+</html>

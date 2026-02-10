@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>403 – Zugriff verweigert | {{BRAND_NAME}}</title>
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{--dark-bg:{{BG}};--cyan:{{PRIMARY}};--cyan-dark:{{PRIMARY_DARK}};--cloud:{{TEXT}};--muted:{{MUTED}};--amber:#d69e2e;--amber-dim:rgba(214,158,46,.12)}
+  body{font-family:system-ui,-apple-system,sans-serif;background:var(--dark-bg);color:var(--cloud);min-height:100vh;display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative}
+  body::before{content:'';position:fixed;inset:0;background-image:radial-gradient(rgba(214,158,46,.04) 1px,transparent 1px);background-size:32px 32px;z-index:0}
+  .container{text-align:center;position:relative;z-index:2;padding:2rem}
+  /* Shield illustration */
+  .shield-wrap{position:relative;width:180px;height:200px;margin:0 auto 2rem}
+  .shield-svg{width:100%;height:100%}
+  /* Scanning line */
+  .scan-line{position:absolute;top:0;left:10%;width:80%;height:3px;background:linear-gradient(90deg,transparent,var(--amber),transparent);border-radius:2px;animation:scan 2.5s ease-in-out infinite;opacity:.8;box-shadow:0 0 12px rgba(214,158,46,.4)}
+  @keyframes scan{0%{top:10%;opacity:0}10%{opacity:.8}90%{opacity:.8}100%{top:85%;opacity:0}}
+  /* 403 code */
+  .error-code{font-size:clamp(7rem,18vw,12rem);font-weight:900;line-height:1;color:var(--cloud);margin-bottom:.75rem;position:relative}
+  .error-code span{background:linear-gradient(135deg,var(--cloud) 40%,var(--amber));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+  h1{font-size:clamp(1.4rem,3vw,2rem);font-weight:700;margin-bottom:.75rem;color:var(--amber)}
+  .desc{color:var(--muted);font-size:1.1rem;margin-bottom:2.5rem;max-width:460px;margin-inline:auto;line-height:1.6}
+  /* Buttons */
+  .btn-group{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap}
+  .btn{padding:.85rem 2rem;border-radius:10px;font-size:1rem;font-weight:600;cursor:pointer;border:none;transition:all .25s;text-decoration:none;display:inline-flex;align-items:center;gap:.5rem}
+  .btn-primary{background:var(--amber);color:var(--dark-bg)}.btn-primary:hover{background:#b7791f;transform:translateY(-2px);box-shadow:0 6px 24px rgba(214,158,46,.3)}
+  .btn-secondary{background:transparent;color:var(--cloud);border:2px solid rgba(248,250,252,.2)}.btn-secondary:hover{border-color:var(--cyan);color:var(--cyan);transform:translateY(-2px)}
+  /* Amber ambient glow */
+  .ambient{position:fixed;width:500px;height:500px;border-radius:50%;background:radial-gradient(circle,rgba(214,158,46,.06),transparent 70%);top:50%;left:50%;transform:translate(-50%,-50%);z-index:0;pointer-events:none}
+</style>
+</head>
+<body>
+  <div class="ambient"></div>
+  <div class="container">
+    <div class="shield-wrap">
+      <svg class="shield-svg" viewBox="0 0 180 200" fill="none">
+        <defs>
+          <linearGradient id="sg" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#d69e2e" stop-opacity=".7"/>
+            <stop offset="100%" stop-color="{{PRIMARY}}" stop-opacity=".3"/>
+          </linearGradient>
+        </defs>
+        <!-- Shield shape -->
+        <path d="M90 16 L160 50 L160 110 Q160 160 90 190 Q20 160 20 110 L20 50 Z" stroke="url(#sg)" stroke-width="2.5" fill="rgba(214,158,46,.04)"/>
+        <!-- Lock body -->
+        <rect x="65" y="100" width="50" height="40" rx="6" stroke="#d69e2e" stroke-width="2" fill="rgba(214,158,46,.08)"/>
+        <!-- Lock shackle -->
+        <path d="M75 100 V85 Q75 70 90 70 Q105 70 105 85 V100" stroke="#d69e2e" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+        <!-- Keyhole -->
+        <circle cx="90" cy="116" r="5" fill="#d69e2e" opacity=".6"/>
+        <rect x="88" y="118" width="4" height="10" rx="2" fill="#d69e2e" opacity=".6"/>
+        <!-- Shield decorative lines -->
+        <path d="M90 50 L90 70" stroke="rgba(214,158,46,.3)" stroke-width="1.5" stroke-linecap="round"/>
+        <path d="M70 60 L110 60" stroke="rgba(214,158,46,.3)" stroke-width="1.5" stroke-linecap="round"/>
+        <!-- Cross / forbidden -->
+        <circle cx="90" cy="60" r="12" stroke="rgba(214,158,46,.25)" stroke-width="1.5" fill="none"/>
+        <line x1="82" y1="52" x2="98" y2="68" stroke="rgba(214,158,46,.3)" stroke-width="1.5" stroke-linecap="round"/>
+      </svg>
+      <div class="scan-line"></div>
+    </div>
+    <div class="error-code"><span>403</span></div>
+    <h1>Zugriff verweigert</h1>
+    <p class="desc">Du hast keine Berechtigung auf diese Ressource zuzugreifen.</p>
+    <div class="btn-group">
+      <a href="/login" class="btn btn-primary">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+        Anmelden
+      </a>
+      <a href="javascript:history.back()" class="btn btn-secondary">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+        Zurück
+      </a>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{BRAND_NAME}} System-Architektur</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:{{BG}};font-family:system-ui,-apple-system,sans-serif;color:{{TEXT}};min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:40px 20px}
+  h1{font-size:2rem;font-weight:700;letter-spacing:-.5px;margin-bottom:8px}
+  h1 span{color:{{PRIMARY}}}
+  .subtitle{color:{{MUTED}};font-size:.95rem;margin-bottom:32px}
+  .diagram-wrap{background:#1e293b;border-radius:16px;border:1px solid rgba({{PRIMARY_RGB}},.15);padding:32px;max-width:1200px;width:100%;overflow-x:auto}
+  svg text{font-family:system-ui,-apple-system,sans-serif}
+
+  @keyframes dashFlow{to{stroke-dashoffset:-24}}
+  @keyframes pulse{0%,100%{opacity:.7}50%{opacity:1}}
+
+  .flow-line{stroke-dasharray:8 4;animation:dashFlow 1.2s linear infinite}
+  .flow-line-rev{stroke-dasharray:8 4;animation:dashFlow 1.2s linear infinite reverse}
+
+  .legend{position:absolute;bottom:20px;left:20px}
+  .legend-item{display:flex;align-items:center;gap:8px;margin-bottom:6px;font-size:.8rem;color:#cbd5e1}
+  .legend-dot{width:14px;height:14px;border-radius:4px;flex-shrink:0}
+</style>
+</head>
+<body>
+
+<h1><span>{{BRAND_NAME}}</span> System-Architektur</h1>
+<p class="subtitle">Event-getriebenes Ecosystem &mdash; Gesamtübersicht aller Komponenten und Datenflüsse</p>
+
+<div class="diagram-wrap">
+<svg viewBox="0 0 1100 700" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto">
+  <defs>
+    <!-- Arrowhead markers -->
+    <marker id="ar-cyan" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+      <polygon points="0 0,10 3.5,0 7" fill="{{PRIMARY}}"/>
+    </marker>
+    <marker id="ar-blue" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+      <polygon points="0 0,10 3.5,0 7" fill="{{INFO}}"/>
+    </marker>
+    <marker id="ar-purple" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+      <polygon points="0 0,10 3.5,0 7" fill="#a78bfa"/>
+    </marker>
+    <marker id="ar-green" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+      <polygon points="0 0,10 3.5,0 7" fill="{{SUCCESS}}"/>
+    </marker>
+    <marker id="ar-warn" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+      <polygon points="0 0,10 3.5,0 7" fill="{{WARNING}}"/>
+    </marker>
+
+    <!-- Glow filters -->
+    <filter id="glow-cyan"><feDropShadow dx="0" dy="0" stdDeviation="4" flood-color="{{PRIMARY}}" flood-opacity=".35"/></filter>
+    <filter id="glow-blue"><feDropShadow dx="0" dy="0" stdDeviation="4" flood-color="{{INFO}}" flood-opacity=".35"/></filter>
+    <filter id="glow-green"><feDropShadow dx="0" dy="0" stdDeviation="4" flood-color="{{SUCCESS}}" flood-opacity=".35"/></filter>
+    <filter id="glow-purple"><feDropShadow dx="0" dy="0" stdDeviation="4" flood-color="#a78bfa" flood-opacity=".35"/></filter>
+
+    <!-- Component box template -->
+    <linearGradient id="grad-blue" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="{{SURFACE}}"/><stop offset="100%" stop-color="#1e293b"/>
+    </linearGradient>
+    <linearGradient id="grad-cyan" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#1a3a3a"/><stop offset="100%" stop-color="#1e293b"/>
+    </linearGradient>
+    <linearGradient id="grad-green" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#1a3a2a"/><stop offset="100%" stop-color="#1e293b"/>
+    </linearGradient>
+    <linearGradient id="grad-purple" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#2a1a3a"/><stop offset="100%" stop-color="#1e293b"/>
+    </linearGradient>
+  </defs>
+
+  <!-- ========== LAYER BACKGROUNDS ========== -->
+  <!-- Frontend layer -->
+  <rect x="20" y="30" width="300" height="640" rx="12" fill="none" stroke="{{INFO}}" stroke-width="1" stroke-dasharray="6 3" opacity=".3"/>
+  <text x="170" y="22" text-anchor="middle" fill="{{INFO}}" font-size="11" font-weight="600" opacity=".6">FRONTEND</text>
+
+  <!-- Backend layer -->
+  <rect x="360" y="30" width="340" height="640" rx="12" fill="none" stroke="{{PRIMARY}}" stroke-width="1" stroke-dasharray="6 3" opacity=".3"/>
+  <text x="530" y="22" text-anchor="middle" fill="{{PRIMARY}}" font-size="11" font-weight="600" opacity=".6">BACKEND</text>
+
+  <!-- Storage layer -->
+  <rect x="740" y="30" width="160" height="640" rx="12" fill="none" stroke="{{SUCCESS}}" stroke-width="1" stroke-dasharray="6 3" opacity=".3"/>
+  <text x="820" y="22" text-anchor="middle" fill="{{SUCCESS}}" font-size="11" font-weight="600" opacity=".6">SPEICHER</text>
+
+  <!-- External layer -->
+  <rect x="940" y="30" width="140" height="640" rx="12" fill="none" stroke="#a78bfa" stroke-width="1" stroke-dasharray="6 3" opacity=".3"/>
+  <text x="1010" y="22" text-anchor="middle" fill="#a78bfa" font-size="11" font-weight="600" opacity=".6">EXTERN</text>
+
+  <!-- ========== COMPONENTS ========== -->
+
+  <!-- CLIENT (React/Vite) -->
+  <g filter="url(#glow-blue)">
+    <rect x="60" y="80" width="220" height="110" rx="12" fill="url(#grad-blue)" stroke="{{INFO}}" stroke-width="1.5"/>
+    <text x="170" y="112" text-anchor="middle" fill="{{INFO}}" font-size="11" font-weight="600" letter-spacing="1">CLIENT</text>
+    <text x="170" y="136" text-anchor="middle" fill="{{TEXT}}" font-size="15" font-weight="700">React / Vite</text>
+    <text x="170" y="158" text-anchor="middle" fill="{{MUTED}}" font-size="11">SPA mit TypeScript</text>
+    <text x="170" y="175" text-anchor="middle" fill="{{MUTED}}" font-size="10">HMR &bull; Lazy Loading &bull; PWA</text>
+  </g>
+
+  <!-- DASHBOARD -->
+  <g filter="url(#glow-blue)">
+    <rect x="60" y="240" width="220" height="100" rx="12" fill="url(#grad-blue)" stroke="{{INFO}}" stroke-width="1.5"/>
+    <text x="170" y="270" text-anchor="middle" fill="{{INFO}}" font-size="11" font-weight="600" letter-spacing="1">DASHBOARD</text>
+    <text x="170" y="294" text-anchor="middle" fill="{{TEXT}}" font-size="15" font-weight="700">Echtzeit-Dashboard</text>
+    <text x="170" y="316" text-anchor="middle" fill="{{MUTED}}" font-size="11">SSE Streaming &bull; Charts</text>
+  </g>
+
+  <!-- ADMIN UI -->
+  <g filter="url(#glow-blue)">
+    <rect x="60" y="390" width="220" height="90" rx="12" fill="url(#grad-blue)" stroke="{{INFO}}" stroke-width="1.5"/>
+    <text x="170" y="418" text-anchor="middle" fill="{{INFO}}" font-size="11" font-weight="600" letter-spacing="1">VERWALTUNG</text>
+    <text x="170" y="442" text-anchor="middle" fill="{{TEXT}}" font-size="14" font-weight="700">Admin-Oberfläche</text>
+    <text x="170" y="462" text-anchor="middle" fill="{{MUTED}}" font-size="11">Workspace &bull; Nutzer &bull; Konfig</text>
+  </g>
+
+  <!-- API SERVER (Express) -->
+  <g filter="url(#glow-cyan)">
+    <rect x="390" y="80" width="280" height="130" rx="12" fill="url(#grad-cyan)" stroke="{{PRIMARY}}" stroke-width="1.5"/>
+    <text x="530" y="112" text-anchor="middle" fill="{{PRIMARY}}" font-size="11" font-weight="600" letter-spacing="1">API SERVER</text>
+    <text x="530" y="138" text-anchor="middle" fill="{{TEXT}}" font-size="16" font-weight="700">Express.js</text>
+    <text x="530" y="160" text-anchor="middle" fill="{{MUTED}}" font-size="11">REST API &bull; SSE &bull; Middleware</text>
+    <text x="530" y="178" text-anchor="middle" fill="{{MUTED}}" font-size="10">Auth &bull; Validierung &bull; Rate Limiting</text>
+    <text x="530" y="196" text-anchor="middle" fill="{{PRIMARY_DARK}}" font-size="10">Port 3000</text>
+  </g>
+
+  <!-- AI ENGINE -->
+  <g filter="url(#glow-cyan)">
+    <rect x="390" y="260" width="280" height="110" rx="12" fill="url(#grad-cyan)" stroke="{{PRIMARY}}" stroke-width="1.5"/>
+    <text x="530" y="290" text-anchor="middle" fill="{{PRIMARY}}" font-size="11" font-weight="600" letter-spacing="1">KI-ENGINE</text>
+    <text x="530" y="314" text-anchor="middle" fill="{{TEXT}}" font-size="15" font-weight="700">AI SDK v6</text>
+    <text x="530" y="336" text-anchor="middle" fill="{{MUTED}}" font-size="11">Analyse &bull; Generierung &bull; Streaming</text>
+    <text x="530" y="354" text-anchor="middle" fill="{{MUTED}}" font-size="10">Tool-Aufrufe &bull; Strukturierte Ausgabe</text>
+  </g>
+
+  <!-- WEBHOOK SYSTEM -->
+  <g filter="url(#glow-cyan)">
+    <rect x="390" y="420" width="280" height="100" rx="12" fill="url(#grad-cyan)" stroke="{{PRIMARY}}" stroke-width="1.5"/>
+    <text x="530" y="450" text-anchor="middle" fill="{{PRIMARY}}" font-size="11" font-weight="600" letter-spacing="1">WEBHOOK-SYSTEM</text>
+    <text x="530" y="474" text-anchor="middle" fill="{{TEXT}}" font-size="15" font-weight="700">Event-Dispatcher</text>
+    <text x="530" y="496" text-anchor="middle" fill="{{MUTED}}" font-size="11">Retry-Logik &bull; Signierung &bull; Queue</text>
+  </g>
+
+  <!-- TELEGRAM BOT -->
+  <g filter="url(#glow-cyan)">
+    <rect x="390" y="570" width="280" height="100" rx="12" fill="url(#grad-cyan)" stroke="{{PRIMARY}}" stroke-width="1.5"/>
+    <text x="530" y="600" text-anchor="middle" fill="{{PRIMARY}}" font-size="11" font-weight="600" letter-spacing="1">TELEGRAM BOT</text>
+    <text x="530" y="624" text-anchor="middle" fill="{{TEXT}}" font-size="15" font-weight="700">grammY</text>
+    <text x="530" y="646" text-anchor="middle" fill="{{MUTED}}" font-size="11">Befehle &bull; Benachrichtigungen &bull; Inline</text>
+  </g>
+
+  <!-- EVENT STORE -->
+  <g filter="url(#glow-green)">
+    <rect x="755" y="80" width="130" height="130" rx="12" fill="url(#grad-green)" stroke="{{SUCCESS}}" stroke-width="1.5"/>
+    <text x="820" y="112" text-anchor="middle" fill="{{SUCCESS}}" font-size="11" font-weight="600" letter-spacing="1">EVENT STORE</text>
+    <text x="820" y="138" text-anchor="middle" fill="{{TEXT}}" font-size="15" font-weight="700">JSONL</text>
+    <text x="820" y="158" text-anchor="middle" fill="{{MUTED}}" font-size="10">Append-Only Log</text>
+    <text x="820" y="175" text-anchor="middle" fill="{{MUTED}}" font-size="10">Immutable Events</text>
+    <text x="820" y="192" text-anchor="middle" fill="{{SUCCESS}}" font-size="10">Komprimiert</text>
+  </g>
+
+  <!-- SNAPSHOT STORE -->
+  <g filter="url(#glow-green)">
+    <rect x="755" y="260" width="130" height="100" rx="12" fill="url(#grad-green)" stroke="{{SUCCESS}}" stroke-width="1.5"/>
+    <text x="820" y="288" text-anchor="middle" fill="{{SUCCESS}}" font-size="11" font-weight="600" letter-spacing="1">SNAPSHOTS</text>
+    <text x="820" y="312" text-anchor="middle" fill="{{TEXT}}" font-size="14" font-weight="700">Zustand</text>
+    <text x="820" y="332" text-anchor="middle" fill="{{MUTED}}" font-size="10">Materialisierte Views</text>
+    <text x="820" y="348" text-anchor="middle" fill="{{MUTED}}" font-size="10">Projektionen</text>
+  </g>
+
+  <!-- BACKUP -->
+  <g filter="url(#glow-green)">
+    <rect x="755" y="410" width="130" height="90" rx="12" fill="url(#grad-green)" stroke="{{SUCCESS}}" stroke-width="1.5"/>
+    <text x="820" y="438" text-anchor="middle" fill="{{SUCCESS}}" font-size="11" font-weight="600" letter-spacing="1">BACKUP</text>
+    <text x="820" y="462" text-anchor="middle" fill="{{TEXT}}" font-size="14" font-weight="700">Sicherung</text>
+    <text x="820" y="482" text-anchor="middle" fill="{{MUTED}}" font-size="10">Rotiert &bull; Verschlüsselt</text>
+  </g>
+
+  <!-- TELEGRAM API -->
+  <g filter="url(#glow-purple)">
+    <rect x="955" y="80" width="110" height="90" rx="12" fill="url(#grad-purple)" stroke="#a78bfa" stroke-width="1.5"/>
+    <text x="1010" y="108" text-anchor="middle" fill="#a78bfa" font-size="10" font-weight="600" letter-spacing="1">EXTERN</text>
+    <text x="1010" y="130" text-anchor="middle" fill="{{TEXT}}" font-size="13" font-weight="700">Telegram</text>
+    <text x="1010" y="148" text-anchor="middle" fill="{{MUTED}}" font-size="10">Bot API v7</text>
+  </g>
+
+  <!-- AI PROVIDER -->
+  <g filter="url(#glow-purple)">
+    <rect x="955" y="210" width="110" height="90" rx="12" fill="url(#grad-purple)" stroke="#a78bfa" stroke-width="1.5"/>
+    <text x="1010" y="238" text-anchor="middle" fill="#a78bfa" font-size="10" font-weight="600" letter-spacing="1">EXTERN</text>
+    <text x="1010" y="260" text-anchor="middle" fill="{{TEXT}}" font-size="13" font-weight="700">KI-Anbieter</text>
+    <text x="1010" y="278" text-anchor="middle" fill="{{MUTED}}" font-size="10">OpenAI / Anthropic</text>
+  </g>
+
+  <!-- WEBHOOK ENDPOINTS -->
+  <g filter="url(#glow-purple)">
+    <rect x="955" y="340" width="110" height="90" rx="12" fill="url(#grad-purple)" stroke="#a78bfa" stroke-width="1.5"/>
+    <text x="1010" y="368" text-anchor="middle" fill="#a78bfa" font-size="10" font-weight="600" letter-spacing="1">EXTERN</text>
+    <text x="1010" y="390" text-anchor="middle" fill="{{TEXT}}" font-size="13" font-weight="700">Webhooks</text>
+    <text x="1010" y="408" text-anchor="middle" fill="{{MUTED}}" font-size="10">Endpunkte Dritter</text>
+  </g>
+
+  <!-- ========== FLOW ARROWS ========== -->
+
+  <!-- Client → API Server -->
+  <line x1="280" y1="135" x2="387" y2="135" class="flow-line" stroke="{{INFO}}" stroke-width="2" marker-end="url(#ar-cyan)"/>
+  <text x="334" y="128" text-anchor="middle" fill="{{MUTED}}" font-size="9">HTTP/SSE</text>
+
+  <!-- Dashboard → API Server -->
+  <line x1="280" y1="285" x2="360" y2="200" class="flow-line" stroke="{{INFO}}" stroke-width="2" marker-end="url(#ar-cyan)"/>
+  <text x="305" y="232" text-anchor="middle" fill="{{MUTED}}" font-size="9" transform="rotate(-22,305,232)">SSE Stream</text>
+
+  <!-- Admin → API Server -->
+  <line x1="280" y1="435" x2="360" y2="200" class="flow-line" stroke="{{INFO}}" stroke-width="1.5" marker-end="url(#ar-cyan)"/>
+
+  <!-- API → Event Store -->
+  <line x1="670" y1="140" x2="752" y2="140" class="flow-line" stroke="{{PRIMARY}}" stroke-width="2" marker-end="url(#ar-green)"/>
+  <text x="711" y="132" text-anchor="middle" fill="{{MUTED}}" font-size="9">append</text>
+
+  <!-- API → AI Engine -->
+  <line x1="530" y1="210" x2="530" y2="257" class="flow-line" stroke="{{PRIMARY}}" stroke-width="2" marker-end="url(#ar-cyan)"/>
+  <text x="542" y="238" fill="{{MUTED}}" font-size="9">async</text>
+
+  <!-- API → Webhook -->
+  <line x1="530" y1="370" x2="530" y2="417" class="flow-line" stroke="{{PRIMARY}}" stroke-width="2" marker-end="url(#ar-cyan)"/>
+  <text x="542" y="398" fill="{{MUTED}}" font-size="9">dispatch</text>
+
+  <!-- API → Telegram Bot -->
+  <line x1="530" y1="520" x2="530" y2="567" class="flow-line" stroke="{{PRIMARY}}" stroke-width="2" marker-end="url(#ar-cyan)"/>
+  <text x="542" y="548" fill="{{MUTED}}" font-size="9">notify</text>
+
+  <!-- Event Store → Snapshots -->
+  <line x1="820" y1="210" x2="820" y2="257" class="flow-line" stroke="{{SUCCESS}}" stroke-width="1.5" marker-end="url(#ar-green)"/>
+  <text x="832" y="238" fill="{{MUTED}}" font-size="9">project</text>
+
+  <!-- Event Store → Backup -->
+  <line x1="820" y1="360" x2="820" y2="407" class="flow-line" stroke="{{SUCCESS}}" stroke-width="1.5" marker-end="url(#ar-green)"/>
+
+  <!-- AI Engine → AI Provider -->
+  <line x1="670" y1="310" x2="952" y2="255" class="flow-line" stroke="#a78bfa" stroke-width="1.5" marker-end="url(#ar-purple)"/>
+  <text x="810" y="275" text-anchor="middle" fill="{{MUTED}}" font-size="9">API-Aufruf</text>
+
+  <!-- Webhook → External Endpoints -->
+  <line x1="670" y1="470" x2="952" y2="385" class="flow-line" stroke="#a78bfa" stroke-width="1.5" marker-end="url(#ar-purple)"/>
+  <text x="810" y="418" text-anchor="middle" fill="{{MUTED}}" font-size="9">POST Payload</text>
+
+  <!-- Telegram Bot → Telegram API -->
+  <line x1="670" y1="620" x2="880" y2="140" class="flow-line" stroke="#a78bfa" stroke-width="1.5" marker-end="url(#ar-purple)"/>
+  <text x="800" y="540" text-anchor="middle" fill="{{MUTED}}" font-size="9" transform="rotate(-60,800,540)">Bot API</text>
+
+  <!-- AI Engine → Event Store (feedback loop) -->
+  <path d="M670,290 Q730,290 740,220 Q748,170 752,165" fill="none" class="flow-line-rev" stroke="{{SUCCESS}}" stroke-width="1.5" marker-end="url(#ar-green)"/>
+  <text x="718" y="220" fill="{{MUTED}}" font-size="9">Ergebnis</text>
+
+  <!-- ========== LEGEND ========== -->
+  <g transform="translate(40,560)">
+    <rect x="0" y="0" width="200" height="108" rx="8" fill="{{BG}}" stroke="#334155" stroke-width="1"/>
+    <text x="12" y="22" fill="{{TEXT}}" font-size="12" font-weight="600">Legende</text>
+    <rect x="12" y="32" width="14" height="14" rx="3" fill="{{INFO}}"/>
+    <text x="32" y="44" fill="#cbd5e1" font-size="10">Frontend (React/Vite)</text>
+    <rect x="12" y="52" width="14" height="14" rx="3" fill="{{PRIMARY}}"/>
+    <text x="32" y="64" fill="#cbd5e1" font-size="10">Backend (Express/Node)</text>
+    <rect x="12" y="72" width="14" height="14" rx="3" fill="{{SUCCESS}}"/>
+    <text x="32" y="84" fill="#cbd5e1" font-size="10">Speicher (JSONL/Backup)</text>
+    <rect x="12" y="92" width="14" height="14" rx="3" fill="#a78bfa"/>
+    <text x="32" y="104" fill="#cbd5e1" font-size="10">Externe Dienste</text>
+  </g>
+
+</svg>
+</div>
+
+</body>
+</html>

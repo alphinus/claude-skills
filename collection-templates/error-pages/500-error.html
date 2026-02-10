@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>500 – Interner Serverfehler | {{BRAND_NAME}}</title>
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{--dark-bg:{{BG}};--cyan:{{PRIMARY}};--cyan-dark:{{PRIMARY_DARK}};--cloud:{{TEXT}};--muted:{{MUTED}};--red:#e53e3e;--red-dim:rgba(229,62,62,.15)}
+  body{font-family:system-ui,-apple-system,sans-serif;background:var(--dark-bg);color:var(--cloud);min-height:100vh;display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative}
+  .container{text-align:center;position:relative;z-index:2;padding:2rem}
+  /* Glitch 500 */
+  .error-code{font-size:clamp(8rem,20vw,14rem);font-weight:900;line-height:1;position:relative;color:var(--cloud);margin-bottom:1rem}
+  .error-code::before,.error-code::after{content:'500';position:absolute;top:0;left:0;width:100%;height:100%}
+  .error-code::before{color:var(--red);animation:glitch-1 2.5s infinite;clip-path:polygon(0 0,100% 0,100% 33%,0 33%)}
+  .error-code::after{color:var(--cyan);animation:glitch-2 2.5s infinite;clip-path:polygon(0 67%,100% 67%,100% 100%,0 100%)}
+  @keyframes glitch-1{0%,90%{transform:translate(0)}92%{transform:translate(-8px,2px)}94%{transform:translate(6px,-3px)}96%{transform:translate(-4px,1px)}98%{transform:translate(3px,-2px)}100%{transform:translate(0)}}
+  @keyframes glitch-2{0%,88%{transform:translate(0)}90%{transform:translate(6px,-2px)}93%{transform:translate(-7px,3px)}95%{transform:translate(4px,1px)}97%{transform:translate(-3px,-1px)}100%{transform:translate(0)}}
+  /* Static noise overlay on code */
+  .error-code-wrap{position:relative;display:inline-block}
+  .error-code-wrap::after{content:'';position:absolute;inset:-10px;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(229,62,62,.03) 2px,rgba(229,62,62,.03) 4px);animation:static-scroll .15s steps(8) infinite;pointer-events:none}
+  @keyframes static-scroll{to{background-position:0 -20px}}
+  h1{font-size:clamp(1.4rem,3vw,2rem);font-weight:700;margin-bottom:.75rem;color:var(--cloud)}
+  .desc{color:var(--muted);font-size:1.1rem;margin-bottom:2.5rem;max-width:420px;margin-inline:auto;line-height:1.6}
+  /* Broken hexagon */
+  .hex-wrap{width:160px;height:160px;margin:0 auto 2.5rem;position:relative}
+  .hex-piece{position:absolute;transform-origin:center center;animation-duration:4s;animation-iteration-count:infinite;animation-timing-function:ease-in-out}
+  .hex-piece:nth-child(1){animation-name:drift-1}
+  .hex-piece:nth-child(2){animation-name:drift-2}
+  .hex-piece:nth-child(3){animation-name:drift-3}
+  .hex-piece:nth-child(4){animation-name:drift-4}
+  .hex-piece:nth-child(5){animation-name:drift-5}
+  .hex-piece:nth-child(6){animation-name:drift-6}
+  @keyframes drift-1{0%,100%{transform:translate(0,0) rotate(0)}50%{transform:translate(-14px,-18px) rotate(-8deg)}}
+  @keyframes drift-2{0%,100%{transform:translate(0,0) rotate(0)}50%{transform:translate(16px,-14px) rotate(6deg)}}
+  @keyframes drift-3{0%,100%{transform:translate(0,0) rotate(0)}50%{transform:translate(20px,4px) rotate(10deg)}}
+  @keyframes drift-4{0%,100%{transform:translate(0,0) rotate(0)}50%{transform:translate(12px,18px) rotate(-5deg)}}
+  @keyframes drift-5{0%,100%{transform:translate(0,0) rotate(0)}50%{transform:translate(-16px,14px) rotate(7deg)}}
+  @keyframes drift-6{0%,100%{transform:translate(0,0) rotate(0)}50%{transform:translate(-20px,-4px) rotate(-9deg)}}
+  /* Buttons */
+  .btn-group{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;margin-bottom:2rem}
+  .btn{padding:.85rem 2rem;border-radius:10px;font-size:1rem;font-weight:600;cursor:pointer;border:none;transition:all .25s;text-decoration:none;display:inline-flex;align-items:center;gap:.5rem}
+  .btn-primary{background:var(--cyan);color:var(--dark-bg)}.btn-primary:hover{background:var(--cyan-dark);transform:translateY(-2px);box-shadow:0 6px 24px rgba({{PRIMARY_RGB}},.3)}
+  .btn-secondary{background:transparent;color:var(--cloud);border:2px solid rgba(248,250,252,.2)}.btn-secondary:hover{border-color:var(--cyan);color:var(--cyan);transform:translateY(-2px)}
+  /* Error ref */
+  .error-ref{color:var(--muted);font-size:.8rem;font-family:'SF Mono',SFMono-Regular,Consolas,monospace;background:rgba(255,255,255,.05);display:inline-block;padding:.4rem 1rem;border-radius:6px;border:1px solid rgba(255,255,255,.08)}
+  /* Floating error particles */
+  .particles{position:fixed;inset:0;pointer-events:none;z-index:1;overflow:hidden}
+  .particle{position:absolute;width:4px;height:4px;border-radius:50%;background:var(--red);opacity:0;animation:float-up linear infinite}
+  .particle:nth-child(1){left:10%;animation-duration:7s;animation-delay:0s;width:3px;height:3px}
+  .particle:nth-child(2){left:25%;animation-duration:9s;animation-delay:1.2s;width:5px;height:5px}
+  .particle:nth-child(3){left:40%;animation-duration:6s;animation-delay:2.5s}
+  .particle:nth-child(4){left:55%;animation-duration:8s;animation-delay:.8s;width:3px;height:3px}
+  .particle:nth-child(5){left:70%;animation-duration:10s;animation-delay:3s;width:6px;height:6px}
+  .particle:nth-child(6){left:85%;animation-duration:7.5s;animation-delay:1.8s}
+  .particle:nth-child(7){left:15%;animation-duration:8.5s;animation-delay:4s;width:5px;height:5px}
+  .particle:nth-child(8){left:60%;animation-duration:6.5s;animation-delay:2s;width:3px;height:3px}
+  .particle:nth-child(9){left:90%;animation-duration:9.5s;animation-delay:.5s}
+  .particle:nth-child(10){left:35%;animation-duration:7s;animation-delay:3.5s;width:4px;height:4px}
+  .particle:nth-child(11){left:50%;animation-duration:11s;animation-delay:1s;width:3px;height:3px}
+  .particle:nth-child(12){left:78%;animation-duration:8s;animation-delay:2.8s;width:5px;height:5px}
+  @keyframes float-up{0%{transform:translateY(100vh) scale(0);opacity:0}10%{opacity:.6}90%{opacity:.3}100%{transform:translateY(-10vh) scale(1.2);opacity:0}}
+  /* BG grid */
+  body::before{content:'';position:fixed;inset:0;background-image:radial-gradient(rgba({{PRIMARY_RGB}},.06) 1px,transparent 1px);background-size:32px 32px;z-index:0}
+</style>
+</head>
+<body>
+  <div class="particles">
+    <div class="particle"></div><div class="particle"></div><div class="particle"></div>
+    <div class="particle"></div><div class="particle"></div><div class="particle"></div>
+    <div class="particle"></div><div class="particle"></div><div class="particle"></div>
+    <div class="particle"></div><div class="particle"></div><div class="particle"></div>
+  </div>
+  <div class="container">
+    <!-- Broken hexagon -->
+    <div class="hex-wrap">
+      <svg viewBox="0 0 160 160" width="160" height="160">
+        <defs>
+          <linearGradient id="hg" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#e53e3e" stop-opacity=".8"/>
+            <stop offset="100%" stop-color="{{PRIMARY}}" stop-opacity=".4"/>
+          </linearGradient>
+        </defs>
+        <!-- Six hex triangles splitting apart -->
+        <g class="hex-piece" style="animation-name:drift-1"><polygon points="80,80 80,20 38,50" fill="none" stroke="url(#hg)" stroke-width="2"/></g>
+        <g class="hex-piece" style="animation-name:drift-2"><polygon points="80,80 38,50 38,110" fill="none" stroke="url(#hg)" stroke-width="2"/></g>
+        <g class="hex-piece" style="animation-name:drift-3"><polygon points="80,80 38,110 80,140" fill="none" stroke="url(#hg)" stroke-width="2"/></g>
+        <g class="hex-piece" style="animation-name:drift-4"><polygon points="80,80 80,140 122,110" fill="none" stroke="url(#hg)" stroke-width="2"/></g>
+        <g class="hex-piece" style="animation-name:drift-5"><polygon points="80,80 122,110 122,50" fill="none" stroke="url(#hg)" stroke-width="2"/></g>
+        <g class="hex-piece" style="animation-name:drift-6"><polygon points="80,80 122,50 80,20" fill="none" stroke="url(#hg)" stroke-width="2"/></g>
+      </svg>
+    </div>
+    <div class="error-code-wrap">
+      <div class="error-code">500</div>
+    </div>
+    <h1>Interner Serverfehler</h1>
+    <p class="desc">Etwas ist schiefgelaufen. Unser Team wurde benachrichtigt.</p>
+    <div class="btn-group">
+      <a href="javascript:location.reload()" class="btn btn-primary">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 2v6h-6"/><path d="M3 12a9 9 0 0 1 15-6.7L21 8"/><path d="M3 22v-6h6"/><path d="M21 12a9 9 0 0 1-15 6.7L3 16"/></svg>
+        Erneut versuchen
+      </a>
+      <a href="https://{{BRAND_DOMAIN}}" class="btn btn-secondary">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        Zur Startseite
+      </a>
+    </div>
+    <div class="error-ref">Ref: ERR-2026-A7F3</div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{BRAND_NAME}} Square Posts - 1080x1080px</title>
+<style>
+  :root {
+    --dark-bg: {{BG}};
+    --cyan: {{PRIMARY}};
+    --cyan-dark: {{PRIMARY_DARK}};
+    --cloud: {{TEXT}};
+    --muted: {{MUTED}};
+    --card-bg: #1e293b;
+    --border: #334155;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #0a0f1c;
+    color: var(--cloud);
+    font-family: system-ui, -apple-system, sans-serif;
+    padding: 40px;
+    min-height: 100vh;
+  }
+
+  .page-header {
+    text-align: center;
+    margin-bottom: 48px;
+  }
+
+  .page-header h1 {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--cloud);
+    letter-spacing: -0.5px;
+  }
+
+  .page-header h1 span { color: var(--cyan); }
+
+  .page-header p {
+    color: var(--muted);
+    margin-top: 8px;
+    font-size: 15px;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .variant-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .variant-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--cyan);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-bottom: 12px;
+  }
+
+  .variant-dims {
+    font-size: 11px;
+    color: var(--muted);
+    margin-bottom: 16px;
+  }
+
+  .post-frame {
+    width: 540px;
+    height: 540px;
+    overflow: hidden;
+    border-radius: 8px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.4), 0 0 0 1px var(--border);
+    position: relative;
+  }
+
+  .post-canvas {
+    width: 1080px;
+    height: 1080px;
+    transform: scale(0.5);
+    transform-origin: top left;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* =========================================
+     VARIANT 1: ANNOUNCEMENT
+     ========================================= */
+  .announcement {
+    background: var(--dark-bg);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 100px 80px;
+    position: relative;
+  }
+
+  .announcement::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 6px;
+    background: linear-gradient(90deg, var(--cyan), var(--cyan-dark), var(--cyan));
+  }
+
+  .announcement .hex-deco {
+    position: absolute;
+    opacity: 0.06;
+  }
+
+  .announcement .hex-deco-1 { top: -40px; right: -30px; }
+  .announcement .hex-deco-2 { bottom: -60px; left: -40px; }
+
+  .announcement .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: rgba({{PRIMARY_RGB}}, 0.12);
+    border: 1px solid rgba({{PRIMARY_RGB}}, 0.25);
+    border-radius: 100px;
+    padding: 14px 32px;
+    margin-bottom: 48px;
+  }
+
+  .announcement .badge-dot {
+    width: 10px;
+    height: 10px;
+    background: var(--cyan);
+    border-radius: 50%;
+    box-shadow: 0 0 12px var(--cyan);
+  }
+
+  .announcement .badge-text {
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--cyan);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+
+  .announcement h2 {
+    font-size: 80px;
+    font-weight: 800;
+    color: var(--cloud);
+    letter-spacing: -2px;
+    line-height: 1.05;
+    margin-bottom: 28px;
+  }
+
+  .announcement h2 em {
+    font-style: normal;
+    color: var(--cyan);
+  }
+
+  .announcement .desc {
+    font-size: 28px;
+    color: var(--muted);
+    line-height: 1.6;
+    max-width: 750px;
+    margin-bottom: 60px;
+  }
+
+  .announcement .footer-bar {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 80px;
+    background: rgba(30, 41, 59, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    border-top: 1px solid var(--border);
+  }
+
+  .announcement .footer-logo {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--cloud);
+    letter-spacing: 3px;
+  }
+
+  .announcement .footer-sep {
+    width: 1px;
+    height: 20px;
+    background: var(--border);
+  }
+
+  .announcement .footer-url {
+    font-size: 20px;
+    color: var(--muted);
+    letter-spacing: 1px;
+  }
+
+  /* =========================================
+     VARIANT 2: STATS / INFOGRAPHIC
+     ========================================= */
+  .stats {
+    background: var(--dark-bg);
+    display: flex;
+    flex-direction: column;
+    padding: 80px;
+    position: relative;
+  }
+
+  .stats::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 6px;
+    background: linear-gradient(90deg, var(--cyan), var(--cyan-dark));
+  }
+
+  .stats .top-label {
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--cyan);
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    margin-bottom: 48px;
+  }
+
+  .stats .big-number {
+    font-size: 160px;
+    font-weight: 900;
+    color: var(--cloud);
+    letter-spacing: -6px;
+    line-height: 1;
+    margin-bottom: 12px;
+  }
+
+  .stats .big-label {
+    font-size: 36px;
+    color: var(--muted);
+    font-weight: 500;
+    margin-bottom: 64px;
+  }
+
+  .stats .bar-chart {
+    display: flex;
+    align-items: flex-end;
+    gap: 16px;
+    height: 260px;
+    flex: 1;
+    padding-bottom: 40px;
+    border-bottom: 2px solid var(--border);
+  }
+
+  .stats .bar {
+    flex: 1;
+    border-radius: 6px 6px 0 0;
+    position: relative;
+    min-width: 0;
+  }
+
+  .stats .bar-value {
+    position: absolute;
+    top: -30px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 16px;
+    color: var(--muted);
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  .stats .bar-label {
+    position: absolute;
+    bottom: -34px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 16px;
+    color: var(--muted);
+    white-space: nowrap;
+  }
+
+  .stats .footer-bar {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 80px;
+    background: rgba(30, 41, 59, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 80px;
+    border-top: 1px solid var(--border);
+  }
+
+  .stats .footer-logo {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--cloud);
+    letter-spacing: 3px;
+  }
+
+  .stats .footer-url {
+    font-size: 20px;
+    color: var(--muted);
+  }
+
+  /* =========================================
+     VARIANT 3: QUOTE
+     ========================================= */
+  .quote-post {
+    background: var(--dark-bg);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 100px 90px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .quote-post .hex-bg {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    opacity: 0.035;
+  }
+
+  .quote-post .quote-mark {
+    font-size: 200px;
+    color: var(--cyan);
+    opacity: 0.15;
+    font-family: Georgia, serif;
+    line-height: 1;
+    margin-bottom: -60px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .quote-post .quote-text {
+    font-size: 48px;
+    font-style: italic;
+    font-weight: 300;
+    color: var(--cloud);
+    line-height: 1.5;
+    margin-bottom: 48px;
+    position: relative;
+    z-index: 1;
+    max-width: 850px;
+  }
+
+  .quote-post .quote-text em {
+    font-style: italic;
+    color: var(--cyan);
+  }
+
+  .quote-post .attribution {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .quote-post .attr-line {
+    width: 40px;
+    height: 2px;
+    background: var(--cyan);
+  }
+
+  .quote-post .attr-name {
+    font-size: 24px;
+    font-weight: 600;
+    color: var(--cloud);
+  }
+
+  .quote-post .attr-title {
+    font-size: 20px;
+    color: var(--muted);
+    margin-top: 4px;
+  }
+
+  .quote-post .footer-bar {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 80px;
+    background: rgba(30, 41, 59, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    border-top: 1px solid var(--border);
+  }
+
+  .quote-post .footer-logo {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--cloud);
+    letter-spacing: 3px;
+  }
+
+  .quote-post .footer-url {
+    font-size: 20px;
+    color: var(--muted);
+  }
+
+  .quote-post .footer-sep {
+    width: 1px;
+    height: 20px;
+    background: var(--border);
+  }
+
+  /* =========================================
+     VARIANT 4: FEATURE HIGHLIGHT
+     ========================================= */
+  .feature {
+    background: var(--dark-bg);
+    display: flex;
+    flex-direction: column;
+    padding: 80px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .feature::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle, rgba({{PRIMARY_RGB}},0.08) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .feature .gradient-accent {
+    position: absolute;
+    bottom: 80px;
+    left: 0;
+    width: 8px;
+    height: 300px;
+    background: linear-gradient(to bottom, var(--cyan), var(--cyan-dark), transparent);
+    border-radius: 0 4px 4px 0;
+  }
+
+  .feature .top-bar {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 48px;
+  }
+
+  .feature .feature-icon {
+    width: 80px;
+    height: 80px;
+    background: rgba({{PRIMARY_RGB}}, 0.12);
+    border: 1.5px solid rgba({{PRIMARY_RGB}}, 0.25);
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .feature .feature-name {
+    font-size: 52px;
+    font-weight: 800;
+    color: var(--cloud);
+    letter-spacing: -1px;
+  }
+
+  .feature .feature-tag {
+    font-size: 18px;
+    color: var(--cyan);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+  }
+
+  .feature .desc {
+    font-size: 28px;
+    color: var(--muted);
+    line-height: 1.5;
+    margin-bottom: 48px;
+    max-width: 800px;
+  }
+
+  .feature .bullet-list {
+    list-style: none;
+    margin-bottom: 64px;
+  }
+
+  .feature .bullet-list li {
+    font-size: 28px;
+    color: var(--cloud);
+    padding: 18px 0;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 18px;
+  }
+
+  .feature .bullet-list li:last-child {
+    border-bottom: none;
+  }
+
+  .feature .bullet-check {
+    width: 32px;
+    height: 32px;
+    background: rgba({{PRIMARY_RGB}}, 0.15);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .feature .cta-area {
+    margin-top: auto;
+    display: flex;
+    align-items: center;
+    gap: 24px;
+  }
+
+  .feature .cta-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    background: linear-gradient(135deg, var(--cyan), var(--cyan-dark));
+    color: var(--dark-bg);
+    font-size: 26px;
+    font-weight: 700;
+    padding: 22px 48px;
+    border-radius: 14px;
+    letter-spacing: 0.5px;
+  }
+
+  .feature .cta-sub {
+    font-size: 20px;
+    color: var(--muted);
+  }
+
+  .feature .footer-bar {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 80px;
+    background: rgba(30, 41, 59, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 80px;
+    border-top: 1px solid var(--border);
+  }
+
+  .feature .footer-logo {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--cloud);
+    letter-spacing: 3px;
+  }
+
+  .feature .footer-url {
+    font-size: 20px;
+    color: var(--muted);
+  }
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <h1><span>{{BRAND_NAME}}</span> Square Posts</h1>
+  <p>1080 x 1080px &mdash; Instagram / Facebook Feed</p>
+</div>
+
+<div class="grid">
+
+  <!-- ======== VARIANT 1: ANNOUNCEMENT ======== -->
+  <div class="variant-wrapper">
+    <div class="variant-label">Announcement</div>
+    <div class="variant-dims">1080 x 1080px</div>
+    <div class="post-frame">
+      <div class="post-canvas announcement">
+        <!-- Hexagon decorations -->
+        <svg class="hex-deco hex-deco-1" width="400" height="460" viewBox="0 0 400 460">
+          <polygon points="200,0 400,115 400,345 200,460 0,345 0,115" fill="none" stroke="var(--cyan)" stroke-width="3"/>
+        </svg>
+        <svg class="hex-deco hex-deco-2" width="300" height="346" viewBox="0 0 300 346">
+          <polygon points="150,0 300,86.5 300,259.5 150,346 0,259.5 0,86.5" fill="none" stroke="var(--cyan)" stroke-width="2"/>
+        </svg>
+
+        <div class="badge">
+          <div class="badge-dot"></div>
+          <div class="badge-text">Neu</div>
+        </div>
+
+        <h2>Event<br><em>Streams</em></h2>
+
+        <p class="desc">Echtzeit-Datenverarbeitung f&uuml;r Ihr gesamtes &Ouml;kosystem &ndash; skalierbar und event-gesteuert.</p>
+
+        <div class="footer-bar">
+          <span class="footer-logo">{{BRAND_NAME}}</span>
+          <span class="footer-sep"></span>
+          <span class="footer-url">{{BRAND_DOMAIN}}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======== VARIANT 2: STATS / INFOGRAPHIC ======== -->
+  <div class="variant-wrapper">
+    <div class="variant-label">Stats / Infographic</div>
+    <div class="variant-dims">1080 x 1080px</div>
+    <div class="post-frame">
+      <div class="post-canvas stats">
+        <div class="top-label">{{BRAND_NAME}} Plattform-Statistik</div>
+        <div class="big-number">12'400+</div>
+        <div class="big-label">Events pro Tag</div>
+
+        <div class="bar-chart">
+          <div class="bar" style="height:35%; background: linear-gradient(to top, var(--cyan-dark), var(--cyan)); opacity:0.5;">
+            <span class="bar-value">2.1k</span>
+            <span class="bar-label">Mo</span>
+          </div>
+          <div class="bar" style="height:55%; background: linear-gradient(to top, var(--cyan-dark), var(--cyan)); opacity:0.6;">
+            <span class="bar-value">3.8k</span>
+            <span class="bar-label">Di</span>
+          </div>
+          <div class="bar" style="height:70%; background: linear-gradient(to top, var(--cyan-dark), var(--cyan)); opacity:0.7;">
+            <span class="bar-value">5.2k</span>
+            <span class="bar-label">Mi</span>
+          </div>
+          <div class="bar" style="height:90%; background: linear-gradient(to top, var(--cyan-dark), var(--cyan)); opacity:0.85;">
+            <span class="bar-value">7.6k</span>
+            <span class="bar-label">Do</span>
+          </div>
+          <div class="bar" style="height:100%; background: linear-gradient(to top, var(--cyan-dark), var(--cyan));">
+            <span class="bar-value">9.1k</span>
+            <span class="bar-label">Fr</span>
+          </div>
+          <div class="bar" style="height:80%; background: linear-gradient(to top, var(--cyan-dark), var(--cyan)); opacity:0.75;">
+            <span class="bar-value">6.4k</span>
+            <span class="bar-label">Sa</span>
+          </div>
+          <div class="bar" style="height:50%; background: linear-gradient(to top, var(--cyan-dark), var(--cyan)); opacity:0.55;">
+            <span class="bar-value">3.2k</span>
+            <span class="bar-label">So</span>
+          </div>
+        </div>
+
+        <div class="footer-bar">
+          <span class="footer-logo">{{BRAND_NAME}}</span>
+          <span class="footer-url">{{BRAND_DOMAIN}}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======== VARIANT 3: QUOTE ======== -->
+  <div class="variant-wrapper">
+    <div class="variant-label">Quote</div>
+    <div class="variant-dims">1080 x 1080px</div>
+    <div class="post-frame">
+      <div class="post-canvas quote-post">
+        <!-- Subtle hexagon background -->
+        <svg class="hex-bg" width="800" height="920" viewBox="0 0 800 920">
+          <polygon points="400,0 800,230 800,690 400,920 0,690 0,230" fill="none" stroke="var(--cyan)" stroke-width="1.5"/>
+          <polygon points="400,80 720,270 720,650 400,840 80,650 80,270" fill="none" stroke="var(--cyan)" stroke-width="1"/>
+          <polygon points="400,160 640,310 640,610 400,760 160,610 160,310" fill="none" stroke="var(--cyan)" stroke-width="0.5"/>
+        </svg>
+
+        <div class="quote-mark">&ldquo;</div>
+        <p class="quote-text">Die Zukunft geh&ouml;rt denen, die <em>Daten in Echtzeit</em> zu Entscheidungen machen.</p>
+
+        <div class="attribution">
+          <div class="attr-line"></div>
+          <div>
+            <div class="attr-name">{{BRAND_NAME}} Engineering</div>
+            <div class="attr-title">Event-Driven Architecture</div>
+          </div>
+        </div>
+
+        <div class="footer-bar">
+          <span class="footer-logo">{{BRAND_NAME}}</span>
+          <span class="footer-sep"></span>
+          <span class="footer-url">{{BRAND_DOMAIN}}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======== VARIANT 4: FEATURE HIGHLIGHT ======== -->
+  <div class="variant-wrapper">
+    <div class="variant-label">Feature Highlight</div>
+    <div class="variant-dims">1080 x 1080px</div>
+    <div class="post-frame">
+      <div class="post-canvas feature">
+        <div class="gradient-accent"></div>
+
+        <div class="top-bar">
+          <div class="feature-icon">
+            <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+              <path d="M20 4L36 12V28L20 36L4 28V12L20 4Z" stroke="var(--cyan)" stroke-width="2" fill="rgba({{PRIMARY_RGB}},0.1)"/>
+              <circle cx="20" cy="20" r="6" stroke="var(--cyan)" stroke-width="1.5" fill="none"/>
+              <circle cx="20" cy="20" r="2" fill="var(--cyan)"/>
+            </svg>
+          </div>
+          <div>
+            <div class="feature-tag">Neues Feature</div>
+            <div class="feature-name">AI Studio</div>
+          </div>
+        </div>
+
+        <p class="desc">Intelligente Automatisierung f&uuml;r Ihre Event-Pipelines mit KI-Unterst&uuml;tzung.</p>
+
+        <ul class="bullet-list">
+          <li>
+            <span class="bullet-check">
+              <svg width="16" height="16" viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 5" stroke="var(--cyan)" stroke-width="2" fill="none" stroke-linecap="round"/></svg>
+            </span>
+            Automatische Event-Klassifizierung
+          </li>
+          <li>
+            <span class="bullet-check">
+              <svg width="16" height="16" viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 5" stroke="var(--cyan)" stroke-width="2" fill="none" stroke-linecap="round"/></svg>
+            </span>
+            Anomalie-Erkennung in Echtzeit
+          </li>
+          <li>
+            <span class="bullet-check">
+              <svg width="16" height="16" viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 5" stroke="var(--cyan)" stroke-width="2" fill="none" stroke-linecap="round"/></svg>
+            </span>
+            Pr&auml;diktive Analyse &amp; Dashboards
+          </li>
+        </ul>
+
+        <div class="cta-area">
+          <div class="cta-btn">
+            Jetzt testen
+            <svg width="22" height="22" viewBox="0 0 22 22"><path d="M5 11h12M13 7l4 4-4 4" stroke="var(--dark-bg)" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <span class="cta-sub">Kostenlos starten</span>
+        </div>
+
+        <div class="footer-bar">
+          <span class="footer-logo">{{BRAND_NAME}}</span>
+          <span class="footer-url">{{BRAND_DOMAIN}}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>

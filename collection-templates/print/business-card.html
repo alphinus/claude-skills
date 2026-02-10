@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>{{BRAND_NAME}} Visitenkarte</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #1a1a2e;
+    font-family: system-ui, -apple-system, sans-serif;
+    display: flex; align-items: center; justify-content: center;
+    min-height: 100vh; gap: 40px; padding: 40px;
+  }
+
+  .card {
+    width: 340px; height: 220px;
+    border-radius: 8px;
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5), 0 0 0 1px rgba({{PRIMARY_RGB}},0.08);
+  }
+
+  /* ── FRONT ── */
+  .front {
+    background: {{BG}};
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+  }
+  .front::before {
+    content: ''; position: absolute; inset: 0;
+    background-image: linear-gradient(rgba({{PRIMARY_RGB}},0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba({{PRIMARY_RGB}},0.03) 1px, transparent 1px);
+    background-size: 20px 20px;
+    mask-image: radial-gradient(ellipse at center, black 20%, transparent 80%);
+  }
+
+  .front .hex-logo {
+    position: relative; z-index: 1;
+    margin-bottom: 16px;
+  }
+
+  .front .wordmark {
+    position: relative; z-index: 1;
+    font-size: 28px; font-weight: 200; letter-spacing: 10px;
+    color: {{TEXT}};
+  }
+  .front .wordmark span { color: {{PRIMARY}}; }
+
+  .front .tagline {
+    position: relative; z-index: 1;
+    font-size: 9px; letter-spacing: 3px; color: {{MUTED}};
+    text-transform: uppercase; margin-top: 6px;
+  }
+
+  /* Decorative corner hexagons */
+  .front .corner-hex {
+    position: absolute; z-index: 1; opacity: 0.04;
+  }
+  .front .corner-hex.tl { top: -15px; left: -15px; }
+  .front .corner-hex.br { bottom: -15px; right: -15px; }
+
+  /* Cyan accent line */
+  .front .accent-line {
+    position: absolute; bottom: 0; left: 0; right: 0; height: 2px;
+    background: linear-gradient(90deg, transparent, {{PRIMARY}}, transparent);
+    z-index: 1;
+  }
+
+  /* ── BACK ── */
+  .back {
+    background: {{BG}};
+    padding: 24px 28px;
+    display: flex; flex-direction: column; justify-content: space-between;
+  }
+  .back::before {
+    content: ''; position: absolute; top: 0; right: 0;
+    width: 120px; height: 120px;
+    background: radial-gradient(circle, rgba({{PRIMARY_RGB}},0.06) 0%, transparent 70%);
+  }
+
+  .back-top {
+    position: relative; z-index: 1;
+  }
+
+  .back .name {
+    font-size: 16px; font-weight: 600; color: {{TEXT}};
+    letter-spacing: 0.5px;
+  }
+  .back .title {
+    font-size: 10px; color: {{PRIMARY}}; letter-spacing: 1px;
+    margin-top: 3px; font-weight: 400;
+  }
+
+  .back .divider {
+    width: 30px; height: 1px;
+    background: linear-gradient(90deg, {{PRIMARY}}, transparent);
+    margin: 12px 0;
+  }
+
+  .back .info {
+    position: relative; z-index: 1;
+    display: flex; flex-direction: column; gap: 6px;
+  }
+  .back .info-row {
+    display: flex; align-items: center; gap: 10px;
+    font-size: 9px; color: #cbd5e0; letter-spacing: 0.3px;
+  }
+  .back .info-row .icon {
+    width: 14px; height: 14px; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .back .info-row .icon svg {
+    width: 12px; height: 12px;
+  }
+
+  .back-bottom {
+    position: relative; z-index: 1;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .back .mini-hex {
+    opacity: 0.15;
+  }
+  .back .url {
+    font-size: 8px; color: {{MUTED}}; letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+
+  /* Label */
+  .label {
+    color: {{MUTED}}; font-size: 11px; text-align: center;
+    margin-top: 12px; letter-spacing: 1px;
+  }
+
+  .card-wrap { display: flex; flex-direction: column; align-items: center; }
+</style>
+</head>
+<body>
+
+<!-- FRONT -->
+<div class="card-wrap">
+  <div class="card front">
+    <!-- Corner hexagons -->
+    <svg class="corner-hex tl" width="60" height="60" viewBox="0 0 60 60"><polygon points="30,2 56,16 56,44 30,58 4,44 4,16" fill="none" stroke="{{PRIMARY}}" stroke-width="1"/></svg>
+    <svg class="corner-hex br" width="80" height="80" viewBox="0 0 60 60"><polygon points="30,2 56,16 56,44 30,58 4,44 4,16" fill="none" stroke="{{PRIMARY}}" stroke-width="1"/></svg>
+
+    <!-- Hexagon logo -->
+    <div class="hex-logo">
+      <svg width="56" height="64" viewBox="0 0 56 64">
+        <defs>
+          <linearGradient id="hexGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="{{PRIMARY}}"/>
+            <stop offset="100%" stop-color="{{PRIMARY_DARK}}"/>
+          </linearGradient>
+        </defs>
+        <polygon points="28,2 54,16 54,48 28,62 2,48 2,16" fill="none" stroke="url(#hexGrad)" stroke-width="1.5"/>
+        <!-- E-beams -->
+        <line x1="18" y1="22" x2="38" y2="22" stroke="{{PRIMARY}}" stroke-width="1.5" stroke-linecap="round"/>
+        <line x1="18" y1="32" x2="34" y2="32" stroke="{{PRIMARY}}" stroke-width="1.5" stroke-linecap="round"/>
+        <line x1="18" y1="42" x2="38" y2="42" stroke="{{PRIMARY}}" stroke-width="1.5" stroke-linecap="round"/>
+        <line x1="18" y1="22" x2="18" y2="42" stroke="{{PRIMARY}}" stroke-width="1.5" stroke-linecap="round"/>
+      </svg>
+    </div>
+
+    <div class="wordmark">ELUM<span>A</span></div>
+    <div class="tagline">{{BRAND_TAGLINE}}</div>
+    <div class="accent-line"></div>
+  </div>
+  <div class="label">Vorderseite (85 &times; 55 mm)</div>
+</div>
+
+<!-- BACK -->
+<div class="card-wrap">
+  <div class="card back">
+    <div class="back-top">
+      <div class="name">Marco Keller</div>
+      <div class="title">Gründer &amp; CTO</div>
+      <div class="divider"></div>
+    </div>
+
+    <div class="info">
+      <!-- Email -->
+      <div class="info-row">
+        <div class="icon">
+          <svg viewBox="0 0 16 16" fill="none" stroke="{{PRIMARY}}" stroke-width="1.2">
+            <rect x="1" y="3" width="14" height="10" rx="1.5"/>
+            <path d="M1 4l7 5 7-5"/>
+          </svg>
+        </div>
+        <span>hello@{{BRAND_DOMAIN}}</span>
+      </div>
+      <!-- Web -->
+      <div class="info-row">
+        <div class="icon">
+          <svg viewBox="0 0 16 16" fill="none" stroke="{{PRIMARY}}" stroke-width="1.2">
+            <circle cx="8" cy="8" r="6.5"/>
+            <ellipse cx="8" cy="8" rx="3" ry="6.5"/>
+            <line x1="1.5" y1="8" x2="14.5" y2="8"/>
+          </svg>
+        </div>
+        <span>{{BRAND_DOMAIN}}</span>
+      </div>
+      <!-- Phone -->
+      <div class="info-row">
+        <div class="icon">
+          <svg viewBox="0 0 16 16" fill="none" stroke="{{PRIMARY}}" stroke-width="1.2">
+            <rect x="4" y="1" width="8" height="14" rx="2"/>
+            <line x1="6.5" y1="12" x2="9.5" y2="12"/>
+          </svg>
+        </div>
+        <span>+41 44 000 00 00</span>
+      </div>
+    </div>
+
+    <div class="back-bottom">
+      <div class="url">{{BRAND_DOMAIN}}</div>
+      <div class="mini-hex">
+        <svg width="24" height="28" viewBox="0 0 56 64">
+          <polygon points="28,2 54,16 54,48 28,62 2,48 2,16" fill="none" stroke="{{PRIMARY}}" stroke-width="2"/>
+          <line x1="18" y1="22" x2="38" y2="22" stroke="{{PRIMARY}}" stroke-width="2" stroke-linecap="round"/>
+          <line x1="18" y1="32" x2="34" y2="32" stroke="{{PRIMARY}}" stroke-width="2" stroke-linecap="round"/>
+          <line x1="18" y1="42" x2="38" y2="42" stroke="{{PRIMARY}}" stroke-width="2" stroke-linecap="round"/>
+          <line x1="18" y1="22" x2="18" y2="42" stroke="{{PRIMARY}}" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </div>
+    </div>
+  </div>
+  <div class="label">Rückseite (85 &times; 55 mm)</div>
+</div>
+
+</body>
+</html>

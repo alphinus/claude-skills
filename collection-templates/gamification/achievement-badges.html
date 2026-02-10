@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{BRAND_NAME}} - Achievement Badges</title>
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  :root{--dark-bg:{{BG}};--cyan:{{PRIMARY}};--cyan-dark:{{PRIMARY_DARK}};--cloud:{{TEXT}};--muted:{{MUTED}};
+    --bronze:#cd7f32;--silver:#c0c0c0;--gold:#ffd700;--purple:#9f7aea;--pink:#ed64a6;--orange:#ed8936;--blue:#4299e1;--green:#48bb78;--red:#fc8181}
+  body{font-family:system-ui,-apple-system,sans-serif;background:var(--dark-bg);color:var(--cloud);min-height:100vh;padding:40px 20px}
+  .container{max-width:1200px;margin:0 auto}
+  .header{text-align:center;margin-bottom:48px}
+  .header h1{font-size:2.4rem;font-weight:700;margin-bottom:8px;background:linear-gradient(135deg,var(--cyan),var(--cyan-dark));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+  .header .subtitle{color:var(--muted);font-size:1.05rem}
+  .progress-summary{text-align:center;margin-bottom:40px}
+  .progress-summary .count{font-size:1.6rem;font-weight:700;color:var(--cyan)}
+  .progress-summary .label{color:var(--muted);font-size:.95rem;margin-top:4px}
+  .progress-bar-wrap{max-width:400px;margin:16px auto 0;background:rgba(255,255,255,.08);border-radius:20px;height:10px;overflow:hidden}
+  .progress-bar-fill{height:100%;width:66.6%;background:linear-gradient(90deg,var(--cyan-dark),var(--cyan));border-radius:20px;transition:width .6s ease}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:24px}
+  .badge-card{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:28px 20px;text-align:center;position:relative;transition:transform .25s,box-shadow .25s,border-color .25s}
+  .badge-card:hover{transform:translateY(-4px);box-shadow:0 12px 32px rgba(0,0,0,.3)}
+  .badge-card.unlocked:hover{border-color:rgba({{PRIMARY_RGB}},.3)}
+  .badge-card.locked{opacity:.45;filter:grayscale(.7)}
+  .badge-card.locked .badge-icon{position:relative}
+  .badge-card.locked .badge-icon::after{content:'';position:absolute;inset:0;display:flex;align-items:center;justify-content:center}
+  .lock-overlay{position:absolute;top:14px;right:14px}
+  .lock-overlay svg{width:18px;height:18px;fill:var(--muted)}
+  .badge-icon{width:90px;height:90px;margin:0 auto 16px;position:relative}
+  .badge-icon svg{width:100%;height:100%}
+  .badge-name{font-size:1.1rem;font-weight:700;margin-bottom:4px}
+  .badge-desc{color:var(--muted);font-size:.85rem;line-height:1.5;margin-bottom:12px}
+  .rarity{display:inline-block;font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;padding:4px 12px;border-radius:20px;background:rgba(255,255,255,.06)}
+  .rarity.bronze{color:var(--bronze);border:1px solid rgba(205,127,50,.3)}
+  .rarity.silver{color:var(--silver);border:1px solid rgba(192,192,192,.3)}
+  .rarity.gold{color:var(--gold);border:1px solid rgba(255,215,0,.3)}
+  .rarity.rare{color:var(--purple);border:1px solid rgba(159,122,234,.3)}
+  .rarity.epic{color:var(--pink);border:1px solid rgba(237,100,166,.3)}
+  .rarity.legendary{color:var(--orange);border:1px solid rgba(237,137,54,.3)}
+  .badge-card.unlocked .badge-icon{animation:badgePulse 3s ease-in-out infinite}
+  @keyframes badgePulse{0%,100%{filter:drop-shadow(0 0 6px rgba({{PRIMARY_RGB}},.15))}50%{filter:drop-shadow(0 0 14px rgba({{PRIMARY_RGB}},.35))}}
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <h1>Achievement Badges</h1>
+    <p class="subtitle">Sammle Abzeichen und zeige deinen Fortschritt im {{BRAND_NAME}}-Oekosystem</p>
+  </div>
+  <div class="progress-summary">
+    <div class="count">8 von 12 freigeschaltet</div>
+    <div class="label">Weiter so! Noch 4 Badges bis zur Komplettierung.</div>
+    <div class="progress-bar-wrap"><div class="progress-bar-fill"></div></div>
+  </div>
+  <div class="grid" id="badgeGrid"></div>
+</div>
+<script>
+const badges=[
+  {name:"Erster Event",desc:"Sende deinen allerersten Event an das {{BRAND_NAME}}-System.",rarity:"bronze",rarityLabel:"Bronze",unlocked:true,icon:"bolt",color:"#cd7f32"},
+  {name:"100 Events",desc:"Erreiche die Marke von 100 gesendeten Events.",rarity:"silver",rarityLabel:"Silber",unlocked:true,icon:"stack",color:"#c0c0c0"},
+  {name:"10K Events",desc:"10.000 Events verarbeitet \u2013 du bist ein Event-Kraftwerk!",rarity:"gold",rarityLabel:"Gold",unlocked:true,icon:"trophy",color:"#ffd700"},
+  {name:"Stream-Meister",desc:"Erstelle 5 aktive Streams und halte sie stabil.",rarity:"rare",rarityLabel:"Selten",unlocked:true,icon:"stream",color:"#9f7aea"},
+  {name:"AI-Pionier",desc:"Nutze die KI-Analyse f\u00fcr mindestens 50 Events.",rarity:"epic",rarityLabel:"Episch",unlocked:true,icon:"brain",color:"#ed64a6"},
+  {name:"Bot-Fl\u00fcsterer",desc:"Konfiguriere und deploye deinen ersten {{BRAND_NAME}}-Bot.",rarity:"rare",rarityLabel:"Selten",unlocked:true,icon:"bot",color:"#9f7aea"},
+  {name:"Nacht-Eule",desc:"Sende Events zwischen 00:00 und 05:00 Uhr.",rarity:"silver",rarityLabel:"Silber",unlocked:true,icon:"moon",color:"#c0c0c0"},
+  {name:"Blitzschnell",desc:"Erziele eine Event-Verarbeitungszeit unter 10ms.",rarity:"gold",rarityLabel:"Gold",unlocked:true,icon:"zap",color:"#ffd700"},
+  {name:"Team-Player",desc:"Lade 3 Teammitglieder ein und arbeite kollaborativ.",rarity:"rare",rarityLabel:"Selten",unlocked:false,icon:"users",color:"#9f7aea"},
+  {name:"Power-User",desc:"Nutze {{BRAND_NAME}} an 30 aufeinanderfolgenden Tagen.",rarity:"epic",rarityLabel:"Episch",unlocked:false,icon:"fire",color:"#ed64a6"},
+  {name:"Bug-J\u00e4ger",desc:"Melde 5 verifizierte Bugs \u00fcber das Feedback-System.",rarity:"legendary",rarityLabel:"Legend\u00e4r",unlocked:false,icon:"bug",color:"#ed8936"},
+  {name:"Early Adopter",desc:"Sei unter den ersten 100 registrierten Nutzern.",rarity:"legendary",rarityLabel:"Legend\u00e4r",unlocked:false,icon:"star",color:"#ed8936"}
+];
+
+function hexSVG(color,icon,unlocked){
+  const c=unlocked?color:'#4a5568';
+  const fill=unlocked?color+'33':'#2d374833';
+  const icons={
+    bolt:`<path d="M28 18L22 30H28L24 42L36 26H29L34 18H28Z" fill="${c}" stroke="${c}" stroke-width="1.5" stroke-linejoin="round"/>`,
+    stack:`<rect x="20" y="18" width="20" height="5" rx="1.5" fill="${c}" opacity=".5"/><rect x="22" y="25" width="16" height="5" rx="1.5" fill="${c}" opacity=".7"/><rect x="18" y="32" width="24" height="5" rx="1.5" fill="${c}"/>`,
+    trophy:`<path d="M24 22h12v6c0 4-2.7 7-6 8v3h4v2H26v-2h4v-3c-3.3-1-6-4-6-8v-6zm-4 0h4v4c-1.5-.2-3-1-4-2.2V22zm20 0h-4v4c1.5-.2 3-1 4-2.2V22z" fill="${c}"/>`,
+    stream:`<path d="M18 24c0-4.4 3.6-8 8-8M22 24c0-2.2 1.8-4 4-4M34 24c0-4.4-3.6-8-8-8M30 24c0-2.2-1.8-4-4-4" stroke="${c}" stroke-width="2" fill="none" stroke-linecap="round"/><circle cx="26" cy="24" r="2" fill="${c}"/><path d="M18 30c0 4.4 3.6 8 8 8M22 30c0 2.2 1.8 4 4 4M34 30c0 4.4-3.6 8-8 8M30 30c0 2.2-1.8 4-4 4" stroke="${c}" stroke-width="2" fill="none" stroke-linecap="round"/>`,
+    brain:`<path d="M30 20c-1-2-3-3-5-3s-4 1.5-4.5 3.5c-2 .5-3.5 2.5-3.5 4.5 0 2 1 3.5 2.5 4.3-.2.7-.5 1.7-.5 2.7 0 3 2.5 5 5.5 5h1v-5.5" stroke="${c}" stroke-width="1.8" fill="none" stroke-linecap="round"/><path d="M30 20c1-2 3-3 5-3s4 1.5 4.5 3.5c2 .5 3.5 2.5 3.5 4.5 0 2-1 3.5-2.5 4.3.2.7.5 1.7.5 2.7 0 3-2.5 5-5.5 5h-1v-5.5" stroke="${c}" stroke-width="1.8" fill="none" stroke-linecap="round"/><line x1="30" y1="20" x2="30" y2="37" stroke="${c}" stroke-width="1.5"/>`,
+    bot:`<rect x="22" y="22" width="16" height="14" rx="3" stroke="${c}" stroke-width="1.8" fill="none"/><circle cx="27" cy="28" r="2" fill="${c}"/><circle cx="33" cy="28" r="2" fill="${c}"/><line x1="30" y1="19" x2="30" y2="22" stroke="${c}" stroke-width="2" stroke-linecap="round"/><circle cx="30" cy="18" r="1.5" fill="${c}"/><line x1="20" y1="27" x2="22" y2="27" stroke="${c}" stroke-width="2" stroke-linecap="round"/><line x1="38" y1="27" x2="40" y2="27" stroke="${c}" stroke-width="2" stroke-linecap="round"/>`,
+    moon:`<path d="M34 20a10 10 0 1 1-10 6 7 7 0 0 0 10-6z" fill="${c}"/>`,
+    zap:`<polygon points="30,16 22,30 28,30 26,42 38,26 31,26 34,16" fill="${c}"/>`,
+    users:`<circle cx="26" cy="23" r="4" stroke="${c}" stroke-width="1.8" fill="none"/><path d="M18 36c0-4.4 3.6-8 8-8s8 3.6 8 8" stroke="${c}" stroke-width="1.8" fill="none" stroke-linecap="round"/><circle cx="36" cy="23" r="3" stroke="${c}" stroke-width="1.5" fill="none" opacity=".6"/><path d="M38 36c0-3-1.8-5.6-4.5-7" stroke="${c}" stroke-width="1.5" fill="none" stroke-linecap="round" opacity=".6"/>`,
+    fire:`<path d="M30 16c0 4-6 8-6 14a8 8 0 0 0 12 0c0-6-6-10-6-14z" fill="${c}" opacity=".3"/><path d="M30 22c0 3-4 5-4 9a5 5 0 0 0 8 0c0-4-4-6-4-9z" fill="${c}"/>`,
+    bug:`<ellipse cx="30" cy="30" rx="6" ry="8" stroke="${c}" stroke-width="1.8" fill="none"/><line x1="30" y1="22" x2="30" y2="38" stroke="${c}" stroke-width="1.2"/><line x1="24" y1="28" x2="36" y2="28" stroke="${c}" stroke-width="1.2"/><line x1="24" y1="33" x2="36" y2="33" stroke="${c}" stroke-width="1.2"/><line x1="24" y1="26" x2="20" y2="22" stroke="${c}" stroke-width="1.5" stroke-linecap="round"/><line x1="36" y1="26" x2="40" y2="22" stroke="${c}" stroke-width="1.5" stroke-linecap="round"/><line x1="24" y1="30" x2="19" y2="30" stroke="${c}" stroke-width="1.5" stroke-linecap="round"/><line x1="36" y1="30" x2="41" y2="30" stroke="${c}" stroke-width="1.5" stroke-linecap="round"/><line x1="24" y1="34" x2="20" y2="38" stroke="${c}" stroke-width="1.5" stroke-linecap="round"/><line x1="36" y1="34" x2="40" y2="38" stroke="${c}" stroke-width="1.5" stroke-linecap="round"/>`,
+    star:`<polygon points="30,16 33,25 42,25 35,31 37,40 30,35 23,40 25,31 18,25 27,25" fill="${c}"/>`
+  };
+  return `<svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
+    <polygon points="30,2 52,16 52,44 30,58 8,44 8,16" fill="${fill}" stroke="${c}" stroke-width="1.5" opacity=".9"/>
+    ${icons[icon]||''}
+  </svg>`;
+}
+
+const grid=document.getElementById('badgeGrid');
+badges.forEach(b=>{
+  const card=document.createElement('div');
+  card.className=`badge-card ${b.unlocked?'unlocked':'locked'}`;
+  card.innerHTML=`
+    ${!b.unlocked?`<div class="lock-overlay"><svg viewBox="0 0 24 24"><path d="M18 10h-1V7A5 5 0 0 0 7 7v3H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8a2 2 0 0 0-2-2zM9 7a3 3 0 0 1 6 0v3H9V7zm4 10.7V20h-2v-2.3A1.5 1.5 0 0 1 12 15a1.5 1.5 0 0 1 1 2.7z"/></svg></div>`:''}
+    <div class="badge-icon">${hexSVG(b.color,b.icon,b.unlocked)}</div>
+    <div class="badge-name">${b.name}</div>
+    <div class="badge-desc">${b.desc}</div>
+    <span class="rarity ${b.rarity}">${b.rarityLabel}</span>
+  `;
+  grid.appendChild(card);
+});
+</script>
+</body>
+</html>

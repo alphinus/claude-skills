@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{BRAND_NAME}} Event-Lebenszyklus</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:{{BG}};font-family:system-ui,-apple-system,sans-serif;color:{{TEXT}};min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:40px 20px}
+  h1{font-size:2rem;font-weight:700;letter-spacing:-.5px;margin-bottom:8px}
+  h1 span{color:{{PRIMARY}}}
+  .subtitle{color:{{MUTED}};font-size:.95rem;margin-bottom:32px}
+  .diagram-wrap{background:#1e293b;border-radius:16px;border:1px solid rgba({{PRIMARY_RGB}},.15);padding:32px;max-width:1300px;width:100%;overflow-x:auto}
+  svg text{font-family:system-ui,-apple-system,sans-serif}
+
+  @keyframes dashFlow{to{stroke-dashoffset:-20}}
+  @keyframes dotMove1{
+    0%{offset-distance:0%}
+    100%{offset-distance:100%}
+  }
+  @keyframes blink{0%,100%{opacity:.4}50%{opacity:1}}
+  @keyframes pulse{0%,100%{r:5}50%{r:7}}
+
+  .flow-arrow{stroke-dasharray:6 3;animation:dashFlow .8s linear infinite}
+  .flow-arrow-error{stroke-dasharray:6 3;animation:dashFlow .8s linear infinite}
+
+  .dot-flow{animation:dotMove1 3s linear infinite}
+
+  .node-glow{filter:drop-shadow(0 0 6px rgba({{PRIMARY_RGB}},.3))}
+  .node-glow-blue{filter:drop-shadow(0 0 6px rgba({{INFO_RGB}},.3))}
+  .node-glow-purple{filter:drop-shadow(0 0 6px rgba(167,139,250,.3))}
+  .node-glow-red{filter:drop-shadow(0 0 6px rgba({{ERROR_RGB}},.3))}
+  .node-glow-warn{filter:drop-shadow(0 0 6px rgba({{WARNING_RGB}},.3))}
+</style>
+</head>
+<body>
+
+<h1><span>{{BRAND_NAME}}</span> Event-Lebenszyklus</h1>
+<p class="subtitle">Vom Eingang bis zur Verarbeitung &mdash; alle Pfade eines Events durch das System</p>
+
+<div class="diagram-wrap">
+<svg viewBox="0 0 1240 680" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto">
+  <defs>
+    <marker id="ar" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <polygon points="0 0,8 3,0 6" fill="{{PRIMARY}}"/>
+    </marker>
+    <marker id="ar-b" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <polygon points="0 0,8 3,0 6" fill="{{INFO}}"/>
+    </marker>
+    <marker id="ar-p" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <polygon points="0 0,8 3,0 6" fill="#a78bfa"/>
+    </marker>
+    <marker id="ar-r" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <polygon points="0 0,8 3,0 6" fill="{{ERROR}}"/>
+    </marker>
+    <marker id="ar-w" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <polygon points="0 0,8 3,0 6" fill="{{WARNING}}"/>
+    </marker>
+    <marker id="ar-g" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <polygon points="0 0,8 3,0 6" fill="{{SUCCESS}}"/>
+    </marker>
+
+    <!-- Animated dot on main path -->
+    <path id="mainPath" d="M100,200 L250,200 L400,200 L550,200 L700,200 L850,200 L1000,200" fill="none"/>
+    <path id="aiPath" d="M550,230 L550,370 L625,370" fill="none"/>
+    <path id="whPath" d="M700,230 L700,490 L775,490" fill="none"/>
+    <path id="tgPath" d="M850,230 L850,370 L925,370" fill="none"/>
+    <path id="errPath" d="M400,230 L400,490 L475,490" fill="none"/>
+  </defs>
+
+  <!-- ========= MAIN HORIZONTAL FLOW ========= -->
+
+  <!-- Step 1: Event Erstellt -->
+  <g class="node-glow">
+    <rect x="40" y="160" width="130" height="80" rx="12" fill="#1a3a3a" stroke="{{PRIMARY}}" stroke-width="1.5"/>
+    <!-- Icon: lightning bolt -->
+    <g transform="translate(90,174)">
+      <polygon points="6,0 0,14 5,14 2,24 12,10 7,10 10,0" fill="{{PRIMARY}}" opacity=".8"/>
+    </g>
+    <text x="105" y="210" text-anchor="middle" fill="{{TEXT}}" font-size="12" font-weight="600">Event erstellt</text>
+    <text x="105" y="226" text-anchor="middle" fill="{{MUTED}}" font-size="9">POST /events</text>
+  </g>
+
+  <!-- Step 2: Validiert -->
+  <g class="node-glow">
+    <rect x="210" y="160" width="130" height="80" rx="12" fill="#1a3a3a" stroke="{{PRIMARY}}" stroke-width="1.5"/>
+    <!-- Icon: checkmark shield -->
+    <g transform="translate(262,174)">
+      <path d="M8,0 L16,4 L16,10 C16,15 8,20 8,20 C8,20 0,15 0,10 L0,4 Z" fill="none" stroke="{{PRIMARY}}" stroke-width="1.5" opacity=".8"/>
+      <polyline points="5,10 7.5,13 12,7" fill="none" stroke="{{PRIMARY}}" stroke-width="1.5"/>
+    </g>
+    <text x="275" y="210" text-anchor="middle" fill="{{TEXT}}" font-size="12" font-weight="600">Validiert</text>
+    <text x="275" y="226" text-anchor="middle" fill="{{MUTED}}" font-size="9">Schema &bull; Auth</text>
+  </g>
+
+  <!-- Step 3: Gespeichert -->
+  <g class="node-glow">
+    <rect x="380" y="160" width="130" height="80" rx="12" fill="#1a3a2a" stroke="{{SUCCESS}}" stroke-width="1.5"/>
+    <!-- Icon: database -->
+    <g transform="translate(432,172)">
+      <ellipse cx="8" cy="3" rx="8" ry="3" fill="none" stroke="{{SUCCESS}}" stroke-width="1.5"/>
+      <path d="M0,3 L0,17 C0,19 8,21 8,21 C8,21 16,19 16,17 L16,3" fill="none" stroke="{{SUCCESS}}" stroke-width="1.5"/>
+      <path d="M0,10 C0,12 8,14 8,14 C8,14 16,12 16,10" fill="none" stroke="{{SUCCESS}}" stroke-width="1"/>
+    </g>
+    <text x="445" y="210" text-anchor="middle" fill="{{TEXT}}" font-size="12" font-weight="600">Gespeichert</text>
+    <text x="445" y="226" text-anchor="middle" fill="{{MUTED}}" font-size="9">JSONL Append</text>
+  </g>
+
+  <!-- Step 4: Verarbeitet -->
+  <g class="node-glow">
+    <rect x="550" y="160" width="130" height="80" rx="12" fill="#1a3a3a" stroke="{{PRIMARY}}" stroke-width="1.5"/>
+    <!-- Icon: gear -->
+    <g transform="translate(602,174)">
+      <circle cx="8" cy="8" r="4" fill="none" stroke="{{PRIMARY}}" stroke-width="1.5"/>
+      <circle cx="8" cy="8" r="7.5" fill="none" stroke="{{PRIMARY}}" stroke-width="1.5" stroke-dasharray="3 2.5"/>
+    </g>
+    <text x="615" y="210" text-anchor="middle" fill="{{TEXT}}" font-size="12" font-weight="600">Verarbeitet</text>
+    <text x="615" y="226" text-anchor="middle" fill="{{MUTED}}" font-size="9">Handler-Pipeline</text>
+  </g>
+
+  <!-- Step 5: Trigger -->
+  <g class="node-glow-warn">
+    <rect x="720" y="160" width="130" height="80" rx="12" fill="#2a2a1a" stroke="{{WARNING}}" stroke-width="1.5"/>
+    <!-- Icon: lightning -->
+    <g transform="translate(772,174)">
+      <polygon points="6,0 0,10 5,10 3,18 14,7 9,7 12,0" fill="{{WARNING}}" opacity=".8"/>
+    </g>
+    <text x="785" y="210" text-anchor="middle" fill="{{TEXT}}" font-size="12" font-weight="600">Trigger</text>
+    <text x="785" y="226" text-anchor="middle" fill="{{MUTED}}" font-size="9">Regeln auswerten</text>
+  </g>
+
+  <!-- Step 6: Benachrichtigt -->
+  <g class="node-glow-blue">
+    <rect x="890" y="160" width="140" height="80" rx="12" fill="{{SURFACE}}" stroke="{{INFO}}" stroke-width="1.5"/>
+    <!-- Icon: bell -->
+    <g transform="translate(948,174)">
+      <path d="M8,0 C8,0 3,2 3,8 L3,12 L0,14 L16,14 L13,12 L13,8 C13,2 8,0 8,0" fill="none" stroke="{{INFO}}" stroke-width="1.5"/>
+      <circle cx="8" cy="17" r="2" fill="{{INFO}}"/>
+    </g>
+    <text x="960" y="210" text-anchor="middle" fill="{{TEXT}}" font-size="12" font-weight="600">Benachrichtigt</text>
+    <text x="960" y="226" text-anchor="middle" fill="{{MUTED}}" font-size="9">Alle Kanäle</text>
+  </g>
+
+  <!-- Main horizontal arrows -->
+  <line x1="170" y1="200" x2="207" y2="200" class="flow-arrow" stroke="{{PRIMARY}}" stroke-width="2" marker-end="url(#ar)"/>
+  <line x1="340" y1="200" x2="377" y2="200" class="flow-arrow" stroke="{{PRIMARY}}" stroke-width="2" marker-end="url(#ar)"/>
+  <line x1="510" y1="200" x2="547" y2="200" class="flow-arrow" stroke="{{PRIMARY}}" stroke-width="2" marker-end="url(#ar)"/>
+  <line x1="680" y1="200" x2="717" y2="200" class="flow-arrow" stroke="{{PRIMARY}}" stroke-width="2" marker-end="url(#ar)"/>
+  <line x1="850" y1="200" x2="887" y2="200" class="flow-arrow" stroke="{{PRIMARY}}" stroke-width="2" marker-end="url(#ar)"/>
+
+  <!-- Animated dots on main path -->
+  <circle r="5" fill="{{PRIMARY}}" opacity=".8">
+    <animateMotion dur="4s" repeatCount="indefinite" path="M105,200 L275,200 L445,200 L615,200 L785,200 L960,200" begin="0s"/>
+  </circle>
+  <circle r="4" fill="{{PRIMARY}}" opacity=".5">
+    <animateMotion dur="4s" repeatCount="indefinite" path="M105,200 L275,200 L445,200 L615,200 L785,200 L960,200" begin="1.5s"/>
+  </circle>
+
+  <!-- ========= BRANCH: KI-Analyse (async) ========= -->
+  <g class="node-glow-purple">
+    <rect x="500" y="340" width="160" height="80" rx="12" fill="#2a1a3a" stroke="#a78bfa" stroke-width="1.5"/>
+    <text x="510" y="362" fill="#a78bfa" font-size="9" font-weight="600">ASYNC</text>
+    <text x="580" y="382" text-anchor="middle" fill="{{TEXT}}" font-size="12" font-weight="600">KI-Analyse</text>
+    <text x="580" y="400" text-anchor="middle" fill="{{MUTED}}" font-size="9">AI SDK v6 &bull; Streaming</text>
+  </g>
+  <!-- Arrow down from Verarbeitet -->
+  <path d="M615,240 L615,270 L580,270 L580,337" fill="none" class="flow-arrow" stroke="#a78bfa" stroke-width="1.5" marker-end="url(#ar-p)"/>
+  <text x="592" y="264" fill="#a78bfa" font-size="9">async</text>
+  <!-- Animated dot -->
+  <circle r="4" fill="#a78bfa" opacity=".7">
+    <animateMotion dur="2.5s" repeatCount="indefinite" path="M615,240 L615,270 L580,270 L580,337" begin="0.5s"/>
+  </circle>
+
+  <!-- KI result back -->
+  <g class="node-glow-purple">
+    <rect x="500" y="450" width="160" height="60" rx="12" fill="#2a1a3a" stroke="#a78bfa" stroke-width="1"/>
+    <text x="580" y="478" text-anchor="middle" fill="{{TEXT}}" font-size="11" font-weight="600">Dokument generiert</text>
+    <text x="580" y="496" text-anchor="middle" fill="{{MUTED}}" font-size="9">Zusammenfassung / Aktion</text>
+  </g>
+  <line x1="580" y1="420" x2="580" y2="447" class="flow-arrow" stroke="#a78bfa" stroke-width="1.5" marker-end="url(#ar-p)"/>
+
+  <!-- ========= BRANCH: Webhook Zustellung ========= -->
+  <g class="node-glow-blue">
+    <rect x="740" y="340" width="160" height="80" rx="12" fill="{{SURFACE}}" stroke="{{INFO}}" stroke-width="1.5"/>
+    <text x="820" y="368" text-anchor="middle" fill="{{INFO}}" font-size="9" font-weight="600">DISPATCH</text>
+    <text x="820" y="388" text-anchor="middle" fill="{{TEXT}}" font-size="12" font-weight="600">Webhook-Zustellung</text>
+    <text x="820" y="406" text-anchor="middle" fill="{{MUTED}}" font-size="9">HTTP POST &bull; Signiert</text>
+  </g>
+  <!-- Arrow down from Trigger -->
+  <path d="M785,240 L785,270 L820,270 L820,337" fill="none" class="flow-arrow" stroke="{{INFO}}" stroke-width="1.5" marker-end="url(#ar-b)"/>
+  <text x="798" y="264" fill="{{INFO}}" font-size="9">emit</text>
+  <circle r="4" fill="{{INFO}}" opacity=".7">
+    <animateMotion dur="2.5s" repeatCount="indefinite" path="M785,240 L785,270 L820,270 L820,337" begin="1s"/>
+  </circle>
+
+  <!-- Retry loop -->
+  <path d="M900,380 Q930,380 930,400 Q930,420 900,420 L900,395" fill="none" stroke="{{WARNING}}" stroke-width="1.5" stroke-dasharray="4 2" marker-end="url(#ar-w)"/>
+  <text x="944" y="404" fill="{{WARNING}}" font-size="9">Retry</text>
+
+  <!-- ========= BRANCH: Telegram Benachrichtigung ========= -->
+  <g class="node-glow">
+    <rect x="940" y="340" width="160" height="80" rx="12" fill="#1a3a3a" stroke="{{PRIMARY}}" stroke-width="1.5"/>
+    <text x="1020" y="368" text-anchor="middle" fill="{{PRIMARY}}" font-size="9" font-weight="600">BOT</text>
+    <text x="1020" y="388" text-anchor="middle" fill="{{TEXT}}" font-size="12" font-weight="600">Telegram senden</text>
+    <text x="1020" y="406" text-anchor="middle" fill="{{MUTED}}" font-size="9">grammY &bull; Formatiert</text>
+  </g>
+  <!-- Arrow from Benachrichtigt -->
+  <path d="M960,240 L960,270 L1020,270 L1020,337" fill="none" class="flow-arrow" stroke="{{PRIMARY}}" stroke-width="1.5" marker-end="url(#ar)"/>
+  <text x="972" y="264" fill="{{PRIMARY}}" font-size="9">notify</text>
+  <circle r="4" fill="{{PRIMARY}}" opacity=".7">
+    <animateMotion dur="2.5s" repeatCount="indefinite" path="M960,240 L960,270 L1020,270 L1020,337" begin="1.5s"/>
+  </circle>
+
+  <!-- ========= ERROR BRANCH ========= -->
+  <g class="node-glow-red">
+    <rect x="260" y="340" width="180" height="80" rx="12" fill="#3a1a1a" stroke="{{ERROR}}" stroke-width="1.5"/>
+    <!-- Icon: X -->
+    <g transform="translate(338,352)">
+      <circle cx="8" cy="8" r="8" fill="none" stroke="{{ERROR}}" stroke-width="1.5"/>
+      <line x1="5" y1="5" x2="11" y2="11" stroke="{{ERROR}}" stroke-width="1.5"/>
+      <line x1="11" y1="5" x2="5" y2="11" stroke="{{ERROR}}" stroke-width="1.5"/>
+    </g>
+    <text x="350" y="388" text-anchor="middle" fill="{{TEXT}}" font-size="12" font-weight="600">Fehlerbehandlung</text>
+    <text x="350" y="406" text-anchor="middle" fill="{{MUTED}}" font-size="9">Validierungsfehler / Timeout</text>
+  </g>
+  <!-- Arrow from Validiert -->
+  <path d="M275,240 L275,270 L350,270 L350,337" fill="none" class="flow-arrow-error" stroke="{{ERROR}}" stroke-width="1.5" marker-end="url(#ar-r)"/>
+  <text x="280" y="264" fill="{{ERROR}}" font-size="9">Fehler</text>
+
+  <!-- Error sub-nodes -->
+  <g>
+    <rect x="220" y="450" width="120" height="50" rx="8" fill="#3a1a1a" stroke="{{ERROR}}" stroke-width="1"/>
+    <text x="280" y="476" text-anchor="middle" fill="{{ERROR}}" font-size="10" font-weight="600">Loggen</text>
+    <text x="280" y="490" text-anchor="middle" fill="{{MUTED}}" font-size="9">Event Store</text>
+  </g>
+  <g>
+    <rect x="360" y="450" width="120" height="50" rx="8" fill="#3a1a1a" stroke="{{ERROR}}" stroke-width="1"/>
+    <text x="420" y="476" text-anchor="middle" fill="{{ERROR}}" font-size="10" font-weight="600">Alarmieren</text>
+    <text x="420" y="490" text-anchor="middle" fill="{{MUTED}}" font-size="9">Admin-Kanal</text>
+  </g>
+  <line x1="320" y1="420" x2="280" y2="447" stroke="{{ERROR}}" stroke-width="1" marker-end="url(#ar-r)"/>
+  <line x1="370" y1="420" x2="420" y2="447" stroke="{{ERROR}}" stroke-width="1" marker-end="url(#ar-r)"/>
+
+  <!-- Dead letter queue -->
+  <g>
+    <rect x="220" y="530" width="260" height="50" rx="8" fill="#3a1a1a" stroke="{{ERROR}}" stroke-width="1" stroke-dasharray="4 2"/>
+    <text x="350" y="556" text-anchor="middle" fill="{{ERROR}}" font-size="10" font-weight="600">Dead Letter Queue</text>
+    <text x="350" y="570" text-anchor="middle" fill="{{MUTED}}" font-size="9">Manuelle Überprüfung erforderlich</text>
+  </g>
+  <line x1="280" y1="500" x2="310" y2="527" stroke="{{ERROR}}" stroke-width="1" stroke-dasharray="3 2"/>
+
+  <!-- ========= SUCCESS END ========= -->
+  <g class="node-glow">
+    <rect x="1060" y="160" width="120" height="80" rx="40" fill="#1a3a2a" stroke="{{SUCCESS}}" stroke-width="2"/>
+    <text x="1120" y="196" text-anchor="middle" fill="{{SUCCESS}}" font-size="12" font-weight="700">Fertig</text>
+    <text x="1120" y="214" text-anchor="middle" fill="{{MUTED}}" font-size="9">Abgeschlossen</text>
+    <!-- Checkmark -->
+    <g transform="translate(1108,220)">
+      <polyline points="3,6 8,12 20,0" fill="none" stroke="{{SUCCESS}}" stroke-width="2"/>
+    </g>
+  </g>
+  <line x1="1030" y1="200" x2="1057" y2="200" class="flow-arrow" stroke="{{SUCCESS}}" stroke-width="2" marker-end="url(#ar-g)"/>
+
+  <!-- ========= LEGEND ========= -->
+  <g transform="translate(40,600)">
+    <rect x="0" y="0" width="450" height="55" rx="8" fill="{{BG}}" stroke="#334155" stroke-width="1"/>
+    <circle cx="20" cy="28" r="6" fill="{{PRIMARY}}"/><text x="34" y="32" fill="#cbd5e1" font-size="10">Hauptpfad</text>
+    <circle cx="130" cy="28" r="6" fill="#a78bfa"/><text x="144" y="32" fill="#cbd5e1" font-size="10">KI (async)</text>
+    <circle cx="230" cy="28" r="6" fill="{{INFO}}"/><text x="244" y="32" fill="#cbd5e1" font-size="10">Webhook</text>
+    <circle cx="330" cy="28" r="6" fill="{{ERROR}}"/><text x="344" y="32" fill="#cbd5e1" font-size="10">Fehlerbehandlung</text>
+  </g>
+
+</svg>
+</div>
+
+</body>
+</html>

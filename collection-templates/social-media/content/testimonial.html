@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{BRAND_NAME}} Testimonial - 1080x1080</title>
+<style>
+  :root {
+    --dark-bg: {{BG}};
+    --cyan: {{PRIMARY}};
+    --cyan-dark: {{PRIMARY_DARK}};
+    --cloud: {{TEXT}};
+    --muted: {{MUTED}};
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #080e1a;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    font-family: system-ui, -apple-system, sans-serif;
+    color: var(--cloud);
+    padding: 40px 20px;
+  }
+
+  .meta {
+    color: var(--muted);
+    font-size: 14px;
+    margin-bottom: 20px;
+    text-align: center;
+    letter-spacing: 0.5px;
+  }
+  .meta strong { color: var(--cyan); }
+
+  .template {
+    width: 1080px;
+    height: 1080px;
+    background: var(--dark-bg);
+    position: relative;
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+
+  /* Hexagon pattern background */
+  .hex-bg {
+    position: absolute;
+    inset: 0;
+    opacity: 0.035;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='70'%3E%3Cpath d='M40 0l35 20v40L40 80 5 60V20z' fill='none' stroke='%234fd1c5' stroke-width='0.6'/%3E%3C/svg%3E");
+    background-size: 80px 70px;
+  }
+
+  /* Decorative hexagons */
+  .hex-deco {
+    position: absolute;
+    opacity: 0.06;
+  }
+  .hex-deco svg { width: 100%; height: 100%; }
+  .hex-deco.h1 { width: 200px; height: 200px; top: -40px; right: -40px; }
+  .hex-deco.h2 { width: 160px; height: 160px; bottom: -30px; left: -30px; }
+  .hex-deco.h3 { width: 100px; height: 100px; top: 200px; left: 60px; opacity: 0.03; }
+
+  .bg-orb {
+    position: absolute;
+    width: 500px; height: 500px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba({{PRIMARY_RGB}}, 0.08), transparent 70%);
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    filter: blur(80px);
+  }
+
+  .top-line {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, transparent, var(--cyan), var(--cyan-dark), transparent);
+  }
+
+  .content {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 80px 90px 60px;
+    text-align: center;
+  }
+
+  /* Large quote mark */
+  .quote-decoration {
+    font-size: 200px;
+    font-weight: 800;
+    font-family: Georgia, 'Times New Roman', serif;
+    background: linear-gradient(180deg, var(--cyan), rgba({{PRIMARY_RGB}}, 0.1));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 0.6;
+    margin-bottom: 24px;
+    animation: quoteGlow 4s ease-in-out infinite;
+    filter: drop-shadow(0 0 30px rgba({{PRIMARY_RGB}}, 0.2));
+    user-select: none;
+  }
+  @keyframes quoteGlow {
+    0%, 100% { filter: drop-shadow(0 0 20px rgba({{PRIMARY_RGB}}, 0.2)); opacity: 0.9; }
+    50% { filter: drop-shadow(0 0 40px rgba({{PRIMARY_RGB}}, 0.35)); opacity: 1; }
+  }
+
+  /* Testimonial text */
+  .testimonial-text {
+    font-size: 34px;
+    font-weight: 400;
+    line-height: 1.55;
+    color: var(--cloud);
+    max-width: 820px;
+    margin-bottom: 48px;
+    font-style: italic;
+    opacity: 0.95;
+  }
+
+  /* Stars */
+  .stars {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 48px;
+  }
+  .star {
+    width: 32px;
+    height: 32px;
+    color: #f6ad55;
+    filter: drop-shadow(0 0 6px rgba(246, 173, 85, 0.3));
+  }
+
+  /* Divider */
+  .divider {
+    width: 60px;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, var(--cyan), transparent);
+    border-radius: 2px;
+    margin-bottom: 40px;
+  }
+
+  /* Person info */
+  .person {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+  .person-avatar {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--cyan), var(--cyan-dark));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    position: relative;
+  }
+  .person-avatar::before {
+    content: '';
+    position: absolute;
+    inset: -3px;
+    border-radius: 50%;
+    background: conic-gradient(var(--cyan), var(--cyan-dark), rgba({{PRIMARY_RGB}}, 0.3), var(--cyan));
+    z-index: -1;
+    animation: personRing 6s linear infinite;
+  }
+  @keyframes personRing {
+    to { transform: rotate(360deg); }
+  }
+  .person-avatar-inner {
+    width: 58px;
+    height: 58px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #1a2332, #2d3748);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .person-avatar-inner svg {
+    width: 28px; height: 28px;
+    color: var(--muted);
+    opacity: 0.6;
+  }
+  .person-info { text-align: left; }
+  .person-name {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--cloud);
+    margin-bottom: 2px;
+  }
+  .person-company {
+    font-size: 17px;
+    color: var(--cyan);
+    font-weight: 500;
+  }
+
+  /* Footer */
+  .footer {
+    position: absolute;
+    bottom: 48px;
+    left: 0; right: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+  }
+  .footer svg { width: 28px; height: 28px; }
+  .footer-text {
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: 4px;
+    color: var(--cloud);
+    opacity: 0.8;
+  }
+  .footer-dot {
+    width: 4px; height: 4px;
+    border-radius: 50%;
+    background: var(--muted);
+  }
+  .footer-url {
+    font-size: 17px;
+    color: var(--cyan);
+    font-weight: 500;
+    letter-spacing: 1px;
+  }
+
+  .meta-bottom {
+    color: var(--muted);
+    font-size: 14px;
+    margin-top: 20px;
+    text-align: center;
+  }
+</style>
+</head>
+<body>
+
+<div class="meta">
+  <strong>Testimonial</strong> &mdash; 1080 &times; 1080px &mdash; Instagram / Facebook / LinkedIn Feed
+</div>
+
+<div class="template">
+  <div class="hex-bg"></div>
+  <div class="bg-orb"></div>
+  <div class="top-line"></div>
+
+  <!-- Decorative hexagons -->
+  <div class="hex-deco h1">
+    <svg viewBox="0 0 200 200" fill="none"><path d="M100 10l78 45v90l-78 45-78-45V55z" stroke="{{PRIMARY}}" stroke-width="1.5"/></svg>
+  </div>
+  <div class="hex-deco h2">
+    <svg viewBox="0 0 160 160" fill="none"><path d="M80 8l62 36v72L80 152 18 116V44z" stroke="{{PRIMARY}}" stroke-width="1.5"/></svg>
+  </div>
+  <div class="hex-deco h3">
+    <svg viewBox="0 0 100 100" fill="none"><path d="M50 5l39 22v46L50 95 11 73V27z" stroke="{{PRIMARY}}" stroke-width="1"/></svg>
+  </div>
+
+  <div class="content">
+    <!-- Large decorative quote -->
+    <div class="quote-decoration">&ldquo;</div>
+
+    <!-- Testimonial -->
+    <div class="testimonial-text">
+      {{BRAND_NAME}} hat unsere Event-Verarbeitung komplett transformiert. Die Latenz ist um 60% gesunken.
+    </div>
+
+    <!-- Stars -->
+    <div class="stars">
+      <svg class="star" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+      <svg class="star" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+      <svg class="star" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+      <svg class="star" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+      <svg class="star" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+    </div>
+
+    <!-- Divider -->
+    <div class="divider"></div>
+
+    <!-- Person -->
+    <div class="person">
+      <div class="person-avatar">
+        <div class="person-avatar-inner">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+            <circle cx="12" cy="7" r="4"/>
+          </svg>
+        </div>
+      </div>
+      <div class="person-info">
+        <div class="person-name">Lisa Meier</div>
+        <div class="person-company">TechFlow AG</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="footer">
+    <svg viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M14 2L25 8.5v11L14 26 3 19.5v-11L14 2z" stroke="{{PRIMARY}}" stroke-width="1.2" fill="rgba({{PRIMARY_RGB}},0.06)"/>
+      <circle cx="14" cy="14" r="3.5" fill="{{PRIMARY}}" opacity="0.9"/>
+      <circle cx="14" cy="14" r="1.8" fill="{{BG}}"/>
+    </svg>
+    <span class="footer-text">{{BRAND_NAME}}</span>
+    <div class="footer-dot"></div>
+    <span class="footer-url">{{BRAND_DOMAIN}}</span>
+  </div>
+</div>
+
+<div class="meta-bottom">
+  Empfohlen: Instagram Feed, Facebook Post, LinkedIn Post, Website
+</div>
+
+</body>
+</html>

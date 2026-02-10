@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{BRAND_NAME}} - Instagram Story Highlight Covers</title>
+<style>
+  :root {
+    --dark-bg: {{BG}};
+    --cyan: {{PRIMARY}};
+    --cyan-dark: {{PRIMARY_DARK}};
+    --cloud: {{TEXT}};
+    --muted: {{MUTED}};
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #080e1e;
+    color: var(--cloud);
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 40px 20px;
+  }
+
+  h1 {
+    font-size: 28px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    margin-bottom: 8px;
+    color: var(--cloud);
+  }
+
+  h1 span { color: var(--cyan); }
+
+  .subtitle {
+    color: var(--muted);
+    font-size: 14px;
+    margin-bottom: 48px;
+    letter-spacing: 0.02em;
+  }
+
+  .covers-row {
+    display: flex;
+    gap: 32px;
+    flex-wrap: wrap;
+    justify-content: center;
+    max-width: 1400px;
+  }
+
+  .cover-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .cover-circle {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    background: var(--dark-bg);
+    border: 2.5px solid var(--cyan-dark);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.2s ease, border-color 0.2s ease;
+  }
+
+  .cover-circle::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: radial-gradient(circle at center, rgba({{PRIMARY_RGB}},0.08) 0%, transparent 70%);
+  }
+
+  .cover-circle:hover {
+    transform: scale(1.05);
+    border-color: var(--cyan);
+  }
+
+  .cover-circle svg {
+    width: 56px;
+    height: 56px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .cover-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--muted);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  .cover-item:hover .cover-label {
+    color: var(--cyan);
+  }
+
+  .specs {
+    margin-top: 56px;
+    padding: 20px 28px;
+    background: rgba(15,23,42,0.7);
+    border: 1px solid rgba({{PRIMARY_RGB}},0.15);
+    border-radius: 12px;
+    color: var(--muted);
+    font-size: 13px;
+    line-height: 1.7;
+  }
+
+  .specs strong { color: var(--cloud); }
+</style>
+</head>
+<body>
+
+<h1><span>{{BRAND_NAME}}</span> Highlight Covers</h1>
+<p class="subtitle">Instagram Story Highlights - 150 x 150 px</p>
+
+<div class="covers-row">
+
+  <!-- Events (Lightning Bolt) -->
+  <div class="cover-item">
+    <div class="cover-circle">
+      <svg viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M32 6L14 30h12L22 50l20-26H30L32 6z" fill="none" stroke="{{PRIMARY}}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+    <span class="cover-label">Events</span>
+  </div>
+
+  <!-- Features (Star / Sparkle) -->
+  <div class="cover-item">
+    <div class="cover-circle">
+      <svg viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M28 6l4.5 13.8H47L35.3 28.5l4.5 13.8L28 33.6 16.2 42.3l4.5-13.8L9 19.8h14.5L28 6z" fill="none" stroke="{{PRIMARY}}" stroke-width="2.5" stroke-linejoin="round"/>
+        <circle cx="44" cy="10" r="2" fill="{{PRIMARY}}" opacity="0.6"/>
+        <circle cx="12" cy="12" r="1.5" fill="{{PRIMARY}}" opacity="0.4"/>
+        <circle cx="46" cy="38" r="1.5" fill="{{PRIMARY}}" opacity="0.5"/>
+      </svg>
+    </div>
+    <span class="cover-label">Features</span>
+  </div>
+
+  <!-- Updates (Arrow Up) -->
+  <div class="cover-item">
+    <div class="cover-circle">
+      <svg viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M28 46V12" stroke="{{PRIMARY}}" stroke-width="2.5" stroke-linecap="round"/>
+        <path d="M16 22l12-12 12 12" stroke="{{PRIMARY}}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M18 38h20" stroke="{{PRIMARY}}" stroke-width="2" stroke-linecap="round" opacity="0.4"/>
+        <path d="M22 44h12" stroke="{{PRIMARY}}" stroke-width="2" stroke-linecap="round" opacity="0.25"/>
+      </svg>
+    </div>
+    <span class="cover-label">Updates</span>
+  </div>
+
+  <!-- Team (People) -->
+  <div class="cover-item">
+    <div class="cover-circle">
+      <svg viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="28" cy="18" r="7" stroke="{{PRIMARY}}" stroke-width="2.5" fill="none"/>
+        <path d="M14 46c0-7.7 6.3-14 14-14s14 6.3 14 14" stroke="{{PRIMARY}}" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+        <circle cx="43" cy="20" r="4.5" stroke="{{PRIMARY}}" stroke-width="2" fill="none" opacity="0.5"/>
+        <path d="M47 46c0-4.5-2-8.5-5-11" stroke="{{PRIMARY}}" stroke-width="2" stroke-linecap="round" opacity="0.5"/>
+        <circle cx="13" cy="20" r="4.5" stroke="{{PRIMARY}}" stroke-width="2" fill="none" opacity="0.5"/>
+        <path d="M9 46c0-4.5 2-8.5 5-11" stroke="{{PRIMARY}}" stroke-width="2" stroke-linecap="round" opacity="0.5"/>
+      </svg>
+    </div>
+    <span class="cover-label">Team</span>
+  </div>
+
+  <!-- Tutorial (Play Button) -->
+  <div class="cover-item">
+    <div class="cover-circle">
+      <svg viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="28" cy="28" r="20" stroke="{{PRIMARY}}" stroke-width="2.5" fill="none"/>
+        <path d="M23 17.5l17 10.5-17 10.5V17.5z" fill="none" stroke="{{PRIMARY}}" stroke-width="2.5" stroke-linejoin="round"/>
+      </svg>
+    </div>
+    <span class="cover-label">Tutorial</span>
+  </div>
+
+  <!-- FAQ (Question Mark) -->
+  <div class="cover-item">
+    <div class="cover-circle">
+      <svg viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="28" cy="28" r="20" stroke="{{PRIMARY}}" stroke-width="2.5" fill="none"/>
+        <path d="M21 21a8 8 0 0 1 14.5 4.5c0 4.5-7 4.5-7 9" stroke="{{PRIMARY}}" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+        <circle cx="28" cy="41" r="2" fill="{{PRIMARY}}"/>
+      </svg>
+    </div>
+    <span class="cover-label">FAQ</span>
+  </div>
+
+  <!-- Behind the Scenes (Eye) -->
+  <div class="cover-item">
+    <div class="cover-circle">
+      <svg viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M6 28s8-14 22-14 22 14 22 14-8 14-22 14S6 28 6 28z" stroke="{{PRIMARY}}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+        <circle cx="28" cy="28" r="7" stroke="{{PRIMARY}}" stroke-width="2.5" fill="none"/>
+        <circle cx="28" cy="28" r="3" fill="{{PRIMARY}}"/>
+      </svg>
+    </div>
+    <span class="cover-label">Behind the Scenes</span>
+  </div>
+
+  <!-- Links (Chain Link) -->
+  <div class="cover-item">
+    <div class="cover-circle">
+      <svg viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M24 32l8-8" stroke="{{PRIMARY}}" stroke-width="2.5" stroke-linecap="round"/>
+        <path d="M32 24l4-4a6 6 0 0 1 8.5 8.5l-4 4" stroke="{{PRIMARY}}" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+        <path d="M24 32l-4 4a6 6 0 0 1-8.5-8.5l4-4" stroke="{{PRIMARY}}" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+        <path d="M35 21l2-2" stroke="{{PRIMARY}}" stroke-width="2" stroke-linecap="round" opacity="0.4"/>
+        <path d="M21 35l-2 2" stroke="{{PRIMARY}}" stroke-width="2" stroke-linecap="round" opacity="0.4"/>
+      </svg>
+    </div>
+    <span class="cover-label">Links</span>
+  </div>
+
+</div>
+
+<div class="specs">
+  <strong>Spezifikation:</strong> 150 x 150 px pro Cover | Kreisformat | Hintergrund: {{BG}} | Icons: {{PRIMARY}} (Cyan) | Linienstärke: 2.5px<br>
+  <strong>Verwendung:</strong> Instagram Story Highlights | Export als PNG mit transparentem oder dunklem Hintergrund
+</div>
+
+</body>
+</html>

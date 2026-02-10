@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{BRAND_NAME}} - Blog</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  :root { --dark-bg: {{BG}}; --cyan: {{PRIMARY}}; --cyan-dark: {{PRIMARY_DARK}}; --cloud: {{TEXT}}; --muted: {{MUTED}}; }
+  body { background: var(--dark-bg); font-family: system-ui, -apple-system, sans-serif; color: var(--cloud); padding: 60px 40px; }
+
+  .blog-header { text-align: center; margin-bottom: 48px; }
+  .blog-header h1 { font-size: 42px; font-weight: 200; margin-bottom: 8px; }
+  .blog-header h1 span { background: linear-gradient(135deg, var(--cyan), var(--cyan-dark)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+  .blog-header p { color: var(--muted); font-size: 15px; font-weight: 300; }
+
+  /* Filters */
+  .filters { display: flex; gap: 8px; justify-content: center; margin-bottom: 48px; flex-wrap: wrap; }
+  .filter-btn {
+    padding: 8px 18px; border-radius: 8px; font-size: 13px; cursor: pointer;
+    background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.06);
+    color: var(--muted); font-family: inherit; transition: all 0.3s; font-weight: 300;
+  }
+  .filter-btn.active { background: rgba({{PRIMARY_RGB}},0.08); border-color: rgba({{PRIMARY_RGB}},0.25); color: var(--cyan); }
+  .filter-btn:hover:not(.active) { border-color: rgba(255,255,255,0.12); color: var(--cloud); }
+
+  /* Featured Post */
+  .featured { max-width: 1000px; margin: 0 auto 48px; display: grid; grid-template-columns: 1.2fr 1fr; gap: 32px; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.06); border-radius: 20px; overflow: hidden; transition: all 0.3s; cursor: pointer; }
+  .featured:hover { border-color: rgba({{PRIMARY_RGB}},0.15); box-shadow: 0 16px 40px rgba(0,0,0,0.25); transform: translateY(-4px); }
+  .featured-img { background: linear-gradient(135deg, rgba({{PRIMARY_RGB}},0.08), rgba(30,58,95,0.15)); min-height: 280px; position: relative; display: flex; align-items: center; justify-content: center; }
+  .featured-img::before { content: ''; position: absolute; inset: 0; background-image: linear-gradient(rgba({{PRIMARY_RGB}},0.03) 1px, transparent 1px), linear-gradient(90deg, rgba({{PRIMARY_RGB}},0.03) 1px, transparent 1px); background-size: 30px 30px; }
+  .featured-badge { position: absolute; top: 16px; left: 16px; background: var(--cyan); color: var(--dark-bg); font-size: 10px; font-weight: 600; letter-spacing: 2px; padding: 4px 12px; border-radius: 6px; }
+  .featured-body { padding: 36px 36px 36px 0; display: flex; flex-direction: column; justify-content: center; }
+  .featured-tag { font-size: 11px; letter-spacing: 2px; color: var(--cyan); margin-bottom: 12px; }
+  .featured-title { font-size: 24px; font-weight: 300; margin-bottom: 12px; line-height: 1.4; }
+  .featured-excerpt { font-size: 14px; color: var(--muted); font-weight: 300; line-height: 1.7; margin-bottom: 20px; }
+  .featured-meta { display: flex; align-items: center; gap: 12px; }
+  .meta-avatar { width: 32px; height: 32px; border-radius: 8px; background: linear-gradient(135deg, var(--cyan), var(--cyan-dark)); display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 600; color: var(--dark-bg); }
+  .meta-name { font-size: 13px; font-weight: 400; }
+  .meta-date { font-size: 12px; color: var(--muted); font-weight: 300; }
+
+  /* Post Grid */
+  .posts-grid { max-width: 1000px; margin: 0 auto; display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+  .post-card { background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.06); border-radius: 16px; overflow: hidden; cursor: pointer; transition: all 0.3s; }
+  .post-card:hover { border-color: rgba({{PRIMARY_RGB}},0.15); transform: translateY(-4px); box-shadow: 0 12px 30px rgba(0,0,0,0.2); }
+  .post-img { height: 160px; position: relative; overflow: hidden; }
+  .post-img-inner { width: 100%; height: 100%; transition: transform 0.4s; }
+  .post-card:hover .post-img-inner { transform: scale(1.05); }
+  .post-body { padding: 20px; }
+  .post-tag { font-size: 10px; letter-spacing: 2px; color: var(--cyan); margin-bottom: 8px; }
+  .post-title { font-size: 16px; font-weight: 400; margin-bottom: 8px; line-height: 1.4; transition: color 0.3s; }
+  .post-card:hover .post-title { color: var(--cyan); }
+  .post-excerpt { font-size: 13px; color: var(--muted); font-weight: 300; line-height: 1.6; margin-bottom: 16px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+  .post-meta { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--muted); font-weight: 300; }
+  .post-meta-dot { width: 3px; height: 3px; border-radius: 50%; background: var(--muted); }
+
+  /* Colors for post images */
+  .img-1 { background: linear-gradient(135deg, rgba({{PRIMARY_RGB}},0.1), rgba(30,58,95,0.15)); }
+  .img-2 { background: linear-gradient(135deg, rgba(30,58,95,0.15), rgba(56,178,172,0.1)); }
+  .img-3 { background: linear-gradient(135deg, rgba(56,178,172,0.1), rgba({{PRIMARY_RGB}},0.08)); }
+  .img-4 { background: linear-gradient(135deg, rgba({{PRIMARY_RGB}},0.06), rgba(30,58,95,0.12)); }
+  .img-5 { background: linear-gradient(135deg, rgba(30,58,95,0.1), rgba({{PRIMARY_RGB}},0.1)); }
+  .img-6 { background: linear-gradient(135deg, rgba(56,178,172,0.08), rgba(30,58,95,0.1)); }
+</style>
+</head>
+<body>
+
+<div class="blog-header">
+  <h1>{{BRAND_NAME}} <span>Blog</span></h1>
+  <p>Insights, Updates und Best Practices für Event-Driven Architectures</p>
+</div>
+
+<div class="filters">
+  <button class="filter-btn active">Alle</button>
+  <button class="filter-btn">Engineering</button>
+  <button class="filter-btn">Product</button>
+  <button class="filter-btn">AI</button>
+  <button class="filter-btn">Tutorial</button>
+  <button class="filter-btn">Changelog</button>
+</div>
+
+<!-- Featured -->
+<div class="featured">
+  <div class="featured-img img-1">
+    <div class="featured-badge">FEATURED</div>
+  </div>
+  <div class="featured-body">
+    <div class="featured-tag">ENGINEERING</div>
+    <div class="featured-title">Warum wir auf Event Sourcing setzen und was wir dabei gelernt haben</div>
+    <div class="featured-excerpt">Nach 6 Monaten Event Sourcing in Produktion teilen wir unsere Erfahrungen, Learnings und die Architektur-Entscheidungen dahinter.</div>
+    <div class="featured-meta">
+      <div class="meta-avatar">MK</div>
+      <div><div class="meta-name">Marco Keller</div><div class="meta-date">8. Feb 2026 &middot; 12 Min. Lesezeit</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- Grid -->
+<div class="posts-grid">
+  <div class="post-card"><div class="post-img"><div class="post-img-inner img-2"></div></div><div class="post-body"><div class="post-tag">AI</div><div class="post-title">AI SDK v6: Automatische Dokumentation mit einem Befehl</div><div class="post-excerpt">Wie wir die AI-Integration genutzt haben um Event-Dokumentation automatisch zu generieren.</div><div class="post-meta"><span>Sarah Brunner</span><span class="post-meta-dot"></span><span>5. Feb 2026</span></div></div></div>
+
+  <div class="post-card"><div class="post-img"><div class="post-img-inner img-3"></div></div><div class="post-body"><div class="post-tag">TUTORIAL</div><div class="post-title">Event Streams in 5 Minuten aufsetzen</div><div class="post-excerpt">Step-by-Step Guide: Von der Installation bis zum ersten verarbeiteten Event.</div><div class="post-meta"><span>Tom Weber</span><span class="post-meta-dot"></span><span>1. Feb 2026</span></div></div></div>
+
+  <div class="post-card"><div class="post-img"><div class="post-img-inner img-4"></div></div><div class="post-body"><div class="post-tag">PRODUCT</div><div class="post-title">Neu: Multi-Workspace Support für Teams</div><div class="post-excerpt">Teams können jetzt mehrere Workspaces verwalten mit feingranularen Berechtigungen.</div><div class="post-meta"><span>Marco Keller</span><span class="post-meta-dot"></span><span>28. Jan 2026</span></div></div></div>
+
+  <div class="post-card"><div class="post-img"><div class="post-img-inner img-5"></div></div><div class="post-body"><div class="post-tag">ENGINEERING</div><div class="post-title">Von JSON zu JSONL: Unsere Event Store Migration</div><div class="post-excerpt">Warum wir den Event Store auf JSONL umgestellt haben und die Performance-Gains.</div><div class="post-meta"><span>Sarah Brunner</span><span class="post-meta-dot"></span><span>22. Jan 2026</span></div></div></div>
+
+  <div class="post-card"><div class="post-img"><div class="post-img-inner img-6"></div></div><div class="post-body"><div class="post-tag">TUTORIAL</div><div class="post-title">Telegram Bot: Notifications von überall</div><div class="post-excerpt">Konfiguriere den {{BRAND_NAME}} Telegram Bot für Echtzeit-Benachrichtigungen in deinem Team.</div><div class="post-meta"><span>Tom Weber</span><span class="post-meta-dot"></span><span>18. Jan 2026</span></div></div></div>
+
+  <div class="post-card"><div class="post-img"><div class="post-img-inner img-1"></div></div><div class="post-body"><div class="post-tag">CHANGELOG</div><div class="post-title">{{BRAND_NAME}} v0.2.0: Was ist neu?</div><div class="post-excerpt">Dashboard, i18n Support und die Event Sourcing Engine - alle Neuerungen im Überblick.</div><div class="post-meta"><span>Marco Keller</span><span class="post-meta-dot"></span><span>15. Jan 2026</span></div></div></div>
+</div>
+
+<script>
+  document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+    });
+  });
+</script>
+
+</body>
+</html>

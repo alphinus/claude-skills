@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{BRAND_NAME}} Technologie-Stack</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:{{BG}};font-family:system-ui,-apple-system,sans-serif;color:{{TEXT}};min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:40px 20px}
+  h1{font-size:2rem;font-weight:700;letter-spacing:-.5px;margin-bottom:8px}
+  h1 span{color:{{PRIMARY}}}
+  .subtitle{color:{{MUTED}};font-size:.95rem;margin-bottom:32px}
+  .stack-container{max-width:1100px;width:100%;display:flex;flex-direction:column;gap:16px}
+
+  .layer{
+    background:#1e293b;border-radius:16px;border:1px solid rgba({{PRIMARY_RGB}},.1);
+    padding:24px 32px;display:flex;align-items:center;gap:24px;
+    transition:all .3s ease;position:relative;overflow:hidden
+  }
+  .layer::before{
+    content:'';position:absolute;left:0;top:0;bottom:0;width:4px;border-radius:16px 0 0 16px
+  }
+  .layer:hover{
+    transform:translateX(6px);
+    border-color:rgba({{PRIMARY_RGB}},.3);
+    box-shadow:0 8px 32px rgba(0,0,0,.3)
+  }
+
+  .layer-frontend::before{background:{{INFO}}}
+  .layer-frontend:hover{border-color:rgba({{INFO_RGB}},.4)}
+  .layer-backend::before{background:{{PRIMARY}}}
+  .layer-backend:hover{border-color:rgba({{PRIMARY_RGB}},.4)}
+  .layer-data::before{background:{{SUCCESS}}}
+  .layer-data:hover{border-color:rgba({{SUCCESS_RGB}},.4)}
+  .layer-ai::before{background:#a78bfa}
+  .layer-ai:hover{border-color:rgba(167,139,250,.4)}
+  .layer-bot::before{background:{{WARNING}}}
+  .layer-bot:hover{border-color:rgba({{WARNING_RGB}},.4)}
+  .layer-tools::before{background:{{MUTED}}}
+  .layer-tools:hover{border-color:rgba(113,128,150,.4)}
+
+  .layer-label{
+    min-width:130px;flex-shrink:0
+  }
+  .layer-label .label-tag{
+    font-size:.7rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;opacity:.7;margin-bottom:4px
+  }
+  .layer-label .label-name{
+    font-size:1.1rem;font-weight:700
+  }
+
+  .techs{display:flex;flex-wrap:wrap;gap:12px;flex:1}
+
+  .tech-badge{
+    display:flex;align-items:center;gap:10px;
+    background:{{BG}};border-radius:10px;padding:10px 16px;
+    border:1px solid #334155;
+    transition:all .3s ease;cursor:default;position:relative
+  }
+  .tech-badge:hover{
+    transform:translateY(-3px);
+    box-shadow:0 6px 20px rgba(0,0,0,.4)
+  }
+
+  .tech-badge .tech-icon{
+    width:36px;height:36px;flex-shrink:0;display:flex;align-items:center;justify-content:center
+  }
+  .tech-badge .tech-info{display:flex;flex-direction:column}
+  .tech-badge .tech-name{font-size:.9rem;font-weight:700;line-height:1.2}
+  .tech-badge .tech-version{font-size:.7rem;color:{{MUTED}};margin-top:1px}
+  .tech-badge .tech-desc{
+    font-size:.72rem;color:{{MUTED}};
+    max-height:0;overflow:hidden;
+    transition:max-height .3s ease, margin-top .3s ease;margin-top:0
+  }
+  .tech-badge:hover .tech-desc{
+    max-height:40px;margin-top:4px
+  }
+
+  .layer-frontend .tech-badge:hover{border-color:{{INFO}};box-shadow:0 6px 20px rgba({{INFO_RGB}},.15)}
+  .layer-backend .tech-badge:hover{border-color:{{PRIMARY}};box-shadow:0 6px 20px rgba({{PRIMARY_RGB}},.15)}
+  .layer-data .tech-badge:hover{border-color:{{SUCCESS}};box-shadow:0 6px 20px rgba({{SUCCESS_RGB}},.15)}
+  .layer-ai .tech-badge:hover{border-color:#a78bfa;box-shadow:0 6px 20px rgba(167,139,250,.15)}
+  .layer-bot .tech-badge:hover{border-color:{{WARNING}};box-shadow:0 6px 20px rgba({{WARNING_RGB}},.15)}
+  .layer-tools .tech-badge:hover{border-color:{{MUTED}};box-shadow:0 6px 20px rgba(113,128,150,.15)}
+
+  /* Connection lines SVG overlay */
+  .connections-wrap{
+    position:relative;margin-top:-8px;margin-bottom:-8px;
+    height:20px;display:flex;align-items:center;justify-content:center
+  }
+  .conn-line{
+    width:2px;height:20px;margin:0 40px;
+    opacity:.3;border-radius:1px
+  }
+
+  @media(max-width:800px){
+    .layer{flex-direction:column;align-items:flex-start}
+    .layer-label{min-width:auto}
+  }
+</style>
+</head>
+<body>
+
+<h1><span>{{BRAND_NAME}}</span> Technologie-Stack</h1>
+<p class="subtitle">Alle Technologien auf einen Blick &mdash; Hover für Details</p>
+
+<div class="stack-container">
+
+  <!-- ========= FRONTEND LAYER ========= -->
+  <div class="layer layer-frontend">
+    <div class="layer-label">
+      <div class="label-tag" style="color:{{INFO}}">Schicht 1</div>
+      <div class="label-name" style="color:{{INFO}}">Frontend</div>
+    </div>
+    <div class="techs">
+      <!-- React -->
+      <div class="tech-badge">
+        <div class="tech-icon">
+          <svg width="36" height="36" viewBox="0 0 36 36">
+            <ellipse cx="18" cy="18" rx="15" ry="6" fill="none" stroke="{{INFO}}" stroke-width="1.2" transform="rotate(0,18,18)"/>
+            <ellipse cx="18" cy="18" rx="15" ry="6" fill="none" stroke="{{INFO}}" stroke-width="1.2" transform="rotate(60,18,18)"/>
+            <ellipse cx="18" cy="18" rx="15" ry="6" fill="none" stroke="{{INFO}}" stroke-width="1.2" transform="rotate(-60,18,18)"/>
+            <circle cx="18" cy="18" r="3" fill="{{INFO}}"/>
+          </svg>
+        </div>
+        <div class="tech-info">
+          <span class="tech-name">React</span>
+          <span class="tech-version">v19.x</span>
+          <span class="tech-desc">Komponentenbasierte UI-Bibliothek</span>
+        </div>
+      </div>
+      <!-- Vite -->
+      <div class="tech-badge">
+        <div class="tech-icon">
+          <svg width="36" height="36" viewBox="0 0 36 36">
+            <polygon points="18,2 4,32 18,26 32,32" fill="none" stroke="#a78bfa" stroke-width="1.5"/>
+            <polygon points="18,8 10,28 18,24 26,28" fill="#a78bfa" opacity=".3"/>
+            <line x1="18" y1="2" x2="28" y2="6" stroke="{{WARNING}}" stroke-width="1.5"/>
+          </svg>
+        </div>
+        <div class="tech-info">
+          <span class="tech-name">Vite</span>
+          <span class="tech-version">v6.x</span>
+          <span class="tech-desc">Blitzschnelles Build-Tool mit HMR</span>
+        </div>
+      </div>
+      <!-- TypeScript -->
+      <div class="tech-badge">
+        <div class="tech-icon">
+          <svg width="36" height="36" viewBox="0 0 36 36">
+            <rect x="4" y="4" width="28" height="28" rx="4" fill="{{INFO}}" opacity=".2" stroke="{{INFO}}" stroke-width="1.2"/>
+            <text x="18" y="25" text-anchor="middle" fill="{{INFO}}" font-size="16" font-weight="900" font-family="system-ui">TS</text>
+          </svg>
+        </div>
+        <div class="tech-info">
+          <span class="tech-name">TypeScript</span>
+          <span class="tech-version">v5.x</span>
+          <span class="tech-desc">Typsicheres JavaScript-Superset</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Connection dots -->
+  <div class="connections-wrap">
+    <div class="conn-line" style="background:{{INFO}}"></div>
+    <div class="conn-line" style="background:linear-gradient({{INFO}},{{PRIMARY}})"></div>
+    <div class="conn-line" style="background:{{PRIMARY}}"></div>
+  </div>
+
+  <!-- ========= BACKEND LAYER ========= -->
+  <div class="layer layer-backend">
+    <div class="layer-label">
+      <div class="label-tag" style="color:{{PRIMARY}}">Schicht 2</div>
+      <div class="label-name" style="color:{{PRIMARY}}">Backend</div>
+    </div>
+    <div class="techs">
+      <!-- Express -->
+      <div class="tech-badge">
+        <div class="tech-icon">
+          <svg width="36" height="36" viewBox="0 0 36 36">
+            <rect x="4" y="10" width="28" height="16" rx="3" fill="none" stroke="{{PRIMARY}}" stroke-width="1.2"/>
+            <line x1="4" y1="18" x2="32" y2="18" stroke="{{PRIMARY}}" stroke-width="1"/>
+            <circle cx="10" cy="14" r="2" fill="{{PRIMARY}}" opacity=".5"/>
+            <circle cx="16" cy="14" r="2" fill="{{PRIMARY}}" opacity=".5"/>
+            <circle cx="22" cy="14" r="2" fill="{{PRIMARY}}" opacity=".5"/>
+            <text x="18" y="25" text-anchor="middle" fill="{{PRIMARY}}" font-size="7" font-weight="700">EX</text>
+          </svg>
+        </div>
+        <div class="tech-info">
+          <span class="tech-name">Express.js</span>
+          <span class="tech-version">v5.x</span>
+          <span class="tech-desc">Minimalistisches Web-Framework</span>
+        </div>
+      </div>
+      <!-- Node.js -->
+      <div class="tech-badge">
+        <div class="tech-icon">
+          <svg width="36" height="36" viewBox="0 0 36 36">
+            <polygon points="18,3 32,12 32,24 18,33 4,24 4,12" fill="none" stroke="{{SUCCESS}}" stroke-width="1.2"/>
+            <text x="18" y="22" text-anchor="middle" fill="{{SUCCESS}}" font-size="10" font-weight="900">N</text>
+          </svg>
+        </div>
+        <div class="tech-info">
+          <span class="tech-name">Node.js</span>
+          <span class="tech-version">v22 LTS</span>
+          <span class="tech-desc">Serverseitige JavaScript-Runtime</span>
+        </div>
+      </div>
+      <!-- SSE -->
+      <div class="tech-badge">
+        <div class="tech-icon">
+          <svg width="36" height="36" viewBox="0 0 36 36">
+            <path d="M6,10 Q18,4 30,10" fill="none" stroke="{{PRIMARY}}" stroke-width="1.2"/>
+            <path d="M6,18 Q18,12 30,18" fill="none" stroke="{{PRIMARY}}" stroke-width="1.2"/>
+            <path d="M6,26 Q18,20 30,26" fill="none" stroke="{{PRIMARY}}" stroke-width="1.2"/>
+            <circle cx="30" cy="10" r="2" fill="{{PRIMARY}}"/>
+            <circle cx="30" cy="18" r="2" fill="{{PRIMARY}}"/>
+            <circle cx="30" cy="26" r="2" fill="{{PRIMARY}}"/>
+          </svg>
+        </div>
+        <div class="tech-info">
+          <span class="tech-name">SSE</span>
+          <span class="tech-version">EventSource</span>
+          <span class="tech-desc">Server-Sent Events für Echtzeit</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="connections-wrap">
+    <div class="conn-line" style="background:{{PRIMARY}}"></div>
+    <div class="conn-line" style="background:linear-gradient({{PRIMARY}},{{SUCCESS}})"></div>
+    <div class="conn-line" style="background:{{SUCCESS}}"></div>
+  </div>
+
+  <!-- ========= DATA LAYER ========= -->
+  <div class="layer layer-data">
+    <div class="layer-label">
+      <div class="label-tag" style="color:{{SUCCESS}}">Schicht 3</div>
+      <div class="label-name" style="color:{{SUCCESS}}">Daten</div>
+    </div>
+    <div class="techs">
+      <!-- JSONL -->
+      <div class="tech-badge">
+        <div class="tech-icon">
+          <svg width="36" height="36" viewBox="0 0 36 36">
+            <rect x="6" y="4" width="24" height="28" rx="3" fill="none" stroke="{{SUCCESS}}" stroke-width="1.2"/>
+            <line x1="10" y1="10" x2="26" y2="10" stroke="{{SUCCESS}}" stroke-width="1" opacity=".5"/>
+            <line x1="10" y1="15" x2="26" y2="15" stroke="{{SUCCESS}}" stroke-width="1" opacity=".5"/>
+            <line x1="10" y1="20" x2="26" y2="20" stroke="{{SUCCESS}}" stroke-width="1" opacity=".5"/>
+            <line x1="10" y1="25" x2="20" y2="25" stroke="{{SUCCESS}}" stroke-width="1" opacity=".5"/>
+            <text x="18" y="34" text-anchor="middle" fill="{{SUCCESS}}" font-size="5" font-weight="700">.jsonl</text>
+          </svg>
+        </div>
+        <div class="tech-info">
+          <span class="tech-name">JSONL Event Store</span>
+          <span class="tech-version">Custom</span>
+          <span class="tech-desc">Append-Only Event Log</span>
+        </div>
+      </div>
+      <!-- Event Sourcing -->
+      <div class="tech-badge">
+        <div class="tech-icon">
+          <svg width="36" height="36" viewBox="0 0 36 36">
+            <circle cx="10" cy="10" r="4" fill="none" stroke="{{SUCCESS}}" stroke-width="1.2"/>
+            <circle cx="26" cy="10" r="4" fill="none" stroke="{{SUCCESS}}" stroke-width="1.2"/>
+            <circle cx="18" cy="26" r="4" fill="none" stroke="{{SUCCESS}}" stroke-width="1.2"/>
+            <line x1="13" y1="12" x2="16" y2="23" stroke="{{SUCCESS}}" stroke-width="1" opacity=".6"/>
+            <line x1="23" y1="12" x2="20" y2="23" stroke="{{SUCCESS}}" stroke-width="1" opacity=".6"/>
+            <line x1="14" y1="10" x2="22" y2="10" stroke="{{SUCCESS}}" stroke-width="1" opacity=".6"/>
+          </svg>
+        </div>
+        <div class="tech-info">
+          <span class="tech-name">Event Sourcing</span>
+          <span class="tech-version">Pattern</span>
+          <span class="tech-desc">Immutable Event-basierte Architektur</span>
+        </div>
+      </div>
+      <!-- Projections -->
+      <div class="tech-badge">
+        <div class="tech-icon">
+          <svg width="36" height="36" viewBox="0 0 36 36">
+            <rect x="4" y="8" width="12" height="20" rx="2" fill="none" stroke="{{SUCCESS}}" stroke-width="1.2"/>
+            <path d="M16,18 L22,12 L22,24 Z" fill="{{SUCCESS}}" opacity=".4"/>
+            <rect x="22" y="10" width="10" height="16" rx="2" fill="none" stroke="{{SUCCESS}}" stroke-width="1.2"/>
+          </svg>
+        </div>
+        <div class="tech-info">
+          <span class="tech-name">Projektionen</span>
+          <span class="tech-version">CQRS</span>
+          <span class="tech-desc">Materialisierte Views aus Events</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="connections-wrap">
+    <div class="conn-line" style="background:{{SUCCESS}}"></div>
+    <div class="conn-line" style="background:linear-gradient({{SUCCESS}},#a78bfa)"></div>
+    <div class="conn-line" style="background:#a78bfa"></div>
+  </div>
+
+  <!-- ========= AI LAYER ========= -->
+  <div class="layer layer-ai">
+    <div class="layer-label">
+      <div class="label-tag" style="color:#a78bfa">Schicht 4</div>
+      <div class="label-name" style="color:#a78bfa">KI</div>
+    </div>
+    <div class="techs">
+      <!-- AI SDK -->
+      <div class="tech-badge">
+        <div class="tech-icon">
+          <svg width="36" height="36" viewBox="0 0 36 36">
+            <circle cx="18" cy="18" r="13" fill="none" stroke="#a78bfa" stroke-width="1.2"/>
+            <circle cx="18" cy="18" r="7" fill="none" stroke="#a78bfa" stroke-width="1" opacity=".5"/>
+            <circle cx="18" cy="18" r="2" fill="#a78bfa"/>
+            <line x1="18" y1="5" x2="18" y2="11" stroke="#a78bfa" stroke-width="1"/>
+            <line x1="18" y1="25" x2="18" y2="31" stroke="#a78bfa" stroke-width="1"/>
+            <line x1="5" y1="18" x2="11" y2="18" stroke="#a78bfa" stroke-width="1"/>
+            <line x1="25" y1="18" x2="31" y2="18" stroke="#a78bfa" stroke-width="1"/>
+          </svg>
+        </div>
+        <div class="tech-info">
+          <span class="tech-name">Vercel AI SDK</span>
+          <span class="tech-version">v6.x</span>
+          <span class="tech-desc">Unified AI-Schnittstelle mit Streaming</span>
+        </div>
+      </div>
+      <!-- Structured Output -->
+      <div class="tech-badge">
+        <div class="tech-icon">
+          <svg width="36" height="36" viewBox="0 0 36 36">
+            <rect x="6" y="6" width="24" height="24" rx="4" fill="none" stroke="#a78bfa" stroke-width="1.2"/>
+            <text x="12" y="16" fill="#a78bfa" font-size="6" font-family="monospace">{</text>
+            <line x1="16" y1="20" x2="26" y2="20" stroke="#a78bfa" stroke-width="1" opacity=".5"/>
+            <line x1="16" y1="24" x2="22" y2="24" stroke="#a78bfa" stroke-width="1" opacity=".5"/>
+            <text x="10" y="30" fill="#a78bfa" font-size="6" font-family="monospace">}</text>
+          </svg>
+        </div>
+        <div class="tech-info">
+          <span class="tech-name">Strukturierte Ausgabe</span>
+          <span class="tech-version">Zod</span>
+          <span class="tech-desc">Typsichere KI-Antworten mit Schema</span>
+        </div>
+      </div>
+      <!-- Tool Calling -->
+      <div class="tech-badge">
+        <div class="tech-icon">
+          <svg width="36" height="36" viewBox="0 0 36 36">
+            <rect x="14" y="4" width="8" height="18" rx="2" fill="none" stroke="#a78bfa" stroke-width="1.2"/>
+            <rect x="10" y="22" width="16" height="10" rx="3" fill="none" stroke="#a78bfa" stroke-width="1.2"/>
+            <line x1="18" y1="22" x2="18" y2="18" stroke="#a78bfa" stroke-width="1.2"/>
+            <circle cx="18" cy="27" r="2" fill="#a78bfa" opacity=".5"/>
+          </svg>
+        </div>
+        <div class="tech-info">
+          <span class="tech-name">Tool Calling</span>
+          <span class="tech-version">Function</span>
+          <span class="tech-desc">KI-gesteuerte Funktionsaufrufe</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="connections-wrap">
+    <div class="conn-line" style="background:#a78bfa"></div>
+    <div class="conn-line" style="background:linear-gradient(#a78bfa,{{WARNING}})"></div>
+    <div class="conn-line" style="background:{{WARNING}}"></div>
+  </div>
+
+  <!-- ========= BOT LAYER ========= -->
+  <div class="layer layer-bot">
+    <div class="layer-label">
+      <div class="label-tag" style="color:{{WARNING}}">Schicht 5</div>
+      <div class="label-name" style="color:{{WARNING}}">Bot</div>
+    </div>
+    <div class="techs">
+      <!-- grammY -->
+      <div class="tech-badge">
+        <div class="tech-icon">
+          <svg width="36" height="36" viewBox="0 0 36 36">
+            <path d="M4,14 L32,6 L28,30 L18,22 L12,28 L14,20 Z" fill="none" stroke="{{WARNING}}" stroke-width="1.2" stroke-linejoin="round"/>
+            <line x1="14" y1="20" x2="32" y2="6" stroke="{{WARNING}}" stroke-width="1" opacity=".4"/>
+          </svg>
+        </div>
+        <div class="tech-info">
+          <span class="tech-name">grammY</span>
+          <span class="tech-version">v1.x</span>
+          <span class="tech-desc">Modernes Telegram Bot Framework</span>
+        </div>
+      </div>
+      <!-- Telegram API -->
+      <div class="tech-badge">
+        <div class="tech-icon">
+          <svg width="36" height="36" viewBox="0 0 36 36">
+            <circle cx="18" cy="18" r="14" fill="none" stroke="{{WARNING}}" stroke-width="1.2"/>
+            <path d="M8,18 L28,10 L22,28 L17,20 L8,18Z" fill="{{WARNING}}" opacity=".2" stroke="{{WARNING}}" stroke-width="1"/>
+          </svg>
+        </div>
+        <div class="tech-info">
+          <span class="tech-name">Telegram Bot API</span>
+          <span class="tech-version">v7.x</span>
+          <span class="tech-desc">Befehle, Inline-Modus, Callbacks</span>
+        </div>
+      </div>
+      <!-- Conversations -->
+      <div class="tech-badge">
+        <div class="tech-icon">
+          <svg width="36" height="36" viewBox="0 0 36 36">
+            <rect x="4" y="6" width="18" height="12" rx="4" fill="none" stroke="{{WARNING}}" stroke-width="1.2"/>
+            <polygon points="8,18 12,18 8,24" fill="none" stroke="{{WARNING}}" stroke-width="1.2"/>
+            <rect x="14" y="18" width="18" height="12" rx="4" fill="none" stroke="{{WARNING}}" stroke-width="1.2" opacity=".6"/>
+            <polygon points="28,30 24,30 28,36" fill="none" stroke="{{WARNING}}" stroke-width="1.2" opacity=".6"/>
+          </svg>
+        </div>
+        <div class="tech-info">
+          <span class="tech-name">Conversations</span>
+          <span class="tech-version">Plugin</span>
+          <span class="tech-desc">Dialogbasierte Bot-Interaktion</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="connections-wrap">
+    <div class="conn-line" style="background:{{WARNING}}"></div>
+    <div class="conn-line" style="background:linear-gradient({{WARNING}},{{MUTED}})"></div>
+    <div class="conn-line" style="background:{{MUTED}}"></div>
+  </div>
+
+  <!-- ========= TOOLS LAYER ========= -->
+  <div class="layer layer-tools">
+    <div class="layer-label">
+      <div class="label-tag" style="color:{{MUTED}}">Schicht 6</div>
+      <div class="label-name" style="color:#94a3b8">Werkzeuge</div>
+    </div>
+    <div class="techs">
+      <!-- npm -->
+      <div class="tech-badge">
+        <div class="tech-icon">
+          <svg width="36" height="36" viewBox="0 0 36 36">
+            <rect x="4" y="8" width="28" height="20" rx="2" fill="none" stroke="{{ERROR}}" stroke-width="1.2"/>
+            <rect x="8" y="12" width="6" height="12" fill="{{ERROR}}" opacity=".3"/>
+            <rect x="16" y="12" width="6" height="12" fill="{{ERROR}}" opacity=".3"/>
+            <rect x="16" y="12" width="6" height="6" fill="{{ERROR}}" opacity=".2"/>
+          </svg>
+        </div>
+        <div class="tech-info">
+          <span class="tech-name">npm</span>
+          <span class="tech-version">v10.x</span>
+          <span class="tech-desc">Paketmanager und Skripte</span>
+        </div>
+      </div>
+      <!-- Git -->
+      <div class="tech-badge">
+        <div class="tech-icon">
+          <svg width="36" height="36" viewBox="0 0 36 36">
+            <circle cx="12" cy="10" r="3" fill="none" stroke="{{ERROR}}" stroke-width="1.2"/>
+            <circle cx="24" cy="10" r="3" fill="none" stroke="{{ERROR}}" stroke-width="1.2"/>
+            <circle cx="18" cy="26" r="3" fill="none" stroke="{{ERROR}}" stroke-width="1.2"/>
+            <line x1="12" y1="13" x2="18" y2="23" stroke="{{ERROR}}" stroke-width="1"/>
+            <line x1="24" y1="13" x2="18" y2="23" stroke="{{ERROR}}" stroke-width="1"/>
+          </svg>
+        </div>
+        <div class="tech-info">
+          <span class="tech-name">Git</span>
+          <span class="tech-version">v2.x</span>
+          <span class="tech-desc">Versionskontrolle und Branching</span>
+        </div>
+      </div>
+      <!-- Docker -->
+      <div class="tech-badge">
+        <div class="tech-icon">
+          <svg width="36" height="36" viewBox="0 0 36 36">
+            <rect x="4" y="16" width="28" height="14" rx="4" fill="none" stroke="{{INFO}}" stroke-width="1.2"/>
+            <rect x="8" y="10" width="5" height="6" rx="1" fill="none" stroke="{{INFO}}" stroke-width="1"/>
+            <rect x="14" y="10" width="5" height="6" rx="1" fill="none" stroke="{{INFO}}" stroke-width="1"/>
+            <rect x="20" y="10" width="5" height="6" rx="1" fill="none" stroke="{{INFO}}" stroke-width="1"/>
+            <rect x="14" y="4" width="5" height="6" rx="1" fill="none" stroke="{{INFO}}" stroke-width="1"/>
+            <path d="M32,22 Q34,20 34,18" fill="none" stroke="{{INFO}}" stroke-width="1" opacity=".5"/>
+          </svg>
+        </div>
+        <div class="tech-info">
+          <span class="tech-name">Docker</span>
+          <span class="tech-version">v27.x</span>
+          <span class="tech-desc">Container-Virtualisierung</span>
+        </div>
+      </div>
+      <!-- PM2 -->
+      <div class="tech-badge">
+        <div class="tech-icon">
+          <svg width="36" height="36" viewBox="0 0 36 36">
+            <circle cx="18" cy="18" r="13" fill="none" stroke="{{SUCCESS}}" stroke-width="1.2"/>
+            <text x="18" y="22" text-anchor="middle" fill="{{SUCCESS}}" font-size="10" font-weight="900">PM</text>
+          </svg>
+        </div>
+        <div class="tech-info">
+          <span class="tech-name">PM2</span>
+          <span class="tech-version">v5.x</span>
+          <span class="tech-desc">Prozessmanager mit Clustering</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Architecture connection SVG overlay -->
+<svg viewBox="0 0 1100 60" style="max-width:1100px;width:100%;height:60px;margin-top:32px" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="grad-line" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="{{INFO}}"/>
+      <stop offset="25%" stop-color="{{PRIMARY}}"/>
+      <stop offset="50%" stop-color="{{SUCCESS}}"/>
+      <stop offset="75%" stop-color="#a78bfa"/>
+      <stop offset="100%" stop-color="{{WARNING}}"/>
+    </linearGradient>
+  </defs>
+  <line x1="50" y1="30" x2="1050" y2="30" stroke="url(#grad-line)" stroke-width="2" opacity=".3"/>
+  <text x="550" y="54" text-anchor="middle" fill="{{MUTED}}" font-size="12">{{BRAND_NAME}} Ecosystem &mdash; Event-getrieben &bull; KI-gestützt &bull; Echtzeit</text>
+</svg>
+
+</body>
+</html>

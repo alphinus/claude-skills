@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{BRAND_NAME}} - Notification Center</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  :root { --dark-bg: {{BG}}; --cyan: {{PRIMARY}}; --cyan-dark: {{PRIMARY_DARK}}; --cloud: {{TEXT}}; --muted: {{MUTED}}; --success: {{SUCCESS}}; --warning: {{WARNING}}; --error: {{ERROR}}; }
+  body { background: var(--dark-bg); font-family: system-ui, -apple-system, sans-serif; color: var(--cloud); min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 60px 40px; }
+
+  h1 { font-size: 36px; font-weight: 200; margin-bottom: 12px; }
+  h1 span { background: linear-gradient(135deg, var(--cyan), var(--cyan-dark)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+  .subtitle { color: var(--muted); font-size: 14px; margin-bottom: 48px; font-weight: 300; }
+
+  /* Bell trigger */
+  .bell-wrap { position: relative; margin-bottom: 20px; }
+  .bell-btn {
+    width: 48px; height: 48px; border-radius: 12px;
+    background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08);
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; transition: all 0.3s; font-size: 22px;
+  }
+  .bell-btn:hover { background: rgba({{PRIMARY_RGB}},0.06); border-color: rgba({{PRIMARY_RGB}},0.2); }
+  .bell-badge {
+    position: absolute; top: -4px; right: -4px; width: 18px; height: 18px;
+    background: var(--error); border-radius: 50%; font-size: 10px; font-weight: 600;
+    display: flex; align-items: center; justify-content: center; color: white;
+    border: 2px solid var(--dark-bg); animation: badgePop 0.3s ease;
+  }
+  @keyframes badgePop { 0% { transform: scale(0); } 60% { transform: scale(1.3); } 100% { transform: scale(1); } }
+
+  /* Dropdown */
+  .notif-panel {
+    width: 400px; background: {{SURFACE}}; border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 16px; box-shadow: 0 24px 60px rgba(0,0,0,0.5);
+    overflow: hidden; transform: scale(0.95) translateY(-8px); opacity: 0;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); pointer-events: none;
+    transform-origin: top center;
+  }
+  .notif-panel.open { transform: scale(1) translateY(0); opacity: 1; pointer-events: auto; }
+
+  .notif-header {
+    padding: 16px 20px; display: flex; justify-content: space-between; align-items: center;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+  }
+  .notif-title { font-size: 15px; font-weight: 400; }
+  .notif-mark { font-size: 12px; color: var(--cyan); cursor: pointer; background: none; border: none; font-family: inherit; }
+  .notif-mark:hover { text-decoration: underline; }
+
+  /* Tabs */
+  .notif-tabs { display: flex; border-bottom: 1px solid rgba(255,255,255,0.04); }
+  .notif-tab {
+    flex: 1; padding: 10px; text-align: center; font-size: 12px; color: var(--muted);
+    cursor: pointer; transition: all 0.2s; background: none; border: none;
+    font-family: inherit; position: relative;
+  }
+  .notif-tab.active { color: var(--cyan); }
+  .notif-tab.active::after { content: ''; position: absolute; bottom: 0; left: 20%; right: 20%; height: 2px; background: var(--cyan); border-radius: 1px; }
+  .notif-tab:hover:not(.active) { color: var(--cloud); }
+
+  /* Items */
+  .notif-list { max-height: 360px; overflow-y: auto; }
+  .notif-list::-webkit-scrollbar { width: 3px; }
+  .notif-list::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 2px; }
+
+  .notif-item {
+    display: flex; gap: 12px; padding: 14px 20px; border-bottom: 1px solid rgba(255,255,255,0.02);
+    transition: background 0.2s; cursor: pointer;
+  }
+  .notif-item:hover { background: rgba(255,255,255,0.02); }
+  .notif-item.unread { background: rgba({{PRIMARY_RGB}},0.02); }
+  .notif-item.unread::before {
+    content: ''; width: 6px; height: 6px; border-radius: 50%;
+    background: var(--cyan); flex-shrink: 0; margin-top: 6px;
+  }
+
+  .notif-icon {
+    width: 36px; height: 36px; border-radius: 10px; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center; font-size: 16px;
+  }
+  .ni-event { background: rgba({{PRIMARY_RGB}},0.08); color: var(--cyan); }
+  .ni-ai { background: rgba({{INFO_RGB}},0.08); color: {{INFO}}; }
+  .ni-warn { background: rgba({{WARNING_RGB}},0.08); color: var(--warning); }
+  .ni-team { background: rgba({{SUCCESS_RGB}},0.08); color: var(--success); }
+  .ni-error { background: rgba({{ERROR_RGB}},0.08); color: var(--error); }
+
+  .notif-body { flex: 1; min-width: 0; }
+  .notif-text { font-size: 13px; font-weight: 300; line-height: 1.5; }
+  .notif-text strong { font-weight: 500; }
+  .notif-time { font-size: 11px; color: var(--muted); margin-top: 2px; }
+
+  /* Group label */
+  .notif-group { font-size: 10px; letter-spacing: 2px; color: var(--muted); padding: 12px 20px 6px; opacity: 0.5; }
+
+  .notif-footer {
+    padding: 12px; text-align: center; border-top: 1px solid rgba(255,255,255,0.04);
+  }
+  .notif-footer a { font-size: 13px; color: var(--cyan); text-decoration: none; font-weight: 300; }
+  .notif-footer a:hover { text-decoration: underline; }
+</style>
+</head>
+<body>
+
+<h1>Notification <span>Center</span></h1>
+<p class="subtitle">Klicke auf die Glocke</p>
+
+<div class="bell-wrap">
+  <div class="bell-btn" onclick="toggleNotif()">&#128276;</div>
+  <div class="bell-badge">5</div>
+</div>
+
+<div class="notif-panel" id="notifPanel">
+  <div class="notif-header">
+    <div class="notif-title">Benachrichtigungen</div>
+    <button class="notif-mark">Alle gelesen</button>
+  </div>
+
+  <div class="notif-tabs">
+    <button class="notif-tab active" onclick="switchTab(this)">Alle</button>
+    <button class="notif-tab" onclick="switchTab(this)">Events</button>
+    <button class="notif-tab" onclick="switchTab(this)">System</button>
+    <button class="notif-tab" onclick="switchTab(this)">Team</button>
+  </div>
+
+  <div class="notif-list">
+    <div class="notif-group">HEUTE</div>
+
+    <div class="notif-item unread">
+      <div class="notif-icon ni-event">&#9889;</div>
+      <div class="notif-body">
+        <div class="notif-text"><strong>142 Events</strong> in der letzten Stunde verarbeitet</div>
+        <div class="notif-time">vor 5 Minuten</div>
+      </div>
+    </div>
+
+    <div class="notif-item unread">
+      <div class="notif-icon ni-ai">&#10024;</div>
+      <div class="notif-body">
+        <div class="notif-text">AI hat <strong>3 Dokumente</strong> automatisch generiert</div>
+        <div class="notif-time">vor 12 Minuten</div>
+      </div>
+    </div>
+
+    <div class="notif-item unread">
+      <div class="notif-icon ni-warn">&#9888;</div>
+      <div class="notif-body">
+        <div class="notif-text">API Rate Limit bei <strong>85%</strong> - Upgrade empfohlen</div>
+        <div class="notif-time">vor 28 Minuten</div>
+      </div>
+    </div>
+
+    <div class="notif-item unread">
+      <div class="notif-icon ni-team">&#128101;</div>
+      <div class="notif-body">
+        <div class="notif-text"><strong>Sarah Brunner</strong> hat den Workspace betreten</div>
+        <div class="notif-time">vor 1 Stunde</div>
+      </div>
+    </div>
+
+    <div class="notif-item unread">
+      <div class="notif-icon ni-error">&#10007;</div>
+      <div class="notif-body">
+        <div class="notif-text">Webhook Retry fehlgeschlagen: <strong>order.failed</strong></div>
+        <div class="notif-time">vor 2 Stunden</div>
+      </div>
+    </div>
+
+    <div class="notif-group">GESTERN</div>
+
+    <div class="notif-item">
+      <div class="notif-icon ni-event">&#9889;</div>
+      <div class="notif-body">
+        <div class="notif-text">Neuer Event-Stream <strong>billing-stream</strong> erstellt</div>
+        <div class="notif-time">Gestern, 16:30</div>
+      </div>
+    </div>
+
+    <div class="notif-item">
+      <div class="notif-icon ni-team">&#128101;</div>
+      <div class="notif-body">
+        <div class="notif-text"><strong>Tom Weber</strong> wurde eingeladen</div>
+        <div class="notif-time">Gestern, 14:15</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="notif-footer"><a href="#">Alle Benachrichtigungen anzeigen</a></div>
+</div>
+
+<script>
+  function toggleNotif() { document.getElementById('notifPanel').classList.toggle('open'); }
+  function switchTab(el) {
+    el.parentElement.querySelectorAll('.notif-tab').forEach(t => t.classList.remove('active'));
+    el.classList.add('active');
+  }
+</script>
+
+</body>
+</html>

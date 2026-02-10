@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{BRAND_NAME}} - Onboarding Wizard</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  :root { --dark-bg: {{BG}}; --cyan: {{PRIMARY}}; --cyan-dark: {{PRIMARY_DARK}}; --cloud: {{TEXT}}; --muted: {{MUTED}}; --success: {{SUCCESS}}; }
+  body { background: var(--dark-bg); font-family: system-ui, -apple-system, sans-serif; color: var(--cloud); min-height: 100vh; display: flex; align-items: center; justify-content: center; }
+
+  .wizard { max-width: 560px; width: 90%; }
+
+  /* Progress */
+  .progress { display: flex; align-items: center; margin-bottom: 48px; padding: 0 20px; }
+  .step-dot {
+    width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 500; transition: all 0.4s; flex-shrink: 0;
+    background: rgba(255,255,255,0.04); border: 2px solid rgba(255,255,255,0.08); color: var(--muted);
+  }
+  .step-dot.active { background: rgba({{PRIMARY_RGB}},0.1); border-color: var(--cyan); color: var(--cyan); box-shadow: 0 0 16px rgba({{PRIMARY_RGB}},0.15); }
+  .step-dot.done { background: var(--cyan); border-color: var(--cyan); color: var(--dark-bg); }
+  .step-line { flex: 1; height: 2px; background: rgba(255,255,255,0.06); margin: 0 8px; position: relative; overflow: hidden; }
+  .step-line-fill { height: 100%; background: var(--cyan); width: 0; transition: width 0.6s ease; }
+  .step-label { position: absolute; top: 42px; left: 50%; transform: translateX(-50%); font-size: 10px; color: var(--muted); letter-spacing: 1px; white-space: nowrap; display: none; }
+
+  /* Card */
+  .wizard-card {
+    background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 20px; padding: 40px; min-height: 380px;
+    display: flex; flex-direction: column;
+  }
+
+  .wizard-step { display: none; flex-direction: column; flex: 1; animation: stepFade 0.4s ease; }
+  .wizard-step.active { display: flex; }
+  @keyframes stepFade { from { opacity: 0; transform: translateX(20px); } to { opacity: 1; transform: translateX(0); } }
+
+  .step-icon { font-size: 36px; margin-bottom: 20px; }
+  .step-title { font-size: 24px; font-weight: 300; margin-bottom: 8px; }
+  .step-desc { font-size: 14px; color: var(--muted); font-weight: 300; line-height: 1.7; margin-bottom: 28px; }
+
+  /* Form elements */
+  .field { margin-bottom: 18px; }
+  .field-label { font-size: 12px; color: var(--muted); letter-spacing: 1px; margin-bottom: 6px; display: block; font-weight: 300; }
+  .field-input {
+    width: 100%; padding: 12px 16px; border-radius: 10px;
+    background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08);
+    color: var(--cloud); font-size: 14px; font-family: inherit; outline: none; transition: all 0.3s;
+  }
+  .field-input:focus { border-color: rgba({{PRIMARY_RGB}},0.5); box-shadow: 0 0 0 3px rgba({{PRIMARY_RGB}},0.08); }
+  .field-input::placeholder { color: rgba(255,255,255,0.15); }
+
+  /* Option cards */
+  .option-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 18px; }
+  .option-card {
+    padding: 16px; border-radius: 10px; cursor: pointer; text-align: center;
+    background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.06);
+    transition: all 0.3s; font-size: 13px; color: var(--muted); font-weight: 300;
+  }
+  .option-card.selected { border-color: rgba({{PRIMARY_RGB}},0.4); background: rgba({{PRIMARY_RGB}},0.06); color: var(--cyan); }
+  .option-card:hover:not(.selected) { border-color: rgba(255,255,255,0.12); }
+  .option-icon { font-size: 24px; margin-bottom: 8px; display: block; }
+  .option-title { font-size: 14px; font-weight: 400; color: var(--cloud); margin-bottom: 2px; }
+
+  /* Team invite */
+  .invite-row { display: flex; gap: 8px; margin-bottom: 12px; }
+  .invite-row .field-input { flex: 1; }
+  .invite-btn {
+    padding: 0 16px; border-radius: 10px; background: rgba({{PRIMARY_RGB}},0.1);
+    border: 1px solid rgba({{PRIMARY_RGB}},0.3); color: var(--cyan); cursor: pointer;
+    font-size: 18px; transition: all 0.2s;
+  }
+  .invite-btn:hover { background: rgba({{PRIMARY_RGB}},0.2); }
+  .invited-list { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 18px; }
+  .invited-tag {
+    padding: 4px 12px; border-radius: 8px; font-size: 12px;
+    background: rgba({{PRIMARY_RGB}},0.08); color: var(--cyan); border: 1px solid rgba({{PRIMARY_RGB}},0.15);
+    display: flex; align-items: center; gap: 6px;
+  }
+  .invited-tag button { background: none; border: none; color: var(--muted); cursor: pointer; font-size: 14px; }
+
+  /* Completion */
+  .complete-check {
+    width: 80px; height: 80px; margin: 0 auto 24px; border-radius: 50%;
+    background: rgba({{SUCCESS_RGB}},0.08); border: 2px solid var(--success);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 36px; color: var(--success);
+    animation: checkPop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  @keyframes checkPop { 0% { transform: scale(0); } 100% { transform: scale(1); } }
+
+  /* Footer */
+  .wizard-footer { display: flex; justify-content: space-between; margin-top: auto; padding-top: 24px; }
+  .btn {
+    padding: 12px 28px; border-radius: 8px; font-size: 13px; font-weight: 500;
+    letter-spacing: 1px; cursor: pointer; transition: all 0.3s; font-family: inherit;
+  }
+  .btn-ghost { background: transparent; border: 1px solid rgba(255,255,255,0.1); color: var(--muted); }
+  .btn-ghost:hover { border-color: rgba(255,255,255,0.2); color: var(--cloud); }
+  .btn-primary { background: linear-gradient(135deg, var(--cyan), var(--cyan-dark)); border: none; color: var(--dark-bg); font-weight: 600; }
+  .btn-primary:hover { box-shadow: 0 6px 20px rgba({{PRIMARY_RGB}},0.25); transform: translateY(-1px); }
+  .btn-skip { background: none; border: none; color: var(--muted); font-size: 13px; cursor: pointer; font-family: inherit; }
+  .btn-skip:hover { color: var(--cloud); }
+</style>
+</head>
+<body>
+
+<div class="wizard">
+  <!-- Progress Bar -->
+  <div class="progress">
+    <div class="step-dot active" id="dot0">1</div>
+    <div class="step-line"><div class="step-line-fill" id="line0"></div></div>
+    <div class="step-dot" id="dot1">2</div>
+    <div class="step-line"><div class="step-line-fill" id="line1"></div></div>
+    <div class="step-dot" id="dot2">3</div>
+    <div class="step-line"><div class="step-line-fill" id="line2"></div></div>
+    <div class="step-dot" id="dot3">4</div>
+  </div>
+
+  <div class="wizard-card">
+    <!-- Step 1: Workspace -->
+    <div class="wizard-step active" id="step0">
+      <div class="step-icon">&#9883;</div>
+      <div class="step-title">Workspace erstellen</div>
+      <div class="step-desc">Gib deinem Workspace einen Namen. Du kannst ihn später jederzeit ändern.</div>
+      <div class="field">
+        <label class="field-label">WORKSPACE NAME</label>
+        <input class="field-input" type="text" placeholder="z.B. Mein Startup" value="{{BRAND_NAME}} Dev">
+      </div>
+      <div class="field">
+        <label class="field-label">WORKSPACE URL</label>
+        <input class="field-input" type="text" placeholder="workspace-url" value="{{BRAND_NAME_LOWER}}-dev" style="font-family:'SF Mono',Monaco,monospace;font-size:13px;">
+      </div>
+      <div class="wizard-footer">
+        <div></div>
+        <button class="btn btn-primary" onclick="nextStep()">WEITER</button>
+      </div>
+    </div>
+
+    <!-- Step 2: Use Case -->
+    <div class="wizard-step" id="step1">
+      <div class="step-icon">&#10024;</div>
+      <div class="step-title">Wie nutzt du {{BRAND_NAME}}?</div>
+      <div class="step-desc">Wähle deinen Hauptanwendungsfall. Wir optimieren die Einstellungen entsprechend.</div>
+      <div class="option-grid">
+        <div class="option-card selected" onclick="selectOption(this)"><span class="option-icon">&#9889;</span><div class="option-title">SaaS Backend</div>Event-driven Microservices</div>
+        <div class="option-card" onclick="selectOption(this)"><span class="option-icon">&#9881;</span><div class="option-title">IoT / Sensoren</div>Geräte-Events verarbeiten</div>
+        <div class="option-card" onclick="selectOption(this)"><span class="option-icon">&#128202;</span><div class="option-title">Analytics</div>User-Verhalten tracken</div>
+        <div class="option-card" onclick="selectOption(this)"><span class="option-icon">&#129302;</span><div class="option-title">AI Workflows</div>Automatisierung mit AI</div>
+      </div>
+      <div class="wizard-footer">
+        <button class="btn btn-ghost" onclick="prevStep()">ZURÜCK</button>
+        <button class="btn btn-primary" onclick="nextStep()">WEITER</button>
+      </div>
+    </div>
+
+    <!-- Step 3: Team -->
+    <div class="wizard-step" id="step2">
+      <div class="step-icon">&#128101;</div>
+      <div class="step-title">Team einladen</div>
+      <div class="step-desc">Lade dein Team ein. Sie erhalten eine E-Mail mit Zugangslink.</div>
+      <div class="invite-row">
+        <input class="field-input" type="email" placeholder="name@firma.ch" id="inviteInput">
+        <button class="invite-btn" onclick="addInvite()">+</button>
+      </div>
+      <div class="invited-list" id="invitedList">
+        <div class="invited-tag">sarah@firma.ch <button onclick="this.parentElement.remove()">&times;</button></div>
+        <div class="invited-tag">tom@firma.ch <button onclick="this.parentElement.remove()">&times;</button></div>
+      </div>
+      <div class="wizard-footer">
+        <button class="btn btn-ghost" onclick="prevStep()">ZURÜCK</button>
+        <div style="display:flex;gap:12px;align-items:center;">
+          <button class="btn-skip" onclick="nextStep()">Überspringen</button>
+          <button class="btn btn-primary" onclick="nextStep()">WEITER</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 4: Complete -->
+    <div class="wizard-step" id="step3" style="text-align:center;justify-content:center;">
+      <div class="complete-check">&#10003;</div>
+      <div class="step-title">Alles bereit!</div>
+      <div class="step-desc" style="max-width:360px;margin:8px auto 0;">Dein Workspace "{{BRAND_NAME}} Dev" ist eingerichtet. 2 Team-Mitglieder wurden eingeladen.</div>
+      <div class="wizard-footer" style="justify-content:center;">
+        <button class="btn btn-primary" style="padding:14px 48px;">DASHBOARD ÖFFNEN</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  let current = 0;
+  const total = 4;
+
+  function nextStep() {
+    if (current >= total - 1) return;
+    document.getElementById('step' + current).classList.remove('active');
+    document.getElementById('dot' + current).classList.remove('active');
+    document.getElementById('dot' + current).classList.add('done');
+    document.getElementById('dot' + current).innerHTML = '&#10003;';
+    if (current < total - 1) document.getElementById('line' + current).style.width = '100%';
+    current++;
+    document.getElementById('step' + current).classList.add('active');
+    document.getElementById('dot' + current).classList.add('active');
+  }
+
+  function prevStep() {
+    if (current <= 0) return;
+    document.getElementById('step' + current).classList.remove('active');
+    document.getElementById('dot' + current).classList.remove('active');
+    current--;
+    document.getElementById('line' + current).style.width = '0';
+    document.getElementById('dot' + current).classList.remove('done');
+    document.getElementById('dot' + current).classList.add('active');
+    document.getElementById('dot' + current).textContent = current + 1;
+    document.getElementById('step' + current).classList.add('active');
+  }
+
+  function selectOption(el) {
+    el.parentElement.querySelectorAll('.option-card').forEach(c => c.classList.remove('selected'));
+    el.classList.add('selected');
+  }
+
+  function addInvite() {
+    const input = document.getElementById('inviteInput');
+    if (!input.value) return;
+    const tag = document.createElement('div');
+    tag.className = 'invited-tag';
+    tag.innerHTML = input.value + ' <button onclick="this.parentElement.remove()">&times;</button>';
+    document.getElementById('invitedList').appendChild(tag);
+    input.value = '';
+  }
+</script>
+
+</body>
+</html>

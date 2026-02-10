@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Beitragen zu {{BRAND_NAME}}</title>
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --dark-bg:{{BG}};--cyan:{{PRIMARY}};--cyan-dark:{{PRIMARY_DARK}};--cloud:{{TEXT}};--muted:{{MUTED}};
+    --surface:#1e293b;--border:#334155;--success:#48bb78;--info:#4299e1;
+  }
+  body{font-family:system-ui,-apple-system,sans-serif;background:var(--dark-bg);color:var(--cloud);line-height:1.7}
+
+  /* Header */
+  .page-header{
+    padding:64px;text-align:center;position:relative;overflow:hidden;
+    border-bottom:1px solid var(--border);
+  }
+  .page-header::before{
+    content:'';position:absolute;inset:0;
+    background:radial-gradient(ellipse at 50% 100%,rgba({{PRIMARY_RGB}},.06) 0%,transparent 60%);
+  }
+  .header-icon{
+    width:64px;height:64px;border-radius:16px;background:rgba({{PRIMARY_RGB}},.1);
+    border:1px solid rgba({{PRIMARY_RGB}},.2);display:flex;align-items:center;justify-content:center;
+    margin:0 auto 20px;position:relative;
+  }
+  .page-header h1{font-size:40px;font-weight:700;letter-spacing:-1px;position:relative}
+  .page-header h1 span{color:var(--cyan)}
+  .page-header p{color:var(--muted);font-size:17px;margin-top:8px;position:relative;max-width:600px;margin-left:auto;margin-right:auto}
+
+  .container{max-width:960px;margin:0 auto;padding:48px 32px}
+  .section{margin-bottom:56px}
+  .section-title{font-size:24px;font-weight:700;margin-bottom:8px}
+  .section-title::before{content:'';display:inline-block;width:4px;height:24px;background:var(--cyan);border-radius:2px;margin-right:12px;vertical-align:middle}
+  .section-desc{color:var(--muted);margin-bottom:24px;font-size:15px}
+  .divider{height:1px;background:var(--border);margin:48px 0}
+
+  /* Steps */
+  .steps-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+  @media(max-width:768px){.steps-grid{grid-template-columns:1fr}}
+  .step-card{
+    background:var(--surface);border:1px solid var(--border);border-radius:12px;
+    padding:28px 24px;transition:all .25s;position:relative;overflow:hidden;
+  }
+  .step-card:hover{border-color:var(--cyan);transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.2)}
+  .step-card::before{
+    content:'';position:absolute;top:0;left:0;right:0;height:2px;
+    background:linear-gradient(90deg,var(--cyan),transparent);opacity:0;transition:opacity .25s;
+  }
+  .step-card:hover::before{opacity:1}
+  .step-num{
+    width:36px;height:36px;border-radius:10px;background:rgba({{PRIMARY_RGB}},.1);
+    border:1px solid rgba({{PRIMARY_RGB}},.2);display:flex;align-items:center;justify-content:center;
+    font-size:16px;font-weight:700;color:var(--cyan);margin-bottom:16px;
+  }
+  .step-icon{font-size:28px;margin-bottom:12px}
+  .step-title{font-size:16px;font-weight:600;margin-bottom:8px}
+  .step-desc{font-size:13px;color:var(--muted);line-height:1.6}
+
+  /* Code Style */
+  .guidelines{display:flex;flex-direction:column;gap:16px}
+  .guideline{
+    background:var(--surface);border:1px solid var(--border);border-radius:10px;
+    padding:20px 24px;display:flex;gap:16px;align-items:flex-start;
+  }
+  .guideline-icon{
+    width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;
+    flex-shrink:0;font-size:16px;
+  }
+  .gi-cyan{background:rgba({{PRIMARY_RGB}},.1);color:var(--cyan)}
+  .gi-blue{background:rgba(66,153,225,.1);color:var(--info)}
+  .gi-green{background:rgba(72,187,120,.1);color:var(--success)}
+  .guideline-content{flex:1}
+  .guideline-title{font-size:14px;font-weight:600;margin-bottom:4px}
+  .guideline-text{font-size:13px;color:var(--muted)}
+
+  /* Code block */
+  .code-block{
+    background:{{SIDEBAR_BG}};border:1px solid var(--border);border-radius:8px;
+    padding:20px 24px;margin:12px 0;font-family:'SF Mono','Fira Code',monospace;
+    font-size:13px;line-height:1.8;overflow-x:auto;
+  }
+  .code-comment{color:#4a5568}
+  .code-type{color:#805ad5}
+  .code-scope{color:var(--cyan)}
+  .code-msg{color:var(--cloud)}
+  .code-example{color:var(--muted)}
+
+  /* PR Template */
+  .pr-template{
+    background:var(--surface);border:1px solid var(--border);border-radius:10px;
+    overflow:hidden;
+  }
+  .pr-header{
+    padding:14px 20px;border-bottom:1px solid var(--border);font-size:14px;font-weight:600;
+    display:flex;align-items:center;gap:8px;
+  }
+  .pr-header svg{color:var(--success)}
+  .pr-body{padding:20px;font-size:13px;color:var(--muted);line-height:1.8;font-family:'SF Mono','Fira Code',monospace}
+  .pr-body .pr-heading{color:var(--cloud);font-weight:600;font-family:system-ui,-apple-system,sans-serif}
+  .pr-body .pr-check{color:var(--muted)}
+
+  /* Code of Conduct */
+  .conduct-card{
+    background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:28px 32px;
+  }
+  .conduct-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px}
+  @media(max-width:600px){.conduct-grid{grid-template-columns:1fr}}
+  .conduct-item{
+    display:flex;align-items:center;gap:10px;font-size:14px;color:var(--muted);
+    padding:10px 14px;background:var(--dark-bg);border-radius:8px;
+  }
+  .conduct-item .icon{font-size:18px;flex-shrink:0}
+  .conduct-positive{border-left:3px solid var(--success)}
+  .conduct-negative{border-left:3px solid #e53e3e}
+
+  /* Links */
+  .links-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px}
+  .link-card{
+    background:var(--surface);border:1px solid var(--border);border-radius:10px;
+    padding:20px;display:flex;align-items:center;gap:14px;cursor:pointer;
+    transition:all .2s;text-decoration:none;color:inherit;
+  }
+  .link-card:hover{border-color:var(--cyan);transform:translateY(-1px)}
+  .link-icon{
+    width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;
+    flex-shrink:0;font-size:20px;
+  }
+  .li-cyan{background:rgba({{PRIMARY_RGB}},.1)}
+  .li-blue{background:rgba(66,153,225,.1)}
+  .li-green{background:rgba(72,187,120,.1)}
+  .li-purple{background:rgba(128,90,213,.1)}
+  .link-info .link-title{font-size:14px;font-weight:600}
+  .link-info .link-desc{font-size:12px;color:var(--muted)}
+
+  /* Footer */
+  .page-footer{
+    text-align:center;padding:32px;border-top:1px solid var(--border);
+    color:var(--muted);font-size:14px;margin-top:32px;
+  }
+  .page-footer a{color:var(--cyan);text-decoration:none}
+</style>
+</head>
+<body>
+
+<!-- Header -->
+<div class="page-header">
+  <div class="header-icon">
+    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="{{PRIMARY}}" stroke-width="2">
+      <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/>
+      <circle cx="9" cy="7" r="4"/>
+      <path d="M23 21v-2a4 4 0 00-3-3.87"/>
+      <path d="M16 3.13a4 4 0 010 7.75"/>
+    </svg>
+  </div>
+  <h1>Beitragen zu <span>{{BRAND_NAME}}</span></h1>
+  <p>Vielen Dank fuer Ihr Interesse! Jeder Beitrag macht {{BRAND_NAME}} besser. Hier erfahren Sie, wie Sie anfangen koennen.</p>
+</div>
+
+<div class="container">
+
+  <!-- Steps -->
+  <div class="section">
+    <h2 class="section-title">Schritt fuer Schritt</h2>
+    <p class="section-desc">Vom Fork zum Pull Request in sechs einfachen Schritten.</p>
+
+    <div class="steps-grid">
+      <div class="step-card">
+        <div class="step-num">1</div>
+        <div class="step-icon">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="{{PRIMARY}}" stroke-width="2"><path d="M16 22v-2a4 4 0 00-1-2.7c3-.3 6-1.5 6-7a5.4 5.4 0 00-1.5-3.7 5 5 0 00-.1-3.8s-1.2-.4-4 1.5a13.4 13.4 0 00-7 0C5.3 2.8 4 3.2 4 3.2a5 5 0 00-.2 3.8A5.4 5.4 0 002.4 10.7c0 5.5 3 6.7 6 7A4 4 0 007 20v2"/><path d="M9 18c-4.5 2-5-2-7-2"/></svg>
+        </div>
+        <div class="step-title">Fork</div>
+        <div class="step-desc">Erstellen Sie einen Fork des {{BRAND_NAME}}-Repositorys auf GitHub. Damit haben Sie Ihre eigene Kopie zum Arbeiten.</div>
+      </div>
+
+      <div class="step-card">
+        <div class="step-num">2</div>
+        <div class="step-icon">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="{{PRIMARY}}" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+        </div>
+        <div class="step-title">Clone</div>
+        <div class="step-desc">Klonen Sie Ihren Fork lokal und installieren Sie die Abhaengigkeiten mit <code style="color:var(--cyan)">npm install</code>.</div>
+      </div>
+
+      <div class="step-card">
+        <div class="step-num">3</div>
+        <div class="step-icon">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="{{PRIMARY}}" stroke-width="2"><line x1="6" y1="3" x2="6" y2="15"/><circle cx="18" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M18 9a9 9 0 01-9 9"/></svg>
+        </div>
+        <div class="step-title">Branch</div>
+        <div class="step-desc">Erstellen Sie einen Feature-Branch: <code style="color:var(--cyan)">git checkout -b feature/mein-feature</code>.</div>
+      </div>
+
+      <div class="step-card">
+        <div class="step-num">4</div>
+        <div class="step-icon">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="{{PRIMARY}}" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+        </div>
+        <div class="step-title">Code</div>
+        <div class="step-desc">Nehmen Sie Ihre Aenderungen vor. Halten Sie sich an die Code-Stilrichtlinien und schreiben Sie klaren, dokumentierten Code.</div>
+      </div>
+
+      <div class="step-card">
+        <div class="step-num">5</div>
+        <div class="step-icon">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="{{PRIMARY}}" stroke-width="2"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+        </div>
+        <div class="step-title">Test</div>
+        <div class="step-desc">Fuehren Sie die Tests aus: <code style="color:var(--cyan)">npm test</code>. Fuegen Sie Tests fuer neue Funktionen hinzu. Alle Tests muessen bestehen.</div>
+      </div>
+
+      <div class="step-card">
+        <div class="step-num">6</div>
+        <div class="step-icon">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="{{PRIMARY}}" stroke-width="2"><circle cx="12" cy="12" r="4"/><line x1="1.05" y1="12" x2="7" y2="12"/><line x1="17.01" y1="12" x2="22.96" y2="12"/></svg>
+        </div>
+        <div class="step-title">Pull Request</div>
+        <div class="step-desc">Oeffnen Sie einen PR gegen den <code style="color:var(--cyan)">main</code>-Branch. Beschreiben Sie Ihre Aenderungen und verlinken Sie verwandte Issues.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- Code Style -->
+  <div class="section">
+    <h2 class="section-title">Code-Stilrichtlinien</h2>
+    <p class="section-desc">Konsistenter Code erleichtert die Zusammenarbeit und Wartung.</p>
+
+    <div class="guidelines">
+      <div class="guideline">
+        <div class="guideline-icon gi-cyan">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        </div>
+        <div class="guideline-content">
+          <div class="guideline-title">TypeScript Strict Mode</div>
+          <div class="guideline-text">Alle Dateien verwenden TypeScript mit <code style="color:var(--cyan)">strict: true</code>. Vermeiden Sie <code style="color:var(--cyan)">any</code>-Typen. Definieren Sie explizite Rueckgabetypen fuer oeffentliche Funktionen.</div>
+        </div>
+      </div>
+      <div class="guideline">
+        <div class="guideline-icon gi-blue">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>
+        </div>
+        <div class="guideline-content">
+          <div class="guideline-title">ESLint und Prettier</div>
+          <div class="guideline-text">Fuehren Sie <code style="color:var(--cyan)">npm run lint</code> vor jedem Commit aus. Die Konfiguration wird automatisch uebernommen. Verwenden Sie 2 Leerzeichen zur Einrueckung.</div>
+        </div>
+      </div>
+      <div class="guideline">
+        <div class="guideline-icon gi-green">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+        </div>
+        <div class="guideline-content">
+          <div class="guideline-title">Test-Abdeckung</div>
+          <div class="guideline-text">Mindestens 80% Test-Abdeckung fuer neuen Code. Verwenden Sie Vitest fuer Unit-Tests und Playwright fuer E2E-Tests.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- Commit Message Format -->
+  <div class="section">
+    <h2 class="section-title">Commit-Nachricht Format</h2>
+    <p class="section-desc">Wir verwenden Conventional Commits fuer klare und konsistente Commit-Nachrichten.</p>
+
+    <div class="code-block">
+      <span class="code-comment"># Format</span><br>
+      <span class="code-type">&lt;typ&gt;</span><span class="code-msg">(</span><span class="code-scope">&lt;bereich&gt;</span><span class="code-msg">): &lt;beschreibung&gt;</span><br>
+      <br>
+      <span class="code-comment"># Typen</span><br>
+      <span class="code-type">feat</span><span class="code-example">     - Neue Funktion</span><br>
+      <span class="code-type">fix</span><span class="code-example">      - Fehlerbehebung</span><br>
+      <span class="code-type">docs</span><span class="code-example">     - Dokumentation</span><br>
+      <span class="code-type">style</span><span class="code-example">    - Formatierung (kein Code-Aenderung)</span><br>
+      <span class="code-type">refactor</span><span class="code-example"> - Code-Umstrukturierung</span><br>
+      <span class="code-type">test</span><span class="code-example">     - Tests hinzufuegen/aendern</span><br>
+      <span class="code-type">chore</span><span class="code-example">    - Build-Prozess / Werkzeuge</span><br>
+      <br>
+      <span class="code-comment"># Beispiele</span><br>
+      <span class="code-type">feat</span><span class="code-msg">(</span><span class="code-scope">events</span><span class="code-msg">): Event-Filterung nach Typ hinzufuegen</span><br>
+      <span class="code-type">fix</span><span class="code-msg">(</span><span class="code-scope">api</span><span class="code-msg">): Race Condition bei Stream-Erstellung beheben</span><br>
+      <span class="code-type">docs</span><span class="code-msg">(</span><span class="code-scope">readme</span><span class="code-msg">): Installationsanleitung aktualisieren</span>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- PR Template -->
+  <div class="section">
+    <h2 class="section-title">Pull Request Vorlage</h2>
+    <p class="section-desc">Verwenden Sie diese Vorlage beim Erstellen eines Pull Requests.</p>
+
+    <div class="pr-template">
+      <div class="pr-header">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="#48bb78"><path d="M7.177 3.073L9.573.677A.25.25 0 0110 .854v4.792a.25.25 0 01-.427.177L7.177 3.427a.25.25 0 010-.354zM3.75 2.5a.75.75 0 100 1.5.75.75 0 000-1.5zm-2.25.75a2.25 2.25 0 113 2.122v5.256a2.251 2.251 0 11-1.5 0V5.372A2.25 2.25 0 011.5 3.25zM11 2.5h-1V4h1a1 1 0 011 1v5.628a2.251 2.251 0 101.5 0V5A2.5 2.5 0 0011 2.5zm1 10.25a.75.75 0 111.5 0 .75.75 0 01-1.5 0zM3.75 12a.75.75 0 100 1.5.75.75 0 000-1.5z"/></svg>
+        Pull Request
+      </div>
+      <div class="pr-body">
+        <div class="pr-heading">## Zusammenfassung</div>
+        Kurze Beschreibung der Aenderungen...<br><br>
+        <div class="pr-heading">## Motivation</div>
+        Warum ist diese Aenderung notwendig?<br>
+        Verwandtes Issue: #XXX<br><br>
+        <div class="pr-heading">## Aenderungen</div>
+        - Aenderung 1<br>
+        - Aenderung 2<br><br>
+        <div class="pr-heading">## Testplan</div>
+        <span class="pr-check">- [ ] Unit-Tests hinzugefuegt</span><br>
+        <span class="pr-check">- [ ] E2E-Tests bestanden</span><br>
+        <span class="pr-check">- [ ] Manuell getestet</span><br><br>
+        <div class="pr-heading">## Screenshots</div>
+        (Falls zutreffend)
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- Code of Conduct -->
+  <div class="section">
+    <h2 class="section-title">Verhaltenskodex</h2>
+    <p class="section-desc">Wir schaffen eine einladende und respektvolle Umgebung fuer alle.</p>
+
+    <div class="conduct-card">
+      <p style="color:var(--muted);font-size:14px;margin-bottom:16px">Dieses Projekt und alle Teilnehmenden unterliegen unserem Verhaltenskodex. Mit Ihrer Teilnahme erklaeren Sie sich einverstanden, diese Richtlinien einzuhalten.</p>
+
+      <div class="conduct-grid">
+        <div class="conduct-item conduct-positive">
+          <span class="icon" style="color:var(--success)">&#10003;</span>
+          Respektvoller und konstruktiver Umgang
+        </div>
+        <div class="conduct-item conduct-positive">
+          <span class="icon" style="color:var(--success)">&#10003;</span>
+          Inklusive und einladende Sprache
+        </div>
+        <div class="conduct-item conduct-positive">
+          <span class="icon" style="color:var(--success)">&#10003;</span>
+          Offenheit fuer verschiedene Meinungen
+        </div>
+        <div class="conduct-item conduct-positive">
+          <span class="icon" style="color:var(--success)">&#10003;</span>
+          Konstruktives Feedback geben
+        </div>
+        <div class="conduct-item conduct-negative">
+          <span class="icon" style="color:#e53e3e">&#10007;</span>
+          Beleidigende oder abwertende Kommentare
+        </div>
+        <div class="conduct-item conduct-negative">
+          <span class="icon" style="color:#e53e3e">&#10007;</span>
+          Persoenliche Angriffe oder Trolling
+        </div>
+        <div class="conduct-item conduct-negative">
+          <span class="icon" style="color:#e53e3e">&#10007;</span>
+          Diskriminierung jeglicher Art
+        </div>
+        <div class="conduct-item conduct-negative">
+          <span class="icon" style="color:#e53e3e">&#10007;</span>
+          Unaufgefordertes Werben
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- Links -->
+  <div class="section">
+    <h2 class="section-title">Nuetzliche Links</h2>
+    <p class="section-desc">Ressourcen fuer Mitwirkende.</p>
+
+    <div class="links-grid">
+      <a class="link-card" href="#">
+        <div class="link-icon li-cyan">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="{{PRIMARY}}" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>
+        </div>
+        <div class="link-info">
+          <div class="link-title">Dokumentation</div>
+          <div class="link-desc">API-Referenz und Leitfaeden</div>
+        </div>
+      </a>
+      <a class="link-card" href="#">
+        <div class="link-icon li-blue">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#4299e1" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+        </div>
+        <div class="link-info">
+          <div class="link-title">Discord Community</div>
+          <div class="link-desc">Fragen stellen und diskutieren</div>
+        </div>
+      </a>
+      <a class="link-card" href="#">
+        <div class="link-icon li-green">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#48bb78" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        </div>
+        <div class="link-info">
+          <div class="link-title">Issue Tracker</div>
+          <div class="link-desc">Bugs melden und Features vorschlagen</div>
+        </div>
+      </a>
+      <a class="link-card" href="#">
+        <div class="link-icon li-purple">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#805ad5" stroke-width="2"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg>
+        </div>
+        <div class="link-info">
+          <div class="link-title">Changelog</div>
+          <div class="link-desc">Aenderungsverlauf und Releases</div>
+        </div>
+      </a>
+    </div>
+  </div>
+
+</div>
+
+<div class="page-footer">
+  <p>{{BRAND_NAME}} ist ein Open-Source-Projekt unter der <a href="#">MIT-Lizenz</a>.</p>
+  <p style="margin-top:8px">Vielen Dank an alle <a href="#">Mitwirkenden</a>, die {{BRAND_NAME}} moeglich machen.</p>
+</div>
+
+</body>
+</html>

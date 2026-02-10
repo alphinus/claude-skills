@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{BRAND_NAME}} Einstellungen</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --dark-bg: {{BG}}; --cyan: {{PRIMARY}}; --cyan-dark: {{PRIMARY_DARK}}; --cloud: {{TEXT}};
+    --muted: {{MUTED}}; --success: {{SUCCESS}}; --warning: {{WARNING}}; --error: {{ERROR}}; --info: {{INFO}};
+    --surface: #1e293b; --surface-2: #334155; --border: #475569;
+    --sidebar-w: 240px;
+  }
+  body { font-family: system-ui, -apple-system, sans-serif; background: var(--dark-bg); color: var(--cloud); min-height: 100vh; display: flex; }
+
+  /* Sidebar */
+  .sidebar { width: var(--sidebar-w); background: var(--surface); border-right: 1px solid var(--border); display: flex; flex-direction: column; position: fixed; top: 0; left: 0; bottom: 0; }
+  .sidebar-logo { padding: 24px 20px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 12px; }
+  .sidebar-logo svg { width: 32px; height: 32px; }
+  .sidebar-logo span { font-size: 18px; font-weight: 700; color: var(--cyan); letter-spacing: 1px; }
+  .sidebar-title { padding: 20px 20px 8px; font-size: 11px; text-transform: uppercase; letter-spacing: .8px; color: var(--muted); }
+  .sidebar-nav { flex: 1; }
+  .nav-item { display: flex; align-items: center; gap: 12px; padding: 11px 20px; color: var(--muted); font-size: 14px; cursor: pointer; transition: all .2s; border-left: 3px solid transparent; }
+  .nav-item:hover { color: var(--cloud); background: rgba({{PRIMARY_RGB}},.06); }
+  .nav-item.active { color: var(--cyan); background: rgba({{PRIMARY_RGB}},.1); border-left-color: var(--cyan); }
+  .nav-item svg { width: 18px; height: 18px; flex-shrink: 0; }
+
+  /* Main */
+  .main { margin-left: var(--sidebar-w); flex: 1; padding: 32px 40px; max-width: 780px; }
+  .page-header { margin-bottom: 32px; }
+  .page-header h1 { font-size: 24px; font-weight: 700; margin-bottom: 4px; }
+  .page-header p { color: var(--muted); font-size: 14px; }
+
+  /* Sections */
+  .settings-section { margin-bottom: 36px; }
+  .section-title { font-size: 16px; font-weight: 600; margin-bottom: 4px; }
+  .section-desc { font-size: 13px; color: var(--muted); margin-bottom: 16px; }
+
+  /* Toggle row */
+  .toggle-row { display: flex; align-items: center; justify-content: space-between; padding: 16px 20px; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; margin-bottom: 8px; }
+  .toggle-info { flex: 1; }
+  .toggle-label { font-size: 14px; font-weight: 500; margin-bottom: 2px; }
+  .toggle-desc { font-size: 12px; color: var(--muted); }
+
+  /* Toggle switch */
+  .toggle-switch { position: relative; width: 44px; height: 24px; flex-shrink: 0; margin-left: 16px; }
+  .toggle-switch input { display: none; }
+  .toggle-track { position: absolute; inset: 0; background: var(--surface-2); border: 1px solid var(--border); border-radius: 12px; transition: all .3s; cursor: pointer; }
+  .toggle-track::after { content: ''; position: absolute; width: 18px; height: 18px; border-radius: 50%; background: var(--muted); top: 2px; left: 2px; transition: all .3s; }
+  .toggle-switch input:checked + .toggle-track { background: var(--cyan); border-color: var(--cyan); }
+  .toggle-switch input:checked + .toggle-track::after { background: var(--dark-bg); left: 22px; }
+
+  /* Threshold inputs */
+  .threshold-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .threshold-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 16px 20px; }
+  .threshold-label { font-size: 13px; font-weight: 500; margin-bottom: 8px; }
+  .threshold-input-wrap { display: flex; align-items: center; gap: 8px; }
+  .threshold-prefix { font-size: 13px; color: var(--muted); }
+  .threshold-input { width: 80px; background: var(--dark-bg); border: 1px solid var(--border); border-radius: 6px; padding: 7px 10px; color: var(--cloud); font-size: 14px; text-align: center; outline: none; font-family: inherit; font-variant-numeric: tabular-nums; }
+  .threshold-input:focus { border-color: var(--cyan); box-shadow: 0 0 0 3px rgba({{PRIMARY_RGB}},.15); }
+  .threshold-suffix { font-size: 13px; color: var(--muted); }
+
+  /* Radio cards (schedule) */
+  .schedule-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+  .radio-card { background: var(--surface); border: 2px solid var(--border); border-radius: 10px; padding: 16px; cursor: pointer; transition: all .2s; text-align: center; }
+  .radio-card:hover { border-color: rgba({{PRIMARY_RGB}},.3); }
+  .radio-card.selected { border-color: var(--cyan); background: rgba({{PRIMARY_RGB}},.06); }
+  .radio-card input { display: none; }
+  .radio-icon { margin-bottom: 8px; }
+  .radio-icon svg { width: 24px; height: 24px; color: var(--muted); }
+  .radio-card.selected .radio-icon svg { color: var(--cyan); }
+  .radio-title { font-size: 14px; font-weight: 600; margin-bottom: 2px; }
+  .radio-card.selected .radio-title { color: var(--cyan); }
+  .radio-desc { font-size: 11px; color: var(--muted); }
+
+  /* Save area */
+  .save-area { display: flex; align-items: center; gap: 16px; padding-top: 8px; }
+  .save-btn { background: var(--cyan); color: var(--dark-bg); border: none; padding: 10px 28px; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; transition: background .2s; font-family: inherit; }
+  .save-btn:hover { background: var(--cyan-dark); }
+
+  /* Toast */
+  .toast { display: inline-flex; align-items: center; gap: 8px; background: rgba({{SUCCESS_RGB}},.15); border: 1px solid rgba({{SUCCESS_RGB}},.3); color: var(--success); padding: 8px 16px; border-radius: 8px; font-size: 13px; font-weight: 500; animation: toast-in .4s ease; }
+  .toast svg { width: 16px; height: 16px; flex-shrink: 0; }
+  @keyframes toast-in { 0% { opacity: 0; transform: translateY(8px); } 100% { opacity: 1; transform: translateY(0); } }
+</style>
+</head>
+<body>
+
+<!-- Sidebar -->
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <svg viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="14" stroke="{{PRIMARY}}" stroke-width="2"/><path d="M10 16c0-3.3 2.7-6 6-6s6 2.7 6 6-2.7 6-6 6" stroke="{{PRIMARY}}" stroke-width="2" stroke-linecap="round"/><circle cx="16" cy="16" r="2" fill="{{PRIMARY}}"/></svg>
+    <span>{{BRAND_NAME}}</span>
+  </div>
+  <div class="sidebar-title">Einstellungen</div>
+  <nav class="sidebar-nav">
+    <div class="nav-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      Profil
+    </div>
+    <div class="nav-item active">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+      Benachrichtigungen
+    </div>
+    <div class="nav-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+      API-Schl&uuml;ssel
+    </div>
+    <div class="nav-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+      Integrationen
+    </div>
+    <div class="nav-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      Sicherheit
+    </div>
+    <div class="nav-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+      Abrechnung
+    </div>
+  </nav>
+</aside>
+
+<!-- Main -->
+<main class="main">
+  <div class="page-header">
+    <h1>Benachrichtigungen</h1>
+    <p>Konfiguriere, wann und wie du &uuml;ber Ereignisse informiert wirst.</p>
+  </div>
+
+  <!-- Notification toggles -->
+  <div class="settings-section">
+    <h3 class="section-title">Benachrichtigungskan&auml;le</h3>
+    <p class="section-desc">W&auml;hle aus, welche Benachrichtigungen du erhalten m&ouml;chtest.</p>
+
+    <div class="toggle-row">
+      <div class="toggle-info">
+        <div class="toggle-label">E-Mail bei neuem Event</div>
+        <div class="toggle-desc">Erhalte eine E-Mail, wenn ein neues Event in deinen abonnierten Streams eintrifft.</div>
+      </div>
+      <label class="toggle-switch">
+        <input type="checkbox" checked>
+        <span class="toggle-track"></span>
+      </label>
+    </div>
+
+    <div class="toggle-row">
+      <div class="toggle-info">
+        <div class="toggle-label">Telegram-Alerts</div>
+        <div class="toggle-desc">Empfange Echtzeit-Benachrichtigungen &uuml;ber den {{BRAND_NAME}} Telegram Bot.</div>
+      </div>
+      <label class="toggle-switch">
+        <input type="checkbox" checked>
+        <span class="toggle-track"></span>
+      </label>
+    </div>
+
+    <div class="toggle-row">
+      <div class="toggle-info">
+        <div class="toggle-label">W&ouml;chentlicher Report</div>
+        <div class="toggle-desc">Zusammenfassung aller Events und Metriken der vergangenen Woche per E-Mail.</div>
+      </div>
+      <label class="toggle-switch">
+        <input type="checkbox" checked>
+        <span class="toggle-track"></span>
+      </label>
+    </div>
+
+    <div class="toggle-row">
+      <div class="toggle-info">
+        <div class="toggle-label">Fehler-Benachrichtigungen</div>
+        <div class="toggle-desc">Sofortige Benachrichtigung bei fehlgeschlagenen Events oder Systemfehlern.</div>
+      </div>
+      <label class="toggle-switch">
+        <input type="checkbox" checked>
+        <span class="toggle-track"></span>
+      </label>
+    </div>
+  </div>
+
+  <!-- Threshold settings -->
+  <div class="settings-section">
+    <h3 class="section-title">Schwellenwerte</h3>
+    <p class="section-desc">Definiere Grenzwerte, bei deren &Uuml;berschreitung Alerts ausgel&ouml;st werden.</p>
+
+    <div class="threshold-grid">
+      <div class="threshold-card">
+        <div class="threshold-label">Alert bei Latenz &uuml;ber</div>
+        <div class="threshold-input-wrap">
+          <span class="threshold-prefix">&gt;</span>
+          <input type="number" class="threshold-input" value="200">
+          <span class="threshold-suffix">ms</span>
+        </div>
+      </div>
+      <div class="threshold-card">
+        <div class="threshold-label">Alert bei Error Rate &uuml;ber</div>
+        <div class="threshold-input-wrap">
+          <span class="threshold-prefix">&gt;</span>
+          <input type="number" class="threshold-input" value="5">
+          <span class="threshold-suffix">%</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Notification schedule -->
+  <div class="settings-section">
+    <h3 class="section-title">Zustellungszeitplan</h3>
+    <p class="section-desc">W&auml;hle, wie oft nicht-kritische Benachrichtigungen zugestellt werden sollen.</p>
+
+    <div class="schedule-grid">
+      <label class="radio-card selected">
+        <input type="radio" name="schedule" checked>
+        <div class="radio-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+        </div>
+        <div class="radio-title">Sofort</div>
+        <div class="radio-desc">Benachrichtigungen werden sofort zugestellt</div>
+      </label>
+      <label class="radio-card">
+        <input type="radio" name="schedule">
+        <div class="radio-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        </div>
+        <div class="radio-title">St&uuml;ndlich</div>
+        <div class="radio-desc">Zusammenfassung jede volle Stunde</div>
+      </label>
+      <label class="radio-card">
+        <input type="radio" name="schedule">
+        <div class="radio-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        </div>
+        <div class="radio-title">T&auml;glich</div>
+        <div class="radio-desc">Tagesbericht um 09:00 Uhr</div>
+      </label>
+    </div>
+  </div>
+
+  <!-- Save -->
+  <div class="save-area">
+    <button class="save-btn">Einstellungen speichern</button>
+    <div class="toast">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+      &Auml;nderungen gespeichert
+    </div>
+  </div>
+</main>
+
+</body>
+</html>

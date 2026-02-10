@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{BRAND_NAME}} - Accordion & Tabs</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  :root { --dark-bg: {{BG}}; --cyan: {{PRIMARY}}; --cyan-dark: {{PRIMARY_DARK}}; --cloud: {{TEXT}}; --muted: {{MUTED}}; }
+  body { background: var(--dark-bg); font-family: system-ui, -apple-system, sans-serif; color: var(--cloud); min-height: 100vh; padding: 60px 40px; display: flex; flex-direction: column; align-items: center; }
+  h1 { font-size: 36px; font-weight: 200; margin-bottom: 12px; }
+  h1 span { background: linear-gradient(135deg, var(--cyan), var(--cyan-dark)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+  .subtitle { color: var(--muted); font-size: 14px; margin-bottom: 60px; font-weight: 300; }
+
+  .columns { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; max-width: 1000px; width: 100%; }
+  .col-title { font-size: 12px; letter-spacing: 4px; color: var(--cyan); margin-bottom: 24px; opacity: 0.6; }
+
+  /* === TABS === */
+  .tabs-header { display: flex; gap: 2px; margin-bottom: 0; background: rgba(255,255,255,0.02); border-radius: 12px 12px 0 0; padding: 4px 4px 0; border: 1px solid rgba(255,255,255,0.06); border-bottom: none; }
+  .tab-btn {
+    flex: 1; padding: 12px 16px; border: none; background: transparent; color: var(--muted);
+    font-size: 13px; font-family: inherit; cursor: pointer; border-radius: 8px 8px 0 0;
+    transition: all 0.3s; position: relative; font-weight: 300;
+  }
+  .tab-btn.active { color: var(--cloud); background: rgba({{PRIMARY_RGB}},0.06); }
+  .tab-btn::after {
+    content: ''; position: absolute; bottom: 0; left: 20%; right: 20%;
+    height: 2px; background: var(--cyan); border-radius: 1px;
+    transform: scaleX(0); transition: transform 0.3s;
+  }
+  .tab-btn.active::after { transform: scaleX(1); }
+  .tab-btn:hover:not(.active) { color: var(--cloud); }
+
+  .tabs-body { background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.06); border-top: 1px solid rgba({{PRIMARY_RGB}},0.1); border-radius: 0 0 12px 12px; padding: 24px; min-height: 200px; }
+  .tab-panel { display: none; animation: tabFade 0.3s ease; }
+  .tab-panel.active { display: block; }
+  @keyframes tabFade { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+  .tab-panel p { font-size: 14px; color: var(--muted); font-weight: 300; line-height: 1.8; }
+  .tab-panel .tag { display: inline-block; padding: 3px 10px; border-radius: 6px; font-size: 11px; letter-spacing: 1px; margin: 8px 4px 0 0; background: rgba({{PRIMARY_RGB}},0.08); color: var(--cyan); border: 1px solid rgba({{PRIMARY_RGB}},0.15); }
+
+  /* === ACCORDION === */
+  .accordion { display: flex; flex-direction: column; gap: 8px; }
+  .acc-item { background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.06); border-radius: 12px; overflow: hidden; transition: border-color 0.3s; }
+  .acc-item.open { border-color: rgba({{PRIMARY_RGB}},0.15); }
+  .acc-header {
+    padding: 16px 20px; display: flex; justify-content: space-between; align-items: center;
+    cursor: pointer; transition: all 0.3s;
+  }
+  .acc-header:hover { background: rgba(255,255,255,0.01); }
+  .acc-title { font-size: 14px; font-weight: 400; }
+  .acc-item.open .acc-title { color: var(--cyan); }
+  .acc-chevron { color: var(--muted); transition: transform 0.3s, color 0.3s; font-size: 12px; }
+  .acc-item.open .acc-chevron { transform: rotate(180deg); color: var(--cyan); }
+  .acc-body { max-height: 0; overflow: hidden; transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+  .acc-body-inner { padding: 0 20px 16px; font-size: 13px; color: var(--muted); font-weight: 300; line-height: 1.7; }
+
+  /* === FAQ SECTION === */
+  .faq-section { max-width: 1000px; width: 100%; margin-top: 80px; }
+  .faq-title { font-size: 28px; font-weight: 200; text-align: center; margin-bottom: 8px; }
+  .faq-sub { text-align: center; color: var(--muted); font-size: 14px; margin-bottom: 40px; font-weight: 300; }
+  .faq-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .faq-item { background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.06); border-radius: 12px; overflow: hidden; }
+  .faq-q { padding: 18px 20px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; font-size: 14px; font-weight: 400; transition: color 0.3s; }
+  .faq-q:hover { color: var(--cyan); }
+  .faq-a { max-height: 0; overflow: hidden; transition: max-height 0.4s ease; }
+  .faq-a-inner { padding: 0 20px 18px; font-size: 13px; color: var(--muted); font-weight: 300; line-height: 1.7; }
+  .faq-icon { color: var(--muted); transition: transform 0.3s; font-size: 16px; }
+  .faq-item.open .faq-icon { transform: rotate(45deg); color: var(--cyan); }
+  .faq-item.open .faq-q { color: var(--cyan); }
+</style>
+</head>
+<body>
+
+<h1>Accordion & <span>Tabs</span></h1>
+<p class="subtitle">Interaktive Content-Switcher mit smooth Transitions</p>
+
+<div class="columns">
+  <!-- TABS -->
+  <div>
+    <div class="col-title">TABS</div>
+    <div class="tabs-header">
+      <button class="tab-btn active" onclick="switchTab(0)">Overview</button>
+      <button class="tab-btn" onclick="switchTab(1)">Features</button>
+      <button class="tab-btn" onclick="switchTab(2)">Stack</button>
+    </div>
+    <div class="tabs-body">
+      <div class="tab-panel active">
+        <p>{{BRAND_NAME}} ist ein event-driven Ecosystem für moderne Teams. Gebaut mit TypeScript, React und Express. Event Sourcing als Kern-Architektur mit AI-gestützter Automatisierung.</p>
+      </div>
+      <div class="tab-panel">
+        <p>Event Sourcing, AI Integration, Telegram Bot, React Dashboard, i18n Support und Monorepo-Architektur. Alles was ein modernes Team braucht.</p>
+        <div class="tag">Event Sourcing</div><div class="tag">AI SDK v6</div><div class="tag">grammY</div><div class="tag">React</div><div class="tag">i18n</div>
+      </div>
+      <div class="tab-panel">
+        <p>Monorepo mit shared TypeScript Types. Express Backend, Vite + React Frontend, JSONL Event Store. Deployed mit PM2.</p>
+        <div class="tag">TypeScript</div><div class="tag">Express</div><div class="tag">Vite</div><div class="tag">React</div><div class="tag">PM2</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ACCORDION -->
+  <div>
+    <div class="col-title">ACCORDION</div>
+    <div class="accordion">
+      <div class="acc-item open">
+        <div class="acc-header" onclick="toggleAcc(this)">
+          <span class="acc-title">Was ist Event Sourcing?</span>
+          <span class="acc-chevron">&#9660;</span>
+        </div>
+        <div class="acc-body" style="max-height:120px;">
+          <div class="acc-body-inner">Ein Architektur-Pattern bei dem alle Zustandsänderungen als unveränderliche Events gespeichert werden. Der aktuelle State wird durch Replay aller Events berechnet.</div>
+        </div>
+      </div>
+      <div class="acc-item">
+        <div class="acc-header" onclick="toggleAcc(this)">
+          <span class="acc-title">Wie funktioniert die AI Integration?</span>
+          <span class="acc-chevron">&#9660;</span>
+        </div>
+        <div class="acc-body">
+          <div class="acc-body-inner">Über das AI SDK v6 werden Events automatisch analysiert, Dokumentation generiert und Smart Suggestions für das Team erstellt.</div>
+        </div>
+      </div>
+      <div class="acc-item">
+        <div class="acc-header" onclick="toggleAcc(this)">
+          <span class="acc-title">Ist {{BRAND_NAME}} Open Source?</span>
+          <span class="acc-chevron">&#9660;</span>
+        </div>
+        <div class="acc-body">
+          <div class="acc-body-inner">{{BRAND_NAME}} ist aktuell in der Beta-Phase. Der Starter-Plan ist kostenlos. Open-Source-Pläne werden evaluiert.</div>
+        </div>
+      </div>
+      <div class="acc-item">
+        <div class="acc-header" onclick="toggleAcc(this)">
+          <span class="acc-title">Welche Sprachen werden unterstützt?</span>
+          <span class="acc-chevron">&#9660;</span>
+        </div>
+        <div class="acc-body">
+          <div class="acc-body-inner">Deutsch und Englisch mit vollständiger i18n-Integration. Weitere Sprachen können über das Plugin-System hinzugefügt werden.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FAQ Section -->
+<div class="faq-section">
+  <div class="faq-title">Häufige <span>Fragen</span></div>
+  <div class="faq-sub">Alles was du wissen musst</div>
+  <div class="faq-grid" id="faqGrid">
+    <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">Gibt es eine kostenlose Version?<span class="faq-icon">+</span></div><div class="faq-a"><div class="faq-a-inner">Ja, der Starter-Plan ist kostenlos und beinhaltet 1'000 Events pro Monat.</div></div></div>
+    <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">Wie sicher sind meine Daten?<span class="faq-icon">+</span></div><div class="faq-a"><div class="faq-a-inner">Alle Daten werden verschlüsselt in der Schweiz gehostet. SOC 2 Compliance in Planung.</div></div></div>
+    <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">Kann ich {{BRAND_NAME}} on-premise betreiben?<span class="faq-icon">+</span></div><div class="faq-a"><div class="faq-a-inner">Ja, im Enterprise-Plan ist Self-Hosting enthalten.</div></div></div>
+    <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">Welchen Support gibt es?<span class="faq-icon">+</span></div><div class="faq-a"><div class="faq-a-inner">Community Forum (Starter), Priority E-Mail (Pro), Dedicated Slack Channel (Enterprise).</div></div></div>
+  </div>
+</div>
+
+<script>
+  function switchTab(i) {
+    document.querySelectorAll('.tab-btn').forEach((b,j) => b.classList.toggle('active', j===i));
+    document.querySelectorAll('.tab-panel').forEach((p,j) => p.classList.toggle('active', j===i));
+  }
+
+  function toggleAcc(header) {
+    const item = header.parentElement;
+    const body = item.querySelector('.acc-body');
+    const isOpen = item.classList.contains('open');
+    document.querySelectorAll('.acc-item').forEach(i => { i.classList.remove('open'); i.querySelector('.acc-body').style.maxHeight = '0'; });
+    if (!isOpen) { item.classList.add('open'); body.style.maxHeight = body.scrollHeight + 'px'; }
+  }
+
+  function toggleFaq(q) {
+    const item = q.parentElement;
+    const a = item.querySelector('.faq-a');
+    const isOpen = item.classList.contains('open');
+    item.classList.toggle('open');
+    a.style.maxHeight = isOpen ? '0' : a.scrollHeight + 'px';
+  }
+</script>
+
+</body>
+</html>

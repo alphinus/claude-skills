@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{BRAND_NAME}} - Animated Logo</title>
+<style>
+  :root {
+    --dark-bg: {{BG}};
+    --cyan: {{PRIMARY}};
+    --cyan-dark: {{PRIMARY_DARK}};
+    --cloud: {{TEXT}};
+    --muted: {{MUTED}};
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #080e1e;
+    color: var(--cloud);
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+  }
+
+  h1 {
+    font-size: 28px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    margin-bottom: 8px;
+    text-align: center;
+  }
+  h1 span { color: var(--cyan); }
+
+  .subtitle {
+    color: var(--muted);
+    font-size: 14px;
+    margin-bottom: 40px;
+    text-align: center;
+  }
+
+  .logo-container {
+    width: 400px;
+    height: 400px;
+    background: var(--dark-bg);
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    border: 1px solid rgba({{PRIMARY_RGB}},0.1);
+  }
+
+  /* Subtle background glow */
+  .logo-container::before {
+    content: '';
+    position: absolute;
+    width: 200px;
+    height: 200px;
+    background: radial-gradient(circle, rgba({{PRIMARY_RGB}},0.1) 0%, transparent 70%);
+    border-radius: 50%;
+    animation: pulse-glow 3s ease-in-out infinite;
+  }
+
+  @keyframes pulse-glow {
+    0%, 100% { opacity: 0; transform: scale(0.8); }
+    40% { opacity: 1; transform: scale(1); }
+    70% { opacity: 0.6; transform: scale(1.1); }
+  }
+
+  .animated-logo {
+    position: relative;
+    z-index: 1;
+    width: 280px;
+    height: 320px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* ===== HEXAGON ===== */
+  .hex-svg {
+    width: 180px;
+    height: 200px;
+    margin-bottom: 20px;
+  }
+
+  .hex-outline {
+    fill: none;
+    stroke: var(--cyan);
+    stroke-width: 3;
+    stroke-dasharray: 600;
+    stroke-dashoffset: 600;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    animation: draw-hex 1.2s ease-out 0.2s forwards;
+  }
+
+  @keyframes draw-hex {
+    0% { stroke-dashoffset: 600; }
+    100% { stroke-dashoffset: 0; }
+  }
+
+  /* ===== E-LETTER BEAMS ===== */
+  .e-beam {
+    fill: none;
+    stroke: var(--cyan);
+    stroke-width: 4;
+    stroke-linecap: round;
+    opacity: 0;
+  }
+
+  .e-beam-top {
+    animation: slide-beam 0.4s ease-out 1.0s forwards;
+  }
+
+  .e-beam-mid {
+    animation: slide-beam 0.4s ease-out 1.2s forwards;
+  }
+
+  .e-beam-bot {
+    animation: slide-beam 0.4s ease-out 1.4s forwards;
+  }
+
+  .e-beam-vert {
+    animation: slide-beam-vert 0.5s ease-out 0.8s forwards;
+  }
+
+  @keyframes slide-beam {
+    0% {
+      opacity: 0;
+      stroke-dasharray: 40;
+      stroke-dashoffset: 40;
+    }
+    30% { opacity: 1; }
+    100% {
+      opacity: 1;
+      stroke-dasharray: 40;
+      stroke-dashoffset: 0;
+    }
+  }
+
+  @keyframes slide-beam-vert {
+    0% {
+      opacity: 0;
+      stroke-dasharray: 60;
+      stroke-dashoffset: 60;
+    }
+    30% { opacity: 1; }
+    100% {
+      opacity: 1;
+      stroke-dasharray: 60;
+      stroke-dashoffset: 0;
+    }
+  }
+
+  /* ===== {{BRAND_NAME}} TEXT ===== */
+  .logo-text {
+    font-size: 42px;
+    font-weight: 800;
+    letter-spacing: 0.18em;
+    color: var(--cloud);
+    opacity: 0;
+    animation: fade-in-text 0.8s ease-out 1.6s forwards;
+  }
+
+  @keyframes fade-in-text {
+    0% {
+      opacity: 0;
+      transform: translateY(8px);
+      letter-spacing: 0.3em;
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+      letter-spacing: 0.18em;
+    }
+  }
+
+  /* ===== GLOW EFFECT ON COMPLETION ===== */
+  .hex-glow {
+    fill: none;
+    stroke: var(--cyan);
+    stroke-width: 6;
+    opacity: 0;
+    filter: blur(8px);
+    animation: hex-bloom 0.6s ease-out 2.2s forwards;
+  }
+
+  @keyframes hex-bloom {
+    0% { opacity: 0; stroke-width: 6; }
+    50% { opacity: 0.4; stroke-width: 10; }
+    100% { opacity: 0; stroke-width: 14; }
+  }
+
+  /* ===== LOOP: restart all animations ===== */
+  .animated-logo {
+    animation: restart-cycle 3s linear infinite;
+  }
+
+  /* We use a wrapper animation to re-trigger child animations */
+  @keyframes restart-cycle {
+    0% { opacity: 1; }
+    90% { opacity: 1; }
+    95% { opacity: 0; }
+    100% { opacity: 0; }
+  }
+
+  /* Re-triggering via animation-iteration on the wrapper */
+  .hex-outline { animation: draw-hex 1.2s ease-out 0.2s forwards; }
+
+  /* Small particles */
+  .particle {
+    position: absolute;
+    width: 3px;
+    height: 3px;
+    border-radius: 50%;
+    background: var(--cyan);
+    opacity: 0;
+  }
+
+  .particle:nth-child(1) {
+    top: 25%; left: 20%;
+    animation: sparkle 3s ease-in-out 1.8s infinite;
+  }
+  .particle:nth-child(2) {
+    top: 30%; right: 22%;
+    animation: sparkle 3s ease-in-out 2.0s infinite;
+  }
+  .particle:nth-child(3) {
+    bottom: 35%; left: 25%;
+    animation: sparkle 3s ease-in-out 2.1s infinite;
+  }
+  .particle:nth-child(4) {
+    bottom: 30%; right: 18%;
+    animation: sparkle 3s ease-in-out 1.9s infinite;
+  }
+
+  @keyframes sparkle {
+    0%, 100% { opacity: 0; transform: scale(0); }
+    10% { opacity: 0.8; transform: scale(1.2); }
+    30% { opacity: 0; transform: scale(0); }
+  }
+
+  .info {
+    margin-top: 32px;
+    color: var(--muted);
+    font-size: 13px;
+    text-align: center;
+    line-height: 1.7;
+  }
+
+  .info strong { color: var(--cloud); }
+</style>
+</head>
+<body>
+
+<h1><span>{{BRAND_NAME}}</span> Animated Logo</h1>
+<p class="subtitle">400 x 400 px - 3-Sekunden-Loop fuer GIF-Export</p>
+
+<div class="logo-container">
+  <!-- Sparkle particles -->
+  <div class="particle"></div>
+  <div class="particle"></div>
+  <div class="particle"></div>
+  <div class="particle"></div>
+
+  <div class="animated-logo">
+    <!-- Hexagon SVG -->
+    <svg class="hex-svg" viewBox="0 0 180 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <!-- Glow layer -->
+      <polygon class="hex-glow" points="90,10 165,47.5 165,152.5 90,190 15,152.5 15,47.5"/>
+
+      <!-- Main hexagon outline -->
+      <polygon class="hex-outline" points="90,10 165,47.5 165,152.5 90,190 15,152.5 15,47.5"/>
+
+      <!-- E letter beams -->
+      <!-- Vertical bar -->
+      <line class="e-beam e-beam-vert" x1="65" y1="70" x2="65" y2="130"/>
+      <!-- Top horizontal -->
+      <line class="e-beam e-beam-top" x1="65" y1="70" x2="115" y2="70"/>
+      <!-- Middle horizontal -->
+      <line class="e-beam e-beam-mid" x1="65" y1="100" x2="108" y2="100"/>
+      <!-- Bottom horizontal -->
+      <line class="e-beam e-beam-bot" x1="65" y1="130" x2="115" y2="130"/>
+    </svg>
+
+    <!-- {{BRAND_NAME}} text -->
+    <span class="logo-text">{{BRAND_NAME}}</span>
+  </div>
+</div>
+
+<p class="info">
+  <strong>Animation:</strong> Hexagon zeichnet sich (0-1.2s) &rarr; E-Balken gleiten ein (0.8-1.5s) &rarr; Text fadet ein (1.6-2.4s) &rarr; Glow (2.2s) &rarr; Reset (3s)<br>
+  <strong>Export:</strong> Als GIF (400x400, 30fps) oder als APNG / WebP fuer verlustfreie Animation
+</p>
+
+</body>
+</html>
