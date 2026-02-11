@@ -1,5 +1,5 @@
 #!/bin/bash
-# Setup a repository with github-repo-pimper templates.
+# Setup a repository with eluma:github-pimper templates.
 # Usage: setup-repo.sh <repo-path> <repo-name> <one-liner> [tag1] [tag2] [tag3] [tag4]
 
 set -e

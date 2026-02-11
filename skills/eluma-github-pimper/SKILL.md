@@ -1,5 +1,5 @@
 ---
-name: github-repo-pimper
+name: eluma:github-pimper
 description: "Transform any GitHub repository into a professional, conversion-optimized showcase. Generates branded READMEs, animated SVG banners (dense hex grid, circuit animations, floating particles), social preview images, GitHub Actions, issue templates, and YouTube Shorts content foundations. Consistent Eluma design language with terminal-style monospace typography across all repos by alphinus / Eluma Developments."
 triggers:
   - "pimp repo"
