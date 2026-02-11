@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    width: 1280px; height: 640px;
+    background: linear-gradient(135deg, #0b1120, #0f172a);
+    font-family: system-ui, -apple-system, sans-serif;
+    color: #f8fafc;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 80px;
+    position: relative;
+    overflow: hidden;
+  }
+  .glow {
+    position: absolute; width: 300px; height: 300px;
+    background: radial-gradient(circle, #4fd1c522, transparent 70%);
+    border-radius: 50%;
+  }
+  .glow-1 { top: -100px; right: -50px; }
+  .glow-2 { bottom: -100px; left: 200px; }
+  .top-bar { position: absolute; top: 0; left: 0; right: 0; height: 4px; background: linear-gradient(90deg, #4fd1c5, #38b2ac); }
+  .title { font-size: 64px; font-weight: 800; letter-spacing: -0.03em; margin-bottom: 16px; }
+  .title span { background: linear-gradient(135deg, #4fd1c5, #38b2ac); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  .subtitle { font-size: 24px; color: #718096; max-width: 800px; line-height: 1.4; }
+  .footer { position: absolute; bottom: 40px; left: 80px; right: 80px; display: flex; justify-content: space-between; align-items: center; }
+  .author { font-size: 16px; color: #718096; }
+  .author strong { color: #4fd1c5; }
+  .badges { display: flex; gap: 12px; }
+  .badge { padding: 6px 16px; border-radius: 20px; font-size: 13px; font-weight: 600; border: 1px solid rgba(79,209,197,0.2); color: #4fd1c5; background: rgba(79,209,197,0.05); }
+  .hex-grid { position: absolute; right: 60px; top: 50%; transform: translateY(-50%); opacity: 0.06; }
+  .hex-grid polygon { fill: none; stroke: #4fd1c5; stroke-width: 1; }
+</style>
+</head>
+<body>
+  <div class="glow glow-1"></div>
+  <div class="glow glow-2"></div>
+  <div class="top-bar"></div>
+
+  <svg class="hex-grid" width="300" height="300" viewBox="0 0 300 300">
+    <polygon points="30,0 60,17 60,52 30,69 0,52 0,17" transform="translate(50,30)"/>
+    <polygon points="30,0 60,17 60,52 30,69 0,52 0,17" transform="translate(115,67)"/>
+    <polygon points="30,0 60,17 60,52 30,69 0,52 0,17" transform="translate(50,104)"/>
+    <polygon points="30,0 60,17 60,52 30,69 0,52 0,17" transform="translate(180,30)"/>
+    <polygon points="30,0 60,17 60,52 30,69 0,52 0,17" transform="translate(180,104)"/>
+    <polygon points="30,0 60,17 60,52 30,69 0,52 0,17" transform="translate(115,141)"/>
+    <polygon points="30,0 60,17 60,52 30,69 0,52 0,17" transform="translate(50,178)"/>
+    <polygon points="30,0 60,17 60,52 30,69 0,52 0,17" transform="translate(180,178)"/>
+  </svg>
+
+  <h1 class="title"><span>claude-skills</span></h1>
+  <p class="subtitle">Create branded Claude Code skills with live color picker, 110-page design collections, and AI logo generation</p>
+
+  <div class="footer">
+    <span class="author">by <strong>alphinus</strong> / Eluma Developments</span>
+    <div class="badges">
+      <span class="badge">TypeScript</span><span class="badge">React 19</span><span class="badge">Vite 6</span>
+    </div>
+  </div>
+</body>
+</html>

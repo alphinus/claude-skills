@@ -1,0 +1,95 @@
+<div align="center">
+
+<!-- Dark/Light mode banner -->
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset=".github/assets/banner-dark.svg">
+  <source media="(prefers-color-scheme: light)" srcset=".github/assets/banner-light.svg">
+  <img alt="{{REPO_NAME}}" src=".github/assets/banner-dark.svg" width="100%">
+</picture>
+
+<br />
+
+<!-- Badges -->
+[![Build](https://img.shields.io/github/actions/workflow/status/{{GITHUB_USER}}/{{REPO_NAME}}/ci.yml?style=flat-square&color=4fd1c5&label=build)](https://github.com/{{GITHUB_USER}}/{{REPO_NAME}}/actions)
+[![Version](https://img.shields.io/github/package-json/v/{{GITHUB_USER}}/{{REPO_NAME}}?style=flat-square&color=4fd1c5)](https://github.com/{{GITHUB_USER}}/{{REPO_NAME}}/releases)
+[![License](https://img.shields.io/github/license/{{GITHUB_USER}}/{{REPO_NAME}}?style=flat-square&color=38b2ac)](LICENSE)
+[![Stars](https://img.shields.io/github/stars/{{GITHUB_USER}}/{{REPO_NAME}}?style=flat-square&color=4fd1c5)](https://github.com/{{GITHUB_USER}}/{{REPO_NAME}}/stargazers)
+
+**{{ONE_LINER}}**
+
+[Demo]({{DEMO_URL}}) | [Docs](#documentation) | [Quick Start](#quick-start) | [Contributing](CONTRIBUTING.md)
+
+</div>
+
+---
+
+## What is {{REPO_NAME}}?
+
+{{DESCRIPTION}}
+
+<div align="center">
+  <img src=".github/assets/screenshot-01.png" alt="Screenshot" width="720" />
+</div>
+
+## Features
+
+{{FEATURES}}
+
+## Quick Start
+
+```bash
+{{QUICK_START}}
+```
+
+{{QUICK_START_DETAILS}}
+
+## Screenshots
+
+{{SCREENSHOTS}}
+
+## Tech Stack
+
+{{TECH_STACK}}
+
+## Architecture
+
+{{ARCHITECTURE}}
+
+## API Reference
+
+{{API_TABLE}}
+
+## Documentation
+
+{{DOCUMENTATION}}
+
+## Contributing
+
+We welcome contributions! See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
+
+```bash
+# Clone the repo
+git clone https://github.com/{{GITHUB_USER}}/{{REPO_NAME}}.git
+
+# Install dependencies
+cd {{REPO_NAME}} && npm install
+
+# Start development
+npm run dev
+```
+
+## License
+
+{{LICENSE_TYPE}} - see [LICENSE](LICENSE) for details.
+
+---
+
+<div align="center">
+
+**Built by [{{GITHUB_USER}}](https://github.com/{{GITHUB_USER}}) | [Eluma Developments](https://eluma.ch)**
+
+<sub>
+{{OTHER_REPOS}}
+</sub>
+
+</div>

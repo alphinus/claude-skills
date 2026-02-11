@@ -1,0 +1,75 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="300" viewBox="0 0 1200 300">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0b1120"/>
+      <stop offset="100%" style="stop-color:#0f172a"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#4fd1c5"/>
+      <stop offset="100%" style="stop-color:#38b2ac"/>
+    </linearGradient>
+    <linearGradient id="glow" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#4fd1c5;stop-opacity:0.15"/>
+      <stop offset="100%" style="stop-color:#4fd1c5;stop-opacity:0"/>
+    </linearGradient>
+    <filter id="blur">
+      <feGaussianBlur stdDeviation="40"/>
+    </filter>
+    <style>
+      @keyframes pulse { 0%, 100% { opacity: 0.4; } 50% { opacity: 0.8; } }
+      @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
+      .title { font-family: system-ui, -apple-system, sans-serif; font-weight: 800; font-size: 48px; fill: #f8fafc; letter-spacing: -0.02em; }
+      .subtitle { font-family: system-ui, -apple-system, sans-serif; font-weight: 400; font-size: 18px; fill: #718096; }
+      .accent-line { stroke: url(#accent); stroke-width: 3; stroke-linecap: round; }
+      .hex { fill: none; stroke: #4fd1c5; stroke-width: 0.5; opacity: 0.08; }
+      .glow-orb { fill: #4fd1c5; filter: url(#blur); opacity: 0.12; animation: pulse 4s ease-in-out infinite; }
+      .dot { fill: #4fd1c5; opacity: 0.3; }
+      .dot:nth-child(2n) { animation: pulse 3s ease-in-out infinite; }
+    </style>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="300" fill="url(#bg)"/>
+
+  <!-- Glow orbs -->
+  <circle class="glow-orb" cx="200" cy="150" r="120"/>
+  <circle class="glow-orb" cx="1000" cy="200" r="80" style="animation-delay: -2s;"/>
+
+  <!-- Hexagonal grid pattern -->
+  <g transform="translate(800, 20)">
+    <polygon class="hex" points="30,0 60,17 60,52 30,69 0,52 0,17" transform="translate(0,0)"/>
+    <polygon class="hex" points="30,0 60,17 60,52 30,69 0,52 0,17" transform="translate(65,37)"/>
+    <polygon class="hex" points="30,0 60,17 60,52 30,69 0,52 0,17" transform="translate(130,0)"/>
+    <polygon class="hex" points="30,0 60,17 60,52 30,69 0,52 0,17" transform="translate(130,74)"/>
+    <polygon class="hex" points="30,0 60,17 60,52 30,69 0,52 0,17" transform="translate(195,37)"/>
+    <polygon class="hex" points="30,0 60,17 60,52 30,69 0,52 0,17" transform="translate(260,0)"/>
+    <polygon class="hex" points="30,0 60,17 60,52 30,69 0,52 0,17" transform="translate(260,74)"/>
+    <polygon class="hex" points="30,0 60,17 60,52 30,69 0,52 0,17" transform="translate(0,74)"/>
+    <polygon class="hex" points="30,0 60,17 60,52 30,69 0,52 0,17" transform="translate(65,111)"/>
+    <polygon class="hex" points="30,0 60,17 60,52 30,69 0,52 0,17" transform="translate(130,148)"/>
+    <polygon class="hex" points="30,0 60,17 60,52 30,69 0,52 0,17" transform="translate(195,111)"/>
+    <polygon class="hex" points="30,0 60,17 60,52 30,69 0,52 0,17" transform="translate(325,37)"/>
+  </g>
+
+  <!-- Decorative dots -->
+  <circle class="dot" cx="60" cy="40" r="2"/>
+  <circle class="dot" cx="90" cy="60" r="1.5"/>
+  <circle class="dot" cx="40" cy="80" r="1"/>
+  <circle class="dot" cx="120" cy="250" r="2"/>
+  <circle class="dot" cx="150" cy="230" r="1.5"/>
+
+  <!-- Accent line -->
+  <line class="accent-line" x1="80" y1="185" x2="200" y2="185"/>
+
+  <!-- Top glow bar -->
+  <rect x="0" y="0" width="1200" height="3" fill="url(#accent)" opacity="0.6"/>
+
+  <!-- Title -->
+  <text class="title" x="80" y="140">claude-skills</text>
+  <text class="subtitle" x="80" y="220">Brand Machine — Claude Code Skill Builder</text>
+
+  <!-- Bottom branding -->
+  <text x="80" y="275" style="font-family: system-ui, sans-serif; font-size: 12px; fill: #718096; letter-spacing: 0.1em; text-transform: uppercase;">
+    by alphinus / Eluma Developments
+  </text>
+</svg>
