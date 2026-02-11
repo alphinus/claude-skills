@@ -16,9 +16,9 @@
 [![License](https://img.shields.io/github/license/alphinus/claude-skills?style=flat-square&color=38b2ac)](LICENSE)
 [![Stars](https://img.shields.io/github/stars/alphinus/claude-skills?style=flat-square&color=4fd1c5)](https://github.com/alphinus/claude-skills/stargazers)
 
-**Create branded Claude Code skills with live color picker, 110-page design collections, and AI logo generation.**
+**Multi-brand skill ecosystem for Claude Code — namespaced registry, build pipeline, and Brand Machine web app.**
 
-[Live Demo](https://claude-skills-beta.vercel.app) · [Quick Start](#quick-start) · [Features](#features) · [API Reference](#api-reference) · [Contributing](CONTRIBUTING.md)
+[Live Demo](https://claude-skills-beta.vercel.app) · [Quick Start](#quick-start) · [Skill Registry](#skill-registry) · [Features](#features) · [API Reference](#api-reference) · [Contributing](CONTRIBUTING.md)
 
 </div>
 
@@ -26,9 +26,9 @@
 
 ## What is claude-skills?
 
-A **Brand Machine** web app that turns brand definitions (colors, logos, tokens) into fully deployed [Claude Code](https://docs.anthropic.com/en/docs/claude-code) skills. Pick your brand colors in a canvas-based color wheel, preview them in real-time, generate a 110-page HTML design collection, create AI logos, and deploy — all from one UI.
+A **multi-brand skill ecosystem** and **Brand Machine** web app for [Claude Code](https://docs.anthropic.com/en/docs/claude-code). Manages skills across brand namespaces (`eluma:`, `core:`, etc.) with a central registry, automated build pipeline, and a web UI for creating brand design systems.
 
-> **How it works:** Brand form → `tokens.json` → `build.sh` (core templates + tokens) → `sync.sh` → Skill appears in Claude Code.
+> **How it works:** `skills/<brand>/<slug>/` → `registry.json` → `sync.sh` → `~/.claude/skills/<brand>:<slug>/` → Claude Code discovers it.
 
 <div align="center">
   <br />
@@ -53,8 +53,37 @@ A **Brand Machine** web app that turns brand definitions (colors, logos, tokens)
   <br />
 </div>
 
+## Skill Registry
+
+All managed skills live in `skills/<brand>/<slug>/` and are tracked in `registry.json`:
+
+| Skill | Type | Description |
+|-------|------|-------------|
+| `eluma:brand-system` | built | Complete Eluma design system (dark/light themes, 124 UI patterns) |
+| `eluma:github-pimper` | authored | GitHub repo showcase generator (banners, READMEs, Actions) |
+| `eluma:brand-machine` | authored | AI logo and brand asset generation via inference.sh |
+| `eluma:naming` | authored | Naming consistency enforcement across repos and packages |
+| `core:skill-forge` | authored | Meta-skill for scaffolding new skills with correct namespace |
+
+### Naming Conventions
+
+| Context | Format | Example |
+|---------|--------|---------|
+| Repo directory | `skills/<brand>/<slug>/` | `skills/eluma/github-pimper/` |
+| SKILL.md name | `<brand>:<slug>` | `eluma:github-pimper` |
+| Deploy directory | `~/.claude/skills/<brand>:<slug>/` | `~/.claude/skills/eluma:github-pimper/` |
+
+Brand names: `^[a-z][a-z0-9]*$` — Slugs: `kebab-case` — `core` is reserved for brand-agnostic utilities.
+
 ## Features
 
+### Skill Ecosystem
+- **Namespaced Skills** — `<brand>:<slug>` convention for prefix-based discovery (`eluma:` shows all Eluma skills)
+- **Central Registry** — `registry.json` with all skills, brands, types, and tags — one read = full overview
+- **Skill Forge** — `core:skill-forge` meta-skill scaffolds new skills with correct structure and registry integration
+- **Flexible Sync** — `./sync.sh` (all), `./sync.sh eluma` (brand), `./sync.sh eluma:github-pimper` (single)
+
+### Brand Machine Web App
 - **Canvas-Based Color Picker** — HSL color wheel with bidirectional hex/RGB sync, smart auto-calculation of dark variants and RGB values
 - **Live Preview** — Real-time preview panel showing sidebar, cards, buttons, and badges in your brand colors as you edit
 - **110-Page Design Collection** — Templatized from Eluma's design system: animations, app screens, branding, social media, print materials, and 15 more categories
@@ -101,24 +130,28 @@ Opens at **http://localhost:5173** — API on port 3001.
 
 ```
 claude-skills/
-├── app/                      # Brand Machine web app
-│   ├── server/               # Express API (brands CRUD, build, collection, images)
-│   │   ├── routes/           # API route handlers
-│   │   └── lib/              # Config, validation, color utils, collection generator
-│   └── src/                  # React frontend
-│       ├── components/       # UI kit, brand form, color picker, layout, preview
-│       ├── pages/            # Dashboard, Create, Edit, Collection, Build, Compare
-│       └── hooks/            # useBrands, useColorSync, useBuildStatus
-├── core/                     # Brand-agnostic skill templates
-│   ├── SKILL.md.template     # Skill manifest with {{PLACEHOLDERS}}
-│   └── references/           # Components, animations, layouts (124 patterns)
-├── brands/                   # Brand configurations (the datastore)
-│   └── eluma/                # Example brand with tokens.json + collection
-├── collection-templates/     # 110 templatized HTML pages
-├── skills/                   # Generated skills (ready to deploy)
-├── scripts/                  # CLI utilities
-├── build.sh                  # core + brand → skill
-└── sync.sh                   # skill → ~/.claude/skills/
+├── skills/                       # ALL managed skills
+│   ├── eluma/                    # Brand namespace
+│   │   ├── brand-system/         # eluma:brand-system (built)
+│   │   ├── github-pimper/        # eluma:github-pimper
+│   │   ├── brand-machine/        # eluma:brand-machine
+│   │   └── naming/               # eluma:naming
+│   └── core/                     # Brand-agnostic skills
+│       └── skill-forge/          # core:skill-forge
+├── registry.json                 # Central skill registry (auto-generated)
+├── app/                          # Brand Machine web app
+│   ├── server/                   # Express API (brands CRUD, build, collection, images)
+│   └── src/                      # React frontend (color picker, preview, dashboard)
+├── core/                         # Brand-agnostic skill templates
+│   ├── SKILL.md.template         # Skill manifest with {{PLACEHOLDERS}}
+│   └── references/               # Components, animations, layouts (124 patterns)
+├── brands/                       # Brand configurations (the datastore)
+│   └── eluma/                    # Brand with tokens.json + collection
+├── collection-templates/         # 110 templatized HTML pages
+├── scripts/                      # CLI utilities
+│   └── update-registry.sh        # Regenerates registry.json from filesystem
+├── build.sh                      # core + brand → skills/<brand>/brand-system/
+└── sync.sh                       # skills/<brand>/<slug>/ → ~/.claude/skills/<brand>:<slug>/
 ```
 
 ## API Reference
@@ -145,7 +178,7 @@ claude-skills/
 {
   "brand": {
     "name": "Your Brand",
-    "slug": "your-brand-system",
+    "slug": "yourbrand:brand-system",
     "domain": "yourbrand.com",
     "tagline": "YOUR TAGLINE",
     "description": "Claude Code skill description...",
@@ -171,11 +204,20 @@ claude-skills/
 ## CLI Usage
 
 ```bash
-# Build a specific brand
-./build.sh eluma
+# Build a brand's design system skill
+./build.sh eluma                    # → skills/eluma/brand-system/
 
-# Deploy all skills to Claude Code
-./sync.sh
+# Sync all skills to Claude Code
+./sync.sh                           # → ~/.claude/skills/<brand>:<slug>/
+
+# Sync a single brand's skills
+./sync.sh eluma                     # → all eluma:* skills
+
+# Sync a single skill
+./sync.sh eluma:github-pimper       # → just this one
+
+# Regenerate the central registry
+./scripts/update-registry.sh        # → registry.json
 
 # Generate collection from templates (CLI)
 ./scripts/generate-collection.sh your-brand
