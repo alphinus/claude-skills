@@ -1,10 +1,9 @@
-import type { VercelRequest, VercelResponse } from '@vercel/node';
-import fs from 'fs';
-import path from 'path';
+const fs = require('fs');
+const path = require('path');
 
 const BRANDS_DIR = path.join(process.cwd(), 'brands');
 
-export default function handler(req: VercelRequest, res: VercelResponse) {
+module.exports = function handler(req, res) {
   const url = req.url || '';
 
   // CORS
@@ -21,7 +20,7 @@ export default function handler(req: VercelRequest, res: VercelResponse) {
         const tp = path.join(BRANDS_DIR, d.name, 'tokens.json');
         if (!fs.existsSync(tp)) return null;
         try { return { slug: d.name, ...JSON.parse(fs.readFileSync(tp, 'utf-8')) }; }
-        catch { return null; }
+        catch (e) { return null; }
       }).filter(Boolean);
       res.json(brands);
       return;
@@ -42,7 +41,7 @@ export default function handler(req: VercelRequest, res: VercelResponse) {
     if (collMatch) {
       const slug = collMatch[1];
       const collDir = path.join(BRANDS_DIR, slug, 'collection');
-      const categories: Record<string, string[]> = {};
+      const categories = {};
       if (fs.existsSync(collDir)) {
         const entries = fs.readdirSync(collDir, { withFileTypes: true });
         for (const entry of entries) {
@@ -62,12 +61,12 @@ export default function handler(req: VercelRequest, res: VercelResponse) {
     // Fallback
     res.status(404).json({ error: 'Not found', note: 'Write operations require the local dev server.' });
   } catch (err) {
-    res.status(500).json({ error: (err as Error).message });
+    res.status(500).json({ error: err.message });
   }
-}
+};
 
-function getAllHtml(dir: string, prefix: string): string[] {
-  const files: string[] = [];
+function getAllHtml(dir, prefix) {
+  const files = [];
   for (const e of fs.readdirSync(dir, { withFileTypes: true })) {
     if (e.isDirectory()) files.push(...getAllHtml(path.join(dir, e.name), `${prefix}/${e.name}`));
     else if (e.name.endsWith('.html')) files.push(`${prefix}/${e.name}`);
