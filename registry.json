@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "updated": "2026-02-11T11:44:34Z",
+  "updated": "2026-02-11T21:24:00Z",
   "brands": {
     "core": {
       "displayName": "Core",
@@ -10,7 +10,7 @@
     "eluma": {
       "displayName": "Eluma",
       "domain": "eluma.ch",
-      "skillCount": 4
+      "skillCount": 8
     }
   },
   "skills": [
@@ -64,6 +64,17 @@
       ]
     },
     {
+      "name": "eluma:homepage",
+      "brand": "eluma",
+      "slug": "homepage",
+      "path": "skills/eluma/homepage",
+      "type": "authored",
+      "description": "Manage the eluma.ch homepage ecosystem — dashboard OS (admin.eluma.ch) and main site (eluma.ch). Use when working on demo pages, homepage sections, content editing, feature flags, the draft/publish wo",
+      "tags": [
+        "references"
+      ]
+    },
+    {
       "name": "eluma:naming",
       "brand": "eluma",
       "slug": "naming",
@@ -71,6 +82,37 @@
       "type": "authored",
       "description": "Enforces 100% consistent naming across folder, GitHub repo, package.json, and deploy URL for every project. Audits naming on project creation, rename, or review. Generates descriptive, unique, memorab",
       "tags": []
+    },
+    {
+      "name": "eluma:remotion-video",
+      "brand": "eluma",
+      "slug": "remotion-video",
+      "path": "skills/eluma/remotion-video",
+      "type": "authored",
+      "description": "Create and render videos programmatically using Remotion. Works from ANY project or directory. Use when the user says \"create a video\", \"render a video\", \"make a video\", \"Remotion video\", \"erstelle ei",
+      "tags": []
+    },
+    {
+      "name": "eluma:seo-combo",
+      "brand": "eluma",
+      "slug": "seo-combo",
+      "path": "skills/eluma/seo-combo",
+      "type": "authored",
+      "description": "Intelligent SEO orchestrator that combines Google Official SEO Guide, Programmatic SEO, and SEO Audit into one unified workflow. Auto-detects your SEO phase, routes to the right strategy, cross-valida",
+      "tags": [
+        "references"
+      ]
+    },
+    {
+      "name": "eluma:ship",
+      "brand": "eluma",
+      "slug": "ship",
+      "path": "skills/eluma/ship",
+      "type": "authored",
+      "description": "Ship an Eluma project to GitHub with full quality assurance. Chains brand audit, production build, GitHub Pimper verification, screenshot capture, commit, push, and browser verification into a single ",
+      "tags": [
+        "references"
+      ]
     }
   ]
 }
