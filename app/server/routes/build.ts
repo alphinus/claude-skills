@@ -1,10 +1,11 @@
 import { Router } from 'express';
 import { runScript } from '../lib/process-runner.js';
+import { validateSlug } from '../lib/validate.js';
 
 const router = Router();
 
 // POST /api/build/:slug — Run build.sh for a brand
-router.post('/:slug', async (req, res) => {
+router.post('/:slug', validateSlug, async (req, res) => {
   try {
     const { slug } = req.params;
     const result = await runScript('./build.sh', [slug]);
@@ -19,7 +20,7 @@ router.post('/:slug', async (req, res) => {
 });
 
 // POST /api/build/:slug/sync — Run sync.sh for a brand
-router.post('/:slug/sync', async (req, res) => {
+router.post('/:slug/sync', validateSlug, async (req, res) => {
   try {
     const { slug } = req.params;
     // First get the skill slug from tokens.json

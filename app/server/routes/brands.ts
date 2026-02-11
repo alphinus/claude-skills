@@ -1,11 +1,11 @@
 import { Router } from 'express';
 import fs from 'fs';
 import path from 'path';
-import { REPO_ROOT } from '../lib/process-runner.js';
+import { BRANDS_DIR } from '../lib/config.js';
+import { validateSlug } from '../lib/validate.js';
 import { hexToRgbString, calculateDarkVariant } from '../lib/color-utils.js';
 
 const router = Router();
-const BRANDS_DIR = path.join(REPO_ROOT, 'brands');
 
 // GET /api/brands — List all brands
 router.get('/', (_req, res) => {
@@ -33,7 +33,7 @@ router.get('/', (_req, res) => {
 });
 
 // GET /api/brands/:slug — Get single brand
-router.get('/:slug', (req, res) => {
+router.get('/:slug', validateSlug, (req, res) => {
   try {
     const tokensPath = path.join(BRANDS_DIR, req.params.slug, 'tokens.json');
     if (!fs.existsSync(tokensPath)) {
@@ -57,6 +57,10 @@ router.post('/', (req, res) => {
     }
 
     const slug = brand.slug.toLowerCase().replace(/[^a-z0-9-]/g, '-');
+    if (!slug || slug.includes('..') || !/^[a-z0-9][a-z0-9-]*$/.test(slug)) {
+      res.status(400).json({ error: 'Invalid slug format' });
+      return;
+    }
     const brandDir = path.join(BRANDS_DIR, slug);
 
     if (fs.existsSync(brandDir)) {
@@ -102,7 +106,7 @@ router.post('/', (req, res) => {
 });
 
 // PUT /api/brands/:slug — Update brand
-router.put('/:slug', (req, res) => {
+router.put('/:slug', validateSlug, (req, res) => {
   try {
     const brandDir = path.join(BRANDS_DIR, req.params.slug);
     const tokensPath = path.join(brandDir, 'tokens.json');
@@ -139,7 +143,7 @@ router.put('/:slug', (req, res) => {
 });
 
 // POST /api/brands/:slug/duplicate — Duplicate brand
-router.post('/:slug/duplicate', (req, res) => {
+router.post('/:slug/duplicate', validateSlug, (req, res) => {
   try {
     const sourceDir = path.join(BRANDS_DIR, req.params.slug);
     const tokensPath = path.join(sourceDir, 'tokens.json');
@@ -190,7 +194,7 @@ router.post('/:slug/duplicate', (req, res) => {
 });
 
 // DELETE /api/brands/:slug — Delete brand
-router.delete('/:slug', (req, res) => {
+router.delete('/:slug', validateSlug, (req, res) => {
   try {
     const brandDir = path.join(BRANDS_DIR, req.params.slug);
     if (!fs.existsSync(brandDir)) {

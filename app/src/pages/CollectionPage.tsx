@@ -10,6 +10,7 @@ export function CollectionPage() {
   const { toast } = useToast();
   const [categories, setCategories] = useState<Record<string, string[]>>({});
   const [generating, setGenerating] = useState(false);
+  const [exporting, setExporting] = useState(false);
   const [activeFilter, setActiveFilter] = useState<string | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
 
@@ -39,6 +40,27 @@ export function CollectionPage() {
     }
   };
 
+  const handleExport = async () => {
+    setExporting(true);
+    try {
+      const res = await fetch(`/api/collection/${slug}/export`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ category: activeFilter }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        toast('success', 'PNG export complete');
+      } else {
+        toast('error', data.log || 'Export failed');
+      }
+    } catch (err) {
+      toast('error', (err as Error).message);
+    } finally {
+      setExporting(false);
+    }
+  };
+
   const allFiles = Object.entries(categories).flatMap(([, files]) =>
     files.map(f => f)
   );
@@ -58,9 +80,16 @@ export function CollectionPage() {
             {totalCount} pages across {Object.keys(categories).length} categories
           </p>
         </div>
-        <Button onClick={handleGenerate} loading={generating}>
-          {generating ? 'Generating...' : totalCount > 0 ? 'Regenerate' : 'Generate Collection'}
-        </Button>
+        <div style={{ display: 'flex', gap: 8 }}>
+          {totalCount > 0 && (
+            <Button variant="ghost" onClick={handleExport} loading={exporting}>
+              {exporting ? 'Exporting...' : 'Export PNG'}
+            </Button>
+          )}
+          <Button onClick={handleGenerate} loading={generating}>
+            {generating ? 'Generating...' : totalCount > 0 ? 'Regenerate' : 'Generate Collection'}
+          </Button>
+        </div>
       </div>
 
       {totalCount === 0 ? (

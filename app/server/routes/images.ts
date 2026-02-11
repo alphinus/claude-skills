@@ -2,24 +2,25 @@ import { Router } from 'express';
 import { exec } from 'child_process';
 import fs from 'fs';
 import path from 'path';
-import { REPO_ROOT } from '../lib/process-runner.js';
+import { BRANDS_DIR } from '../lib/config.js';
+import { validateSlug } from '../lib/validate.js';
 
 const router = Router();
 
 // POST /api/images/:slug/generate — Generate logos via infsh
-router.post('/:slug/generate', async (req, res) => {
+router.post('/:slug/generate', validateSlug, async (req, res) => {
   try {
     const { slug } = req.params;
     const { type = 'logo-light', prompt: customPrompt } = req.body;
 
-    const tokensPath = path.join(REPO_ROOT, 'brands', slug, 'tokens.json');
+    const tokensPath = path.join(BRANDS_DIR, slug, 'tokens.json');
     if (!fs.existsSync(tokensPath)) {
       res.status(404).json({ error: 'Brand not found' });
       return;
     }
 
     const tokens = JSON.parse(fs.readFileSync(tokensPath, 'utf-8'));
-    const logosDir = path.join(REPO_ROOT, 'brands', slug, 'logos');
+    const logosDir = path.join(BRANDS_DIR, slug, 'logos');
     fs.mkdirSync(logosDir, { recursive: true });
 
     const outputFile = path.join(logosDir, `${type}.png`);
@@ -32,7 +33,8 @@ router.post('/:slug/generate', async (req, res) => {
       return;
     }
 
-    const cmd = `${infshPath} app run falai/flux-dev-lora --prompt "${brandPrompt.replace(/"/g, '\\"')}" --output "${outputFile}"`;
+    const safePrompt = brandPrompt.replace(/[^a-zA-Z0-9 .,!?'"()-]/g, '');
+    const cmd = `${infshPath} app run falai/flux-dev-lora --prompt '${safePrompt}' --output '${outputFile}'`;
 
     exec(cmd, { timeout: 120000 }, (error, stdout, stderr) => {
       if (error) {
@@ -51,9 +53,9 @@ router.post('/:slug/generate', async (req, res) => {
 });
 
 // GET /api/images/:slug — List brand images
-router.get('/:slug', (req, res) => {
+router.get('/:slug', validateSlug, (req, res) => {
   try {
-    const logosDir = path.join(REPO_ROOT, 'brands', req.params.slug, 'logos');
+    const logosDir = path.join(BRANDS_DIR, req.params.slug, 'logos');
     if (!fs.existsSync(logosDir)) {
       res.json({ images: [] });
       return;

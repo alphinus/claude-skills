@@ -1,6 +1,7 @@
 import fs from 'fs';
 import path from 'path';
-import { REPO_ROOT } from './process-runner.js';
+import { BRANDS_DIR, TEMPLATES_DIR } from './config.js';
+import { escapeHtml } from './validate.js';
 
 interface TokensJson {
   brand: {
@@ -20,24 +21,23 @@ interface TokensJson {
 }
 
 export async function generateCollection(slug: string): Promise<{ count: number; errors: string[] }> {
-  const tokensPath = path.join(REPO_ROOT, 'brands', slug, 'tokens.json');
-  const templatesDir = path.join(REPO_ROOT, 'collection-templates');
-  const outputDir = path.join(REPO_ROOT, 'brands', slug, 'collection');
+  const tokensPath = path.join(BRANDS_DIR, slug, 'tokens.json');
+  const outputDir = path.join(BRANDS_DIR, slug, 'collection');
 
   if (!fs.existsSync(tokensPath)) {
     throw new Error(`Brand not found: ${slug}`);
   }
-  if (!fs.existsSync(templatesDir)) {
+  if (!fs.existsSync(TEMPLATES_DIR)) {
     throw new Error('Collection templates not found. Run templatize-collection.sh first.');
   }
 
   const tokens: TokensJson = JSON.parse(fs.readFileSync(tokensPath, 'utf-8'));
   const replacements: Record<string, string> = {
-    '{{BRAND_NAME}}': tokens.brand.name,
-    '{{BRAND_NAME_LOWER}}': tokens.brand.name.toLowerCase(),
+    '{{BRAND_NAME}}': escapeHtml(tokens.brand.name),
+    '{{BRAND_NAME_LOWER}}': escapeHtml(tokens.brand.name.toLowerCase()),
     '{{BRAND_SLUG}}': tokens.brand.slug,
-    '{{BRAND_DOMAIN}}': tokens.brand.domain,
-    '{{BRAND_TAGLINE}}': tokens.brand.tagline,
+    '{{BRAND_DOMAIN}}': escapeHtml(tokens.brand.domain),
+    '{{BRAND_TAGLINE}}': escapeHtml(tokens.brand.tagline),
   };
 
   // Add all color tokens
@@ -77,13 +77,13 @@ export async function generateCollection(slug: string): Promise<{ count: number;
   }
 
   fs.mkdirSync(outputDir, { recursive: true });
-  processDir(templatesDir);
+  processDir(TEMPLATES_DIR);
 
   return { count, errors };
 }
 
 export function listCollection(slug: string): { categories: Record<string, string[]> } {
-  const collectionDir = path.join(REPO_ROOT, 'brands', slug, 'collection');
+  const collectionDir = path.join(BRANDS_DIR, slug, 'collection');
   const categories: Record<string, string[]> = {};
 
   if (!fs.existsSync(collectionDir)) {

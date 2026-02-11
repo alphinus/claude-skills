@@ -1,13 +1,11 @@
 import express from 'express';
 import path from 'path';
-import { fileURLToPath } from 'url';
+import { REPO_ROOT, BRANDS_DIR } from './lib/config.js';
+import { validateSlug } from './lib/validate.js';
 import brandsRouter from './routes/brands.js';
 import buildRouter from './routes/build.js';
 import collectionRouter from './routes/collection.js';
 import imagesRouter from './routes/images.js';
-
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const REPO_ROOT = path.resolve(__dirname, '../..');
 
 const app = express();
 app.use(express.json());
@@ -19,16 +17,16 @@ app.use('/api/collection', collectionRouter);
 app.use('/api/images', imagesRouter);
 
 // Serve brand collection HTML files
-app.use('/brands/:slug/collection', (req, res, next) => {
-  const collectionPath = path.join(REPO_ROOT, 'brands', req.params.slug, 'collection');
+app.use('/brands/:slug/collection', validateSlug, (req, res, next) => {
+  const collectionPath = path.join(BRANDS_DIR, req.params.slug, 'collection');
   express.static(collectionPath)(req, res, next);
 });
 
 // In dev mode, Vite handles frontend. In production, serve built files.
 if (process.env.NODE_ENV === 'production') {
-  app.use(express.static(path.join(__dirname, '../dist')));
+  app.use(express.static(path.join(REPO_ROOT, 'app/dist')));
   app.get('*', (_req, res) => {
-    res.sendFile(path.join(__dirname, '../dist/index.html'));
+    res.sendFile(path.join(REPO_ROOT, 'app/dist/index.html'));
   });
 }
 

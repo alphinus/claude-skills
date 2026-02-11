@@ -1,5 +1,6 @@
 import { useParams, useNavigate } from 'react-router-dom';
 import { BrandForm } from '../components/brand-form/BrandForm';
+import { LogoGallery } from '../components/brand-form/LogoGallery';
 import { Button } from '../components/ui/Button';
 import { GlassCard } from '../components/ui/GlassCard';
 import { useToast } from '../components/ui/Toast';
@@ -91,6 +92,10 @@ export function EditBrandPage({ onUpdate, onDelete, onDuplicate }: EditBrandPage
       </div>
 
       <BrandForm initial={brand} onSubmit={handleSubmit} submitLabel="Save Changes" />
+
+      <div style={{ marginTop: 20 }}>
+        <LogoGallery slug={slug!} />
+      </div>
 
       {log && (
         <GlassCard style={{ marginTop: 20 }}>

@@ -1,8 +1,10 @@
-import { NavLink } from 'react-router-dom';
+import { NavLink, useLocation } from 'react-router-dom';
 import type { Brand } from '../../lib/types';
 
 interface SidebarProps {
   brands: Brand[];
+  open?: boolean;
+  onClose?: () => void;
 }
 
 const navLinkStyle = (isActive: boolean): React.CSSProperties => ({
@@ -19,21 +21,30 @@ const navLinkStyle = (isActive: boolean): React.CSSProperties => ({
   transition: 'var(--transition-fast)',
 });
 
-export function Sidebar({ brands }: SidebarProps) {
+export function Sidebar({ brands, open, onClose }: SidebarProps) {
+  const location = useLocation();
+
+  const handleNavClick = () => {
+    if (onClose) onClose();
+  };
+
   return (
-    <aside style={{
-      width: 260,
-      minWidth: 260,
-      height: '100vh',
-      background: 'var(--sidebar-bg)',
-      borderRight: '1px solid var(--glass-border)',
-      display: 'flex',
-      flexDirection: 'column',
-      position: 'fixed',
-      left: 0,
-      top: 0,
-      zIndex: 100,
-    }}>
+    <aside
+      className={`sidebar ${open ? 'open' : ''}`}
+      style={{
+        width: 260,
+        minWidth: 260,
+        height: '100vh',
+        background: 'var(--sidebar-bg)',
+        borderRight: '1px solid var(--glass-border)',
+        display: 'flex',
+        flexDirection: 'column',
+        position: 'fixed',
+        left: 0,
+        top: 0,
+        zIndex: 100,
+      }}
+    >
       {/* Logo */}
       <div style={{
         padding: '20px 20px 16px',
@@ -51,17 +62,17 @@ export function Sidebar({ brands }: SidebarProps) {
           <p style={{ fontSize: 10, fontWeight: 700, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.1em', padding: '0 16px', marginBottom: 8 }}>
             Navigation
           </p>
-          <NavLink to="/" end style={({ isActive }) => navLinkStyle(isActive)}>
+          <NavLink to="/" end style={({ isActive }) => navLinkStyle(isActive)} onClick={handleNavClick}>
             <span>◆</span> Dashboard
           </NavLink>
-          <NavLink to="/brands/new" style={({ isActive }) => navLinkStyle(isActive)}>
+          <NavLink to="/brands/new" style={({ isActive }) => navLinkStyle(isActive)} onClick={handleNavClick}>
             <span>+</span> New Brand
           </NavLink>
-          <NavLink to="/build" style={({ isActive }) => navLinkStyle(isActive)}>
+          <NavLink to="/build" style={({ isActive }) => navLinkStyle(isActive)} onClick={handleNavClick}>
             <span>⚡</span> Build Status
           </NavLink>
           {brands.length >= 2 && (
-            <NavLink to="/compare" style={({ isActive }) => navLinkStyle(isActive)}>
+            <NavLink to="/compare" style={({ isActive }) => navLinkStyle(isActive)} onClick={handleNavClick}>
               <span>⟷</span> Compare
             </NavLink>
           )}
@@ -80,6 +91,7 @@ export function Sidebar({ brands }: SidebarProps) {
                   ...navLinkStyle(isActive),
                   gap: 10,
                 })}
+                onClick={handleNavClick}
               >
                 <span style={{
                   width: 10,
