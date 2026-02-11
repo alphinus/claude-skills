@@ -1,5 +1,5 @@
 ---
-name: brand-machine
+name: eluma:brand-machine
 description: "Generate brand images, logos, and visual assets using AI. Create logo variants (light/dark/icon), social media headers, and branded visuals via inference.sh CLI."
 triggers:
   - "generate brand images"

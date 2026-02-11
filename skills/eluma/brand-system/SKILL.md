@@ -1,5 +1,5 @@
 ---
-name: eluma-brand-system
+name: eluma:brand-system
 description: >
   Apply the complete Eluma design system to any app or component. Includes dark/light themes, 124 UI component patterns, animations, gamification elements, responsive layouts, and brand assets. Use when building any Eluma-related UI, applying Eluma branding to a new app, creating pages/components in the Eluma style, or when the user says "apply Eluma design", "Eluma style", "Eluma branding", "use Eluma UI", or references the Eluma design system. Also use when building any app for eluma.ch. Covers: React, Vue, Svelte, HTML/CSS, Tailwind, Next.js - any web stack.
 ---

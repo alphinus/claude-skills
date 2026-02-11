@@ -1,5 +1,5 @@
 ---
-name: {{SKILL_SLUG}}
+name: {{BRAND_NAME_LOWER}}:brand-system
 description: >
   {{BRAND_DESCRIPTION}}
 ---

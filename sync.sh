@@ -2,9 +2,12 @@
 # ============================================
 # Claude Skills Sync
 # Deploys built skills to ~/.claude/skills/
-# Usage: ./sync.sh [skill-name]
-#   No args: syncs all built skills
-#   With arg: syncs only the specified skill
+# Supports nested brand/skill directory structure
+#
+# Usage:
+#   ./sync.sh                    — sync all skills
+#   ./sync.sh eluma              — sync all skills in brand "eluma"
+#   ./sync.sh eluma:brand-system — sync single skill
 # ============================================
 
 set -euo pipefail
@@ -19,46 +22,85 @@ if [ ! -d "$TARGET_DIR" ]; then
 fi
 
 sync_skill() {
-  local skill_name="$1"
-  local source="$SKILLS_DIR/$skill_name"
-  local target="$TARGET_DIR/$skill_name"
+  local brand="$1"
+  local skill="$2"
+  local source="$SKILLS_DIR/$brand/$skill"
+  local deploy_name="${brand}:${skill}"
+  local target="$TARGET_DIR/$deploy_name"
 
   if [ ! -d "$source" ]; then
-    echo "Error: Skill '$skill_name' not found in $SKILLS_DIR/"
+    echo "Error: Skill '$deploy_name' not found at $source"
     return 1
   fi
 
-  # Check if target is a symlink (plugin) - don't overwrite
+  # Check if target is a symlink (external plugin) — don't overwrite
   if [ -L "$target" ]; then
-    echo "SKIP: $skill_name (is a plugin symlink, won't overwrite)"
+    echo "SKIP: $deploy_name (is a plugin symlink, won't overwrite)"
     return 0
   fi
 
   # Sync
   rm -rf "$target"
   cp -r "$source" "$target"
-  echo "  OK: $skill_name → $target"
+  echo "  OK: $deploy_name → $target"
+}
+
+sync_brand() {
+  local brand="$1"
+  local brand_dir="$SKILLS_DIR/$brand"
+
+  if [ ! -d "$brand_dir" ]; then
+    echo "Error: Brand '$brand' not found in $SKILLS_DIR/"
+    return 1
+  fi
+
+  local count=0
+  for skill_dir in "$brand_dir"/*/; do
+    [ -d "$skill_dir" ] || continue
+    local skill
+    skill=$(basename "$skill_dir")
+    sync_skill "$brand" "$skill"
+    count=$((count + 1))
+  done
+
+  echo ""
+  echo "Synced $count skill(s) for brand '$brand'."
 }
 
 echo "Syncing skills to $TARGET_DIR"
 echo ""
 
 if [ $# -gt 0 ]; then
-  sync_skill "$1"
+  ARG="$1"
+
+  if [[ "$ARG" == *:* ]]; then
+    # Single skill: brand:skill
+    BRAND="${ARG%%:*}"
+    SKILL="${ARG#*:}"
+    sync_skill "$BRAND" "$SKILL"
+  else
+    # Entire brand
+    sync_brand "$ARG"
+  fi
 else
-  count=0
-  for dir in "$SKILLS_DIR"/*/; do
-    [ -d "$dir" ] || continue
-    skill_name=$(basename "$dir")
-    sync_skill "$skill_name"
-    count=$((count + 1))
+  # Sync all brands and skills
+  total=0
+  for brand_dir in "$SKILLS_DIR"/*/; do
+    [ -d "$brand_dir" ] || continue
+    brand=$(basename "$brand_dir")
+    for skill_dir in "$brand_dir"/*/; do
+      [ -d "$skill_dir" ] || continue
+      skill=$(basename "$skill_dir")
+      sync_skill "$brand" "$skill"
+      total=$((total + 1))
+    done
   done
 
-  if [ $count -eq 0 ]; then
-    echo "No built skills found. Run './build.sh <brand>' first."
+  if [ $total -eq 0 ]; then
+    echo "No skills found. Run './build.sh <brand>' first or add skills to skills/<brand>/<skill>/."
   else
     echo ""
-    echo "Synced $count skill(s)."
+    echo "Synced $total skill(s) total."
   fi
 fi
 

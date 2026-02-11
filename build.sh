@@ -53,7 +53,8 @@ rm -f "$TMPVARS"
 BRAND_NAME_LOWER=$(echo "$BRAND_NAME" | tr '[:upper:]' '[:lower:]')
 BRAND_TAGLINE_LOWER=$(echo "$BRAND_TAGLINE" | tr '[:upper:]' '[:lower:]')
 
-OUTPUT_DIR="$SKILLS_DIR/$SKILL_SLUG"
+# Nested output: skills/<brand>/brand-system/
+OUTPUT_DIR="$SKILLS_DIR/$BRAND/brand-system"
 
 echo "Building skill: $SKILL_SLUG ($BRAND_NAME)"
 echo "  Primary: $PRIMARY"
@@ -69,6 +70,7 @@ replace_placeholders() {
   local file="$1"
   sed -i '' \
     -e "s|{{BRAND_NAME}}|$BRAND_NAME|g" \
+    -e "s|{{BRAND_NAME_LOWER}}|$BRAND_NAME_LOWER|g" \
     -e "s|{{brand_name}}|$BRAND_NAME_LOWER|g" \
     -e "s|{{SKILL_SLUG}}|$SKILL_SLUG|g" \
     -e "s|{{BRAND_DOMAIN}}|$BRAND_DOMAIN|g" \
@@ -155,4 +157,9 @@ find "$OUTPUT_DIR" -type f | sort | while read -r f; do
   echo "  $(echo "$f" | sed "s|$OUTPUT_DIR/||")"
 done
 echo ""
+# Update registry
+if [ -x "$SCRIPT_DIR/scripts/update-registry.sh" ]; then
+  "$SCRIPT_DIR/scripts/update-registry.sh"
+fi
+
 echo "Run './sync.sh' to deploy to ~/.claude/skills/"

@@ -1,0 +1,76 @@
+{
+  "version": "1.0.0",
+  "updated": "2026-02-11T11:44:34Z",
+  "brands": {
+    "core": {
+      "displayName": "Core",
+      "domain": null,
+      "skillCount": 1
+    },
+    "eluma": {
+      "displayName": "Eluma",
+      "domain": "eluma.ch",
+      "skillCount": 4
+    }
+  },
+  "skills": [
+    {
+      "name": "core:skill-forge",
+      "brand": "core",
+      "slug": "skill-forge",
+      "path": "skills/core/skill-forge",
+      "type": "authored",
+      "description": "Meta-skill for scaffolding new skills in the claude-skills ecosystem. Creates correctly namespaced skill directories, SKILL.md files, and updates the central registry. Use when asked to create a new s",
+      "tags": [
+        "references"
+      ]
+    },
+    {
+      "name": "eluma:brand-machine",
+      "brand": "eluma",
+      "slug": "brand-machine",
+      "path": "skills/eluma/brand-machine",
+      "type": "authored",
+      "description": "Generate brand images, logos, and visual assets using AI. Create logo variants (light/dark/icon), social media headers, and branded visuals via inference.sh CLI.",
+      "tags": [
+        "scripts",
+        "references"
+      ]
+    },
+    {
+      "name": "eluma:brand-system",
+      "brand": "eluma",
+      "slug": "brand-system",
+      "path": "skills/eluma/brand-system",
+      "type": "built",
+      "description": "Apply the complete Eluma design system to any app or component. Includes dark/light themes, 124 UI component patterns, animations, gamification elements, responsive layouts, and brand assets. Use when",
+      "tags": [
+        "references",
+        "assets"
+      ]
+    },
+    {
+      "name": "eluma:github-pimper",
+      "brand": "eluma",
+      "slug": "github-pimper",
+      "path": "skills/eluma/github-pimper",
+      "type": "authored",
+      "description": "Transform any GitHub repository into a professional, conversion-optimized showcase. Generates branded READMEs, animated SVG banners (dense hex grid, circuit animations, floating particles), social pre",
+      "tags": [
+        "scripts",
+        "references",
+        "templates",
+        "actions"
+      ]
+    },
+    {
+      "name": "eluma:naming",
+      "brand": "eluma",
+      "slug": "naming",
+      "path": "skills/eluma/naming",
+      "type": "authored",
+      "description": "Enforces 100% consistent naming across folder, GitHub repo, package.json, and deploy URL for every project. Audits naming on project creation, rename, or review. Generates descriptive, unique, memorab",
+      "tags": []
+    }
+  ]
+}
