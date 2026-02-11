@@ -6,8 +6,8 @@
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body {
     width: 1280px; height: 640px;
-    background: linear-gradient(135deg, #0b1120, #0f172a);
-    font-family: system-ui, -apple-system, sans-serif;
+    background: linear-gradient(135deg, #060d1f, #0b1120, #111b33);
+    font-family: 'JetBrains Mono', 'Fira Code', 'SF Mono', 'Cascadia Code', 'Source Code Pro', Consolas, monospace;
     color: #f8fafc;
     display: flex;
     flex-direction: column;
@@ -16,47 +16,152 @@
     position: relative;
     overflow: hidden;
   }
+  /* Ambient glow orbs */
   .glow {
-    position: absolute; width: 300px; height: 300px;
-    background: radial-gradient(circle, {{PRIMARY}}22, transparent 70%);
-    border-radius: 50%;
+    position: absolute; border-radius: 50%;
+    filter: blur(80px);
   }
-  .glow-1 { top: -100px; right: -50px; }
-  .glow-2 { bottom: -100px; left: 200px; }
-  .top-bar { position: absolute; top: 0; left: 0; right: 0; height: 4px; background: linear-gradient(90deg, {{PRIMARY}}, {{PRIMARY_DARK}}); }
-  .title { font-size: 64px; font-weight: 800; letter-spacing: -0.03em; margin-bottom: 16px; }
-  .title span { background: linear-gradient(135deg, {{PRIMARY}}, {{PRIMARY_DARK}}); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-  .subtitle { font-size: 24px; color: #718096; max-width: 800px; line-height: 1.4; }
+  .glow-1 { width: 400px; height: 400px; top: -120px; right: -80px; background: radial-gradient(circle, {{PRIMARY}}18, transparent 70%); }
+  .glow-2 { width: 350px; height: 350px; bottom: -100px; left: 150px; background: radial-gradient(circle, {{PRIMARY}}12, transparent 70%); }
+  .glow-3 { width: 250px; height: 250px; top: 50%; left: 40%; background: radial-gradient(circle, {{PRIMARY_DARK}}0a, transparent 70%); }
+  /* Top accent bar */
+  .top-bar { position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, {{PRIMARY}}, {{PRIMARY_DARK}}); }
+  /* Grid overlay */
+  .grid {
+    position: absolute; inset: 0;
+    background-image: linear-gradient({{PRIMARY}}06 1px, transparent 1px), linear-gradient(90deg, {{PRIMARY}}06 1px, transparent 1px);
+    background-size: 80px 80px;
+  }
+  /* Dense hex grid */
+  .hex-grid { position: absolute; right: 40px; top: 50%; transform: translateY(-50%); opacity: 0.05; }
+  .hex-grid polygon { fill: none; stroke: {{PRIMARY}}; stroke-width: 0.8; }
+  .hex-highlight { opacity: 0.15; }
+  /* Title */
+  .title { font-size: 56px; font-weight: 800; letter-spacing: -0.03em; margin-bottom: 16px; }
+  .title span { background: linear-gradient(135deg, #f8fafc 30%, {{PRIMARY}} 70%, {{PRIMARY_DARK}}); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  /* Accent dash */
+  .accent-dash { width: 60px; height: 3px; background: linear-gradient(90deg, {{PRIMARY}}, {{PRIMARY_DARK}}); border-radius: 2px; margin-bottom: 14px; }
+  /* Subtitle */
+  .subtitle { font-size: 20px; font-weight: 400; color: #94a3b8; max-width: 700px; line-height: 1.5; margin-bottom: 28px; }
+  /* Feature tags */
+  .tags { display: flex; gap: 10px; margin-bottom: 0; }
+  .tag {
+    padding: 6px 16px; border-radius: 14px; font-size: 12px; font-weight: 600;
+    border: 1px solid {{PRIMARY}}30; color: {{PRIMARY}}; background: {{PRIMARY}}0a;
+  }
+  .tag:nth-child(2) { opacity: 0.85; }
+  .tag:nth-child(3) { opacity: 0.7; }
+  .tag:nth-child(4) { opacity: 0.55; }
+  /* Footer */
   .footer { position: absolute; bottom: 40px; left: 80px; right: 80px; display: flex; justify-content: space-between; align-items: center; }
-  .author { font-size: 16px; color: #718096; }
-  .author strong { color: {{PRIMARY}}; }
-  .badges { display: flex; gap: 12px; }
-  .badge { padding: 6px 16px; border-radius: 20px; font-size: 13px; font-weight: 600; border: 1px solid rgba(79,209,197,0.2); color: {{PRIMARY}}; background: rgba(79,209,197,0.05); }
-  .hex-grid { position: absolute; right: 60px; top: 50%; transform: translateY(-50%); opacity: 0.06; }
-  .hex-grid polygon { fill: none; stroke: {{PRIMARY}}; stroke-width: 1; }
+  .author { font-size: 13px; color: #475569; letter-spacing: 0.05em; }
+  .author strong { color: {{PRIMARY}}; font-weight: 600; letter-spacing: 0.12em; }
+  .badges { display: flex; gap: 10px; }
+  .badge { padding: 5px 14px; border-radius: 12px; font-size: 11px; font-weight: 600; border: 1px solid {{PRIMARY}}20; color: {{PRIMARY}}; background: {{PRIMARY}}08; }
+  /* Left accent line */
+  .left-line { position: absolute; left: 60px; top: 120px; width: 2px; height: 400px; background: linear-gradient(180deg, {{PRIMARY}}30, {{PRIMARY_DARK}}10); border-radius: 1px; }
+  /* Bottom bar */
+  .bottom-bar { position: absolute; bottom: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, {{PRIMARY}}, {{PRIMARY_DARK}}); opacity: 0.2; }
+  /* Circuit nodes */
+  .node { position: absolute; width: 5px; height: 5px; border-radius: 50%; background: {{PRIMARY}}; }
+  .node-1 { right: 320px; top: 200px; opacity: 0.4; }
+  .node-2 { right: 240px; top: 280px; opacity: 0.3; }
+  .node-3 { right: 380px; top: 340px; opacity: 0.25; }
 </style>
 </head>
 <body>
   <div class="glow glow-1"></div>
   <div class="glow glow-2"></div>
+  <div class="glow glow-3"></div>
+  <div class="grid"></div>
   <div class="top-bar"></div>
+  <div class="left-line"></div>
+  <div class="bottom-bar"></div>
+  <div class="node node-1"></div>
+  <div class="node node-2"></div>
+  <div class="node node-3"></div>
 
-  <svg class="hex-grid" width="300" height="300" viewBox="0 0 300 300">
-    <polygon points="30,0 60,17 60,52 30,69 0,52 0,17" transform="translate(50,30)"/>
-    <polygon points="30,0 60,17 60,52 30,69 0,52 0,17" transform="translate(115,67)"/>
-    <polygon points="30,0 60,17 60,52 30,69 0,52 0,17" transform="translate(50,104)"/>
-    <polygon points="30,0 60,17 60,52 30,69 0,52 0,17" transform="translate(180,30)"/>
-    <polygon points="30,0 60,17 60,52 30,69 0,52 0,17" transform="translate(180,104)"/>
-    <polygon points="30,0 60,17 60,52 30,69 0,52 0,17" transform="translate(115,141)"/>
-    <polygon points="30,0 60,17 60,52 30,69 0,52 0,17" transform="translate(50,178)"/>
-    <polygon points="30,0 60,17 60,52 30,69 0,52 0,17" transform="translate(180,178)"/>
+  <!-- Dense hex grid (matching banner) -->
+  <svg class="hex-grid" width="500" height="500" viewBox="0 0 500 500">
+    <!-- Row 1 -->
+    <polygon points="25,0 50,14 50,43 25,57 0,43 0,14" transform="translate(0,10)"/>
+    <polygon points="25,0 50,14 50,43 25,57 0,43 0,14" transform="translate(60,10)"/>
+    <polygon points="25,0 50,14 50,43 25,57 0,43 0,14" transform="translate(120,10)"/>
+    <polygon points="25,0 50,14 50,43 25,57 0,43 0,14" transform="translate(180,10)"/>
+    <polygon points="25,0 50,14 50,43 25,57 0,43 0,14" transform="translate(240,10)"/>
+    <polygon points="25,0 50,14 50,43 25,57 0,43 0,14" transform="translate(300,10)"/>
+    <polygon points="25,0 50,14 50,43 25,57 0,43 0,14" transform="translate(360,10)"/>
+    <polygon points="25,0 50,14 50,43 25,57 0,43 0,14" transform="translate(420,10)"/>
+    <!-- Row 2 -->
+    <polygon points="25,0 50,14 50,43 25,57 0,43 0,14" transform="translate(30,48)"/>
+    <polygon points="25,0 50,14 50,43 25,57 0,43 0,14" transform="translate(90,48)"/>
+    <polygon points="25,0 50,14 50,43 25,57 0,43 0,14" transform="translate(150,48)"/>
+    <polygon points="25,0 50,14 50,43 25,57 0,43 0,14" transform="translate(210,48)"/>
+    <polygon points="25,0 50,14 50,43 25,57 0,43 0,14" transform="translate(270,48)"/>
+    <polygon points="25,0 50,14 50,43 25,57 0,43 0,14" transform="translate(330,48)"/>
+    <polygon points="25,0 50,14 50,43 25,57 0,43 0,14" transform="translate(390,48)"/>
+    <polygon points="25,0 50,14 50,43 25,57 0,43 0,14" transform="translate(450,48)"/>
+    <!-- Row 3 -->
+    <polygon points="25,0 50,14 50,43 25,57 0,43 0,14" transform="translate(0,86)"/>
+    <polygon points="25,0 50,14 50,43 25,57 0,43 0,14" transform="translate(60,86)"/>
+    <polygon points="25,0 50,14 50,43 25,57 0,43 0,14" transform="translate(120,86)"/>
+    <polygon points="25,0 50,14 50,43 25,57 0,43 0,14" transform="translate(180,86)"/>
+    <polygon points="25,0 50,14 50,43 25,57 0,43 0,14" transform="translate(240,86)"/>
+    <polygon points="25,0 50,14 50,43 25,57 0,43 0,14" transform="translate(300,86)"/>
+    <polygon points="25,0 50,14 50,43 25,57 0,43 0,14" transform="translate(360,86)"/>
+    <polygon points="25,0 50,14 50,43 25,57 0,43 0,14" transform="translate(420,86)"/>
+    <!-- Row 4 -->
+    <polygon points="25,0 50,14 50,43 25,57 0,43 0,14" transform="translate(30,124)"/>
+    <polygon points="25,0 50,14 50,43 25,57 0,43 0,14" transform="translate(90,124)"/>
+    <polygon points="25,0 50,14 50,43 25,57 0,43 0,14" transform="translate(150,124)"/>
+    <polygon points="25,0 50,14 50,43 25,57 0,43 0,14" transform="translate(210,124)"/>
+    <polygon points="25,0 50,14 50,43 25,57 0,43 0,14" transform="translate(270,124)"/>
+    <polygon points="25,0 50,14 50,43 25,57 0,43 0,14" transform="translate(330,124)"/>
+    <polygon points="25,0 50,14 50,43 25,57 0,43 0,14" transform="translate(390,124)"/>
+    <!-- Row 5 -->
+    <polygon points="25,0 50,14 50,43 25,57 0,43 0,14" transform="translate(0,162)"/>
+    <polygon points="25,0 50,14 50,43 25,57 0,43 0,14" transform="translate(60,162)"/>
+    <polygon points="25,0 50,14 50,43 25,57 0,43 0,14" transform="translate(120,162)"/>
+    <polygon points="25,0 50,14 50,43 25,57 0,43 0,14" transform="translate(180,162)"/>
+    <polygon points="25,0 50,14 50,43 25,57 0,43 0,14" transform="translate(240,162)"/>
+    <polygon points="25,0 50,14 50,43 25,57 0,43 0,14" transform="translate(300,162)"/>
+    <polygon points="25,0 50,14 50,43 25,57 0,43 0,14" transform="translate(360,162)"/>
+    <polygon points="25,0 50,14 50,43 25,57 0,43 0,14" transform="translate(420,162)"/>
+    <!-- Row 6 -->
+    <polygon points="25,0 50,14 50,43 25,57 0,43 0,14" transform="translate(30,200)"/>
+    <polygon points="25,0 50,14 50,43 25,57 0,43 0,14" transform="translate(90,200)"/>
+    <polygon points="25,0 50,14 50,43 25,57 0,43 0,14" transform="translate(150,200)"/>
+    <polygon points="25,0 50,14 50,43 25,57 0,43 0,14" transform="translate(210,200)"/>
+    <polygon points="25,0 50,14 50,43 25,57 0,43 0,14" transform="translate(270,200)"/>
+    <polygon points="25,0 50,14 50,43 25,57 0,43 0,14" transform="translate(330,200)"/>
+    <polygon points="25,0 50,14 50,43 25,57 0,43 0,14" transform="translate(390,200)"/>
+    <!-- Row 7 -->
+    <polygon points="25,0 50,14 50,43 25,57 0,43 0,14" transform="translate(0,238)"/>
+    <polygon points="25,0 50,14 50,43 25,57 0,43 0,14" transform="translate(60,238)"/>
+    <polygon points="25,0 50,14 50,43 25,57 0,43 0,14" transform="translate(120,238)"/>
+    <polygon points="25,0 50,14 50,43 25,57 0,43 0,14" transform="translate(180,238)"/>
+    <polygon points="25,0 50,14 50,43 25,57 0,43 0,14" transform="translate(240,238)"/>
+    <polygon points="25,0 50,14 50,43 25,57 0,43 0,14" transform="translate(300,238)"/>
+    <polygon points="25,0 50,14 50,43 25,57 0,43 0,14" transform="translate(360,238)"/>
+    <polygon points="25,0 50,14 50,43 25,57 0,43 0,14" transform="translate(420,238)"/>
+    <!-- Highlighted hexagons -->
+    <polygon class="hex-highlight" points="25,0 50,14 50,43 25,57 0,43 0,14" transform="translate(180,86)"/>
+    <polygon class="hex-highlight" points="25,0 50,14 50,43 25,57 0,43 0,14" transform="translate(270,124)"/>
+    <polygon class="hex-highlight" points="25,0 50,14 50,43 25,57 0,43 0,14" transform="translate(120,162)"/>
   </svg>
 
+  <div class="accent-dash"></div>
   <h1 class="title"><span>{{REPO_NAME}}</span></h1>
   <p class="subtitle">{{ONE_LINER}}</p>
+  <div class="tags">
+    <span class="tag">{{TAG_1}}</span>
+    <span class="tag">{{TAG_2}}</span>
+    <span class="tag">{{TAG_3}}</span>
+    <span class="tag">{{TAG_4}}</span>
+  </div>
 
   <div class="footer">
-    <span class="author">by <strong>alphinus</strong> / Eluma Developments</span>
+    <span class="author"><strong>ALPHINUS</strong> / Eluma Developments</span>
     <div class="badges">
       {{BADGES_HTML}}
     </div>
